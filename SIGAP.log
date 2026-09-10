@@ -1,57 +1,196 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.9.7)  9 SEP 2026 20:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.9.7)  10 SEP 2026 08:08
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/SIGAP.tex
-(/home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/SIGAP.tex
+**/home/afkam/Downloads/tes/SIGAP.tex
+(/home/afkam/Downloads/tes/SIGAP.tex
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-08-10>
-(/home/afkam/.miktex/texmfs/install/tex/latex/base/article.cls
-Document Class: article 2025/01/22 v1.4n Standard LaTeX document class
-(/home/afkam/.miktex/texmfs/install/tex/latex/base/size12.clo
-File: size12.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
+(/home/afkam/.miktex/texmfs/install/tex/latex/ieeetran/IEEEtran.cls
+Document Class: IEEEtran 2015/08/26 V1.8b by Michael Shell
+-- See the "IEEEtran_HOWTO" manual for usage information.
+-- http://www.michaelshell.org/tex/ieeetran/
+\@IEEEtrantmpdimenA=\dimen150
+\@IEEEtrantmpdimenB=\dimen151
+\@IEEEtrantmpdimenC=\dimen152
+\@IEEEtrantmpcountA=\count276
+\@IEEEtrantmpcountB=\count277
+\@IEEEtrantmpcountC=\count278
+\@IEEEtrantmptoksA=\toks17
+LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 503.
+(/home/afkam/.miktex/texmfs/install/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
-\c@part=\count276
-\c@section=\count277
-\c@subsection=\count278
-\c@subsubsection=\count279
-\c@paragraph=\count280
-\c@subparagraph=\count281
-\c@figure=\count282
-\c@table=\count283
-\abovecaptionskip=\skip49
-\belowcaptionskip=\skip50
-\bibindent=\dimen150
+-- Using 8.5in x 11in (letter) paper.
+-- Using PDF output.
+\@IEEEnormalsizeunitybaselineskip=\dimen153
+-- This is a 10 point document.
+LaTeX Encoding Info:    Redeclaring text command \textunderscore (encoding ?) on input line 937.
+\CLASSINFOnormalsizebaselineskip=\dimen154
+\CLASSINFOnormalsizeunitybaselineskip=\dimen155
+\IEEEnormaljot=\dimen156
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <5> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <7> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <8> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <9> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <11> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <11> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <17> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <20> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <20> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <24> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1090.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <24> not available
+(Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1090.
+\IEEEquantizedlength=\dimen157
+\IEEEquantizedlengthdiff=\dimen158
+\IEEEquantizedtextheightdiff=\dimen159
+\IEEEilabelindentA=\dimen160
+\IEEEilabelindentB=\dimen161
+\IEEEilabelindent=\dimen162
+\IEEEelabelindent=\dimen163
+\IEEEdlabelindent=\dimen164
+\IEEElabelindent=\dimen165
+\IEEEiednormlabelsep=\dimen166
+\IEEEiedmathlabelsep=\dimen167
+\IEEEiedtopsep=\skip49
+\c@section=\count279
+\c@subsection=\count280
+\c@subsubsection=\count281
+\c@paragraph=\count282
+\c@IEEEsubequation=\count283
+\abovecaptionskip=\skip50
+\belowcaptionskip=\skip51
+\c@figure=\count284
+\c@table=\count285
+\@IEEEeqnnumcols=\count286
+\@IEEEeqncolcnt=\count287
+\@IEEEsubeqnnumrollback=\count288
+\@IEEEquantizeheightA=\dimen168
+\@IEEEquantizeheightB=\dimen169
+\@IEEEquantizeheightC=\dimen170
+\@IEEEquantizeprevdepth=\dimen171
+\@IEEEquantizemultiple=\count289
+\@IEEEquantizeboxA=\box53
+\@IEEEtmpitemindent=\dimen172
+\IEEEPARstartletwidth=\dimen173
+\c@IEEEbiography=\count290
+\@IEEEtranrubishbin=\box54
 ) (/home/afkam/.miktex/texmfs/install/tex/latex/base/inputenc.sty
 Package: inputenc 2024/02/08 v1.3d Input encoding file
-\inpenc@prehook=\toks17
-\inpenc@posthook=\toks18
-) (/home/afkam/.miktex/texmfs/install/tex/latex/geometry/geometry.sty
-Package: geometry 2026/03/07 v6.0 Page Geometry
+\inpenc@prehook=\toks18
+\inpenc@posthook=\toks19
+) (/home/afkam/.miktex/texmfs/install/tex/latex/cite/cite.sty
+LaTeX Info: Redefining \cite on input line 302.
+LaTeX Info: Redefining \nocite on input line 332.
+Package: cite 2015/02/27  v 5.5
+) (/home/afkam/.miktex/texmfs/install/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2026/05/19 v2.18d AMS math features
+\@mathmargin=\skip52
+
+For additional information on amsmath, use the `?' option.
+(/home/afkam/.miktex/texmfs/install/tex/latex/amsmath/amstext.sty
+Package: amstext 2024/11/17 v2.01 AMS text
+ (/home/afkam/.miktex/texmfs/install/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks20
+\ex@=\dimen174
+)) (/home/afkam/.miktex/texmfs/install/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen175
+) (/home/afkam/.miktex/texmfs/install/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2022/04/08 v2.04 operator names
+)
+\inf@bad=\count291
+LaTeX Info: Redefining \frac on input line 233.
+\uproot@=\count292
+\leftroot@=\count293
+LaTeX Info: Redefining \overline on input line 398.
+LaTeX Info: Redefining \colon on input line 409.
+\classnum@=\count294
+\DOTSCASE@=\count295
+LaTeX Info: Redefining \ldots on input line 495.
+LaTeX Info: Redefining \dots on input line 498.
+LaTeX Info: Redefining \cdots on input line 619.
+\Mathstrutbox@=\box55
+\strutbox@=\box56
+LaTeX Info: Redefining \big on input line 721.
+LaTeX Info: Redefining \Big on input line 722.
+LaTeX Info: Redefining \bigg on input line 723.
+LaTeX Info: Redefining \Bigg on input line 724.
+\big@size=\dimen176
+LaTeX Font Info:    Redeclaring font encoding OML on input line 742.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 743.
+\macc@depth=\count296
+LaTeX Info: Redefining \bmod on input line 904.
+LaTeX Info: Redefining \pmod on input line 909.
+LaTeX Info: Redefining \smash on input line 939.
+LaTeX Info: Redefining \relbar on input line 969.
+LaTeX Info: Redefining \Relbar on input line 970.
+\c@MaxMatrixCols=\count297
+\dotsspace@=\muskip17
+\c@parentequation=\count298
+\dspbrk@lvl=\count299
+\tag@help=\toks21
+\row@=\count300
+\column@=\count301
+\maxfields@=\count302
+\andhelp@=\toks22
+\eqnshift@=\dimen177
+\alignsep@=\dimen178
+\tagshift@=\dimen179
+\tagwidth@=\dimen180
+\totwidth@=\dimen181
+\lineht@=\dimen182
+\@envbody=\toks23
+\multlinegap=\skip53
+\multlinetaggap=\skip54
+\mathdisplay@stack=\toks24
+LaTeX Info: Redefining \[ on input line 2965.
+LaTeX Info: Redefining \] on input line 2966.
+) (/home/afkam/.miktex/texmfs/install/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+ (/home/afkam/.miktex/texmfs/install/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+)) (/home/afkam/.miktex/texmfs/install/tex/latex/graphics/graphicx.sty
+Package: graphicx 2026-05-17 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
  (/home/afkam/.miktex/texmfs/install/tex/latex/graphics/keyval.sty
 Package: keyval 2026-05-17 v1.15 key=value parser (DPC)
-\KV@toks@=\toks19
-) (/home/afkam/.miktex/texmfs/install/tex/generic/iftex/ifvtex.sty
-Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
- (/home/afkam/.miktex/texmfs/install/tex/generic/iftex/iftex.sty
-Package: iftex 2024/12/12 v1.0g TeX engine tests
-))
-\Gm@cnth=\count284
-\Gm@cntv=\count285
-\c@Gm@tempcnt=\count286
-\Gm@bindingoffset=\dimen151
-\Gm@wd@mp=\dimen152
-\Gm@odd@mp=\dimen153
-\Gm@even@mp=\dimen154
-\Gm@layoutwidth=\dimen155
-\Gm@layoutheight=\dimen156
-\Gm@layouthoffset=\dimen157
-\Gm@layoutvoffset=\dimen158
-\Gm@dimlist=\toks20
- (/home/afkam/.miktex/texmfs/install/tex/latex/geometry/geometry.cfg)) (/home/afkam/.miktex/texmfs/install/tex/latex/graphics/graphicx.sty
-Package: graphicx 2026-05-17 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
- (/home/afkam/.miktex/texmfs/install/tex/latex/graphics/graphics.sty
+\KV@toks@=\toks25
+) (/home/afkam/.miktex/texmfs/install/tex/latex/graphics/graphics.sty
 Package: graphics 2026-05-17 v1.4h Standard LaTeX Graphics (DPC,SPQR)
  (/home/afkam/.miktex/texmfs/install/tex/latex/graphics/trig.sty
 Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
@@ -62,149 +201,779 @@ Package graphics Info: Driver file: pdftex.def on input line 106.
  (/home/afkam/.miktex/texmfs/install/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2025/09/29 v1.2d Graphics/color driver for pdftex
 ))
-\Gin@req@height=\dimen159
-\Gin@req@width=\dimen160
-) (/home/afkam/.miktex/texmfs/install/tex/latex/setspace/setspace.sty
-Package: setspace 2022/12/04 v6.7b set line spacing
-) (/home/afkam/.miktex/texmfs/install/tex/latex/psnfss/mathptmx.sty
-Package: mathptmx 2020/03/25 PSNFSS-v9.3 Times w/ Math, improved (SPQR, WaS) 
-LaTeX Font Info:    Redeclaring symbol font `operators' on input line 28.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> OT1/ztmcm/m/n on input line 28.
-LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/ztmcm/m/n on input line 28.
-LaTeX Font Info:    Redeclaring symbol font `letters' on input line 29.
-LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
-(Font)                  OML/cmm/m/it --> OML/ztmcm/m/it on input line 29.
-LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
-(Font)                  OML/cmm/b/it --> OML/ztmcm/m/it on input line 29.
-LaTeX Font Info:    Redeclaring symbol font `symbols' on input line 30.
-LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
-(Font)                  OMS/cmsy/m/n --> OMS/ztmcm/m/n on input line 30.
-LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
-(Font)                  OMS/cmsy/b/n --> OMS/ztmcm/m/n on input line 30.
-LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 31.
-LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
-(Font)                  OMX/cmex/m/n --> OMX/ztmcm/m/n on input line 31.
-LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
-(Font)                  OMX/cmex/m/n --> OMX/ztmcm/m/n on input line 31.
-\symbold=\mathgroup4
-\symitalic=\mathgroup5
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 34.
-LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> OT1/ptm/bx/n on input line 34.
-LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/ptm/bx/n on input line 34.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 35.
-LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> OT1/ptm/m/it on input line 35.
-LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> OT1/ptm/m/it on input line 35.
-LaTeX Info: Redefining \hbar on input line 50.
+\Gin@req@height=\dimen183
+\Gin@req@width=\dimen184
+) (/home/afkam/.miktex/texmfs/install/tex/latex/base/textcomp.sty
+Package: textcomp 2024/04/24 v2.1b Standard LaTeX package
+) (/home/afkam/.miktex/texmfs/install/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
+ (/home/afkam/.miktex/texmfs/install/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
-LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 8.
- (/home/afkam/.miktex/texmfs/install/tex/latex/psnfss/ot1ptm.fd
-File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
-) (/home/afkam/.miktex/texmfs/install/tex/latex/l3kernel/l3backend-pdftex.def
+Package xcolor Info: Driver file: pdftex.def on input line 274.
+ (/home/afkam/.miktex/texmfs/install/tex/latex/graphics/mathcolor.ltx)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1353.
+Package xcolor Info: Model `RGB' extended on input line 1365.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1367.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1370.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1371.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
+) (/home/afkam/.miktex/texmfs/install/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count303
+\float@exts=\toks26
+\float@box=\box57
+\@float@everytoks=\toks27
+\@floatcapt=\box58
+) (/home/afkam/.miktex/texmfs/install/tex/latex/geometry/geometry.sty
+Package: geometry 2026/03/07 v6.0 Page Geometry
+ (/home/afkam/.miktex/texmfs/install/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+ (/home/afkam/.miktex/texmfs/install/tex/generic/iftex/iftex.sty
+Package: iftex 2024/12/12 v1.0g TeX engine tests
+))
+\Gm@cnth=\count304
+\Gm@cntv=\count305
+\c@Gm@tempcnt=\count306
+\Gm@bindingoffset=\dimen185
+\Gm@wd@mp=\dimen186
+\Gm@odd@mp=\dimen187
+\Gm@even@mp=\dimen188
+\Gm@layoutwidth=\dimen189
+\Gm@layoutheight=\dimen190
+\Gm@layouthoffset=\dimen191
+\Gm@layoutvoffset=\dimen192
+\Gm@dimlist=\toks28
+ (/home/afkam/.miktex/texmfs/install/tex/latex/geometry/geometry.cfg)) (/home/afkam/.miktex/texmfs/install/tex/latex/tools/afterpage.sty
+Package: afterpage 2023/07/04 v1.08 After-Page Package (DPC)
+\AP@output=\toks29
+\AP@partial=\box59
+\AP@footins=\box60
+) (/home/afkam/.miktex/texmfs/install/tex/latex/pdfpages/pdfpages.sty
+Package: pdfpages 2026/03/30 v0.6h Insert pages of external PDF documents (AM)
+ (/home/afkam/.miktex/texmfs/install/tex/latex/base/ifthen.sty
+Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
+) (/home/afkam/.miktex/texmfs/install/tex/latex/tools/calc.sty
+Package: calc 2025/03/01 v4.3b Infix arithmetic (KKT,FJ)
+\calc@Acount=\count307
+\calc@Bcount=\count308
+\calc@Adimen=\dimen193
+\calc@Bdimen=\dimen194
+\calc@Askip=\skip55
+\calc@Bskip=\skip56
+LaTeX Info: Redefining \setlength on input line 86.
+LaTeX Info: Redefining \addtolength on input line 87.
+\calc@Ccount=\count309
+\calc@Cskip=\skip57
+) (/home/afkam/.miktex/texmfs/install/tex/latex/eso-pic/eso-pic.sty
+Package: eso-pic 2026/05/31 v3.0e eso-pic (RN)
+\ESO@tempdima=\dimen195
+\ESO@tempdimb=\dimen196
+) (/home/afkam/.miktex/texmfs/install/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2025/10/02 v2.5m e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count310
+)
+\AM@pagewidth=\dimen197
+\AM@pageheight=\dimen198
+\AM@fboxrule=\dimen199
+ (/home/afkam/.miktex/texmfs/install/tex/latex/pdfpages/pppdftex.def
+File: pppdftex.def 2026/03/30 v0.6h Pdfpages driver for pdfTeX (AM)
+)
+\pdfpages@includegraphics@status=\count311
+\AM@pagebox=\box61
+\AM@global@opts=\toks30
+\AM@pagecnt=\count312
+\AM@toc@title=\toks31
+\AM@lof@heading=\toks32
+\c@AM@survey=\count313
+\AM@templatesizebox=\box62
+) (/home/afkam/.miktex/texmfs/install/tex/latex/tools/verbatim.sty
+Package: verbatim 2024-01-22 v1.5x LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks33
+\verbatim@line=\toks34
+\verbatim@in@stream=\read2
+) (/home/afkam/.miktex/texmfs/install/tex/latex/listings/listings.sty
+\lst@mode=\count314
+\lst@gtempboxa=\box63
+\lst@token=\toks35
+\lst@length=\count315
+\lst@currlwidth=\dimen256
+\lst@column=\count316
+\lst@pos=\count317
+\lst@lostspace=\dimen257
+\lst@width=\dimen258
+\lst@newlines=\count318
+\lst@lineno=\count319
+\lst@maxwidth=\dimen259
+ (/home/afkam/.miktex/texmfs/install/tex/latex/listings/lstpatch.sty
+File: lstpatch.sty 2025/11/14 1.11b (Carsten Heinz)
+) (/home/afkam/.miktex/texmfs/install/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
+\c@lstnumber=\count320
+\lst@skipnumbers=\count321
+\lst@framebox=\box64
+) (/home/afkam/.miktex/texmfs/install/tex/latex/listings/listings.cfg
+File: listings.cfg 2025/11/14 1.11b listings configuration
+))
+Package: listings 2025/11/14 1.11b (Carsten Heinz)
+ (/home/afkam/.miktex/texmfs/install/tex/latex/l3kernel/l3backend-pdftex.def
 File: l3backend-pdftex.def 2026-08-10 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count287
+\l__color_backend_stack_int=\count322
 ) (SIGAP.aux)
 \openout1 = `SIGAP.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
-LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
 
-*geometry* driver: auto-detecting
-*geometry* detected driver: pdftex
-*geometry* verbose mode - [ preamble ] result:
-* driver: pdftex
-* paper: a4paper
-* layout: <same size as paper>
-* layoutoffset:(h,v)=(0.0pt,0.0pt)
-* modes: 
-* h-part:(L,W,R)=(71.13188pt, 455.24411pt, 71.13188pt)
-* v-part:(T,H,B)=(71.13188pt, 702.78308pt, 71.13188pt)
-* \paperwidth=597.50787pt
-* \paperheight=845.04684pt
-* \textwidth=455.24411pt
-* \textheight=702.78308pt
-* \oddsidemargin=-1.1381pt
-* \evensidemargin=-1.1381pt
-* \topmargin=-38.1381pt
-* \headheight=12.0pt
-* \headsep=25.0pt
-* \topskip=12.0pt
-* \footskip=30.0pt
-* \marginparwidth=35.0pt
-* \marginparsep=10.0pt
-* \columnsep=10.0pt
-* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
-* \hoffset=0.0pt
-* \voffset=0.0pt
-* \mag=1000
-* \@twocolumnfalse
-* \@twosidefalse
-* \@mparswitchfalse
-* \@reversemarginfalse
-* (1in=72.27pt=25.4mm, 1cm=28.453pt)
-
+-- Lines per column: 46 (approximate, difference = 4.47656pt).
 (/home/afkam/.miktex/texmfs/install/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count288
-\scratchdimen=\dimen161
-\scratchbox=\box53
-\nofMPsegments=\count289
-\nofMParguments=\count290
-\everyMPshowfont=\toks21
-\MPscratchCnt=\count291
-\MPscratchDim=\dimen162
-\MPnumerator=\count292
-\makeMPintoPDFobject=\count293
-\everyMPtoPDFconversion=\toks22
+\scratchcounter=\count323
+\scratchdimen=\dimen260
+\scratchbox=\box65
+\nofMPsegments=\count324
+\nofMParguments=\count325
+\everyMPshowfont=\toks36
+\MPscratchCnt=\count326
+\MPscratchDim=\dimen261
+\MPnumerator=\count327
+\makeMPintoPDFobject=\count328
+\everyMPtoPDFconversion=\toks37
 ) (/home/afkam/.miktex/texmfs/install/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
  (/home/afkam/.miktex/texmfs/install/tex/latex/00miktex/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-\big@size=\dimen163
-<logo_pens.png, id=1, 439.6425pt x 419.5675pt>
-File: logo_pens.png Graphic file (type png)
-<use logo_pens.png>
-Package pdftex.def Info: logo_pens.png  used on input line 21.
-(pdftex.def)             Requested size: 204.85846pt x 195.5002pt.
- [1
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(92.14519pt, 430.00462pt, 92.14519pt)
+* v-part:(T,H,B)=(95.39737pt, 556.47656pt, 143.09605pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=430.00462pt
+* \textheight=556.47656pt
+* \oddsidemargin=19.8752pt
+* \evensidemargin=19.8752pt
+* \topmargin=-7.44023pt
+* \headheight=12.0pt
+* \headsep=18.56761pt
+* \topskip=12.0pt
+* \footskip=40.5821pt
+* \marginparwidth=20.0pt
+* \marginparsep=10.0pt
+* \columnsep=12.0pt
+* \skip\footins=10.79993pt plus 4.79993pt minus 2.39996pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumntrue
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-{/home/afkam/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map}{/home/afkam/.miktex/texmfs/install/fonts/enc/dvips/base/8r.enc} <./logo_pens.png (PNG copy)>] (SIGAP.aux)
+(/home/afkam/.miktex/texmfs/install/tex/latex/pdflscape/pdflscape.sty
+Package: pdflscape 2022-10-27 v0.13 Display of landscape pages in PDF
+ (/home/afkam/.miktex/texmfs/install/tex/latex/pdflscape/pdflscape-nometadata.sty
+Package: pdflscape-nometadata 2022-10-28 v0.13 Display of landscape pages in PDF (HO)
+ (/home/afkam/.miktex/texmfs/install/tex/latex/graphics/lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
+)
+Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
+))
+\c@lstlisting=\count329
+<pens_logo.png, id=1, 439.6425pt x 419.5675pt>
+File: pens_logo.png Graphic file (type png)
+<use pens_logo.png>
+Package pdftex.def Info: pens_logo.png  used on input line 35.
+(pdftex.def)             Requested size: 213.39566pt x 203.65004pt.
+ [0
+
+
+
+{/home/afkam/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map}{/home/afkam/.miktex/texmfs/install/fonts/enc/dvips/base/8r.enc} <./pens_logo.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 82--84
+[]\OT1/ptm/b/it/9 Abstract\OT1/ptm/b/n/9 ---Perundungan (\OT1/ptm/b/it/9 bullying\OT1/ptm/b/n/9 ) dan
+ []
+
+
+Underfull \hbox (badness 8113) in paragraph at lines 82--84
+\OT1/ptm/b/n/9 isu serius yang berdampak negatif terhadap
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 82--84
+\OT1/ptm/b/n/9 kesejahteraan psikologis dan perkembangan
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 82--84
+\OT1/ptm/b/n/9 sosial siswa. Penanganan kasus perundungan
+ []
+
+
+Underfull \hbox (badness 8170) in paragraph at lines 82--84
+\OT1/ptm/b/n/9 sering kali terkendala oleh tiadanya saluran
+ []
+
+
+Underfull \hbox (badness 3209) in paragraph at lines 82--84
+\OT1/ptm/b/n/9 Pelajar), sebuah platform digital terpadu yang
+ []
+
+
+Underfull \hbox (badness 6608) in paragraph at lines 82--84
+\OT1/ptm/b/n/9 memfasilitasi pelaporan pengaduan siswa baik
+ []
+
+
+Underfull \hbox (badness 5756) in paragraph at lines 82--84
+\OT1/ptm/b/n/9 dengan sistem penjejak tiket (\OT1/ptm/b/it/9 ticket tracking\OT1/ptm/b/n/9 ).
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 82--84
+\OT1/ptm/b/n/9 SIGAP mengintegrasikan pemrosesan bahasa
+ []
+
+
+Underfull \hbox (badness 7397) in paragraph at lines 82--84
+\OT1/ptm/b/n/9 sarana pendukung pelaporan dan pengelolaan
+ []
+
+
+Underfull \hbox (badness 3428) in paragraph at lines 86--88
+\OT1/ptm/b/n/9 SIGAP, Sistem Pengaduan, Kecerdasan Buatan,
+ []
+
+
+LaTeX Warning: Citation `zhang2022' on page 1 undefined on input line 92.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 92--93
+[]\OT1/ptm/m/n/10 Perkembangan teknologi informasi dan
+ []
+
+
+Underfull \hbox (badness 3623) in paragraph at lines 92--93
+\OT1/ptm/m/n/10 dalam kehidupan masyarakat, termasuk dalam
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 92--93
+\OT1/ptm/m/n/10 bidang pendidikan. Namun, perkembangan
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 92--93
+\OT1/ptm/m/n/10 tersebut juga menimbulkan tantangan baru
+ []
+
+
+Underfull \hbox (badness 2213) in paragraph at lines 92--93
+\OT1/ptm/m/n/10 dengan memanfaatkan teknologi informasi dan
+ []
+
+
+Underfull \hbox (badness 6445) in paragraph at lines 92--93
+\OT1/ptm/m/n/10 dan teknologi berbasis internet menyebabkan
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+LaTeX Warning: Citation `amanatin2024' on page 1 undefined on input line 94.
+
+
+Underfull \hbox (badness 1888) in paragraph at lines 94--95
+\OT1/ptm/m/n/10 karena anak dan remaja merupakan kelompok
+ []
+
+
+Underfull \hbox (badness 5302) in paragraph at lines 94--95
+\OT1/ptm/m/n/10 yang aktif menggunakan internet dan media
+ []
+
+
+Underfull \hbox (badness 3260) in paragraph at lines 94--95
+\OT1/ptm/m/n/10 sosial. Penelitian Amanatin dan Sekarningrum
+ []
+
+
+Underfull \hbox (badness 4156) in paragraph at lines 94--95
+\OT1/ptm/m/n/10 telah menjadi persoalan di beberapa wilayah
+ []
+
+
+Underfull \hbox (badness 1742) in paragraph at lines 94--95
+\OT1/ptm/m/n/10 terjadi pada remaja dalam konteks lingkungan
+ []
+
+
+Underfull \hbox (badness 2005) in paragraph at lines 94--95
+\OT1/ptm/m/n/10 bahwa permasalahan perundungan digital tidak
+ []
+
+[1
+
+
+
+
+]
+
+LaTeX Warning: Citation `maftuh2024' on page 2 undefined on input line 96.
+
+
+Underfull \hbox (badness 2735) in paragraph at lines 96--97
+\OT1/ptm/m/n/10 terhadap 384 siswa SMA dari enam sekolah
+ []
+
+
+Underfull \hbox (badness 1688) in paragraph at lines 96--97
+\OT1/ptm/m/n/10 bahwa perilaku \OT1/ptm/m/it/10 cyberbullying \OT1/ptm/m/n/10 berkaitan dengan
+ []
+
+
+Underfull \hbox (badness 5519) in paragraph at lines 96--97
+\OT1/ptm/m/n/10 penggunaan media sosial dapat memengaruhi
+ []
+
+
+Underfull \hbox (badness 5274) in paragraph at lines 96--97
+\OT1/ptm/m/n/10 perilaku \OT1/ptm/m/it/10 cyberbullying \OT1/ptm/m/n/10 [\OT1/ptm/b/n/10 ?\OT1/ptm/m/n/10 ]. Dengan demikian,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 96--97
+\OT1/ptm/m/n/10 penanganan perundungan tidak cukup hanya
+ []
+
+
+Underfull \hbox (badness 1769) in paragraph at lines 96--97
+\OT1/ptm/m/n/10 berfokus pada pelaku dan korban, tetapi juga
+ []
+
+
+Underfull \hbox (badness 2027) in paragraph at lines 96--97
+\OT1/ptm/m/n/10 mendukung proses pelaporan, pencegahan, dan
+ []
+
+
+LaTeX Warning: Citation `li2024' on page 2 undefined on input line 98.
+
+
+Underfull \hbox (badness 4673) in paragraph at lines 98--99
+\OT1/ptm/m/n/10 dan \OT1/ptm/m/it/10 cyberbullying \OT1/ptm/m/n/10 memiliki hubungan dengan
+ []
+
+
+Underfull \hbox (badness 3302) in paragraph at lines 98--99
+\OT1/ptm/m/n/10 karena itu, diperlukan mekanisme penanganan
+ []
+
+
+LaTeX Warning: Citation `evangelio2022' on page 2 undefined on input line 100.
+
+
+LaTeX Warning: Citation `eleanora2021' on page 2 undefined on input line 100.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 100--101
+\OT1/ptm/m/n/10 perundungan dapat dilaporkan dan dikelola
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 100--101
+\OT1/ptm/m/n/10 aman. Sistem pelaporan juga perlu mampu
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 100--101
+\OT1/ptm/m/n/10 menangani berbagai bentuk perundungan,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 100--101
+\OT1/ptm/m/n/10 pencegahan \OT1/ptm/m/it/10 cyberbullying \OT1/ptm/m/n/10 dapat memberikan
+ []
+
+
+LaTeX Warning: Citation `kasturiratna2025' on page 2 undefined on input line 102.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 102--103
+[]\OT1/ptm/m/n/10 Selain menyediakan mekanisme pelaporan,
+ []
+
+
+Underfull \hbox (badness 3769) in paragraph at lines 102--103
+\OT1/ptm/m/n/10 membantu pihak sekolah mengelola informasi
+ []
+
+
+Underfull \hbox (badness 7613) in paragraph at lines 102--103
+\OT1/ptm/m/n/10 yang masuk. Jumlah laporan yang semakin
+ []
+
+
+Underfull \hbox (badness 1796) in paragraph at lines 102--103
+\OT1/ptm/m/n/10 banyak dapat membuat proses identifikasi dan
+ []
+
+
+Underfull \hbox (badness 2644) in paragraph at lines 102--103
+\OT1/ptm/m/n/10 pengelompokan kasus menjadi lebih kompleks
+ []
+
+
+Underfull \hbox (badness 5403) in paragraph at lines 102--103
+\OT1/ptm/m/n/10 apabila dilakukan sepenuhnya secara manual.
+ []
+
+
+Underfull \hbox (badness 2707) in paragraph at lines 102--103
+\OT1/ptm/m/n/10 keputusan, bukan sebagai pengganti keputusan
+ []
+
+
+Underfull \hbox (badness 1888) in paragraph at lines 102--103
+\OT1/ptm/m/n/10 pihak sekolah. Berdasarkan kajian Kasturiratna
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 102--103
+\OT1/ptm/m/it/10 effect sizes\OT1/ptm/m/n/10 , \OT1/ptm/m/it/10 cyberbullying \OT1/ptm/m/n/10 memiliki berbagai
+ []
+
+
+LaTeX Warning: Citation `zhang2022' on page 2 undefined on input line 104.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 104--105
+\OT1/ptm/m/n/10 dalam mendefinisikan dan mengklasifikasikan
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 104--105
+\OT1/ptm/m/it/10 cyberbullying\OT1/ptm/m/n/10 . Zhang et al. menunjukkan
+ []
+
+
+Underfull \hbox (badness 2057) in paragraph at lines 104--105
+\OT1/ptm/m/n/10 bahwa penelitian mengenai \OT1/ptm/m/it/10 cyberbullying \OT1/ptm/m/n/10 telah
+ []
+
+
+Underfull \hbox (badness 4060) in paragraph at lines 104--105
+\OT1/ptm/m/n/10 menggunakan berbagai definisi dan instrumen
+ []
+
+
+Underfull \hbox (badness 5431) in paragraph at lines 104--105
+\OT1/ptm/m/n/10 pengukuran, sehingga pemilihan kategori dan
+ []
+
+
+Underfull \hbox (badness 1824) in paragraph at lines 104--105
+\OT1/ptm/m/n/10 hati [\OT1/ptm/b/n/10 ?\OT1/ptm/m/n/10 ]. Oleh karena itu, pemanfaatan model
+ []
+
+
+Underfull \hbox (badness 6608) in paragraph at lines 104--105
+\OT1/ptm/m/n/10 pemrosesan bahasa alami (\OT1/ptm/m/it/10 Natural Language
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 104--105
+\OT1/ptm/m/it/10 Processing\OT1/ptm/m/n/10 /NLP) dapat menjadi salah satu
+ []
+
+
+Underfull \hbox (badness 5504) in paragraph at lines 104--105
+\OT1/ptm/m/n/10 pendekatan untuk membantu menganalisis isi
+ []
+
+
+Underfull \hbox (badness 6725) in paragraph at lines 104--105
+\OT1/ptm/m/n/10 SIGAP, pendekatan tersebut dapat digunakan
+ []
+
+
+Underfull \hbox (badness 1708) in paragraph at lines 106--107
+\OT1/ptm/m/n/10 Perundungan dan Kekerasan Pelajar) dirancang
+ []
+
+
+Underfull \hbox (badness 4940) in paragraph at lines 106--107
+\OT1/ptm/m/n/10 menyampaikan laporan mengenai perundungan
+ []
+
+
+Underfull \hbox (badness 5274) in paragraph at lines 106--107
+\OT1/ptm/m/n/10 atau kekerasan, baik secara anonim maupun
+ []
+
+
+Underfull \hbox (badness 2020) in paragraph at lines 106--107
+\OT1/ptm/m/n/10 dengan identitas, memperoleh tiket pengaduan,
+ []
+
+
+Underfull \hbox (badness 3000) in paragraph at lines 106--107
+\OT1/ptm/m/n/10 pengelola, sistem menyediakan fitur verifikasi,
+ []
+
+
+Underfull \hbox (badness 6944) in paragraph at lines 106--107
+\OT1/ptm/m/n/10 pengelompokan laporan, rekomendasi kategori
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 106--107
+\OT1/ptm/m/n/10 aktivitas (\OT1/ptm/m/it/10 audit trail\OT1/ptm/m/n/10 ). Pendekatan tersebut
+ []
+
+[2]
+
+LaTeX Warning: Citation `maftuh2024' on page 3 undefined on input line 108.
+
+
+LaTeX Warning: Citation `kasturiratna2025' on page 3 undefined on input line 108.
+
+
+Underfull \hbox (badness 3302) in paragraph at lines 108--109
+[]\OT1/ptm/m/n/10 Dengan demikian, SIGAP diharapkan dapat
+ []
+
+
+Underfull \hbox (badness 4072) in paragraph at lines 108--109
+\OT1/ptm/m/n/10 mendukung proses pelaporan dan penanganan
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--109
+\OT1/ptm/m/n/10 diverifikasi, dan ditindaklanjuti secara lebih
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--109
+\OT1/ptm/m/n/10 sistematis. Hal ini sejalan dengan temuan
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--109
+\OT1/ptm/m/n/10 dan dukungan lingkungan dalam menangani
+ []
+
+
+Underfull \hbox (badness 5008) in paragraph at lines 122--123
+\OT1/ptm/m/n/8 and H. Blasco-Fontecilla, ``Traditional bullying and
+ []
+
+
+Underfull \hbox (badness 2503) in paragraph at lines 128--129
+\OT1/ptm/m/n/8 on the risk factors, protective factors, consequences
+ []
+
+
+Underfull \hbox (badness 2237) in paragraph at lines 128--129
+\OT1/ptm/m/it/8 Human Behaviour\OT1/ptm/m/n/8 , vol. 9, pp. 101--132, 2025, doi:
+ []
+
+
+Underfull \hbox (badness 2828) in paragraph at lines 131--132
+\OT1/ptm/m/n/8 dunia maya (Cyberbullying) dan upaya preventif di
+ []
+
+[3] (/home/afkam/.miktex/texmfs/install/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+) (/home/afkam/.miktex/texmfs/install/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2025/11/14 1.11b listings language file
+) (/home/afkam/.miktex/texmfs/install/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2025/11/14 1.11b listings language file
+) (/home/afkam/.miktex/texmfs/install/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+) (/home/afkam/.miktex/texmfs/install/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2025/11/14 1.11b listings language file
+) (/home/afkam/.miktex/texmfs/install/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2025/11/14 1.11b listings language file
+) (/home/afkam/.miktex/texmfs/install/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+) (/home/afkam/.miktex/texmfs/install/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2025/11/14 1.11b listings language file
+) (/home/afkam/.miktex/texmfs/install/tex/latex/listings/lstlang3.sty
+File: lstlang3.sty 2025/11/14 1.11b listings language file
+) (/home/afkam/.miktex/texmfs/install/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
+)
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 161.
+ (/home/afkam/.miktex/texmfs/install/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+) (SIGAP-source.tex
+LaTeX Font Info:    Font shape `OT1/pcr/m/it' in size <8> not available
+(Font)              Font shape `OT1/pcr/m/sl' tried instead on input line 17.
+ [4
+
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [5]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [6]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [8]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [9]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [10])
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [11] [12]
+<Arsitektur Sistem SIGAP/ArsitekturSistem_SIGAP.png, id=51, 1540.75626pt x 1027.84pt>
+File: Arsitektur Sistem SIGAP/ArsitekturSistem_SIGAP.png Graphic file (type png)
+<use Arsitektur Sistem SIGAP/ArsitekturSistem_SIGAP.png>
+Package pdftex.def Info: Arsitektur Sistem SIGAP/ArsitekturSistem_SIGAP.png  used on input line 183.
+(pdftex.def)             Requested size: 429.99821pt x 286.85222pt.
+
+Underfull \hbox (badness 1521) in paragraph at lines 195--199
+[]\OT1/ptm/m/n/10 Siswa mengisi laporan, mengunggah bukti bila tersedia, lalu sistem menyimpan laporan dan
+ []
+
+[13
+
+ <./Arsitektur Sistem SIGAP/ArsitekturSistem_SIGAP.png>] [14]
+<Desain Sistem/DesainSistem_SIGAP.png, id=58, 1541.76pt x 1027.84pt>
+File: Desain Sistem/DesainSistem_SIGAP.png Graphic file (type png)
+<use Desain Sistem/DesainSistem_SIGAP.png>
+Package pdftex.def Info: Desain Sistem/DesainSistem_SIGAP.png  used on input line 221.
+(pdftex.def)             Requested size: 429.99603pt x 286.66402pt.
+ [15
+
+ <./Desain Sistem/DesainSistem_SIGAP.png>] [16]
+<Frontend/OnBoardingUser_SIGAP.png, id=65, 2569.6pt x 1746.525pt>
+File: Frontend/OnBoardingUser_SIGAP.png Graphic file (type png)
+<use Frontend/OnBoardingUser_SIGAP.png>
+Package pdftex.def Info: Frontend/OnBoardingUser_SIGAP.png  used on input line 261.
+(pdftex.def)             Requested size: 206.39558pt x 140.2845pt.
+<Frontend/DashboardUser_SIGAP.png, id=67, 2569.6pt x 2719.15875pt>
+File: Frontend/DashboardUser_SIGAP.png Graphic file (type png)
+<use Frontend/DashboardUser_SIGAP.png>
+Package pdftex.def Info: Frontend/DashboardUser_SIGAP.png  used on input line 269.
+(pdftex.def)             Requested size: 206.39558pt x 218.40845pt.
+<Frontend/FormulirPengaduanUser_SIGAP.png, id=68, 2569.6pt x 3065.4525pt>
+File: Frontend/FormulirPengaduanUser_SIGAP.png Graphic file (type png)
+<use Frontend/FormulirPengaduanUser_SIGAP.png>
+Package pdftex.def Info: Frontend/FormulirPengaduanUser_SIGAP.png  used on input line 278.
+(pdftex.def)             Requested size: 195.8876pt x 233.68779pt.
+<Frontend/LacakStatusLaporanUser_SIGAP.png, id=69, 2569.6pt x 3067.46pt>
+File: Frontend/LacakStatusLaporanUser_SIGAP.png Graphic file (type png)
+<use Frontend/LacakStatusLaporanUser_SIGAP.png>
+Package pdftex.def Info: Frontend/LacakStatusLaporanUser_SIGAP.png  used on input line 286.
+(pdftex.def)             Requested size: 195.76997pt x 233.70041pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [17
+
+ <./Frontend/OnBoardingUser_SIGAP.png> <./Frontend/DashboardUser_SIGAP.png>]
+<Frontend/OnBoardingAdmin_SIGAP.png, id=75, 2569.6pt x 2304.61pt>
+File: Frontend/OnBoardingAdmin_SIGAP.png Graphic file (type png)
+<use Frontend/OnBoardingAdmin_SIGAP.png>
+Package pdftex.def Info: Frontend/OnBoardingAdmin_SIGAP.png  used on input line 295.
+(pdftex.def)             Requested size: 206.39558pt x 185.11104pt.
+<Frontend/DashboardAdmin_SIGAP.png, id=76, 2569.6pt x 2945.0025pt>
+File: Frontend/DashboardAdmin_SIGAP.png Graphic file (type png)
+<use Frontend/DashboardAdmin_SIGAP.png>
+Package pdftex.def Info: Frontend/DashboardAdmin_SIGAP.png  used on input line 303.
+(pdftex.def)             Requested size: 203.92543pt x 233.71765pt.
+<Frontend/DaftarLaporanMasukAdmin_SIGAP.png, id=77, 2569.6pt x 3120.65875pt>
+File: Frontend/DaftarLaporanMasukAdmin_SIGAP.png Graphic file (type png)
+<use Frontend/DaftarLaporanMasukAdmin_SIGAP.png>
+Package pdftex.def Info: Frontend/DaftarLaporanMasukAdmin_SIGAP.png  used on input line 312.
+(pdftex.def)             Requested size: 192.43723pt x 233.70598pt.
+<Frontend/StatusLaporanAdmin_SIGAP.png, id=78, 2569.6pt x 2120.92375pt>
+File: Frontend/StatusLaporanAdmin_SIGAP.png Graphic file (type png)
+<use Frontend/StatusLaporanAdmin_SIGAP.png>
+Package pdftex.def Info: Frontend/StatusLaporanAdmin_SIGAP.png  used on input line 320.
+(pdftex.def)             Requested size: 206.39558pt x 170.35698pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [18 <./Frontend/FormulirPengaduanUser_SIGAP.png> <./Frontend/LacakStatusLaporanUser_SIGAP.png> <./Frontend/OnBoardingAdmin_SIGAP.png> <./Frontend/DashboardAdmin_SIGAP.png>]
+<Frontend/JejakAuditAdmin_SIGAP.png, id=87, 2569.6pt x 2836.5975pt>
+File: Frontend/JejakAuditAdmin_SIGAP.png Graphic file (type png)
+<use Frontend/JejakAuditAdmin_SIGAP.png>
+Package pdftex.def Info: Frontend/JejakAuditAdmin_SIGAP.png  used on input line 329.
+(pdftex.def)             Requested size: 206.39558pt x 227.84138pt.
+
+
+** Conference Paper **
+Before submitting the final camera ready copy, remember to:
+
+ 1. Manually equalize the lengths of two columns on the last page
+ of your paper;
+
+ 2. Ensure that any PostScript and/or PDF output post-processing
+ uses only Type 1 fonts and that every step in the generation
+ process uses the appropriate paper size.
+
+[19 <./Frontend/DaftarLaporanMasukAdmin_SIGAP.png> <./Frontend/StatusLaporanAdmin_SIGAP.png> <./Frontend/JejakAuditAdmin_SIGAP.png>] (SIGAP.aux)
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-08-10>
  ***********
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
  ) 
 Here is how much of TeX's memory you used:
- 2042 strings out of 469378
- 33314 string characters out of 5459632
- 442709 words of memory out of 5000000
- 31122 multiletter control sequences out of 15000+600000
- 633375 words of font info for 48 fonts, out of 8000000 for 9000
+ 9723 strings out of 469378
+ 148851 string characters out of 5459632
+ 1384439 words of memory out of 5000000
+ 38672 multiletter control sequences out of 15000+600000
+ 670077 words of font info for 109 fonts, out of 8000000 for 9000
  0 hyphenation exceptions out of 8191
- 57i,5n,65p,263b,184s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</home/afkam/.miktex/texmfs/install/fonts/type1/urw/times/utmb8a.pfb></home/afkam/.miktex/texmfs/install/fonts/type1/urw/times/utmr8a.pfb>
-Output written on SIGAP.pdf (1 page, 147435 bytes).
+ 67i,8n,73p,1403b,2975s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</home/afkam/.miktex/texmfs/install/fonts/type1/urw/courier/ucrb8a.pfb></home/afkam/.miktex/texmfs/install/fonts/type1/urw/courier/ucrr8a.pfb></home/afkam/.miktex/texmfs/install/fonts/type1/urw/courier/ucrro8a.pfb></home/afkam/.miktex/texmfs/install/fonts/type1/urw/times/utmb8a.pfb></home/afkam/.miktex/texmfs/install/fonts/type1/urw/times/utmbi8a.pfb></home/afkam/.miktex/texmfs/install/fonts/type1/urw/times/utmr8a.pfb></home/afkam/.miktex/texmfs/install/fonts/type1/urw/times/utmri8a.pfb>
+Output written on SIGAP.pdf (20 pages, 5767691 bytes).
 PDF statistics:
- 18 PDF objects out of 1000 (max. 8388607)
+ 125 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
 
