@@ -56,7 +56,7 @@
 \vspace{0.15cm}
 {\fontsize{13pt}{18pt}\selectfont\bfseries POLITEKNIK ELEKTRONIKA NEGERI SURABAYA\par}
 \vspace{0.2cm}
-{\fontsize{13pt}{18pt}\selectfont\bfseries 2025\par}
+{\fontsize{13pt}{18pt}\selectfont\bfseries 2026\par}
 
 \vspace*{0.5cm}
 \end{titlepage}
@@ -68,13 +68,11 @@
 \author{
 \IEEEauthorblockN{Ahmad Falihul Hikam}
 \IEEEauthorblockA{\textit{D3 Teknik Informatika PSDKU Lamongan} \\
-\textit{Politeknik Elektronika Negeri Surabaya}\\
-NRP: 3125521007}
+\textit{Politeknik Elektronika Negeri Surabaya}}
 \and
 \IEEEauthorblockN{Arvin Dzaky Nugraha}
 \IEEEauthorblockA{\textit{D3 Teknik Informatika PSDKU Lamongan} \\
-\textit{Politeknik Elektronika Negeri Surabaya}\\
-NRP: 3125521027}
+\textit{Politeknik Elektronika Negeri Surabaya}}
 }
 
 \maketitle
@@ -84,28 +82,18 @@ Perundungan (\textit{bullying}) dan \textit{cyberbullying} di lingkungan pendidi
 \end{abstract}
 
 \begin{IEEEkeywords}
-Cyberbullying, Perundungan Pelajar, SIGAP, Sistem Pengaduan, Kecerdasan Buatan, Natural Language Processing.
+Perundungan Pelajar, SIGAP, Sistem Pengaduan, Kecerdasan Buatan, Natural Language Processing.
 \end{IEEEkeywords}
 
 \section{BAB I: LATAR BELAKANG}
 
-Perkembangan teknologi informasi dan komunikasi telah memberikan berbagai kemudahan dalam kehidupan masyarakat, termasuk dalam bidang pendidikan. Namun, perkembangan tersebut juga menimbulkan tantangan baru berupa munculnya tindakan perundungan melalui media digital atau \textit{cyberbullying}. \textit{Cyberbullying} merupakan bentuk perundungan yang dilakukan dengan memanfaatkan teknologi informasi dan komunikasi, seperti media sosial, pesan elektronik, dan berbagai platform digital lainnya. Zhang et al. menjelaskan bahwa perkembangan media sosial dan teknologi berbasis internet menyebabkan masyarakat semakin terhubung, tetapi pada saat yang sama menciptakan ruang baru bagi terjadinya perilaku perundungan terhadap anak dan remaja \cite{zhang2022}.
+Perkembangan teknologi informasi dan komunikasi telah memberikan kemudahan bagi pelajar dalam berkomunikasi dan berinteraksi, tetapi di sisi lain juga menghadirkan bentuk perundungan baru melalui media digital atau \textit{cyberbullying}. Perundungan tidak hanya terjadi secara langsung di lingkungan sekolah, tetapi dapat berkembang melalui media sosial dan platform digital. Zhang et al. menjelaskan bahwa selama dua dekade terakhir terdapat berbagai definisi dan metode pengukuran \textit{cyberbullying} pada anak dan remaja, yang menunjukkan bahwa fenomena tersebut menjadi perhatian dalam lingkungan digital \cite{zhang2022}. Penelitian Amanatin dan Sekarningrum juga menunjukkan adanya berbagai bentuk dan penyebab \textit{cyberbullying} pada remaja di wilayah perkotaan Indonesia, termasuk Jakarta, Bandung, dan Surabaya \cite{amanatin2024}.
 
-Permasalahan tersebut menjadi semakin penting karena anak dan remaja merupakan kelompok yang aktif menggunakan internet dan media sosial. Penelitian Amanatin dan Sekarningrum menunjukkan bahwa \textit{cyberbullying} pada remaja telah menjadi persoalan di beberapa wilayah perkotaan Indonesia, termasuk Jakarta, Bandung, dan Surabaya. Penelitian tersebut mengidentifikasi berbagai bentuk dan penyebab \textit{cyberbullying} yang terjadi pada remaja dalam konteks lingkungan perkotaan Indonesia \cite{amanatin2024}. Hal tersebut menunjukkan bahwa permasalahan perundungan digital tidak hanya menjadi isu global, tetapi juga memiliki relevansi yang kuat dalam lingkungan pendidikan di Indonesia.
+Lingkungan sekolah memiliki peran penting dalam upaya pencegahan dan penanganan perundungan. Maftuh et al. menunjukkan adanya keterkaitan antara iklim sekolah dengan perilaku \textit{cyberbullying} pada siswa sekolah menengah, sehingga kondisi lingkungan sekolah menjadi salah satu aspek yang perlu diperhatikan dalam menangani permasalahan tersebut \cite{maftuh2024}. Selain itu, penelitian Eleanora dan Al Adawiah pada siswa SMK menunjukkan pentingnya upaya preventif dalam menghadapi \textit{cyberbullying} di lingkungan pendidikan \cite{eleanora2021}. Hal ini menunjukkan bahwa sekolah membutuhkan mekanisme yang dapat membantu siswa menyampaikan informasi mengenai perundungan serta membantu pihak sekolah dalam mengelola laporan secara lebih terstruktur.
 
-Lingkungan sekolah juga memiliki peran penting dalam munculnya maupun pencegahan perilaku \textit{cyberbullying}. Maftuh et al. melakukan penelitian terhadap 384 siswa SMA dari enam sekolah negeri dan swasta di Magelang dan menemukan bahwa perilaku \textit{cyberbullying} berkaitan dengan kondisi iklim sekolah serta \textit{psychological capital} siswa. Penelitian tersebut juga menunjukkan bahwa penggunaan media sosial dapat memengaruhi hubungan antara faktor lingkungan sekolah dan perilaku \textit{cyberbullying} \cite{maftuh2024}. Dengan demikian, penanganan perundungan tidak cukup hanya berfokus pada pelaku dan korban, tetapi juga membutuhkan lingkungan sekolah yang mampu mendukung proses pelaporan, pencegahan, dan penanganan kasus secara sistematis.
+Perundungan juga dapat memberikan dampak yang serius terhadap siswa. Li et al. melalui meta-analisis menunjukkan adanya hubungan antara \textit{traditional bullying} dan \textit{cyberbullying} dengan berbagai permasalahan kesehatan mental pada anak dan remaja \cite{li2024}. Sementara itu, Evangelio et al. melalui \textit{systematic review} mengenai \textit{cyberbullying} pada siswa sekolah dasar dan menengah menekankan pentingnya upaya pencegahan dan intervensi terhadap permasalahan tersebut \cite{evangelio2022}. Kajian Kasturiratna et al. juga menunjukkan bahwa \textit{cyberbullying} memiliki berbagai faktor risiko, faktor protektif, konsekuensi, serta membutuhkan bentuk intervensi yang sesuai \cite{kasturiratna2025}. Oleh karena itu, diperlukan mekanisme pelaporan yang dapat membantu siswa menyampaikan pengaduan dengan lebih mudah dan membantu pihak sekolah dalam melakukan proses penanganan secara sistematis.
 
-Dampak perundungan terhadap siswa juga perlu menjadi perhatian serius. Li et al. melalui meta-analisis terhadap 42 penelitian dengan total 266.888 partisipan menunjukkan bahwa \textit{bullying} tradisional dan \textit{cyberbullying} memiliki hubungan dengan berbagai permasalahan psikologis pada anak dan remaja \cite{li2024}. Temuan tersebut memperlihatkan bahwa perundungan bukan sekadar permasalahan sosial di lingkungan sekolah, tetapi dapat berkaitan dengan kondisi psikologis dan kesejahteraan siswa. Oleh karena itu, diperlukan mekanisme penanganan yang dapat membantu pihak sekolah menerima informasi mengenai kejadian perundungan secara lebih terstruktur.
-
-Permasalahan lainnya adalah bagaimana kasus perundungan dapat dilaporkan dan dikelola secara efektif. Dalam lingkungan sekolah, siswa yang mengalami atau mengetahui suatu kejadian perundungan memerlukan saluran pelaporan yang mudah digunakan dan mampu memberikan rasa aman. Sistem pelaporan juga perlu mampu menangani berbagai bentuk perundungan, baik perundungan verbal, fisik, sosial, maupun \textit{cyberbullying}. Evangelio et al. melalui systematic review mengenai \textit{cyberbullying} pada siswa sekolah dasar dan menengah menunjukkan bahwa program pencegahan \textit{cyberbullying} dapat memberikan hasil yang efektif, termasuk ketika pencegahan dilakukan sejak usia sekolah \cite{evangelio2022}. Upaya preventif di kalangan siswa juga menjadi bagian penting dalam membangun kesadaran dan perlindungan terhadap perundungan dunia maya \cite{eleanora2021}.
-
-Selain menyediakan mekanisme pelaporan, sistem digital perlu memiliki kemampuan untuk membantu pihak sekolah mengelola informasi yang masuk. Jumlah laporan yang semakin banyak dapat membuat proses identifikasi dan pengelompokan kasus menjadi lebih kompleks apabila dilakukan sepenuhnya secara manual. Dalam konteks ini, teknologi kecerdasan buatan dapat digunakan sebagai alat bantu pengambilan keputusan, bukan sebagai pengganti keputusan pihak sekolah. Berdasarkan kajian Kasturiratna et al., yang mencakup 56 meta-analisis dan 296 \textit{effect sizes}, \textit{cyberbullying} memiliki berbagai faktor risiko, konsekuensi psikologis dan perilaku, serta membutuhkan intervensi yang tepat untuk mengurangi dampaknya \cite{kasturiratna2025}.
-
-Penggunaan teknologi untuk membantu proses identifikasi juga perlu memperhatikan konsistensi dalam mendefinisikan dan mengklasifikasikan \textit{cyberbullying}. Zhang et al. menunjukkan bahwa penelitian mengenai \textit{cyberbullying} telah menggunakan berbagai definisi dan instrumen pengukuran, sehingga pemilihan kategori dan metode identifikasi perlu dilakukan secara hati-hati \cite{zhang2022}. Oleh karena itu, pemanfaatan model pemrosesan bahasa alami (\textit{Natural Language Processing}/NLP) dapat menjadi salah satu pendekatan untuk membantu menganalisis isi laporan yang ditulis oleh siswa. Dalam rancangan SIGAP, pendekatan tersebut dapat digunakan untuk menghasilkan rekomendasi kategori laporan berdasarkan isi pengaduan, sedangkan keputusan akhir tetap berada pada pihak admin atau petugas yang berwenang.
-
-Berdasarkan permasalahan tersebut, diperlukan sebuah sistem yang tidak hanya berfungsi sebagai media pengaduan, tetapi juga mampu mendukung proses pengelolaan dan tindak lanjut laporan secara terstruktur. SIGAP (Sistem Informasi Pengaduan Perundungan dan Kekerasan Pelajar) dirancang sebagai platform digital yang memungkinkan siswa menyampaikan laporan mengenai perundungan atau kekerasan, baik secara anonim maupun dengan identitas, memperoleh tiket pengaduan, serta memantau perkembangan laporan. Pada sisi pengelola, sistem menyediakan fitur verifikasi, pengelompokan laporan, rekomendasi kategori berbasis AI, pemantauan status, serta pencatatan aktivitas (\textit{audit trail}). Pendekatan tersebut diharapkan dapat membantu menciptakan proses pelaporan yang lebih terstruktur, terdokumentasi, dan mudah dipantau.
-
-Dengan demikian, SIGAP diharapkan dapat menjadi salah satu pendekatan teknologi dalam mendukung proses pelaporan dan penanganan perundungan di lingkungan pendidikan. Sistem ini tidak dimaksudkan untuk menggantikan peran guru, konselor, atau pihak sekolah dalam mengambil keputusan, tetapi sebagai sarana pendukung agar informasi pengaduan dapat diterima, dikategorikan, diverifikasi, dan ditindaklanjuti secara lebih sistematis. Hal ini sejalan dengan temuan penelitian yang menunjukkan pentingnya intervensi dan dukungan lingkungan dalam menangani \textit{cyberbullying} serta perlunya pendekatan yang lebih terstruktur untuk melindungi siswa \cite{maftuh2024,kasturiratna2025}.
+Berdasarkan permasalahan tersebut, diperlukan sebuah sistem informasi yang dapat menjadi media pelaporan sekaligus membantu proses pengelolaan pengaduan perundungan dan kekerasan pelajar. SIGAP (Sistem Informasi Pengaduan Perundungan dan Kekerasan Pelajar) dirancang untuk menyediakan mekanisme pelaporan secara anonim maupun non-anonim, pemberian tiket pengaduan, pemantauan status laporan, serta pengelolaan laporan oleh administrator. Sistem ini juga dirancang dengan pemanfaatan teknologi kecerdasan buatan untuk membantu memberikan rekomendasi kategori berdasarkan isi laporan dan mengelompokkan laporan yang memiliki karakteristik serupa. Dengan adanya SIGAP, proses pelaporan diharapkan menjadi lebih terstruktur, terdokumentasi, dan mudah dipantau, sementara keputusan akhir mengenai verifikasi dan tindak lanjut tetap dilakukan oleh pihak yang berwenang.
 
 \begin{thebibliography}{00}
 

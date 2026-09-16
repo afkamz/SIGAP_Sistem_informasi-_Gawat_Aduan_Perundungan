@@ -1,0 +1,24 @@
+# Core Backend Dependencies
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+SQLAlchemy==2.0.35
+PyMySQL==1.1.1
+python-dotenv==1.0.1
+pydantic==2.9.2
+pydantic-settings==2.5.2
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+python-jose[cryptography]==3.3.0
+python-multipart==0.0.9
+
+# Testing Dependencies
+pytest==8.3.3
+httpx==0.27.2
+
+# Optional Heavy ML Dependencies (Modul AI Pipeline Full Weight)
+# Catatan: Backend sudah dilengkapi fallback semantic vectorizer bawaan,
+# baris di bawah ini bersifat opsional jika ingin menjalankan bobot IndoBERT 2GB secara native.
+# torch>=2.0.0
+# transformers>=4.30.0
+# hdbscan>=0.8.33
+# scikit-learn>=1.3.0

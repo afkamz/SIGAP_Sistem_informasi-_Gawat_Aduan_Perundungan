@@ -1,0 +1,96 @@
+<mxfile host="app.diagrams.net" agent="SIGAP" version="24.0.0">
+  <diagram name="Arsitektur Sistem SIGAP" id="sigap-arsitektur">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1650" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ===================== GROUP A: USER CLIENT ===================== -->
+        <mxCell id="grpA" value="USER CLIENT (MVC)" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=16;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="620" height="560" as="geometry" />
+        </mxCell>
+
+        <mxCell id="siswaBox" value="SISWA / USER" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=13;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="70" y="90" width="270" height="480" as="geometry" />
+        </mxCell>
+
+        <mxCell id="siswaInput" value="VIEW - INPUT&#10;&#10;- Login / Registrasi&#10;- Form Pengaduan&#10;   - Kategori Pengaduan&#10;   - Deskripsi Kejadian&#10;   - Anonim / Non-anonim&#10;   - Upload Bukti" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="90" y="120" width="230" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="siswaOutput" value="VIEW - OUTPUT&#10;&#10;- Kode Tiket&#10;- Status Laporan&#10;- Timeline Penanganan&#10;- Riwayat Laporan&#10;- Notifikasi / Pembaruan" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="90" y="300" width="230" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="siswaModel" value="MODEL / PROCESS&#10;&#10;- React Router &amp; RBAC&#10;- Client State / Cache&#10;- ECharts" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f5f5f5;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="90" y="460" width="230" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="adminBox" value="ADMIN / GURU BK / WALI KELAS" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=13;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="360" y="90" width="270" height="480" as="geometry" />
+        </mxCell>
+
+        <mxCell id="adminInput" value="VIEW - INPUT&#10;&#10;- Login&#10;- Validasi Pengaduan&#10;- Konfirmasi / Override Kategori&#10;- Perubahan Status&#10;- Catatan Penanganan&#10;- Filter / Pencarian" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffffff;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="380" y="120" width="230" height="150" as="geometry" />
+        </mxCell>
+
+        <mxCell id="adminOutput" value="VIEW - OUTPUT&#10;&#10;- Dashboard Statistik&#10;- Daftar &amp; Detail Pengaduan&#10;- Rekomendasi Kategori AI&#10;- Confidence Score&#10;- Cluster / Laporan Serupa&#10;- Statistik &amp; Grafik&#10;- Audit Trail" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffffff;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="380" y="290" width="230" height="160" as="geometry" />
+        </mxCell>
+
+        <mxCell id="adminModel" value="MODEL / PROCESS&#10;&#10;- React Router &amp; RBAC&#10;- Client State / Cache&#10;- ECharts" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f5f5f5;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="380" y="460" width="230" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== GROUP B: BACKEND SERVICES ===================== -->
+        <mxCell id="grpB" value="BACKEND SERVICES (PYTHON 3)" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=16;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="740" y="40" width="500" height="560" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fastapi" value="FastAPI&#10;&#10;- API Routing&#10;- Authentication / JWT&#10;- Core Business Logic&#10;- Pengelolaan Pengaduan&#10;- Status Laporan&#10;- Dashboard / Analytics&#10;- Integrasi AI" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffffff;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="770" y="90" width="220" height="170" as="geometry" />
+        </mxCell>
+
+        <mxCell id="mysql" value="MySQL Database&#10;&#10;- Users&#10;- Pengaduan&#10;- Kategori&#10;- Status&#10;- Hasil AI&#10;- Cluster&#10;- Audit Trail" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffffff;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="90" width="200" height="170" as="geometry" />
+        </mxCell>
+
+        <mxCell id="aiPipeline" value="MODUL AI PIPELINE&#10;&#10;Deskripsi Laporan -&gt; IndoBERT -&gt; Vector Embedding&#10;&#10;Embedding -&gt; Cosine Similarity -&gt; Rekomendasi Kategori + Confidence Score&#10;&#10;Embedding -&gt; HDBSCAN -&gt; Cluster / Noise&#10;&#10;Admin Validasi (Approve / Override) -&gt; Kategori Final&#10;&#10;AI berfungsi sebagai pendukung keputusan; Admin tetap menentukan kategori final." style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="770" y="290" width="440" height="270" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== GROUP C: EXTERNAL DATA ===================== -->
+        <mxCell id="grpC" value="EXTERNAL DATA" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;fontStyle=1;fontSize=16;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="740" y="700" width="500" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="extList" value="- Satu Data Indonesia&#10;- Rapor Pendidikan / Kemendikbudristek&#10;- SIMFONI PPA (referensi / pengembangan lanjutan)&#10;- Dataset Domestik / Seed Data" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#ffffff;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="770" y="740" width="440" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== EDGES: MAIN FLOW ===================== -->
+        <mxCell id="edgeAB" value="HTTPS / REST API + JWT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;endArrow=block;startArrow=none;" edge="1" parent="1" source="grpA" target="grpB">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edgeBC" value="Data / Integration" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=11;endArrow=block;startArrow=none;" edge="1" parent="1" source="grpB" target="grpC">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ===================== EDGES: INTERNAL BACKEND ===================== -->
+        <mxCell id="edgeFastMysql" value="CRUD" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;startArrow=block;" edge="1" parent="1" source="fastapi" target="mysql">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edgeFastAI" value="Deskripsi Laporan" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;startArrow=none;" edge="1" parent="1" source="fastapi" target="aiPipeline">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edgeAIMysql" value="Hasil AI" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=10;endArrow=block;startArrow=none;" edge="1" parent="1" source="aiPipeline" target="mysql">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
