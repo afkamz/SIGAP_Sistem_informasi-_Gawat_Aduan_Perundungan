@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.9.7)  23 SEP 2026 14:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.5) (preloaded format=pdflatex 2026.9.7)  23 SEP 2026 17:20
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/home/afkam/Downloads/tes/SIGAP.tex
-(/home/afkam/Downloads/tes/SIGAP.tex
+**/home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/SIGAP.tex
+(/home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/SIGAP.tex
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-08-10>
 (/home/afkam/.miktex/texmfs/install/tex/latex/ieeetran/IEEEtran.cls
@@ -640,12 +640,12 @@ L3 programming layer <2026-08-10>
  ) 
 Here is how much of TeX's memory you used:
  10560 strings out of 469378
- 167244 string characters out of 5459632
+ 167448 string characters out of 5459632
  1626297 words of memory out of 5000000
  39498 multiletter control sequences out of 15000+600000
  669585 words of font info for 115 fonts, out of 8000000 for 9000
  0 hyphenation exceptions out of 8191
- 67i,8n,73p,1792b,2979s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 67i,8n,73p,1826b,2979s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </home/afkam/.miktex/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi10.pfb></home/afkam/.miktex/texmfs/install/fonts/type1/urw/courier/ucrb8a.pfb></home/afkam/.miktex/texmfs/install/fonts/type1/urw/courier/ucrr8a.pfb></home/afkam/.miktex/texmfs/install/fonts/type1/urw/courier/ucrro8a.pfb></home/afkam/.miktex/texmfs/install/fonts/type1/urw/times/utmb8a.pfb></home/afkam/.miktex/texmfs/install/fonts/type1/urw/times/utmbi8a.pfb></home/afkam/.miktex/texmfs/install/fonts/type1/urw/times/utmr8a.pfb></home/afkam/.miktex/texmfs/install/fonts/type1/urw/times/utmri8a.pfb>
 Output written on SIGAP.pdf (14 pages, 7670877 bytes).
 PDF statistics:
