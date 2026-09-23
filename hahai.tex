@@ -1,0 +1,55 @@
+\documentclass[conference]{IEEEtran}
+
+% =========================
+% PACKAGE
+% =========================
+\usepackage[utf8]{inputenc}
+\usepackage{cite}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{url}
+
+\begin{document}
+
+% =========================
+% JUDUL
+% =========================
+\title{
+Ruka Jakarta: Sistem Informasi Ruang Publik dan Pelaporan Fasilitas Berbasis Web di Kota Jakarta
+}
+
+
+\maketitle
+
+% =========================
+% ABSTRAK
+% =========================
+\noindent\textbf{Abstrak—}
+\textbf{Ketersediaan ruang publik di Jakarta belum sepenuhnya didukung oleh informasi yang terstruktur mengenai fasilitas dan kondisi fasilitas yang tersedia, sehingga masyarakat kesulitan memperoleh informasi aktual sebelum berkunjung. JAKI melalui fitur JakLapor telah menyediakan kanal pengaduan masyarakat dengan cakupan permasalahan yang luas, tetapi tidak secara khusus berfokus pada penyajian informasi ruang publik dan kondisi fasilitasnya sebagai referensi sebelum kunjungan. Penelitian ini bertujuan mengembangkan Ruka Jakarta sebagai platform berbasis web yang mengintegrasikan informasi ruang publik, fasilitas, kondisi fasilitas, serta laporan masyarakat. Permasalahan penelitian yang diangkat adalah bagaimana menyediakan informasi ruang publik yang terstruktur dan menghubungkan laporan kondisi fasilitas dengan ruang publik yang relevan. Pengembangan sistem menggunakan React pada sisi frontend dan FastAPI dengan Python pada sisi backend, MySQL sebagai basis data, serta OpenStreetMap untuk mendukung informasi spasial. Data resmi dari Satu Data Jakarta digunakan sebagai dasar informasi ruang publik dan dilengkapi dengan data partisipatif masyarakat mengenai kondisi fasilitas. Hasil yang ditargetkan berupa platform yang memungkinkan masyarakat mencari ruang publik berdasarkan lokasi dan kategori, melihat fasilitas beserta kondisinya, serta menyampaikan laporan yang terhubung dengan fasilitas terkait, sementara pemerintah dapat melakukan verifikasi dan memperbarui status laporan. Dengan demikian, Ruka Jakarta diharapkan dapat menjadi platform pelengkap yang membantu masyarakat memperoleh informasi ruang publik secara lebih terstruktur sekaligus mendukung pemantauan kondisi fasilitas melalui partisipasi masyarakat.}
+
+\vspace{0.5em}
+
+% =========================
+% KATA KUNCI
+% =========================
+\noindent\textbf{Kata Kunci—}
+ruang publik, sistem informasi, pelaporan fasilitas, partisipasi masyarakat, Jakarta
+
+% =========================
+% I. LATAR BELAKANG
+% =========================
+\section{Latar Belakang}
+
+Jakarta memiliki ribuan ruang terbuka yang berperan sebagai tempat aktivitas sosial dan rekreasi masyarakat. Namun, ketersediaan ruang publik tidak hanya perlu diperhatikan dari sisi jumlah, tetapi juga dari kondisi fasilitas yang tersedia agar ruang tersebut dapat dimanfaatkan secara optimal oleh masyarakat. Oleh karena itu, diperlukan informasi yang dapat membantu masyarakat mengetahui kondisi ruang publik dan fasilitasnya sebelum berkunjung.
+
+Jakarta memiliki 3.044 ruang terbuka yang tersebar di berbagai wilayah. Di sisi lain, proporsi Ruang Terbuka Hijau (RTH) yang tersedia masih berada di bawah target yang ditetapkan dalam kebijakan penataan ruang. Kondisi tersebut menunjukkan bahwa pemanfaatan dan pemantauan ruang publik yang telah tersedia menjadi hal yang penting, terutama dalam memastikan fasilitas yang terdapat di dalamnya dapat digunakan oleh masyarakat secara optimal.
+
+Pemerintah Provinsi DKI Jakarta telah menyediakan JAKI dengan fitur JakLapor sebagai kanal pengaduan masyarakat untuk berbagai permasalahan di lingkungan kota. Namun, JakLapor memiliki cakupan pengaduan yang luas dan tidak secara khusus berorientasi pada penyajian informasi mengenai ruang publik, fasilitas yang tersedia, serta kondisi fasilitas sebagai referensi masyarakat sebelum berkunjung.
+
+Kondisi tersebut menunjukkan adanya kebutuhan terhadap platform pelengkap yang berfokus pada informasi ruang publik, fasilitas yang tersedia, serta kondisi fasilitas berdasarkan data resmi dan partisipasi masyarakat. Ruka Jakarta dikembangkan sebagai platform berbasis web yang mengintegrasikan data ruang publik dari Satu Data Jakarta dengan laporan kondisi fasilitas dari masyarakat.
+
+Melalui pendekatan tersebut, masyarakat dapat memperoleh informasi ruang publik secara lebih terstruktur, sedangkan pemerintah dapat memanfaatkan laporan masyarakat sebagai informasi pendukung dalam pemantauan kondisi fasilitas.
+
+\end{document}

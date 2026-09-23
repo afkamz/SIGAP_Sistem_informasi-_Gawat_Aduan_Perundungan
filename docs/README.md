@@ -15,6 +15,7 @@ Folder ini memuat seluruh dokumen spesifikasi produk, arsitektur sistem, rancang
 | **04** | [**04-UIUX_Spesifikasi.md**](./04-UIUX_Spesifikasi.md) | **Spesifikasi UI/UX**: Panduan desain layar S-01 s/d S-10 (Portal Siswa) dan A-01 s/d A-08 (Portal Admin), standar aksesibilitas WCAG, dan tone of voice sistem. |
 | **05** | [**05-Desain_Sistem.md**](./05-Desain_Sistem.md) | **Desain Sistem & Komponen**: Tipografi, palet warna resmi (*Baby Blue* `#A7D8F0`, *Sky*, *Slate*), sistem grid, ikonografi, dan spesifikasi komponen visual. |
 | **06** | [**06-Tahapan_Backend.md**](./06-Tahapan_Backend.md) | **Roadmap & Tahapan Backend**: Panduan teknis bertahap pengerjaan backend dari Fase 1 hingga Fase 6 beserta checklist implementasi. |
+| **07** | [**07-Fondasi_Data_SIGAP.md**](./07-Fondasi_Data_SIGAP.md) | **Fondasi Database & Dataset**: Struktur tabel database, relasi, enum status, format dataset CSV/JSON, normalisasi ETL, dan status implementasi fondasi data. |
 
 ---
 

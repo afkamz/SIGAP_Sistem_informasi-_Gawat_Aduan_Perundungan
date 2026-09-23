@@ -1,4 +1,8 @@
 \documentclass[conference]{IEEEtran}
+
+% =========================
+% PACKAGE
+% =========================
 \usepackage[utf8]{inputenc}
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
@@ -6,7 +10,7 @@
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{float}
-\usepackage{geometry}
+\usepackage{caption}
 \usepackage{afterpage}
 \usepackage{pdfpages}
 \usepackage{verbatim}
@@ -60,32 +64,23 @@
 
 \vspace*{0.5cm}
 \end{titlepage}
+
 \clearpage
 \twocolumn
 
 \title{SIGAP: Sistem Informasi Pengaduan Perundungan dan Kekerasan Pelajar Berbasis Platform Digital dan Kecerdasan Buatan}
 
-\author{
-\IEEEauthorblockN{Ahmad Falihul Hikam}
-\IEEEauthorblockA{\textit{D3 Teknik Informatika PSDKU Lamongan} \\
-\textit{Politeknik Elektronika Negeri Surabaya}}
-\and
-\IEEEauthorblockN{Arvin Dzaky Nugraha}
-\IEEEauthorblockA{\textit{D3 Teknik Informatika PSDKU Lamongan} \\
-\textit{Politeknik Elektronika Negeri Surabaya}}
-}
-
 \maketitle
 
-\begin{abstract}
-Perundungan (\textit{bullying}) dan \textit{cyberbullying} di lingkungan pendidikan merupakan isu serius yang berdampak negatif terhadap kesejahteraan psikologis dan perkembangan sosial siswa. Penanganan kasus perundungan sering kali terkendala oleh tiadanya saluran pelaporan yang aman, terstruktur, dan akuntabel, serta kompleksitas verifikasi laporan pada pihak sekolah. Penelitian ini mengajukan SIGAP (Sistem Informasi Pengaduan Perundungan dan Kekerasan Pelajar), sebuah platform digital terpadu yang memfasilitasi pelaporan pengaduan siswa baik secara anonim maupun teridentifikasi, dilengkapi dengan sistem penjejak tiket (\textit{ticket tracking}). SIGAP mengintegrasikan pemrosesan bahasa alami (\textit{Natural Language Processing}/NLP) berbasis \textit{embedding} teks Bahasa Indonesia untuk memberikan rekomendasi pengkategorian laporan secara otomatis guna membantu administrator dalam mengambil keputusan secara efisien. Sistem ini juga dilengkapi dengan mekanisme verifikasi, pengelolaan alur status laporan, dan jejak audit (\textit{audit trail}) untuk menjamin transparansi serta akuntabilitas. Hasil perancangan menunjukkan bahwa SIGAP mampu menyediakan sarana pendukung pelaporan dan pengelolaan perundungan di lingkungan sekolah secara lebih terstruktur, sistematis, dan terukur.
-\end{abstract}
+\noindent\textbf{Abstract---}
+\textbf{Perundungan (\textit{bullying}) dan \textit{cyberbullying} di lingkungan pendidikan memerlukan saluran pelaporan yang aman, terstruktur, dan akuntabel. Penelitian ini mengembangkan SIGAP (Sistem Informasi Pengaduan Perundungan dan Kekerasan Pelajar), platform digital terpadu dengan pelaporan anonim maupun teridentifikasi, penjejakan tiket (\textit{ticket tracking}), serta jejak audit (\textit{audit trail}). SIGAP mengintegrasikan pemrosesan bahasa alami (\textit{Natural Language Processing}/NLP) berbasis \textit{embedding} Bahasa Indonesia untuk rekomendasi kategori dan klasterisasi laporan serupa guna mendukung pengambilan keputusan admin. Keandalan sistem diuji melalui kerangka metode validasi komprehensif, meliputi validasi teknis logika dan transisi status (\textit{state transition}), \textit{User Acceptance Testing} (UAT), \textit{System Usability Scale} (SUS), evaluasi berbasis tugas (\textit{Task Success Rate} dan \textit{Single Ease Question}/SEQ), serta validasi kualitas model AI. Karena proses evaluasi berada pada tahap pra-iterasi pengujian pengguna, parameter capaian dipetakan menggunakan metrik dasar dengan target pemenuhan skenario UAT pelapor dan admin sebesar [xx/yy], skor \textit{usability} SUS siswa [xx/100] dan admin [xx/100] (target benchmark $>$ 68), \textit{Task Success Rate} alur pelaporan siswa sebesar [xx/yy] dengan SEQ [xx/7], \textit{Task Success Rate} verifikasi admin sebesar [xx/yy] dengan SEQ [xx/7], serta akurasi klasifikasi model AI sebesar [xx\%]. Kerangka validasi ini memastikan SIGAP siap diimplementasikan secara teruji, andal, dan efektif dalam pengelolaan laporan perundungan di sekolah.}
 
-\begin{IEEEkeywords}
+\vspace{0.5em}
+
+\noindent\textbf{Index Terms---}
 Perundungan Pelajar, SIGAP, Sistem Pengaduan, Kecerdasan Buatan, Natural Language Processing.
-\end{IEEEkeywords}
 
-\section{BAB I: LATAR BELAKANG}
+\section{INTRODUCTION}
 
 Perkembangan teknologi informasi dan komunikasi telah memberikan kemudahan bagi pelajar dalam berkomunikasi dan berinteraksi, tetapi di sisi lain juga menghadirkan bentuk perundungan baru melalui media digital atau \textit{cyberbullying}. Perundungan tidak hanya terjadi secara langsung di lingkungan sekolah, tetapi dapat berkembang melalui media sosial dan platform digital. Zhang et al. menjelaskan bahwa selama dua dekade terakhir terdapat berbagai definisi dan metode pengukuran \textit{cyberbullying} pada anak dan remaja, yang menunjukkan bahwa fenomena tersebut menjadi perhatian dalam lingkungan digital \cite{zhang2022}. Penelitian Amanatin dan Sekarningrum juga menunjukkan adanya berbagai bentuk dan penyebab \textit{cyberbullying} pada remaja di wilayah perkotaan Indonesia, termasuk Jakarta, Bandung, dan Surabaya \cite{amanatin2024}.
 
@@ -126,9 +121,7 @@ F. N. Eleanora and R. A. Al Adawiah, ``Perundungan dunia maya (Cyberbullying) da
 \pagestyle{empty}
 
 \begin{center}
-	{\Large\bfseries BAB II}\par
-	\vspace{0.3cm}
-	{\Large\bfseries SOURCE CODE}\par
+	{\Large\bfseries II. SOURCE CODE}\par
 \end{center}
 
 \lstinputlisting[
@@ -150,59 +143,22 @@ F. N. Eleanora and R. A. Al Adawiah, ``Perundungan dunia maya (Cyberbullying) da
 
 \clearpage
 \begin{center}
-	{\Large\bfseries BAB III}\par
-	\vspace{0.3cm}
-	{\Large\bfseries ARSITEKTUR SISTEM}\par
+	{\Large\bfseries III. ARSITEKTUR SISTEM}\par
 \end{center}
 
-SIGAP menggunakan arsitektur aplikasi web yang terdiri atas frontend,
-backend core, lapisan AI/ML, dan data layer. Siswa dan admin mengakses
-aplikasi melalui antarmuka React. Permintaan dikirim melalui REST API ke
-backend FastAPI untuk autentikasi, pengelolaan laporan, dashboard, dan
-komunikasi dengan basis data.
-
-Lapisan AI memproses deskripsi laporan menggunakan embedding Bahasa
-Indonesia, cosine similarity, dan HDBSCAN. AI menghasilkan rekomendasi
-kategori serta kelompok laporan yang memiliki pola serupa. Keputusan
-akhir tetap dilakukan oleh admin yang berwenang.
+Arsitektur SIGAP mengintegrasikan lapisan \textit{User Client}, \textit{Backend Services}, \textit{AI Pipeline}, dan \textit{External Data}. Pengguna (siswa dan admin/guru BK) berinteraksi melalui antarmuka berbasis REST API/HTTPS (didukung autentikasi JWT) serta \textit{WebSocket Gateway} untuk pembaruan status dan notifikasi secara \textit{real-time}. Layanan backend FastAPI mengelola basis data relasional MySQL dan \textit{Local File Storage} untuk berkas bukti pengaduan. Teks deskripsi laporan diproses oleh \textit{AI Pipeline} berbasis IndoBERT \textit{Embedding} yang bercabang ke \textit{Cosine Similarity} (menghasilkan rekomendasi kategori dan skor keyakinan) serta HDBSCAN (mengelompokkan klaster laporan serupa). Hasil AI berstatus \textit{pending review} sebagai pendukung keputusan admin dalam menetapkan kategori final. Setiap validasi dan perubahan status dicatat pada \textit{Audit Trail}, sedangkan data eksternal (Satu Data Indonesia, SIMFONI PPA) dimanfaatkan sebagai \textit{one-time seed/training} pada inisialisasi model.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth,height=0.72\textheight,keepaspectratio]{Arsitektur Sistem SIGAP/ArsitekturSistem_SIGAP.png}
+	\includegraphics[width=\linewidth,height=0.62\textheight,keepaspectratio]{New_Arsitektur_Sistem.png}
 	\caption{Arsitektur Sistem SIGAP}
 	\label{fig:arsitektur-sigap}
 \end{figure}
 
-Komponen utama sistem meliputi React Student Console, React Admin
-Console, FastAPI, JWT Authentication, Report Service, MySQL, file
-storage, dan pemrosesan AI. Data laporan menjadi sumber utama sistem,
-sedangkan audit trail menyimpan admin, waktu, dan tindakan yang dilakukan.
-
-\subsection*{3.1 Alur Data}
-
-Siswa mengisi laporan, mengunggah bukti bila tersedia, lalu sistem
-menyimpan laporan dan menghasilkan ticket ID. Backend meneruskan deskripsi
-ke layanan AI untuk memperoleh rekomendasi kategori. Admin meninjau isi
-laporan, memvalidasi kategori, dan memperbarui status sesuai state machine.
-
-\subsection*{3.2 Keamanan Sistem}
-
-Keamanan sistem menggunakan HTTPS, JWT, role-based authorization,
-validasi tipe dan ukuran file, serta pembatasan akses data anonim. Ticket
-tracking tidak menampilkan informasi identitas sensitif kepada pengguna.
-
 \clearpage
 \begin{center}
-	{\Large\bfseries BAB IV}\par
-	\vspace{0.3cm}
-	{\Large\bfseries DESAIN SISTEM}\par
+	{\Large\bfseries IV. DESAIN SISTEM}\par
 \end{center}
-
-Desain SIGAP dibuat dengan karakter aman, bersih, formal, dan mudah
-dipahami. Antarmuka siswa menggunakan pendekatan mobile-first, sedangkan
-dashboard admin menggunakan pendekatan desktop-first. Warna utama yang
-digunakan adalah baby blue \texttt{\#A7D8F0}, putih, serta warna netral untuk
-teks, border, dan status.
 
 \begin{figure}[H]
 	\centering
@@ -211,112 +167,73 @@ teks, border, dan status.
 	\label{fig:desain-sigap}
 \end{figure}
 
-Desain sistem mencakup alur pengaduan siswa, dashboard admin, validasi
-rekomendasi AI, pengelolaan status, cluster laporan, dan audit trail.
-Navigasi siswa terdiri atas Beranda, Buat Laporan, Riwayat, dan Profil.
-Navigasi admin terdiri atas Dashboard, Daftar Laporan, Validasi AI, Audit
-Trail, dan Pengaturan.
-
-\subsection*{4.1 Alur Pengaduan}
-
-Formulir pengaduan dibagi menjadi kategori, deskripsi, mode pelaporan,
-dan bukti. Siswa dapat memilih pelaporan anonim atau menggunakan nama.
-Setelah laporan terkirim, sistem menampilkan kode tiket untuk pelacakan.
-
-\subsection*{4.2 Status dan AI}
-
-Status ditampilkan dengan timeline Menunggu, Diverifikasi,
-Ditindaklanjuti, dan Selesai. Rekomendasi AI diberi label khusus dan
-confidence. Jika confidence rendah, sistem menampilkan status Perlu
-Peninjauan Manual.
-
 \clearpage
 \begin{center}
-	{\Large\bfseries BAB V}\par
-	\vspace{0.3cm}
-	{\Large\bfseries MOCKUP UI}\par
+	{\Large\bfseries V. MOCKUP UI}\par
 \end{center}
-
-Bab ini menampilkan seluruh mockup antarmuka SIGAP yang tersedia pada
-folder \texttt{Frontend}. Mockup mencakup alur pengguna siswa dan pengelolaan
-laporan oleh admin.
 
 % --- 2 gambar per baris ---
 \noindent
 \begin{minipage}[t]{0.48\linewidth}
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend/OnBoardingUser_SIGAP.png}
-		\caption{Onboarding pengguna siswa}
-	\end{figure}
+	\centering
+	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/OnBoardingUser_SIGAP.png}
+	\captionof{figure}{Onboarding pengguna siswa}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\linewidth}
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend/DashboardUser_SIGAP.png}
-		\caption{Dashboard pengguna siswa}
-	\end{figure}
+	\centering
+	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/DashboardUser_SIGAP.png}
+	\captionof{figure}{Dashboard pengguna siswa}
 \end{minipage}
 
+\vspace{0.8cm}
 \noindent
 \begin{minipage}[t]{0.48\linewidth}
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend/FormulirPengaduanUser_SIGAP.png}
-		\caption{Formulir pengaduan pengguna siswa}
-	\end{figure}
+	\centering
+	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/FormulirPengaduanUser_SIGAP.png}
+	\captionof{figure}{Formulir pengaduan pengguna siswa}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\linewidth}
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend/LacakStatusLaporanUser_SIGAP.png}
-		\caption{Pelacakan status laporan pengguna siswa}
-	\end{figure}
+	\centering
+	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/LacakStatusLaporanUser_SIGAP.png}
+	\captionof{figure}{Pelacakan status laporan pengguna siswa}
 \end{minipage}
 
+\vspace{0.8cm}
 \noindent
 \begin{minipage}[t]{0.48\linewidth}
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend/OnBoardingAdmin_SIGAP.png}
-		\caption{Onboarding admin}
-	\end{figure}
+	\centering
+	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/OnBoardingAdmin_SIGAP.png}
+	\captionof{figure}{Onboarding admin}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\linewidth}
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend/DashboardAdmin_SIGAP.png}
-		\caption{Dashboard admin}
-	\end{figure}
+	\centering
+	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/DashboardAdmin_SIGAP.png}
+	\captionof{figure}{Dashboard admin}
 \end{minipage}
 
+\vspace{0.8cm}
 \noindent
 \begin{minipage}[t]{0.48\linewidth}
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend/DaftarLaporanMasukAdmin_SIGAP.png}
-		\caption{Daftar laporan masuk admin}
-	\end{figure}
+	\centering
+	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/DaftarLaporanMasukAdmin_SIGAP.png}
+	\captionof{figure}{Daftar laporan masuk admin}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\linewidth}
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend/StatusLaporanAdmin_SIGAP.png}
-		\caption{Status laporan pada sisi admin}
-	\end{figure}
+	\centering
+	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/StatusLaporanAdmin_SIGAP.png}
+	\captionof{figure}{Status laporan pada sisi admin}
 \end{minipage}
 
+\vspace{0.8cm}
 \noindent
 \begin{minipage}[t]{0.48\linewidth}
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend/JejakAuditAdmin_SIGAP.png}
-		\caption{Jejak audit admin}
-	\end{figure}
+	\centering
+	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/JejakAuditAdmin_SIGAP.png}
+	\captionof{figure}{Jejak audit admin}
 \end{minipage}
 
 \end{document}

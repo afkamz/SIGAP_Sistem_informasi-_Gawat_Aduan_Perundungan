@@ -36,8 +36,9 @@ Politeknik Elektronika Negeri Surabaya, 2026
 12. Data Seeding
 13. Validation Method
 14. Data dan Referensi
-15. Lampiran A — Peta Layar & Prompt Desain Detail (Stitch.ai)
-16. Ringkasan Perubahan & Catatan untuk Diskusi Lanjutan
+15. Timeline Pengerjaan (Gambaran Umum)
+16. Lampiran A — Peta Layar & Prompt Desain Detail (Stitch.ai)
+17. Ringkasan Perubahan & Catatan untuk Diskusi Lanjutan
 
 ---
 
@@ -456,7 +457,7 @@ Arsitektur disusun mengikuti gaya pengelompokan & penomoran seperti referensi di
 ### 9.7 Catatan untuk Tahap Visualisasi
 
 - Struktur pengelompokan (9.1) dapat langsung dipetakan menjadi *container box* bergaya diagram referensi (kotak besar berlabel, dengan sub-kotak komponen di dalamnya, panah bernomor menghubungkan antar grup).
-- Beberapa komponen masih bertanda *(opsional)* / *(belum ditentukan)* — perlu dikonfirmasi tim sebelum difinalisasi ke diagram visual (lihat juga Bagian 16 — Catatan Diskusi Lanjutan).
+- Beberapa komponen masih bertanda *(opsional)* / *(belum ditentukan)* — perlu dikonfirmasi tim sebelum difinalisasi ke diagram visual (lihat juga Bagian 17 — Catatan Diskusi Lanjutan).
 
 ---
 
@@ -603,13 +604,24 @@ Karena Bagian 13.1–13.4 menguji sistem dari sisi pengguna, ditambahkan validas
 - **STOPit** — platform pelaporan *bullying* berbasis aplikasi, digunakan di sekolah-sekolah Amerika Serikat — dibahas sebagai pembanding fitur UX, bukan sumber data sistem
 - Studi literatur terkait efektivitas sistem pelaporan digital terhadap penurunan kasus *bullying* (perlu ditambahkan sitasi jurnal terkait saat riset lanjutan)
 
----
+## 15. Timeline Pengerjaan (Gambaran Umum)
 
-## 15. Lampiran A — Peta Layar & Prompt Desain Detail (Stitch.ai)
+Timeline berikut merupakan gambaran umum pengerjaan proyek selama 14 minggu. Rincian tugas dapat menyesuaikan hasil evaluasi tim dan arahan dosen.
+
+| Periode | Fokus Pengerjaan | Catatan/Target |
+|---|---|---|
+| Minggu 1–3 | Finalisasi PRD, ERD database, dan kontrak API. Setup FastAPI + MySQL + autentikasi JWT di backend. Setup React dan wireframe tampilan di frontend. Seeding data awal dari CSV. | **Posisi saat ini: minggu ke-3.** Fondasi dokumen, arsitektur, backend, frontend, dan data awal mulai tersedia. |
+| Minggu 4–7 | Implementasi endpoint inti pengaduan, login admin, pelacakan tiket, validasi input, dan audit trail. Penyelesaian halaman utama siswa dan admin. Integrasi awal frontend dengan backend. | Alur dasar siswa dan admin dapat digunakan dari awal sampai akhir pada lingkungan pengembangan. |
+| Minggu 8–11 | Implementasi dashboard dan visualisasi data. Integrasi rekomendasi kategori berbasis AI serta clustering laporan. Penyempurnaan penggabungan data seed dengan laporan aktif. Pengujian unit dan integrasi. | Fitur utama terintegrasi dan mulai diuji menggunakan skenario laporan siswa serta verifikasi admin. |
+| Minggu 12–14 | Testing akhir meliputi pengujian end-to-end, UAT, validasi keamanan, dan pemeriksaan hak akses. Perbaikan bug berdasarkan hasil testing, finalisasi konfigurasi, lalu deployment aplikasi ke server/lingkungan produksi. | Sistem teruji, dapat diakses pada lingkungan deployment, dan siap untuk demo/presentasi. |
+
+**Gambaran langkah terdekat setelah minggu ke-3:** fokus berpindah ke penyelesaian API inti dan autentikasi, penghubungan form React dengan endpoint FastAPI, serta memastikan proses seeding CSV dapat dijalankan tanpa duplikasi.
+
+## 16. Lampiran A — Peta Layar & Prompt Desain Detail (Stitch.ai)
 
 Lampiran ini berisi panduan screen-by-screen beserta prompt siap pakai untuk digenerate di Stitch.ai, mencakup flow **Siswa (Pelapor)** dan **Admin (Guru BK/Dinas)**. Gunakan bersamaan dengan standar UI/UX pada Bagian 8.
 
-### 15.0 Design System (masukkan di prompt pertama / project-level style di Stitch)
+### 16.0 Design System (masukkan di prompt pertama / project-level style di Stitch)
 
 ```
 Style: Minimalist, flat design, clean, structured.
@@ -624,7 +636,7 @@ Charts: flat style, no gradients, use baby blue + neutral grays as palette.
 Platform: mobile-first responsive web app (siswa), desktop-first dashboard (admin).
 ```
 
-### 15.1 Flow Siswa (Pelapor) — Mobile-first
+### 16.1 Flow Siswa (Pelapor) — Mobile-first
 
 **Peta Layar**
 
@@ -756,7 +768,7 @@ Indonesian reassuring the student that their report is being handled
 confidentially.
 ```
 
-### 15.2 Flow Admin (Guru BK / Dinas Pendidikan) — Desktop-first
+### 16.2 Flow Admin (Guru BK / Dinas Pendidikan) — Desktop-first
 
 **Peta Layar**
 
@@ -881,7 +893,7 @@ white space, small icons next to each action type (checkmark for status
 change, AI icon for AI-related actions).
 ```
 
-### 15.3 Urutan Disarankan Saat Membangun di Stitch.ai
+### 16.3 Urutan Disarankan Saat Membangun di Stitch.ai
 
 1. Mulai dari **Design System (15.0)** sebagai konteks/style project pertama.
 2. Bangun flow **Siswa** dulu secara berurutan (1.1 → 1.10) — flow ini lebih linear dan simpel, bagus untuk menyamakan gaya visual dasar.
@@ -894,7 +906,7 @@ change, AI icon for AI-related actions).
    ```
 5. Ekspor/susun sebagai prototipe alur klik-tayang (clickable flow) mengikuti Peta Layar di atas untuk demo ke dosen.
 
-### 15.4 Catatan Desain Tambahan
+### 16.4 Catatan Desain Tambahan
 
 - **Konsistensi status badge**: gunakan warna yang sama persis untuk status yang sama di seluruh layar (siswa & admin).
 - **Bedakan sugesti AI vs data final**: di semua layar admin, elemen yang berasal dari AI (rekomendasi kategori, label klaster) konsisten pakai gaya *outline/badge terbuka* sebelum disetujui, baru berubah jadi *solid* setelah admin approve.
@@ -902,22 +914,22 @@ change, AI icon for AI-related actions).
 
 ---
 
-## 16. Ringkasan Perubahan & Catatan untuk Diskusi Lanjutan
+## 17. Ringkasan Perubahan & Catatan untuk Diskusi Lanjutan
 
-### 16.1 Ringkasan Perubahan dari Draft Sebelumnya
+### 17.1 Ringkasan Perubahan dari Draft Sebelumnya
 
 | Area | Perubahan |
 |---|---|
 | Struktur dokumen | Menggabungkan 3 dokumen kerja (PRD, arsitektur, desain UI/UX) menjadi satu PRD lengkap untuk tahap lanjutan proyek |
 | Arsitektur | Ditambahkan pengelompokan area (Frontend/Backend Core/AI-ML/Data/External) dan alur bernomor 1–22 sebagai dasar diagram visual (Bagian 9) |
-| Lampiran | Ditambahkan Lampiran A berisi peta layar dan prompt Stitch.ai lengkap untuk kedua flow (Bagian 15) |
+| Lampiran | Ditambahkan Lampiran A berisi peta layar dan prompt Stitch.ai lengkap untuk kedua flow (Bagian 16) |
 | User Story | US-05 (rekomendasi kategori AI) dan US-06 (deteksi klaster kejadian serupa) |
 | Rumusan Masalah & Tujuan | Poin terkait bantuan AI untuk validasi kategori |
 | API | Endpoint `/api/ai/kategori/rekomendasi`, `/api/ai/klaster/{report_id}`, `/api/pengaduan/{id}/kategori` |
 | Validation Method | Validasi teknis kualitas model AI (13.5) dan task UAT tambahan untuk fitur klaster |
 | UI/UX | Ketentuan visual agar sugesti AI dibedakan jelas dari data tervalidasi |
 
-### 16.2 Catatan untuk Diskusi Lanjutan (belum final, perlu dikonfirmasi tim/dosen)
+### 17.2 Catatan untuk Diskusi Lanjutan (belum final, perlu dikonfirmasi tim/dosen)
 
 1. Dari mana sumber contoh kalimat untuk membangun *centroid* tiap kategori jika data seed berlabel kategori masih terbatas? Apakah perlu anotasi manual tambahan oleh tim?
 2. Apakah threshold keyakinan (misal 60%) akan diuji coba secara empiris, atau ditentukan berdasarkan literatur/heuristik saja untuk fase awal?
