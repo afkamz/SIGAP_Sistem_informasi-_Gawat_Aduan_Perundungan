@@ -35,7 +35,8 @@ export const TrackReport = () => {
   }, [queryCode, reports]);
 
   const handleSearch = (codeToSearch) => {
-    const clean = (codeToSearch || ticketInput).trim().toUpperCase();
+    const raw = (codeToSearch || ticketInput).trim().toUpperCase();
+    const clean = raw.replace(/[#\s]/g, '');
     setSearchAttempted(true);
 
     if (!clean) {
@@ -43,7 +44,9 @@ export const TrackReport = () => {
       return;
     }
 
-    const found = reports.find((r) => r.ticket_code.toUpperCase() === clean);
+    const found = reports.find(
+      (r) => r.ticket_code.toUpperCase().replace(/[#\s]/g, '') === clean
+    );
     setActiveReport(found || null);
   };
 

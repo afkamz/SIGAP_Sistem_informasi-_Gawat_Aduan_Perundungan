@@ -15,7 +15,11 @@ export const StoreProvider = ({ children }) => {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        return parsed.reports || INITIAL_LAPORAN;
+        if (parsed.reports && Array.isArray(parsed.reports)) {
+          const existingCodes = new Set(parsed.reports.map((r) => r.ticket_code));
+          const missing = INITIAL_LAPORAN.filter((r) => !existingCodes.has(r.ticket_code));
+          return [...missing, ...parsed.reports];
+        }
       }
     } catch (_) {}
     return INITIAL_LAPORAN;

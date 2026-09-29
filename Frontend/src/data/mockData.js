@@ -1,5 +1,151 @@
 export const INITIAL_LAPORAN = [
   {
+    id: 101,
+    ticket_code: 'TKT-2024-0891',
+    judul: 'Komentar intimidatif berulang di grup media sosial angkatan sekolah.',
+    deskripsi: 'Komentar intimidatif berulang di grup media sosial angkatan sekolah yang menyudutkan dan mengganggu kenyamanan belajar.',
+    kategori_id: 3,
+    kategori_nama: 'Perundungan Siber (Cyberbullying)',
+    status: 'menunggu',
+    urgensi: 'Tinggi',
+    is_active: true,
+    is_anonymous: true,
+    reporter_name: 'Ananda Dimas Prasetya',
+    reporter_label: 'Anonim (Siswa)',
+    reporter_school: 'SMAN 1 Teladan',
+    lokasi: 'Grup Media Sosial Angkatan',
+    tanggal: '23 Okt 2024, 14:15 WIB',
+    catatan_konselor: 'Sedang dalam antrean telaah oleh Koordinator Konseling Kesiswaan.',
+    ai: {
+      kategori_rekomendasi: 'Perundungan Siber',
+      confidence: 96.5,
+      secondary_suggestion: 'Kekerasan Psikis',
+      secondary_confidence: 78.0,
+      is_approved: false,
+      is_overridden: false,
+      cluster_label: 'KLS-09',
+      cluster_name: 'Klaster Media Sosial',
+      is_noise: false
+    },
+    bukti_file: 'screenshot_medsos_chat.png',
+    history: [
+      {
+        waktu: '23 Okt 2024, 14:15 WIB',
+        status: 'menunggu',
+        pelaksana: 'Pelapor Anonim',
+        catatan: 'Pengaduan berhasil diajukan melalui portal perlindungan siswa SIGAP.'
+      }
+    ]
+  },
+  {
+    id: 102,
+    ticket_code: 'TKT-2024-0742',
+    judul: 'Pemberian ancaman dan pengucilan berkelompok saat jam istirahat di kantin.',
+    deskripsi: 'Pemberian ancaman dan pengucilan berkelompok saat jam istirahat di kantin oleh beberapa oknum siswa.',
+    kategori_id: 6,
+    kategori_nama: 'Kekerasan Verbal & Pengucilan',
+    status: 'ditindaklanjuti',
+    urgensi: 'Sedang',
+    is_active: true,
+    is_anonymous: false,
+    reporter_name: 'Ananda Dimas Prasetya',
+    reporter_label: 'Dimas Prasetya • Pelapor Terverifikasi',
+    reporter_school: 'SMAN 1 Teladan',
+    lokasi: 'Area Kantin Sekolah',
+    tanggal: '18 Okt 2024, 09:30 WIB',
+    konselor_nama: 'Dra. Hj. Ratna Sari (Guru BK)',
+    catatan_konselor: 'Konselor Pendamping: Dra. Hj. Ratna Sari (Guru BK)',
+    ai: {
+      kategori_rekomendasi: 'Kekerasan Verbal & Pengucilan',
+      confidence: 91.2,
+      secondary_suggestion: 'Perundungan Verbal',
+      secondary_confidence: 82.0,
+      is_approved: true,
+      is_overridden: false,
+      cluster_label: 'KLS-01',
+      cluster_name: 'Klaster Kantin',
+      is_noise: false
+    },
+    bukti_file: null,
+    history: [
+      {
+        waktu: '18 Okt 2024, 09:30 WIB',
+        status: 'menunggu',
+        pelaksana: 'Ananda Dimas Prasetya',
+        catatan: 'Laporan diajukan secara terbuka oleh siswa.'
+      },
+      {
+        waktu: '19 Okt 2024, 10:15 WIB',
+        status: 'diverifikasi',
+        pelaksana: 'Dra. Hj. Ratna Sari (Guru BK)',
+        catatan: 'Verifikasi keterangan saksi dan klarifikasi awal.'
+      },
+      {
+        waktu: '20 Okt 2024, 13:00 WIB',
+        status: 'ditindaklanjuti',
+        pelaksana: 'Dra. Hj. Ratna Sari (Guru BK)',
+        catatan: 'Sesi mediasi dan pendampingan konseling individual dilaksanakan.'
+      }
+    ]
+  },
+  {
+    id: 103,
+    ticket_code: 'TKT-2024-0511',
+    judul: 'Pencahayaan minim dan titik buta CCTV di lorong laboratorium belakang.',
+    deskripsi: 'Pencahayaan minim dan titik buta CCTV di lorong laboratorium belakang yang berisiko terhadap keamanan siswa.',
+    kategori_id: 8,
+    kategori_nama: 'Fasilitas & Keamanan Lingkungan',
+    status: 'selesai',
+    urgensi: 'Rendah',
+    is_active: true,
+    is_anonymous: true,
+    reporter_name: 'Ananda Dimas Prasetya',
+    reporter_label: 'Anonim (Siswa)',
+    reporter_school: 'SMAN 1 Teladan',
+    lokasi: 'Lorong Laboratorium Belakang',
+    tanggal: '05 Okt 2024, 11:00 WIB',
+    solusi: 'Pemasangan 2 unit lampu LED & kamera CCTV baru selesai dilakukan.',
+    catatan_konselor: 'Solusi: Pemasangan 2 unit lampu LED & kamera CCTV baru selesai dilakukan.',
+    ai: {
+      kategori_rekomendasi: 'Fasilitas & Keamanan Lingkungan',
+      confidence: 94.0,
+      secondary_suggestion: null,
+      secondary_confidence: 0,
+      is_approved: true,
+      is_overridden: false,
+      cluster_label: null,
+      cluster_name: null,
+      is_noise: true
+    },
+    bukti_file: null,
+    history: [
+      {
+        waktu: '05 Okt 2024, 11:00 WIB',
+        status: 'menunggu',
+        pelaksana: 'Pelapor Anonim',
+        catatan: 'Aduan fasilitas fisik sekolah dicatat dalam sistem.'
+      },
+      {
+        waktu: '06 Okt 2024, 09:00 WIB',
+        status: 'diverifikasi',
+        pelaksana: 'Tim Kesiswaan & Sarpras',
+        catatan: 'Inspeksi fisik lokasi lorong laboratorium.'
+      },
+      {
+        waktu: '07 Okt 2024, 11:30 WIB',
+        status: 'ditindaklanjuti',
+        pelaksana: 'Bagian Sarpras',
+        catatan: 'Pengadaan lampu dan reposisi sudut kamera CCTV.'
+      },
+      {
+        waktu: '08 Okt 2024, 15:00 WIB',
+        status: 'selesai',
+        pelaksana: 'Ibu Rahmawati, S.Pd',
+        catatan: 'Pemasangan 2 unit lampu LED & kamera CCTV baru selesai dilakukan.'
+      }
+    ]
+  },
+  {
     id: 1,
     ticket_code: 'SGP-2024-0142',
     judul: 'Perundungan Siber Melalui Pesan Grup Kelas',
