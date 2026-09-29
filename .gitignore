@@ -70,6 +70,13 @@ backend/sigap-backend/uploads/*
 *.blg
 test_SIGAP.log
 
+# Zip archives & LibreOffice lock files
+*.zip
+.~lock.*
+
+# LaTeX intermediate files
+hahai.tex
+
 # ------------------------------------------------------------------------------
 # 4. OS & Editor Artifacts
 # ------------------------------------------------------------------------------
