@@ -23,7 +23,8 @@ import {
   GraduationCap,
   ArrowRight,
   PhoneCall,
-  Phone
+  Phone,
+  Search
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { StudentHeader } from '../../components/layout/StudentHeader';
@@ -162,13 +163,22 @@ export const StudentDashboard = () => {
           </div>
 
           <div className="flex flex-col items-center lg:items-end shrink-0 w-full lg:w-auto">
-            <Link
-              to="/buat-laporan"
-              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#7BBCE6] hover:bg-[#68AFDC] text-slate-900 font-bold text-sm shadow-2xs flex items-center justify-center gap-2.5 transition active:scale-[0.98]"
-            >
-              <PlusCircle className="w-4 h-4 text-slate-900" />
-              <span>Buat Laporan Baru</span>
-            </Link>
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+              <Link
+                to="/lacak?from=dashboard"
+                className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm shadow-2xs border border-slate-200 hover:border-slate-300 flex items-center justify-center gap-2.5 transition active:scale-[0.98]"
+              >
+                <Search className="w-4 h-4 text-sky-700" />
+                <span>Lacak Laporan</span>
+              </Link>
+              <Link
+                to="/buat-laporan"
+                className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#7BBCE6] hover:bg-[#68AFDC] text-slate-900 font-bold text-sm shadow-2xs flex items-center justify-center gap-2.5 transition active:scale-[0.98]"
+              >
+                <PlusCircle className="w-4 h-4 text-slate-900" />
+                <span>Buat Laporan Baru</span>
+              </Link>
+            </div>
             <span className="text-[11px] text-slate-500 mt-2 font-medium text-center">
               Layanan bersifat gratis dan terlindungi
             </span>
@@ -416,7 +426,7 @@ export const StudentDashboard = () => {
 
                     {/* Action Footer */}
                     <Link
-                      to={`/lacak?code=${item.ticket_code.replace('#', '')}`}
+                      to={`/lacak?code=${item.ticket_code.replace('#', '')}&from=dashboard`}
                       className="text-xs font-bold text-sky-700 hover:text-sky-900 flex items-center gap-1.5 mt-4 pt-3 border-t border-slate-100/80 transition group"
                     >
                       <span>{isCompleted ? 'Lihat Arsip Resolusi' : 'Lihat Rincian & Percakapan'}</span>

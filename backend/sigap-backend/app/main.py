@@ -21,9 +21,26 @@ app.add_middleware(
 )
 
 
+import time
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 @app.on_event("startup")
 def buat_tabel_jika_belum_ada():
-    Base.metadata.create_all(bind=engine)
+    max_retries = 10
+    for attempt in range(1, max_retries + 1):
+        try:
+            Base.metadata.create_all(bind=engine)
+            logger.info("Tabel database berhasil diinisialisasi.")
+            break
+        except Exception as e:
+            if attempt == max_retries:
+                logger.error(f"Gagal menghubungkan ke database setelah {max_retries} percobaan: {e}")
+                raise
+            logger.warning(f"Menunggu database siap (percobaan {attempt}/{max_retries})...")
+            time.sleep(2)
 
 
 @app.get("/")

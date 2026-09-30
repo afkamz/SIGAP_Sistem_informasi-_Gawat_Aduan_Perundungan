@@ -1,5 +1,173 @@
 export const INITIAL_LAPORAN = [
   {
+    id: 91,
+    ticket_code: 'SGP-2026-0091',
+    judul: 'Perundungan Siber (Cyberbullying)',
+    deskripsi: 'Tindakan intimidasi berulang dan ancaman pengucilan melalui grup pesan media sosial angkatan.',
+    kategori_id: 3,
+    kategori_nama: 'Perundungan Siber (Cyberbullying)',
+    status: 'ditindaklanjuti',
+    status_label: 'Sedang Ditindaklanjuti',
+    status_badge: 'Penelaahan',
+    urgensi: 'Tinggi',
+    is_active: true,
+    is_anonymous: true,
+    reporter_name: 'Ananda Dimas Prasetya',
+    reporter_label: 'Anonim (Siswa)',
+    reporter_school: 'SMAN 1 Teladan',
+    lokasi: 'Grup WhatsApp Angkatan',
+    tanggal: '14 Mei 2024 • 14:15 WIB',
+    catatan_konselor: 'Laporan telah diverifikasi oleh Guru Bimbingan Konseling. Tim Satgas saat ini sedang melakukan pemanggilan tertutup dan koordinasi bersama wali kelas tanpa membuka identitas pelapor. Tetap pantau halaman ini untuk pembaruan berikutnya.',
+    konselor_nama: 'Ibu Rahmawati, S.Pd (Konselor BK)',
+    catatan_updated_at: '15 Mei 2024, 10:45 WIB',
+    step_dates: {
+      step1: '14 Mei 2024 • 14:15 WIB',
+      step2: '14 Mei 2024 • 15:30 WIB',
+      step3: '15 Mei, 09:00',
+      step4: 'Estimasi 1-2 hari kerja'
+    },
+    ai: {
+      kategori_rekomendasi: 'Perundungan Siber',
+      confidence: 98.2,
+      secondary_suggestion: 'Kekerasan Psikis',
+      secondary_confidence: 84.0,
+      is_approved: true,
+      is_overridden: false,
+      cluster_label: 'KLS-09',
+      cluster_name: 'Klaster Media Sosial',
+      is_noise: false
+    },
+    bukti_file: 'screenshot_ancaman_chat.png',
+    history: [
+      {
+        waktu: '14 Mei 2024, 14:15 WIB',
+        status: 'menunggu',
+        pelaksana: 'Pelapor Anonim',
+        catatan: 'Pengaduan berhasil diajukan melalui portal SIGAP.'
+      },
+      {
+        waktu: '14 Mei 2024, 15:30 WIB',
+        status: 'diverifikasi',
+        pelaksana: 'Ibu Rahmawati, S.Pd (Konselor BK)',
+        catatan: 'Bukti tangkapan layar telah kami verifikasi.'
+      },
+      {
+        waktu: '15 Mei 2024, 09:00 WIB',
+        status: 'ditindaklanjuti',
+        pelaksana: 'Tim BK & Satgas PPKSP',
+        catatan: 'Pemanggilan tertutup dan koordinasi bersama wali kelas tanpa membuka identitas pelapor.'
+      }
+    ]
+  },
+  {
+    id: 84,
+    ticket_code: 'SGP-2026-0084',
+    judul: 'Perundungan Verbal di Kantin',
+    deskripsi: 'Cacian nama panggilan menghina secara terus menerus saat jam istirahat pertama di area lorong/kelas.',
+    kategori_id: 6,
+    kategori_nama: 'Perundungan Verbal',
+    status: 'ditindaklanjuti',
+    status_label: 'Mediasi Terjadwal',
+    status_badge: 'Mediasi Terjadwal',
+    urgensi: 'Sedang',
+    is_active: true,
+    is_anonymous: false,
+    reporter_name: 'Ananda Dimas Prasetya',
+    reporter_label: 'Dimas Prasetya • Pelapor Terverifikasi',
+    reporter_school: 'SMAN 1 Teladan',
+    lokasi: 'Area Kantin & Lorong Kelas',
+    tanggal: '02 Mei 2024',
+    catatan_konselor: 'Jadwal mediasi kekeluargaan bersama pihak terkait telah diagendakan oleh guru BK.',
+    konselor_nama: 'Dra. Hj. Ratna Sari (Guru BK)',
+    catatan_updated_at: '03 Mei 2024, 11:00 WIB',
+    step_dates: {
+      step1: '02 Mei 2024, 10:00 WIB',
+      step2: '02 Mei 2024, 14:00 WIB',
+      step3: '03 Mei 2024, 09:00 WIB',
+      step4: 'Estimasi 2 hari kerja'
+    },
+    ai: {
+      kategori_rekomendasi: 'Perundungan Verbal',
+      confidence: 94.1,
+      secondary_suggestion: null,
+      secondary_confidence: 0,
+      is_approved: true,
+      is_overridden: false,
+      cluster_label: 'KLS-01',
+      cluster_name: 'Klaster Kantin',
+      is_noise: false
+    },
+    bukti_file: null,
+    history: [
+      {
+        waktu: '02 Mei 2024, 10:00 WIB',
+        status: 'menunggu',
+        pelaksana: 'Dimas Prasetya',
+        catatan: 'Laporan diajukan secara terbuka oleh siswa.'
+      },
+      {
+        waktu: '03 Mei 2024, 09:00 WIB',
+        status: 'ditindaklanjuti',
+        pelaksana: 'Dra. Hj. Ratna Sari (Guru BK)',
+        catatan: 'Jadwal mediasi kekeluargaan disusun.'
+      }
+    ]
+  },
+  {
+    id: 42,
+    ticket_code: 'SGP-2026-0042',
+    judul: 'Pemalakan Uang Kas Kelas',
+    deskripsi: 'Tindakan intimidasi pemaksaan uang jajan telah diselesaikan melalui bimbingan konseling dan pengembalian uang secara tertutup.',
+    kategori_id: 2,
+    kategori_nama: 'Pemalakan / Pemerasan',
+    status: 'selesai',
+    status_label: 'Terselesaikan',
+    status_badge: 'Terselesaikan',
+    urgensi: 'Tinggi',
+    is_active: true,
+    is_anonymous: true,
+    reporter_name: 'Ananda Dimas Prasetya',
+    reporter_label: 'Anonim (Siswa)',
+    reporter_school: 'SMAN 1 Teladan',
+    lokasi: 'Ruang Kelas IX-A',
+    tanggal: '18 Maret 2024',
+    catatan_konselor: 'Kasus telah diselesaikan dengan mediasi tertutup, surat perjanjian damai, dan pengembalian dana seutuhnya.',
+    konselor_nama: 'Ibu Rahmawati, S.Pd (Konselor BK)',
+    catatan_updated_at: '22 Maret 2024, 14:00 WIB',
+    step_dates: {
+      step1: '18 Mar 2024, 08:30 WIB',
+      step2: '18 Mar 2024, 13:00 WIB',
+      step3: '19 Mar 2024, 10:00 WIB',
+      step4: '22 Mar 2024, 14:00 WIB'
+    },
+    ai: {
+      kategori_rekomendasi: 'Pemalakan / Pemerasan',
+      confidence: 95.8,
+      secondary_suggestion: null,
+      secondary_confidence: 0,
+      is_approved: true,
+      is_overridden: false,
+      cluster_label: null,
+      cluster_name: null,
+      is_noise: false
+    },
+    bukti_file: null,
+    history: [
+      {
+        waktu: '18 Mar 2024, 08:30 WIB',
+        status: 'menunggu',
+        pelaksana: 'Pelapor Anonim',
+        catatan: 'Aduan masuk dalam sistem.'
+      },
+      {
+        waktu: '22 Mar 2024, 14:00 WIB',
+        status: 'selesai',
+        pelaksana: 'Ibu Rahmawati, S.Pd (Konselor BK)',
+        catatan: 'Kesepakatan damai ditandatangani dan kasus dinyatakan tuntas.'
+      }
+    ]
+  },
+  {
     id: 101,
     ticket_code: 'TKT-2024-0891',
     judul: 'Komentar intimidatif berulang di grup media sosial angkatan sekolah.',

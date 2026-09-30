@@ -14,12 +14,22 @@ import app.models  # noqa: F401
 
 
 def get_dataset_dir() -> Path:
-    # Cari letak folder dataset di root project
+    # 1. Jika di dalam container Docker
+    container_dir = Path("/app/dataset")
+    if container_dir.exists():
+        return container_dir
+
+    # 2. Cari di direktori proyek
     base_dir = Path(__file__).resolve().parent.parent.parent.parent
     dataset_dir = base_dir / "dataset"
-    if not dataset_dir.exists():
-        # Fallback path absolut jika dipanggil dari subdirektori
-        dataset_dir = Path("/home/afkam/Downloads/tes/dataset")
+    if dataset_dir.exists():
+        return dataset_dir
+
+    # 3. Fallback direktori relatif terhadap backend
+    backend_sibling = Path(__file__).resolve().parent.parent.parent / "dataset"
+    if backend_sibling.exists():
+        return backend_sibling
+
     return dataset_dir
 
 

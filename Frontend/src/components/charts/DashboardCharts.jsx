@@ -11,56 +11,76 @@ export const TrendLineChart = () => {
     const option = {
       tooltip: {
         trigger: 'axis',
-        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+        backgroundColor: 'rgba(15, 23, 42, 0.95)',
         borderColor: '#334155',
-        textStyle: { color: '#ffffff', fontSize: 12 }
+        borderRadius: 12,
+        padding: [10, 14],
+        textStyle: { color: '#ffffff', fontSize: 11, fontFamily: 'inherit' },
+        formatter: (params) => {
+          let month = params[0]?.axisValue || '';
+          let res = `<div class="font-bold text-white mb-1.5">Bulan ${month} 2024</div>`;
+          params.forEach((item) => {
+            const dotColor = item.seriesName === 'Internal' ? '#0284c7' : '#94a3b8';
+            res += `<div class="flex items-center justify-between gap-4 text-xs">
+              <span style="color:${dotColor}">● ${item.seriesName}:</span>
+              <strong class="text-white">${item.value} kasus</strong>
+            </div>`;
+          });
+          return res;
+        }
       },
       legend: {
-        data: ['Sekolah Kita (2024)', 'Baseline Daerah (Kaltim/Aceh)'],
-        bottom: 0,
-        textStyle: { fontSize: 11, color: '#64748b' }
+        show: false // We show custom legend on top right of the card
       },
       grid: {
-        top: 20,
-        left: '3%',
-        right: '4%',
-        bottom: '15%',
+        top: 25,
+        left: '2%',
+        right: '2%',
+        bottom: '8%',
         containLabel: true
       },
       xAxis: {
         type: 'category',
         boundaryGap: false,
-        data: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
-        axisLine: { lineStyle: { color: '#cbd5e1' } },
-        axisLabel: { color: '#64748b', fontSize: 11 }
+        data: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov'],
+        axisLine: { lineStyle: { color: '#e2e8f0' } },
+        axisTick: { show: false },
+        axisLabel: { color: '#64748b', fontSize: 11, fontWeight: 500 }
       },
       yAxis: {
         type: 'value',
-        splitLine: { lineStyle: { color: '#f1f5f9' } },
-        axisLabel: { color: '#64748b', fontSize: 11 }
+        min: 0,
+        max: 40,
+        interval: 10,
+        splitLine: { lineStyle: { color: '#f1f5f9', type: 'dashed' } },
+        axisLabel: { color: '#94a3b8', fontSize: 11 }
       },
       series: [
         {
-          name: 'Sekolah Kita (2024)',
+          name: 'Internal',
           type: 'line',
           smooth: true,
-          data: [12, 19, 15, 24, 18, 14],
-          lineStyle: { color: '#0284c7', width: 3 },
-          itemStyle: { color: '#0284c7' },
+          showSymbol: true,
+          symbolSize: 7,
+          data: [8, 12, 15, 9, 18, 10, 24, 15, 12, 10, 8],
+          lineStyle: { color: '#0284c7', width: 2.5 },
+          itemStyle: { color: '#0284c7', borderWidth: 2, borderColor: '#ffffff' },
           areaStyle: {
             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: 'rgba(2, 132, 199, 0.25)' },
+              { offset: 0, color: 'rgba(2, 132, 199, 0.15)' },
               { offset: 1, color: 'rgba(2, 132, 199, 0.0)' }
             ])
           }
         },
         {
-          name: 'Baseline Daerah (Kaltim/Aceh)',
+          name: 'Nasional',
           type: 'line',
           smooth: true,
-          data: [10, 14, 13, 16, 15, 12],
-          lineStyle: { color: '#94a3b8', width: 2, type: 'dashed' },
-          itemStyle: { color: '#94a3b8' }
+          showSymbol: true,
+          symbolSize: 6,
+          data: [13, 16, 14, 17, 14, 12, 16, 17, 15, 14, 13],
+          lineStyle: { color: '#94a3b8', width: 1.8, type: 'dashed' },
+          itemStyle: { color: '#ffffff', borderWidth: 1.5, borderColor: '#94a3b8' }
         }
       ]
     };
@@ -76,74 +96,7 @@ export const TrendLineChart = () => {
     };
   }, []);
 
-  return <div ref={chartRef} className="w-full h-72" />;
+  return <div ref={chartRef} className="w-full h-64 sm:h-72" />;
 };
 
-export const CategoryBarChart = ({ categories = [] }) => {
-  const chartRef = useRef(null);
-
-  useEffect(() => {
-    if (!chartRef.current) return;
-    const chart = echarts.init(chartRef.current);
-
-    const names = categories.map((c) =>
-      c.nama.length > 20 ? c.nama.substring(0, 18) + '...' : c.nama
-    );
-    const counts = categories.map((c) => c.count);
-
-    const option = {
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: { type: 'shadow' },
-        backgroundColor: 'rgba(15, 23, 42, 0.9)',
-        textStyle: { color: '#ffffff', fontSize: 12 }
-      },
-      grid: {
-        top: 15,
-        left: '3%',
-        right: '4%',
-        bottom: '5%',
-        containLabel: true
-      },
-      xAxis: {
-        type: 'value',
-        splitLine: { lineStyle: { color: '#f1f5f9' } },
-        axisLabel: { color: '#64748b', fontSize: 11 }
-      },
-      yAxis: {
-        type: 'category',
-        data: names.reverse(),
-        axisLine: { lineStyle: { color: '#cbd5e1' } },
-        axisLabel: { color: '#475569', fontSize: 11 }
-      },
-      series: [
-        {
-          name: 'Jumlah Aduan',
-          type: 'bar',
-          data: counts.reverse(),
-          barWidth: '55%',
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
-              { offset: 0, color: '#38bdf8' },
-              { offset: 1, color: '#0284c7' }
-            ]),
-            borderRadius: [0, 6, 6, 0]
-          }
-        }
-      ]
-    };
-
-    chart.setOption(option);
-
-    const handleResize = () => chart.resize();
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      chart.dispose();
-    };
-  }, [categories]);
-
-  return <div ref={chartRef} className="w-full h-72" />;
-};
-
+export default TrendLineChart;

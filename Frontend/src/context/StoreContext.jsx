@@ -305,6 +305,55 @@ export const StoreProvider = ({ children }) => {
     return true;
   };
 
+  const addReportMessage = (ticketCode, message, file = null, sender = 'Pelapor') => {
+    const timestamp = new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date()) + ' WIB';
+    let updatedReport = null;
+
+    setReports((prev) =>
+      prev.map((r) => {
+        if (r.ticket_code.toUpperCase().replace(/[#\s]/g, '') === ticketCode.toUpperCase().replace(/[#\s]/g, '')) {
+          const newHistory = [
+            ...(r.history || []),
+            {
+              waktu: timestamp,
+              status: r.status,
+              pelaksana: sender,
+              catatan: `[Pesan/Bukti Tambahan]: ${message}${file ? ` (Lampiran: ${file.name || 'Dokumen'})` : ''}`
+            }
+          ];
+          const newMessages = [
+            ...(r.messages || []),
+            {
+              id: Date.now(),
+              waktu: timestamp,
+              pengirim: sender,
+              pesan: message,
+              file_name: file?.name || null
+            }
+          ];
+          updatedReport = {
+            ...r,
+            history: newHistory,
+            messages: newMessages
+          };
+          return updatedReport;
+        }
+        return r;
+      })
+    );
+
+    addAuditEntry({
+      pelaksana_nama: sender,
+      pelaksana_role: 'Pelapor',
+      tipe_aksi: 'update',
+      deskripsi: `Pesan tambahan / bukti baru dikirimkan pada tiket #${ticketCode}`,
+      detail_perubahan: `Pesan: "${message}"`,
+      ticket_code: ticketCode
+    });
+
+    return updatedReport;
+  };
+
   const getMetrics = () => {
     const activeReports = reports.filter((l) => l.is_active);
     const total = activeReports.length;
@@ -350,6 +399,7 @@ export const StoreProvider = ({ children }) => {
         addAuditEntry,
         getMetrics,
         resetDefault,
+        addReportMessage,
         categories: KATEGORI_DATA
       }}
     >
