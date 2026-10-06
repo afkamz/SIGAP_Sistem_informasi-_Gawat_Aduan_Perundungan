@@ -2,8 +2,11 @@ import React from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { StoreProvider } from './context/StoreContext';
 
+// Landing Page (Halaman Informasi Utama Sebelum Login)
+import { LandingPage } from './pages/LandingPage';
+
 // Student Pages
-import { Landing } from './pages/student/Landing';
+import { Login } from './pages/student/Login';
 import { Register } from './pages/student/Register';
 import { StudentDashboard } from './pages/student/StudentDashboard';
 import { CreateReportWizard } from './pages/student/CreateReportWizard';
@@ -22,8 +25,11 @@ export const App = () => {
     <StoreProvider>
       <Router>
         <Routes>
-          {/* Portal Siswa */}
-          <Route path="/" element={<Landing />} />
+          {/* Landing Page Resmi SIGAP */}
+          <Route path="/" element={<LandingPage />} />
+
+          {/* Portal Siswa & Pelapor */}
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<StudentDashboard />} />
           <Route path="/buat-laporan" element={<CreateReportWizard />} />
@@ -46,4 +52,3 @@ export const App = () => {
 };
 
 export default App;
-

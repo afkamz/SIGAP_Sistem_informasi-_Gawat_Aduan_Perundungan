@@ -22,7 +22,8 @@ import {
   Users,
   Edit3,
   Copy,
-  Search
+  Search,
+  LogIn
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { KATEGORI_DATA } from '../../data/categories';
@@ -33,6 +34,51 @@ export const CreateReportWizard = () => {
   const { createReport, currentUser } = useStore();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+
+  // Gatekeeper: Pengguna harus login atau daftar terlebih dahulu
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen flex flex-col justify-between bg-slate-50 text-slate-800">
+        <StudentHeader />
+        <main className="max-w-md mx-auto w-full px-4 py-16 flex-1 flex flex-col justify-center">
+          <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm text-center space-y-6">
+            <div className="w-16 h-16 rounded-2xl bg-[#A7D8F0] text-slate-900 mx-auto flex items-center justify-center font-bold shadow-xs">
+              <Lock className="w-8 h-8" />
+            </div>
+            <div className="space-y-2">
+              <h2 className="text-xl font-bold text-slate-900">Masuk atau Daftar Terlebih Dahulu</h2>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Untuk menjamin keaslian data, perlindungan identitas, serta tindak lanjut resmi oleh Guru BK & Satgas PPKSP, Anda harus memiliki akun terdaftar untuk membuat aduan.
+              </p>
+            </div>
+            <div className="space-y-2.5 pt-2">
+              <Link
+                to="/login?redirect=/buat-laporan"
+                className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition"
+              >
+                <LogIn className="w-4 h-4 text-[#A7D8F0]" />
+                <span>Masuk ke Akun Siswa</span>
+              </Link>
+              <Link
+                to="/register?redirect=/buat-laporan"
+                className="w-full py-3 px-4 rounded-xl bg-[#A7D8F0] hover:bg-[#90C8E4] text-slate-900 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition"
+              >
+                <User className="w-4 h-4" />
+                <span>Daftar Akun Baru</span>
+              </Link>
+              <Link
+                to="/"
+                className="block text-xs text-slate-500 hover:text-slate-800 pt-2 transition font-medium"
+              >
+                ← Kembali ke Beranda
+              </Link>
+            </div>
+          </div>
+        </main>
+        <StudentFooter />
+      </div>
+    );
+  }
 
   const [step, setStep] = useState(1);
   const [createdTicket, setCreatedTicket] = useState(null);

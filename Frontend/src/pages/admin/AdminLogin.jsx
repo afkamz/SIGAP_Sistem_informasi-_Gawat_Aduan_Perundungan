@@ -167,9 +167,13 @@ export const AdminLogin = () => {
             </div>
           </div>
 
-          <div className="text-center text-xs text-slate-600 pt-1">
-            Bukan staf atau guru?{' '}
-            <Link to="/" className="font-bold text-sky-700 hover:underline">
+          <div className="text-center text-xs text-slate-600 pt-1 space-x-2">
+            <Link to="/" className="text-slate-500 hover:text-slate-800">
+              ← Beranda
+            </Link>
+            <span>•</span>
+            <span>Bukan staf atau guru?</span>
+            <Link to="/login" className="font-bold text-sky-700 hover:underline">
               Masuk ke Portal Siswa →
             </Link>
           </div>
