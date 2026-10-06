@@ -77,7 +77,7 @@
 \vspace{0.3em}
 
 \noindent\textbf{Index Terms---}
-Cyberbullying, Perundungan Pelajar, SIGAP, Sistem Pengaduan, Kecerdasan Buatan, Natural Language Processing.
+Perundungan Pelajar, SIGAP, Sistem Pengaduan, Kecerdasan Buatan, Natural Language Processing.
 
 \section{INTRODUCTION}
 
@@ -136,126 +136,5 @@ R. T. Fielding, ``Architectural styles and the design of network-based software 
 \bibitem{weber2004}
 R. Weber, \textit{Information Systems Control and Audit}. Upper Saddle River, NJ: Prentice Hall, 2004.
 \end{thebibliography}
-
-% ===== Mulai bagian non-IEEE: satu kolom, tanpa nomor halaman =====
-\clearpage
-\onecolumn
-\pagestyle{empty}
-
-\begin{center}
-	{\Large\bfseries II. SOURCE CODE}\par
-\end{center}
-
-\lstinputlisting[
-	language={[LaTeX]TeX},
-	basicstyle=\ttfamily\footnotesize,
-	breaklines=true,
-	breakatwhitespace=false,
-	columns=fullflexible,
-	keepspaces=true,
-	literate={é}{{\'e}}1 {ó}{{\'o}}1 {á}{{\'a}}1 {í}{{\'i}}1,
-	frame=single,
-	framerule=0.3pt,
-	rulecolor=\color{black!35},
-	xleftmargin=1cm,
-	xrightmargin=1cm,
-	framexleftmargin=4pt,
-	framexrightmargin=4pt
-]{SIGAP-source.tex}
-
-\clearpage
-\begin{center}
-	{\Large\bfseries III. ARSITEKTUR SISTEM}\par
-\end{center}
-
-Arsitektur SIGAP mengintegrasikan lapisan \textit{User Client}, \textit{Backend Services}, \textit{AI Pipeline}, dan \textit{External Data}. Pengguna (siswa dan admin/guru BK) berinteraksi melalui antarmuka berbasis REST API/HTTPS (didukung autentikasi JWT) serta \textit{WebSocket Gateway} untuk pembaruan status dan notifikasi secara \textit{real-time}. Layanan backend FastAPI mengelola basis data relasional MySQL dan \textit{Local File Storage} untuk berkas bukti pengaduan. Teks deskripsi laporan diproses oleh \textit{AI Pipeline} berbasis IndoBERT \textit{Embedding} yang bercabang ke \textit{Cosine Similarity} (menghasilkan rekomendasi kategori dan skor keyakinan) serta HDBSCAN (mengelompokkan klaster laporan serupa). Hasil AI berstatus \textit{pending review} sebagai pendukung keputusan admin dalam menetapkan kategori final. Setiap validasi dan perubahan status dicatat pada \textit{Audit Trail}, sedangkan data eksternal (Satu Data Indonesia, SIMFONI PPA) dimanfaatkan sebagai \textit{one-time seed/training} pada inisialisasi model.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth,height=0.62\textheight,keepaspectratio]{New_Arsitektur_Sistem.png}
-	\caption{Arsitektur Sistem SIGAP}
-	\label{fig:arsitektur-sigap}
-\end{figure}
-
-\clearpage
-\begin{center}
-	{\Large\bfseries IV. DESAIN SISTEM}\par
-\end{center}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth,height=0.72\textheight,keepaspectratio]{Desain Sistem/DesainSistem_SIGAP.png}
-	\caption{Desain Sistem SIGAP}
-	\label{fig:desain-sigap}
-\end{figure}
-
-\clearpage
-\begin{center}
-	{\Large\bfseries V. MOCKUP UI}\par
-\end{center}
-
-% --- 2 gambar per baris ---
-\noindent
-\begin{minipage}[t]{0.48\linewidth}
-	\centering
-	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/OnBoardingUser_SIGAP.png}
-	\captionof{figure}{Onboarding pengguna siswa}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.48\linewidth}
-	\centering
-	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/DashboardUser_SIGAP.png}
-	\captionof{figure}{Dashboard pengguna siswa}
-\end{minipage}
-
-\vspace{0.8cm}
-\noindent
-\begin{minipage}[t]{0.48\linewidth}
-	\centering
-	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/FormulirPengaduanUser_SIGAP.png}
-	\captionof{figure}{Formulir pengaduan pengguna siswa}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.48\linewidth}
-	\centering
-	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/LacakStatusLaporanUser_SIGAP.png}
-	\captionof{figure}{Pelacakan status laporan pengguna siswa}
-\end{minipage}
-
-\vspace{0.8cm}
-\noindent
-\begin{minipage}[t]{0.48\linewidth}
-	\centering
-	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/OnBoardingAdmin_SIGAP.png}
-	\captionof{figure}{Onboarding admin}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.48\linewidth}
-	\centering
-	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/DashboardAdmin_SIGAP.png}
-	\captionof{figure}{Dashboard admin}
-\end{minipage}
-
-\vspace{0.8cm}
-\noindent
-\begin{minipage}[t]{0.48\linewidth}
-	\centering
-	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/DaftarLaporanMasukAdmin_SIGAP.png}
-	\captionof{figure}{Daftar laporan masuk admin}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.48\linewidth}
-	\centering
-	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/StatusLaporanAdmin_SIGAP.png}
-	\captionof{figure}{Status laporan pada sisi admin}
-\end{minipage}
-
-\vspace{0.8cm}
-\noindent
-\begin{minipage}[t]{0.48\linewidth}
-	\centering
-	\includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{Frontend_image/JejakAuditAdmin_SIGAP.png}
-	\captionof{figure}{Jejak audit admin}
-\end{minipage}
 
 \end{document}

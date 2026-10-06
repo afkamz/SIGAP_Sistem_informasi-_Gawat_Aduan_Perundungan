@@ -89,6 +89,23 @@ Ketiga, belum terdapat mekanisme pemantauan progres (\textit{tracking}) yang tra
 
 Berdasarkan permasalahan tersebut, penelitian ini mengusulkan SIGAP sebagai platform pelaporan dan penanganan kekerasan terpadu di sekolah. SIGAP menyediakan pelaporan \textit{dual-mode} (anonim dan terverifikasi) berfitur kode tiket pelacakan alur penanganan secara \textit{real-time}. Teks aduan diproses dengan \textit{Natural Language Processing} berbasis representasi vektor kalimat (\textit{sentence embedding}) untuk rekomendasi otomatis 7 kategori kekerasan, serta algoritma \textit{Hierarchical Density-Based Spatial Clustering of Applications with Noise} (HDBSCAN) untuk mengelompokkan laporan serupa. Verifikasi dan tindak lanjut tetap dikendalikan oleh Guru BK dan Satgas PPKSP (\textit{human-in-the-loop}) melalui pencatatan \textit{audit trail} digital.
 
+\section{TINJAUAN PUSTAKA}
+
+\subsection{Sistem Informasi Pelaporan Perundungan}
+Sistem pelaporan insiden kekerasan dan perundungan di lingkungan sekolah telah dikembangkan di berbagai negara menggunakan pendekatan berbasis web dan aplikasi mobile. Studi-studi tersebut secara konsisten menunjukkan bahwa ketersediaan kanal pelaporan digital yang mudah diakses meningkatkan tingkat partisipasi pelaporan dari siswa secara signifikan \cite{evangelio2022}. Aspek krusial yang berulang kali ditekankan adalah kerahasiaan identitas pelapor, yang berkorelasi langsung dengan kesediaan korban dan saksi untuk melaporkan insiden \cite{kasturiratna2025}. Di Indonesia, penelitian Eleanora dan Al Adawiah pada siswa SMK menunjukkan bahwa siswa yang memiliki persepsi positif terhadap keamanan dan kerahasiaan sistem pelaporan sekolah menunjukkan kecenderungan lebih besar untuk aktif melaporkan kasus perundungan yang disaksikan maupun dialami \cite{eleanora2021}. SIGAP merespons kebutuhan ini dengan menyediakan mekanisme \textit{dual-mode} (anonim dan terverifikasi) serta kode tiket unik yang menjamin akuntabilitas tanpa mengorbankan privasi pelapor.
+
+\subsection{Pemrosesan Bahasa Alami untuk Klasifikasi Teks}
+\textit{Natural Language Processing} (NLP) berbasis \textit{deep learning} telah terbukti efektif dalam klasifikasi teks bernuansa emosional dan konteks sosial, termasuk deteksi ujaran kebencian dan perundungan siber pada media sosial berbahasa Indonesia \cite{nurrahmi2022}. Pendekatan berbasis representasi vektor kalimat (\textit{sentence embedding}) menggunakan model bahasa pretrained multilingual memungkinkan penangkapan makna semantik narasi laporan secara kontekstual, sehingga laporan yang menggunakan variasi bahasa informal, bahasa daerah, maupun singkatan digital tetap dapat diklasifikasikan dengan akurasi tinggi \cite{wongso2023}. Dalam rancangan SIGAP, teks deskripsi aduan diproses menggunakan \textit{sentence embedding} untuk menghasilkan rekomendasi kategori dari 7 kelompok kekerasan resmi Permendikbudristek No. 46 Tahun 2023 beserta \textit{confidence score}. Rekomendasi AI berstatus \textit{pending review} dan tidak langsung diterapkan; verifikasi serta keputusan akhir tetap berada pada Guru BK atau Satgas PPKSP (\textit{human-in-the-loop}).
+
+\subsection{Klasterisasi Laporan Berbasis HDBSCAN}
+\textit{Hierarchical Density-Based Spatial Clustering of Applications with Noise} (HDBSCAN) merupakan algoritma klasterisasi berbasis densitas yang unggul dibandingkan K-Means dan DBSCAN standar karena mampu mendeteksi klaster dengan bentuk arbitrer, menangani \textit{noise} secara otomatis, dan tidak memerlukan jumlah klaster sebagai parameter masukan \cite{campello2013}. Dalam konteks deteksi pola insiden berulang, HDBSCAN yang dikombinasikan dengan representasi vektor semantik teks mampu mengelompokkan laporan yang memiliki kemiripan konteks waktu, lokasi, dan karakteristik pelaku meskipun ditulis dengan diksi yang berbeda \cite{mcinnes2017}. Pada SIGAP, hasil klasterisasi HDBSCAN digunakan untuk membantu Guru BK mendeteksi pola perundungan sistemik yang berasal dari kelompok pelaku yang sama atau terjadi di lokasi sekolah yang sama, sehingga penanganan dapat dilakukan secara proaktif sebelum kasus berkembang lebih jauh.
+
+\subsection{Autentikasi JWT dan Arsitektur RESTful}
+Arsitektur \textit{backend} SIGAP menggunakan FastAPI dengan autentikasi berbasis \textit{JSON Web Token} (JWT). JWT memungkinkan representasi klaim identitas pengguna secara stateless dan aman dalam format yang dapat diverifikasi tanpa perlu konsultasi basis data pada setiap permintaan \cite{jones2015}. Mekanisme \textit{Role-Based Access Control} (RBAC) diterapkan melalui \textit{payload} JWT yang memuat klaim \texttt{role} (siswa/admin) dan waktu kedaluwarsa token (\texttt{exp}), sehingga akses ke endpoint data pengaduan, dashboard analitik, dan jejak audit dapat dikontrol secara terpisah berdasarkan peran pengguna. Pendekatan ini sejalan dengan praktik keamanan aplikasi web modern yang memisahkan autentikasi dari otorisasi, meminimalkan permukaan serangan, dan memudahkan skalabilitas sistem \cite{fielding2000}.
+
+\subsection{Audit Trail dan Akuntabilitas Penanganan}
+Pencatatan jejak audit (\textit{audit trail}) merupakan komponen esensial dalam sistem informasi yang menangani data sensitif, termasuk data kasus kekerasan dan perundungan pelajar. Audit trail yang komprehensif mendokumentasikan setiap transaksi mutasi data, termasuk identitas operator, \textit{timestamp} perubahan, status sebelum dan sesudah perubahan, serta konteks tindakan, sehingga setiap keputusan penanganan dapat dipertanggungjawabkan secara hukum dan administratif \cite{weber2004}. Dalam konteks SIGAP, setiap perubahan status laporan (dari \textit{Menunggu Verifikasi} $\rightarrow$ \textit{Diverifikasi} $\rightarrow$ \textit{Ditindaklanjuti} $\rightarrow$ \textit{Selesai}), persetujuan atau penolakan rekomendasi AI, serta penambahan catatan konselor dicatat secara otomatis ke tabel \texttt{audit\_trail} dengan transisi status yang ketat (\textit{state transition guard}), memastikan tidak ada tahap penanganan yang dapat dilompati.
+
 \begin{thebibliography}{00}
 \bibitem{zhang2022}
 W. Zhang, S. Huang, L. Lam, R. Evans, and C. Zhu, ``Cyberbullying definitions and measurements in children and adolescents,'' \textit{Front. Public Health}, vol. 10, Art. no. 1000504, 2022.
@@ -104,6 +121,20 @@ F. N. Eleanora and R. A. Al Adawiah, ``Perundungan dunia maya (Cyberbullying) da
 C. Evangelio, P. Rodríguez-González, J. Fernández-Río, and S. Gonzalez-Villora, ``Cyberbullying in elementary and middle school students: A systematic review,'' \textit{Comput. Educ.}, vol. 176, Art. no. 104356, 2022.
 \bibitem{kasturiratna2025}
 K. T. A. S. Kasturiratna, A. Hartanto, C. H. Y. Chen, et al., ``Umbrella review of meta-analyses on cyberbullying victimization,'' \textit{Nat. Hum. Behav.}, vol. 9, pp. 101--132, 2025.
+\bibitem{nurrahmi2022}
+H. Nurrahmi and D. Yuniarti, ``Indonesian Twitter cyberbullying detection using text classification and user credibility,'' \textit{Inform.}, vol. 46, no. 1, pp. 55--62, 2022.
+\bibitem{wongso2023}
+R. Wongso, F. A. Setiawan, and R. Suhartono, ``Causal BERT-Language models for the causal analysis of Indonesian tweets,'' \textit{Procedia Comput. Sci.}, vol. 216, pp. 64--72, 2023.
+\bibitem{campello2013}
+R. J. G. B. Campello, D. Moulavi, and J. Sander, ``Density-based clustering based on hierarchical density estimates,'' in \textit{Proc. PAKDD}, pp. 160--172, 2013.
+\bibitem{mcinnes2017}
+L. McInnes, J. Healy, and S. Astels, ``HDBSCAN: Hierarchical density based clustering,'' \textit{J. Open Source Softw.}, vol. 2, no. 11, p. 205, 2017.
+\bibitem{jones2015}
+M. Jones, J. Bradley, and N. Sakimura, ``JSON Web Token (JWT),'' RFC 7519, IETF, May 2015.
+\bibitem{fielding2000}
+R. T. Fielding, ``Architectural styles and the design of network-based software architectures,'' Ph.D. dissertation, Univ. of California, Irvine, 2000.
+\bibitem{weber2004}
+R. Weber, \textit{Information Systems Control and Audit}. Upper Saddle River, NJ: Prentice Hall, 2004.
 \end{thebibliography}
 
 % ===== Mulai bagian non-IEEE: satu kolom, tanpa nomor halaman =====
