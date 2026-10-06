@@ -6,10 +6,11 @@ Jalankan dengan: pytest test_e2e.py -v
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
+from sqlalchemy.pool import StaticPool
 from sqlalchemy.orm import sessionmaker
 
 from app.database import Base, get_db
-from app.main import app
+from app.main import app as fastapi_app
 from app.core.security import hash_password
 
 # ----------------------------------------------------------------
@@ -19,6 +20,7 @@ SQLALCHEMY_E2E_URL = "sqlite:///:memory:"
 engine_e2e = create_engine(
     SQLALCHEMY_E2E_URL,
     connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
 )
 E2ESession = sessionmaker(autocommit=False, autoflush=False, bind=engine_e2e)
 
@@ -29,9 +31,6 @@ def e2e_get_db():
         yield db
     finally:
         db.close()
-
-
-app.dependency_overrides[get_db] = e2e_get_db
 
 
 @pytest.fixture(scope="module")
@@ -66,10 +65,17 @@ def e2e_client():
     finally:
         db.close()
 
-    with TestClient(app) as c:
-        yield c
-
-    Base.metadata.drop_all(bind=engine_e2e)
+    prev_override = fastapi_app.dependency_overrides.get(get_db)
+    fastapi_app.dependency_overrides[get_db] = e2e_get_db
+    try:
+        with TestClient(fastapi_app) as c:
+            yield c
+    finally:
+        if prev_override:
+            fastapi_app.dependency_overrides[get_db] = prev_override
+        else:
+            fastapi_app.dependency_overrides.pop(get_db, None)
+        Base.metadata.drop_all(bind=engine_e2e)
 
 
 class TestAlurLengkapE2E:

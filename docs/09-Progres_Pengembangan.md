@@ -67,10 +67,12 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 
 ### Catatan Backend — 6 Oktober 2026
 
-- **Virtual environment rusak**: Path interpreter Python di `venv/` mengarah ke path lama (`/home/afkam/Downloads/tes/`). Perlu dibuat ulang dengan `python3 -m venv venv && pip install -r requirements.txt`.
-- **SQLite lokal sudah ada** (`sigap.db` 131 KB) — data development tersedia.
-- **Upload berkas**: Folder `uploads/` ada, namun belum ada kompresi, sanitasi MIME, atau Cloud Storage.
-- **CORS**: Masih `allow_origins=["*"]` — perlu dibatasi sebelum production.
+- **Virtual environment**: Berhasil diperbaiki dan diuji ✅ (`python3.14 -m venv venv` & seluruh dependencies terpasang). Sebanyak **58 unit & E2E tests lulus 100%**.
+- **SQLite lokal** (`sigap.db`): Terverifikasi ✅ — 7 tabel ditemukan, 188 baris data benchmark eksternal tersedia.
+- **CORS**: Diperbaiki ✅ — tidak lagi wildcard `"*"`. Dibaca dari `.env` key `ALLOWED_ORIGINS`. Docker port 3000 sudah ditambahkan.
+- **Lifespan FastAPI**: Dimigrasi dari `@on_event("startup")` (deprecated) ke `@asynccontextmanager lifespan` ✅.
+- **Endpoint `/health`**: Ditambahkan untuk smoke test & monitoring ✅.
+- **Upload berkas**: Diperbaiki ✅ — Validasi lengkap: MIME whitelist (JPG/PNG/WebP/PDF), magic bytes verification, batas 10 MB, nama file UUID (anti path traversal), path relatif di DB (bukan path absolut server).
 
 ---
 
@@ -104,7 +106,7 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 
 ### Prioritas Tinggi 🔴
 
-- [ ] Perbaiki virtual environment backend (`venv` rusak, Python path salah)
+- [x] Perbaiki virtual environment backend (`venv` baru dibuat ulang, dependencies terpasang, 58 tests passed)
 - [ ] Hubungkan form Login Siswa ke endpoint `api.loginSiswa()` (saat ini masih hardcode mock)
 - [ ] Hubungkan form Register ke endpoint `api.registerSiswa()` dengan error handling nyata
 - [ ] Pastikan token JWT dari backend disimpan dan dikirimkan pada request terproteksi

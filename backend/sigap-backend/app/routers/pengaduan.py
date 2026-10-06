@@ -25,6 +25,21 @@ router = APIRouter()
 UPLOAD_DIR = Path(__file__).resolve().parent.parent.parent / "uploads"
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
+# ── Konstanta Upload Bukti ──────────────────────────────────────────────────
+# Batas ukuran file: 10 MB
+MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024
+
+# MIME type yang diizinkan → ekstensi yang aman
+ALLOWED_MIME_TYPES: dict[str, str] = {
+    "image/jpeg":       ".jpg",
+    "image/png":        ".png",
+    "image/webp":       ".webp",
+    "application/pdf":  ".pdf",
+}
+
+# Ekstensi yang diizinkan (sebagai pengaman tambahan dari nama file asli)
+ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".pdf"}
+
 
 def generate_ticket_code() -> str:
     tahun = datetime.now().year
@@ -47,6 +62,71 @@ def _ke_admin_out(p: Pengaduan) -> PengaduanAdminOut:
         is_noise=p.is_noise,
         created_at=p.created_at,
     )
+
+
+def _validasi_file(file: UploadFile, content: bytes) -> str:
+    """
+    Validasi file upload. Kembalikan ekstensi aman untuk penyimpanan.
+    Raise HTTPException jika file tidak valid.
+    """
+    # 1. Cek ukuran file
+    if len(content) > MAX_FILE_SIZE_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail=f"Ukuran file melebihi batas maksimal {MAX_FILE_SIZE_BYTES // (1024*1024)} MB.",
+        )
+
+    # 2. Cek ukuran minimum (hindari file kosong)
+    if len(content) == 0:
+        raise HTTPException(status_code=400, detail="File tidak boleh kosong.")
+
+    # 3. Validasi MIME type dari header Content-Type yang dikirim client
+    content_type = (file.content_type or "").split(";")[0].strip().lower()
+    if content_type not in ALLOWED_MIME_TYPES:
+        allowed_display = ", ".join(ALLOWED_MIME_TYPES.keys())
+        raise HTTPException(
+            status_code=415,
+            detail=f"Tipe file '{content_type}' tidak diizinkan. "
+                   f"Tipe yang diterima: {allowed_display}",
+        )
+
+    # 4. Validasi Magic Bytes (signature file aktual — lebih aman dari sekadar Content-Type)
+    magic_valid = _cek_magic_bytes(content, content_type)
+    if not magic_valid:
+        raise HTTPException(
+            status_code=415,
+            detail="Isi file tidak sesuai dengan tipe yang dideklarasikan. "
+                   "Kemungkinan file telah dimanipulasi.",
+        )
+
+    # 5. Validasi ekstensi dari nama file asli (sebagai layer tambahan)
+    original_ext = Path(file.filename or "").suffix.lower()
+    if original_ext and original_ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(
+            status_code=415,
+            detail=f"Ekstensi file '{original_ext}' tidak diizinkan.",
+        )
+
+    # Kembalikan ekstensi aman berdasarkan MIME type (bukan dari nama file client)
+    return ALLOWED_MIME_TYPES[content_type]
+
+
+def _cek_magic_bytes(content: bytes, content_type: str) -> bool:
+    """
+    Validasi signature byte pertama file (magic bytes) sesuai tipe yang diklaim.
+    Mencegah serangan file spoofing (misal: .exe yang diganti nama jadi .jpg).
+    """
+    magic_signatures: dict[str, list[bytes]] = {
+        "image/jpeg": [b"\xff\xd8\xff"],
+        "image/png":  [b"\x89PNG\r\n\x1a\n"],
+        "image/webp": [b"RIFF"],       # RIFF....WEBP
+        "application/pdf": [b"%PDF"],
+    }
+    signatures = magic_signatures.get(content_type, [])
+    if not signatures:
+        # Tipe tidak dikenali dalam whitelist magic bytes — tolak untuk keamanan
+        return False
+    return any(content.startswith(sig) for sig in signatures)
 
 
 # ============================================================
@@ -93,23 +173,41 @@ def buat_pengaduan(payload: PengaduanCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/{ticket_code}/bukti", response_model=BuktiOut)
-async def upload_bukti(ticket_code: str, file: UploadFile = File(...), db: Session = Depends(get_db)):
-    """Upload bukti dokumen/foto untuk pengaduan berdasarkan kode tiket."""
+async def upload_bukti(
+    ticket_code: str,
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+):
+    """
+    Upload bukti dokumen/foto untuk pengaduan berdasarkan kode tiket.
+
+    - Tipe yang diterima: JPG, PNG, WebP, PDF
+    - Ukuran maksimal: 10 MB
+    - Nama file disimpan dengan UUID (aman dari path traversal)
+    - Magic bytes diverifikasi (mencegah file spoofing)
+    """
     pengaduan = db.query(Pengaduan).filter(Pengaduan.ticket_code == ticket_code).first()
     if not pengaduan:
         raise HTTPException(status_code=404, detail="Kode tiket tidak ditemukan")
 
-    ext = Path(file.filename or "").suffix.lower()
-    filename = f"{ticket_code}_{uuid.uuid4().hex[:8]}{ext}"
+    # Baca seluruh konten file ke memory terlebih dahulu untuk validasi
+    content = await file.read()
+
+    # Validasi MIME, magic bytes, ukuran, dan ekstensi
+    safe_ext = _validasi_file(file, content)
+
+    # Nama file: UUID penuh (tidak menggunakan nama asli dari client — mencegah path traversal)
+    filename = f"{uuid.uuid4().hex}{safe_ext}"
     dest_path = UPLOAD_DIR / filename
 
-    content = await file.read()
+    # Tulis file ke disk
     with open(dest_path, "wb") as f:
         f.write(content)
 
+    # Simpan hanya nama file relatif ke DB (bukan path absolut server)
     bukti = BuktiPendukung(
         pengaduan_id=pengaduan.id,
-        file_path=str(dest_path),
+        file_path=filename,
     )
     db.add(bukti)
     db.commit()
