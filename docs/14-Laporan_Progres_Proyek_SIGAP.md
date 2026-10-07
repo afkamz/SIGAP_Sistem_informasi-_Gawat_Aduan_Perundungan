@@ -30,11 +30,25 @@ Secara visual, sistem tampak seperti telah rampung ~85% karena seluruh antarmuka
 
 ```mermaid
 xychart-beta
-    title "Tingkat Kesiapan Fungsional Riil Komponen SIGAP"
-    x-axis ["Tampilan UI", "Infrastruktur Docker", "Autentikasi Akun", "API Backend", "Integrasi Live DB", "Model AI di UI", "UAT & QA"]
-    y-axis "Kesiapan Riil (%)" 0 --> 100
+    title "Kesiapan Fungsional Riil Komponen SIGAP (%)"
+    x-axis ["UI", "Docker", "Auth", "API", "Live DB", "AI", "UAT"]
+    y-axis "Kesiapan (%)" 0 --> 100
     bar [90, 95, 100, 80, 25, 20, 15]
 ```
+
+**Keterangan Sumbu X & Statistik Visual:**
+
+| Kode | Komponen | Progres | Bar Visual | Status |
+|:---:|---|:---:|---|:---:|
+| **Auth** | Autentikasi Siswa & Admin (JWT) | **100%** | `[████████████████████]` | 🟢 Live MySQL |
+| **Docker** | Infrastruktur 4 Kontainer | **95%** | `[███████████████████░]` | 🟢 Stabil |
+| **UI** | Tampilan Antarmuka & Responsif | **90%** | `[██████████████████░░]` | 🟢 Siap Visual |
+| **API** | Backend Standalone & 58 Tests | **80%** | `[████████████████░░░░]` | 🟢 Endpoint Siap |
+| **Live DB**| Integrasi Form Aduan ke MySQL | **25%** | `[█████░░░░░░░░░░░░░░░]` | 🔴 Masih Mock |
+| **AI** | Model NLP IndoBERT & HDBSCAN di UI| **20%** | `[████░░░░░░░░░░░░░░░░]` | 🔴 Simulasi Acak |
+| **UAT** | Pengujian Lapangan Pengguna | **15%** | `[███░░░░░░░░░░░░░░░░░]` | 🔴 Belum UAT |
+
+---
 
 ### B. Pemetaan Sistem: Data Nyata vs Simulasi (*Mock*)
 
