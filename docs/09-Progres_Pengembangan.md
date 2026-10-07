@@ -15,8 +15,8 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 | AI / NLP Pipeline | **~75%** | IndoBERT + HDBSCAN sudah terintegrasi pada alur pengaduan backend |
 | Paper / Laporan Akademik (SIGAP.tex) | **~65%** | Metodologi & arsitektur siap; belum ada bab Hasil, Pembahasan, Kesimpulan |
 | Testing, Integrasi E2E & Deployment | **~85%** | Docker stack 4 container aktif, dev script siap, pengujian layout & auth berhasil |
-| **KESELURUHAN (Semua Modul & Paper)** | **~87%** | Core sistem & tampilan UI lengkap, termasuk paper akademik |
-| **KESIAPAN MURNI SISTEM (Tanpa Paper & Mock)** | **~70%** | Progres fungsional live end-to-end (lihat detail di `docs/14-Laporan_Progres_Proyek_SIGAP.md`) |
+| **KESELURUHAN (Tampilan UI, Mock & Paper)** | **~85%** | Tampilan prototipe & UI lengkap, paper akademik berjalan |
+| **KESIAPAN MURNI SISTEM (Realistis Tanpa Mock & Paper)** | **~60%** | Progres fungsional live end-to-end (lihat detail di `docs/14-Laporan_Progres_Proyek_SIGAP.md`) |
 
 ---
 
