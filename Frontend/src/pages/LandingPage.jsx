@@ -58,11 +58,16 @@ export const LandingPage = () => {
 
   const handleReportAction = (e, path = '/buat-laporan') => {
     if (e && e.preventDefault) e.preventDefault();
-    if (currentUser) {
-      navigate(path);
-    } else {
+    if (!currentUser) {
+      // Belum login — tampilkan modal auth
       setTargetRedirect(path);
       setShowAuthModal(true);
+    } else if (currentUser.role === 'admin') {
+      // Admin tidak bisa membuat aduan — arahkan ke dashboard admin
+      navigate('/admin/dashboard');
+    } else {
+      // Siswa login — langsung ke halaman buat laporan
+      navigate(path);
     }
   };
 
@@ -141,36 +146,36 @@ export const LandingPage = () => {
       <StudentHeader />
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-sky-100/50 via-white to-slate-50 pt-10 pb-16 lg:pt-16 lg:pb-24 border-b border-slate-200/80">
+      <section className="relative overflow-hidden bg-gradient-to-b from-sky-100/50 via-white to-slate-50 pt-8 pb-12 lg:pt-10 lg:pb-16 border-b border-slate-200/80">
         {/* Subtle Background Pattern */}
         <div className="absolute inset-0 bg-[radial-gradient(#A7D8F0_1px,transparent_1px)] [background-size:24px_24px] opacity-40 pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-12 items-center">
             {/* Left Content */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+            <div className="lg:col-span-7 space-y-5 text-center lg:text-left">
               {/* Official Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-100/80 border border-sky-300/80 text-sky-900 text-xs font-bold shadow-xs">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-100/80 border border-sky-300/80 text-sky-900 text-xs font-bold shadow-xs">
                 <ShieldCheck className="w-4 h-4 text-sky-700" />
                 <span>SIGAP • SISTEM INFORMASI GAWAT ADUAN PERUNDUNGAN</span>
               </div>
 
               {/* Main Headline */}
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-[1.18]">
+              <h1 className="text-3xl sm:text-4xl lg:text-[44px] font-black text-slate-900 tracking-tight leading-[1.18]">
                 Suarakan Kebenaran. <br className="hidden sm:inline" />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-700 via-sky-800 to-indigo-900">
                   Ciptakan Sekolah Bebas Kekerasan
                 </span>{' '}
-                & Perundungan.
+                &amp; Perundungan.
               </h1>
 
               {/* Subtitle */}
-              <p className="text-slate-600 text-sm sm:text-base lg:text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Kanal aduan terpadu resmi bagi seluruh pelajar dan warga sekolah. Laporkan kejadian secara aman dengan proteksi identitas berlapis, verifikasi cerdas asisten AI, dan tindak lanjut terpadu Tim Bimbingan Konseling (BK) & Satgas PPKSP.
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                Kanal aduan terpadu resmi bagi seluruh pelajar dan warga sekolah. Laporkan kejadian secara aman dengan proteksi identitas berlapis, verifikasi cerdas asisten AI, dan tindak lanjut terpadu Tim Bimbingan Konseling (BK) &amp; Satgas PPKSP.
               </p>
 
               {/* Primary Call-to-Actions */}
-              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
+              <div className="pt-1 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
                 <button
                   type="button"
                   onClick={(e) => handleReportAction(e, '/buat-laporan')}
@@ -191,7 +196,7 @@ export const LandingPage = () => {
               </div>
 
               {/* Quick Ticket Tracking Form */}
-              <div className="pt-4 max-w-md mx-auto lg:mx-0">
+              <div className="pt-2 max-w-md mx-auto lg:mx-0">
                 <form
                   onSubmit={handleQuickTrack}
                   className="p-2 bg-white rounded-2xl border border-slate-200 shadow-xs flex items-center gap-2"
@@ -208,7 +213,7 @@ export const LandingPage = () => {
                   />
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition flex-shrink-0"
+                    className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition flex-shrink-0 cursor-pointer"
                   >
                     Lacak
                   </button>
@@ -254,8 +259,8 @@ export const LandingPage = () => {
             </div>
 
             {/* Right Interactive Mockup / Hero Showcase Card */}
-            <div className="lg:col-span-5 max-w-md mx-auto w-full">
-              <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xl overflow-hidden relative">
+            <div className="lg:col-span-5 w-full flex justify-center lg:justify-end">
+              <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xl overflow-hidden relative w-full max-w-md lg:max-w-[480px]">
                 {/* Header Mock Card */}
                 <div className="bg-gradient-to-r from-slate-900 via-sky-950 to-slate-900 p-5 text-white">
                   <div className="flex items-center justify-between">

@@ -6,16 +6,16 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 
 ---
 
-## Ringkasan Cepat — Update 6 Oktober 2026
+## Ringkasan Cepat — Update 7 Oktober 2026
 
 | Komponen | Progres | Catatan |
 |---|:---:|---|
-| Frontend (React + Vite + Tailwind) | **~90%** | Semua halaman utama sudah ada dan bisa di-build |
-| Backend (FastAPI + SQLAlchemy + JWT) | **~75%** | Router & model siap, venv perlu diperbaiki |
-| AI / NLP Pipeline | **~70%** | IndoBERT + HDBSCAN sudah diimplementasikan |
+| Frontend (React + Vite + Tailwind) | **~93%** | Seluruh UI siap, role guard diperkuat, form login & register terhubung API |
+| Backend (FastAPI + SQLAlchemy + JWT) | **~88%** | Venv sehat, CORS secured, sanitasi upload aktif, 58 tests passed 100% |
+| AI / NLP Pipeline | **~75%** | IndoBERT + HDBSCAN sudah terintegrasi pada alur pengaduan |
 | Paper / Laporan Akademik (SIGAP.tex) | **~65%** | Belum ada bab Hasil, Pembahasan, Kesimpulan |
-| Testing, Integrasi E2E & Deployment | **~60%** | Unit test ada, integrasi live belum penuh |
-| **KESELURUHAN** | **~78%** | Testing live dan perbaikan bug menjadi fokus berikutnya |
+| Testing, Integrasi E2E & Deployment | **~80%** | Docker stack (4 container) aktif, unit & E2E tests lulus, dev script siap |
+| **KESELURUHAN** | **~85%** | Integrasi penuh dan pengujian live fungsional terus berlanjut |
 
 ---
 
@@ -107,27 +107,30 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 ### Prioritas Tinggi 🔴
 
 - [x] Perbaiki virtual environment backend (`venv` baru dibuat ulang, dependencies terpasang, 58 tests passed)
-- [ ] Hubungkan form Login Siswa ke endpoint `api.loginSiswa()` (saat ini masih hardcode mock)
-- [ ] Hubungkan form Register ke endpoint `api.registerSiswa()` dengan error handling nyata
-- [ ] Pastikan token JWT dari backend disimpan dan dikirimkan pada request terproteksi
+- [x] Perbaikan role guard admin: admin dilarang mengakses form Buat Aduan & diarahkan ke dashboard admin
+- [x] Perbaikan navigasi StudentHeader: link nama & logo diarahkan ke `/admin/dashboard` untuk admin, sembunyikan tombol Buat Aduan bagi admin
+- [x] Hubungkan form Login Siswa ke endpoint `api.loginSiswa()` dengan JWT token nyata & error handling
+- [x] Hubungkan form Register Siswa ke endpoint `api.registerSiswa()` dengan autentikasi otomatis & error handling nyata
+- [x] Pastikan token JWT dari backend disimpan dan dikirimkan pada request terproteksi
 - [ ] Tambahkan route guard: redirect ke `/login` jika token tidak ada atau kedaluwarsa
 
 ### Prioritas Sedang 🟡
 
-- [ ] Hubungkan form Buat Aduan ke endpoint `api.buatPengaduan()` (saat ini memakai `createReport` lokal)
+- [ ] Hubungkan form Buat Aduan ke endpoint `api.buatPengaduan()` secara penuh (fallback lokal siap)
 - [ ] Hubungkan halaman Lacak Tiket ke endpoint `api.cekStatus()`
 - [ ] Hubungkan dashboard admin ke endpoint `api.getDashboardSummary()`
 - [ ] Pastikan perubahan status laporan memanggil `api.ubahStatus()` ke backend
 - [ ] Nonaktifkan fallback mock data di production
-- [ ] Perbaiki CORS backend agar tidak wildcard
+- [x] Perbaiki CORS backend agar tidak wildcard (membaca dari `ALLOWED_ORIGINS` di `.env`)
+- [x] Perbaiki upload berkas: validasi MIME, magic bytes, batas 10MB, UUID file name
 
 ### Prioritas Rendah 🟢
 
 - [ ] Validasi responsive mobile: Landing Page, form aduan, lacak tiket
 - [ ] Periksa tampilan di mode gelap sistem (jika berlaku)
-- [ ] Tambahkan kompresi & validasi MIME pada upload bukti
 - [ ] Evaluasi akurasi AI NLP: dokumentasi Precision, Recall, F1 per kategori
-- [ ] Buat `docker-compose.yml` untuk orkestrasi lokal (Frontend + Backend + DB)
+- [x] Buat/Verifikasi `docker-compose.yml` untuk orkestrasi lokal (Frontend + Backend + DB + phpMyAdmin)
+- [x] Buat script pembantu development `sigap-dev.sh`
 - [ ] Lengkapi paper akademik: Bab Hasil & Pembahasan, UAT, SUS, Kesimpulan & Saran
 
 ---
@@ -148,6 +151,7 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 
 | Tanggal | Update |
 |---|---|
+| 07 Oktober 2026 | Perbaikan 4 prioritas backend (venv, DB, CORS, upload sanitization). Role guard admin & navigasi StudentHeader. Integrasi auth login/register ke real backend API. Sinkronisasi metrik laporan dashboard admin & 7 kategori resmi Permendikbudristek No. 46/2023. Penambahan halaman Coming Soon Validasi AI. Estimasi progres keseluruhan: ~85% |
 | 06 Oktober 2026 | Penambahan Landing Page, pemisahan Login, gatekeeper Buat Aduan, pembersihan header nav, konsolidasi semua `.md` ke folder `docs/`. Estimasi progres keseluruhan: ~78% |
 | 30 September 2026 | Penyempurnaan TrackReport, StudentDashboard, CreateReportWizard |
 | 29 September 2026 | Penyempurnaan ETL external data, modul AI pipeline |

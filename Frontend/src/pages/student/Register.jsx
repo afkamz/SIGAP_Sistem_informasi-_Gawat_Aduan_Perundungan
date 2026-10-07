@@ -52,30 +52,54 @@ export const Register = () => {
     setIsLoading(true);
 
     try {
-      // Try calling FastAPI backend
-      await api.registerSiswa({
-        nisn: formData.nisn,
-        nama: formData.nama,
-        sekolah: formData.sekolah,
+      // Panggil backend FastAPI
+      const res = await api.registerSiswa({
+        nisn: formData.nisn.trim(),
+        nama: formData.nama.trim(),
+        sekolah: formData.sekolah.trim(),
         password: formData.password
       });
+
+      // Otomatis login untuk mendapatkan token JWT
+      let token = '';
+      try {
+        const loginRes = await api.loginSiswa(formData.nisn.trim(), formData.password);
+        token = loginRes.access_token;
+      } catch (_) {}
+
+      setIsLoading(false);
+      setSuccessMsg('Pendaftaran berhasil! Mengarahkan...');
+
+      setTimeout(() => {
+        loginUser({
+          id: res?.id || Date.now(),
+          nama: formData.nama.trim(),
+          nisn: formData.nisn.trim(),
+          sekolah: formData.sekolah.trim(),
+          role: 'siswa'
+        }, token, 'siswa');
+        navigate(redirectTarget);
+      }, 800);
     } catch (err) {
-      console.warn('Backend warning:', err.message);
+      setIsLoading(false);
+      console.warn('Backend register error:', err.message);
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+        // Fallback jika backend offline saat testing lokal
+        setSuccessMsg('Pendaftaran berhasil (Mode Offline)! Mengarahkan...');
+        setTimeout(() => {
+          loginUser({
+            id: Date.now(),
+            nama: formData.nama.trim(),
+            nisn: formData.nisn.trim(),
+            sekolah: formData.sekolah.trim(),
+            role: 'siswa'
+          });
+          navigate(redirectTarget);
+        }, 800);
+      } else {
+        setErrorMsg(err.message || 'Pendaftaran gagal. Silakan periksa kembali data Anda.');
+      }
     }
-
-    setIsLoading(false);
-    setSuccessMsg('Pendaftaran berhasil! Mengarahkan...');
-
-    setTimeout(() => {
-      loginUser({
-        id: Date.now(),
-        nama: formData.nama,
-        nisn: formData.nisn,
-        sekolah: formData.sekolah,
-        role: 'siswa'
-      });
-      navigate(redirectTarget);
-    }, 1000);
   };
 
   return (

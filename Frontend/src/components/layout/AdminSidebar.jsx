@@ -39,7 +39,7 @@ export const AdminSidebar = () => {
     },
     {
       name: 'Validasi AI',
-      path: '/admin/laporan?tab=low_ai',
+      path: '/admin/validasi-ai',
       icon: Sparkles,
       badge: null
     },

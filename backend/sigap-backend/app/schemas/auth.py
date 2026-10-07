@@ -1,10 +1,23 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
+
+
+class UserInfo(BaseModel):
+    id: int
+    nama: str
+    role: str
+    nisn: str | None = None
+    nip: str | None = None
+    sekolah: str | None = None
+    jabatan: str | None = None
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     role: str = "admin"  # "admin" atau "siswa"
+    user: UserInfo | None = None
 
 
 # Alias untuk backward compatibility
@@ -17,8 +30,7 @@ class AdminOut(BaseModel):
     nama: str
     jabatan: str | None = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class SiswaRegisterRequest(BaseModel):
@@ -39,5 +51,4 @@ class SiswaOut(BaseModel):
     nama: str
     sekolah: str | None = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

@@ -13,6 +13,7 @@ import {
   SearchCheck,
   Info
 } from 'lucide-react';
+import { api } from '../../services/api';
 import { useStore } from '../../context/StoreContext';
 import { StudentHeader } from '../../components/layout/StudentHeader';
 import { StudentFooter } from '../../components/layout/StudentFooter';
@@ -31,29 +32,46 @@ export const Login = () => {
   const redirectTarget = searchParams.get('redirect') || '/dashboard';
   const isFromReport = redirectTarget.includes('buat-laporan');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMsg('');
 
-    if (!identifier || !password) {
-      setErrorMsg('Harap isi NISN / NIP dan Kata Sandi.');
+    if (!identifier.trim() || !password) {
+      setErrorMsg('Harap isi NISN dan Kata Sandi.');
       return;
     }
 
     setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
-      // Mock student login
-      loginUser({
+    try {
+      const res = await api.loginSiswa(identifier.trim(), password);
+      const student = res.user || {
         id: 1,
-        nama: 'Ahmad Falihul Hikam',
-        nisn: identifier,
+        nama: 'Siswa SIGAP',
+        nisn: identifier.trim(),
         sekolah: 'SMAN 1 Teladan',
         role: 'siswa'
-      });
+      };
+      loginUser(student, res.access_token, 'siswa');
       navigate(redirectTarget);
-    }, 400);
+    } catch (err) {
+      console.warn('Login siswa failed:', err.message);
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+        // Fallback jika backend offline saat testing
+        loginUser({
+          id: 1,
+          nama: 'Ahmad Falihul Hikam',
+          nisn: identifier.trim(),
+          sekolah: 'SMAN 1 Teladan',
+          role: 'siswa'
+        });
+        navigate(redirectTarget);
+      } else {
+        setErrorMsg(err.message || 'NISN atau kata sandi tidak sesuai.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

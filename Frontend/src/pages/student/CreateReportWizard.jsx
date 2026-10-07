@@ -80,6 +80,13 @@ export const CreateReportWizard = () => {
     );
   }
 
+  // Gatekeeper lapis 2: Admin tidak boleh mengakses halaman buat aduan
+  // (mencegah akses langsung via URL oleh admin yang sedang login)
+  if (currentUser?.role === 'admin') {
+    navigate('/admin/dashboard', { replace: true });
+    return null;
+  }
+
   const [step, setStep] = useState(1);
   const [createdTicket, setCreatedTicket] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);

@@ -19,6 +19,7 @@ import { ReportList } from './pages/admin/ReportList';
 import { ReportDetail } from './pages/admin/ReportDetail';
 import { AuditTrail } from './pages/admin/AuditTrail';
 import { AdminSettings } from './pages/admin/AdminSettings';
+import { AiValidation } from './pages/admin/AiValidation';
 
 export const App = () => {
   return (
@@ -40,6 +41,7 @@ export const App = () => {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/laporan" element={<ReportList />} />
           <Route path="/admin/laporan-detail" element={<ReportDetail />} />
+          <Route path="/admin/validasi-ai" element={<AiValidation />} />
           <Route path="/admin/audit" element={<AuditTrail />} />
           <Route path="/admin/pengaturan" element={<AdminSettings />} />
 

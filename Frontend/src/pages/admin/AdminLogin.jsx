@@ -28,31 +28,40 @@ export const AdminLogin = () => {
     setErrorMsg('');
     setIsLoading(true);
 
-    let token = '';
     try {
-      // Try FastAPI backend login
-      const res = await api.loginAdmin(nip, password);
-      token = res.access_token;
-    } catch (err) {
-      console.warn('API warning:', err.message);
-    }
-
-    setIsLoading(false);
-
-    // Login user into store
-    loginUser(
-      {
+      // Panggil backend FastAPI
+      const res = await api.loginAdmin(nip.trim(), password);
+      const adminData = res.user || {
         id: 1,
         nama: 'Ibu Rahmawati, S.Pd',
-        nip: nip,
+        nip: nip.trim(),
         jabatan: 'Konselor BK Utama',
         role: 'admin'
-      },
-      token,
-      'admin'
-    );
-
-    navigate('/admin/dashboard');
+      };
+      loginUser(adminData, res.access_token, 'admin');
+      navigate('/admin/dashboard');
+    } catch (err) {
+      console.warn('Admin login error:', err.message);
+      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+        // Fallback jika backend offline saat testing lokal
+        loginUser(
+          {
+            id: 1,
+            nama: 'Ibu Rahmawati, S.Pd (Offline)',
+            nip: nip.trim(),
+            jabatan: 'Konselor BK Utama',
+            role: 'admin'
+          },
+          '',
+          'admin'
+        );
+        navigate('/admin/dashboard');
+      } else {
+        setErrorMsg(err.message || 'NIP atau kata sandi admin tidak valid.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

@@ -58,7 +58,7 @@ export const ReportList = ({ defaultFilter = '' }) => {
       // Tab Filter
       if (activeTab === 'menunggu' && item.status !== 'menunggu') return false;
       if (activeTab === 'low_ai' && (!item.ai || item.ai.confidence >= 80)) return false;
-      if (activeTab === 'klaster' && (!item.ai?.cluster_label && !item.ticket_code?.includes('0142') && !item.ticket_code?.includes('0139') && !item.ticket_code?.includes('0136') && !item.ticket_code?.includes('0141'))) return false;
+      if (activeTab === 'klaster' && (!item.ai?.cluster_label || item.ai?.is_noise)) return false;
       if (activeTab === 'referensi' && item.is_active) return false;
 
       // Source Filter
@@ -211,7 +211,7 @@ export const ReportList = ({ defaultFilter = '' }) => {
               <FileText className="w-4 h-4 text-slate-400" />
             </div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-900">{metrics.total || 142}</span>
+              <span className="text-2xl font-black text-slate-900">{metrics.total ?? 0}</span>
               <span className="text-xs text-slate-400 font-medium">total kasus</span>
             </div>
           </button>
@@ -237,7 +237,7 @@ export const ReportList = ({ defaultFilter = '' }) => {
               <ClipboardList className="w-4 h-4 text-amber-500" />
             </div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-900">{metrics.menunggu || 8}</span>
+              <span className="text-2xl font-black text-slate-900">{metrics.menunggu ?? 0}</span>
               <span className="text-xs text-amber-600 font-semibold">butuh tindakan</span>
             </div>
           </button>
@@ -260,7 +260,7 @@ export const ReportList = ({ defaultFilter = '' }) => {
               <Sparkles className="w-4 h-4 text-sky-600" />
             </div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-900">{metrics.lowAi || 12}</span>
+              <span className="text-2xl font-black text-slate-900">{metrics.lowAi ?? 0}</span>
               <span className="text-xs text-slate-400 font-medium">akurasi &lt;80%</span>
             </div>
           </button>
@@ -283,7 +283,7 @@ export const ReportList = ({ defaultFilter = '' }) => {
               <Share2 className="w-4 h-4 text-purple-600" />
             </div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-900">{metrics.clusters || 5}</span>
+              <span className="text-2xl font-black text-slate-900">{metrics.clusters ?? 0}</span>
               <span className="text-xs text-purple-600 font-semibold">pola berulang</span>
             </div>
           </button>
@@ -306,7 +306,7 @@ export const ReportList = ({ defaultFilter = '' }) => {
               <Database className="w-4 h-4 text-slate-400" />
             </div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-900">{metrics.referenceCount || 35}</span>
+              <span className="text-2xl font-black text-slate-900">{metrics.referenceCount ?? 0}</span>
               <span className="text-xs text-slate-400 font-medium">benchmark</span>
             </div>
           </button>

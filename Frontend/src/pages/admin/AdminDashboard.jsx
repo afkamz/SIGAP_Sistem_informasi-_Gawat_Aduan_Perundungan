@@ -10,8 +10,7 @@ import {
   ChevronRight,
   Download,
   Info,
-  ExternalLink,
-  ChevronDown
+  ExternalLink
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { AdminLayout } from '../../components/layout/AdminLayout';
@@ -22,16 +21,15 @@ export const AdminDashboard = () => {
   const navigate = useNavigate();
 
   const metrics = getMetrics();
-  const [academicYear, setAcademicYear] = useState('2023/2024-genap');
 
-  // 7 Categories data matching Permendikbudristek 46/2023 and reference screenshot
+  // 7 Kategori Resmi Permendikbudristek No. 46/2023 (Data distribusi benchmark per kategori)
   const categoryData = [
     { id: 1, name: '1. Perundungan Verbal', activeCount: 48, refCount: 32, max: 60, isAlert: false },
     { id: 2, name: '2. Perundungan Fisik', activeCount: 34, refCount: 28, max: 60, isAlert: false },
     { id: 3, name: '3. Perundungan Siber', activeCount: 27, refCount: 22, max: 60, isAlert: false },
-    { id: 4, name: '4. Pemalakan / Pemerasan', activeCount: 15, refCount: 18, max: 60, isAlert: false },
-    { id: 5, name: '5. Diskriminasi & Intoleransi', activeCount: 9, refCount: 12, max: 60, isAlert: false },
-    { id: 6, name: '6. Pengabaian / Lainnya', activeCount: 5, refCount: 9, max: 60, isAlert: false },
+    { id: 4, name: '4. Kekerasan Psikis / Pengucilan Sosial', activeCount: 15, refCount: 18, max: 60, isAlert: false },
+    { id: 5, name: '5. Hukuman Fisik oleh Pendidik', activeCount: 8, refCount: 11, max: 60, isAlert: false },
+    { id: 6, name: '6. Penyalahgunaan Narkoba / Miras / Rokok', activeCount: 5, refCount: 7, max: 60, isAlert: false },
     { id: 7, name: '7. Kekerasan Seksual', activeCount: 4, refCount: 6, max: 60, isAlert: true }
   ];
 
@@ -124,33 +122,6 @@ export const AdminDashboard = () => {
 
           {/* Right Controls */}
           <div className="flex flex-wrap items-center gap-3">
-            {/* Legend Pills */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs">
-              <span className="text-slate-400 font-medium">Legenda:</span>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-100 text-sky-900 font-semibold text-[11px]">
-                <span className="w-1.5 h-1.5 rounded-full bg-sky-600"></span>
-                Data Aktif
-              </span>
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-semibold text-[11px]">
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-                Data Referensi
-              </span>
-            </div>
-
-            {/* Academic Year Dropdown */}
-            <div className="relative">
-              <select
-                value={academicYear}
-                onChange={(e) => setAcademicYear(e.target.value)}
-                className="appearance-none pl-3.5 pr-8 py-2 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-800 shadow-2xs hover:border-slate-300 focus:outline-none focus:border-sky-400 cursor-pointer"
-              >
-                <option value="2023/2024-genap">Tahun Ajaran 2023/2024 (Semester Genap)</option>
-                <option value="2023/2024-ganjil">Tahun Ajaran 2023/2024 (Semester Ganjil)</option>
-                <option value="2022/2023-genap">Tahun Ajaran 2022/2023 (Semester Genap)</option>
-              </select>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </div>
-
             {/* Unduh Laporan Button */}
             <button
               onClick={handleDownloadReport}
@@ -179,7 +150,7 @@ export const AdminDashboard = () => {
               <span className="text-xs font-semibold text-slate-500 block">Total Laporan</span>
               <div className="flex items-baseline gap-2 mt-0.5">
                 <span className="text-3xl font-black text-slate-900 leading-none">
-                  {metrics.total || 142}
+                  {metrics.total ?? 0}
                 </span>
                 <span className="text-xs font-bold text-emerald-600 flex items-center">
                   ↗ +12%
@@ -205,7 +176,7 @@ export const AdminDashboard = () => {
               <span className="text-xs font-semibold text-slate-500 block">Menunggu Verifikasi</span>
               <div className="flex items-baseline gap-2 mt-0.5">
                 <span className="text-3xl font-black text-slate-900 leading-none">
-                  {metrics.menunggu || 8}
+                  {metrics.menunggu ?? 0}
                 </span>
                 <span className="text-xs font-bold text-amber-600">
                   Prioritas Satgas
@@ -232,10 +203,10 @@ export const AdminDashboard = () => {
               <span className="text-xs font-semibold text-slate-500 block">Ditindaklanjuti</span>
               <div className="flex items-baseline gap-2 mt-0.5">
                 <span className="text-3xl font-black text-slate-900 leading-none">
-                  {metrics.proses || 23}
+                  {metrics.proses ?? 0}
                 </span>
                 <span className="text-xs font-bold text-slate-500">
-                  16.2% beban
+                  {metrics.total ? `${((metrics.proses / metrics.total) * 100).toFixed(1)}% beban` : '0%'}
                 </span>
               </div>
               <span className="text-[11px] text-slate-400 mt-2 block">
@@ -258,7 +229,7 @@ export const AdminDashboard = () => {
               <span className="text-xs font-semibold text-slate-500 block">Selesai &amp; Ditutup</span>
               <div className="flex items-baseline gap-2 mt-0.5">
                 <span className="text-3xl font-black text-slate-900 leading-none">
-                  {metrics.selesai || 111}
+                  {metrics.selesai ?? 0}
                 </span>
                 <span className="text-xs font-bold text-emerald-600">
                   Efektif

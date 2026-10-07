@@ -6,11 +6,11 @@ from app.database import get_db
 from app.models.admin import Admin
 from app.models.siswa import Siswa
 from app.schemas.auth import (
-    TokenResponse, AdminLoginResponse, AdminOut,
+    TokenResponse, AdminLoginResponse, AdminOut, UserInfo,
     SiswaRegisterRequest, SiswaLoginRequest, SiswaOut,
 )
 from app.core.security import (
-    verify_password, hash_password, create_access_token, get_current_admin,
+    verify_password, hash_password, create_access_token, get_current_user,
 )
 
 router = APIRouter()
@@ -35,7 +35,14 @@ def login_admin(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
         )
 
     access_token = create_access_token(data={"sub": str(admin.id), "role": "admin"})
-    return TokenResponse(access_token=access_token, role="admin")
+    user_info = UserInfo(
+        id=admin.id,
+        nama=admin.nama,
+        role="admin",
+        nip=admin.nip,
+        jabatan=admin.jabatan,
+    )
+    return TokenResponse(access_token=access_token, role="admin", user=user_info)
 
 
 # ============================================================
@@ -79,12 +86,19 @@ def login_siswa(payload: SiswaLoginRequest, db: Session = Depends(get_db)):
         )
 
     access_token = create_access_token(data={"sub": str(siswa.id), "role": "siswa"})
-    return TokenResponse(access_token=access_token, role="siswa")
+    user_info = UserInfo(
+        id=siswa.id,
+        nama=siswa.nama,
+        role="siswa",
+        nisn=siswa.nisn,
+        sekolah=siswa.sekolah,
+    )
+    return TokenResponse(access_token=access_token, role="siswa", user=user_info)
 
 
 @router.get("/me")
 def get_current_user_profile(
-    admin: Admin = Depends(get_current_admin),
+    user: dict = Depends(get_current_user),
 ):
-    """Mendapatkan informasi profil admin yang sedang login."""
-    return AdminOut.model_validate(admin)
+    """Mendapatkan informasi profil user (admin atau siswa) yang sedang login."""
+    return user

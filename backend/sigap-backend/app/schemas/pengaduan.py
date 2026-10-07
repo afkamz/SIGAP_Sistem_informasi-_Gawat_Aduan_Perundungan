@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 from app.models.enums import StatusLaporan, SumberKategori
 
@@ -10,8 +10,7 @@ class KategoriOut(BaseModel):
     id: int
     nama: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ---------- Bukti & Audit ----------
@@ -21,8 +20,7 @@ class BuktiOut(BaseModel):
     file_path: str
     uploaded_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AuditTrailOut(BaseModel):
@@ -31,8 +29,7 @@ class AuditTrailOut(BaseModel):
     keterangan: str | None = None
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ---------- Input dari Siswa ----------
@@ -52,8 +49,7 @@ class PengaduanTicketOut(BaseModel):
     kategori_nama: str
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ---------- Output untuk Admin ----------
@@ -71,8 +67,7 @@ class PengaduanAdminOut(BaseModel):
     is_noise: bool | None = None
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class PengaduanDetailOut(PengaduanAdminOut):

@@ -355,23 +355,22 @@ export const StoreProvider = ({ children }) => {
   };
 
   const getMetrics = () => {
-    const activeReports = reports.filter((l) => l.is_active);
-    const total = activeReports.length;
-    const menunggu = activeReports.filter((l) => l.status === 'menunggu').length;
-    const proses = activeReports.filter((l) => l.status === 'diverifikasi' || l.status === 'ditindaklanjuti').length;
-    const selesai = activeReports.filter((l) => l.status === 'selesai').length;
-    const lowAi = activeReports.filter((l) => l.ai && l.ai.confidence < 80).length;
-    const clusters = 5;
+    const total = reports.length;
+    const menunggu = reports.filter((l) => l.status === 'menunggu').length;
+    const proses = reports.filter((l) => l.status === 'diverifikasi' || l.status === 'ditindaklanjuti').length;
+    const selesai = reports.filter((l) => l.status === 'selesai').length;
+    const lowAi = reports.filter((l) => !l.ai || (l.ai && l.ai.confidence < 80)).length;
+    const clusters = reports.filter((l) => l.ai?.cluster_label && !l.ai?.is_noise).length;
     const referenceCount = reports.filter((l) => !l.is_active).length;
 
     return {
-      total: total + 132,
-      menunggu: menunggu,
-      proses: proses + 21,
-      selesai: selesai + 107,
-      lowAi: lowAi + 10,
-      clusters: clusters,
-      referenceCount: referenceCount + 33
+      total,
+      menunggu,
+      proses,
+      selesai,
+      lowAi,
+      clusters,
+      referenceCount
     };
   };
 
