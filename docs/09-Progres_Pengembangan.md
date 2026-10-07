@@ -6,16 +6,17 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 
 ---
 
-## Ringkasan Cepat — Update 7 Oktober 2026
+## Ringkasan Cepat — Update 7 Oktober 2026 (Sesi Sore)
 
 | Komponen | Progres | Catatan |
 |---|:---:|---|
-| Frontend (React + Vite + Tailwind) | **~93%** | Seluruh UI siap, role guard diperkuat, form login & register terhubung API |
-| Backend (FastAPI + SQLAlchemy + JWT) | **~88%** | Venv sehat, CORS secured, sanitasi upload aktif, 58 tests passed 100% |
-| AI / NLP Pipeline | **~75%** | IndoBERT + HDBSCAN sudah terintegrasi pada alur pengaduan |
-| Paper / Laporan Akademik (SIGAP.tex) | **~65%** | Belum ada bab Hasil, Pembahasan, Kesimpulan |
-| Testing, Integrasi E2E & Deployment | **~80%** | Docker stack (4 container) aktif, unit & E2E tests lulus, dev script siap |
-| **KESELURUHAN** | **~85%** | Integrasi penuh dan pengujian live fungsional terus berlanjut |
+| Frontend (React + Vite + Tailwind) | **~95%** | Tampilan responsive 100% zoom selaras, sinkronisasi KPI & 7 kategori, Coming Soon Validasi AI, auth login/register real terhubung |
+| Backend (FastAPI + SQLAlchemy + JWT) | **~90%** | Auth JWT siswa & admin live di DB, CORS secured, sanitasi upload aktif, 58 tests passed 100% |
+| AI / NLP Pipeline | **~75%** | IndoBERT + HDBSCAN sudah terintegrasi pada alur pengaduan backend |
+| Paper / Laporan Akademik (SIGAP.tex) | **~65%** | Metodologi & arsitektur siap; belum ada bab Hasil, Pembahasan, Kesimpulan |
+| Testing, Integrasi E2E & Deployment | **~85%** | Docker stack 4 container aktif, dev script siap, pengujian layout & auth berhasil |
+| **KESELURUHAN (Semua Modul & Paper)** | **~87%** | Core sistem & tampilan UI lengkap, termasuk paper akademik |
+| **KESIAPAN MURNI SISTEM (Tanpa Paper & Mock)** | **~70%** | Progres fungsional live end-to-end (lihat detail di `docs/14-Laporan_Progres_Proyek_SIGAP.md`) |
 
 ---
 
@@ -149,9 +150,8 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 
 ## E. Riwayat Update Dokumen
 
-| Tanggal | Update |
-|---|---|
-| 07 Oktober 2026 | Perbaikan 4 prioritas backend (venv, DB, CORS, upload sanitization). Role guard admin & navigasi StudentHeader. Integrasi auth login/register ke real backend API. Sinkronisasi metrik laporan dashboard admin & 7 kategori resmi Permendikbudristek No. 46/2023. Penambahan halaman Coming Soon Validasi AI. Estimasi progres keseluruhan: ~85% |
+| 07 Oktober 2026 (Sore) | Perbaikan auth login siswa (seeding akun & verifikasi kata sandi backend), sinkronisasi metrik laporan dashboard admin ke data nyata (tanpa offset dummy), integrasi 7 kategori resmi Permendikbudristek No. 46/2023, penambahan halaman Coming Soon Validasi AI, perbaikan layout responsif Desktop 100% zoom (Landing Page & Student Dashboard), build sukses ke Docker dist. Estimasi progres keseluruhan: **~87%** |
+| 07 Oktober 2026 (Pagi) | Perbaikan 4 prioritas backend (venv, DB, CORS, upload sanitization). Role guard admin & navigasi StudentHeader. Integrasi auth login/register ke real backend API. Estimasi progres: ~85% |
 | 06 Oktober 2026 | Penambahan Landing Page, pemisahan Login, gatekeeper Buat Aduan, pembersihan header nav, konsolidasi semua `.md` ke folder `docs/`. Estimasi progres keseluruhan: ~78% |
 | 30 September 2026 | Penyempurnaan TrackReport, StudentDashboard, CreateReportWizard |
 | 29 September 2026 | Penyempurnaan ETL external data, modul AI pipeline |
