@@ -125,35 +125,35 @@ Fitur-fitur berikut telah berhasil dibangun, terverifikasi fungsional, dan tidak
 
 ## 5. Rincian Progres yang BELUM Selesai (40% Sisa)
 
-Sisa 40% ini merupakan pekerjaan paling esensial agar sistem benar-benar dapat dipergunakan secara nyata di lingkungan sekolah:
+Dari keseluruhan pengerjaan, 40% yang tersisa ini justru bagian yang paling menentukan — bukan karena volumenya besar, tapi karena tanpa ini sistem belum bisa benar-benar dipakai di sekolah. Semua yang sudah dibangun sejauh ini hanya akan jadi pajangan kalau data masih disimpan di browser dan AI-nya masih pura-pura jalan.
 
-### 🔴 1. Melepas Penyimpanan Lokal (*localStorage*) pada Pembuatan Aduan
-* **Kenyataan Saat Ini**: Saat siswa mengirimkan aduan via formulir wizard, sistem masih menyimpan data ke browser (`localStorage`) dan kode tiket dihasilkan acak di frontend (`Math.random()`).
-* **Yang Harus Dikerjakan**: Mengarahkan tombol *Submit* 100% ke endpoint `POST /api/pengaduan`, menghasilkan nomor tiket resmi dari MySQL, dan menghapus penyimpanan cadangan lokal.
+### 🔴 1. Form Aduan Harus Benar-Benar Kirim Data ke Server
+* **Kondisi Sekarang**: Ketika siswa menekan tombol *Kirim*, data aduan sebetulnya cuma tersimpan di `localStorage` browser — bukan ke database. Nomor tiketnya pun dibuat asal-asalan pakai `Math.random()` di sisi frontend.
+* **Yang Perlu Diselesaikan**: Tombol *Submit* harus diarahkan penuh ke endpoint `POST /api/pengaduan`. Nomor tiket resmi dikeluarkan dari MySQL, dan ketergantungan pada `localStorage` sebagai "penyimpanan cadangan" dihapus total.
 
-### 🔴 2. Menghubungkan Dashboard Siswa ke Database Riil
-* **Kenyataan Saat Ini**: Metrik (*Total Aduan*, *Dalam Penanganan*) dan tabel riwayat aduan di halaman siswa membaca dari state browser lokal (`StoreContext`).
-* **Yang Harus Dikerjakan**: Mengambil riwayat aduan siswa secara dinamis dari API `GET /api/pengaduan/siswa/{id}/riwayat` dengan token JWT.
+### 🔴 2. Dashboard Siswa Masih Baca Data Palsu
+* **Kondisi Sekarang**: Angka-angka di halaman siswa — seperti *Total Aduan* dan *Dalam Penanganan* — diambil dari state lokal browser (`StoreContext`), bukan dari database yang sesungguhnya.
+* **Yang Perlu Diselesaikan**: Riwayat aduan siswa harus ditarik langsung dari API `GET /api/pengaduan/siswa/{id}/riwayat` menggunakan autentikasi JWT, bukan dari state yang hidup di memori browser.
 
-### 🔴 3. Menghubungkan Pengelolaan Laporan Guru BK ke Database Riil
-* **Kenyataan Saat Ini**: Guru BK yang mengubah status laporan (misal: memverifikasi aduan atau menandai selesai) hanya mengubah tampilan di browser lokal.
-* **Yang Harus Dikerjakan**: Menghubungkan aksi tombol admin ke endpoint `PUT /api/admin/pengaduan/{id}/status` agar perubahan status langsung tercatat di MySQL dan dapat dilihat siswa saat melacak tiket.
+### 🔴 3. Aksi Guru BK Tidak Tersimpan ke Database
+* **Kondisi Sekarang**: Kalau Guru BK mengubah status laporan — misal memverifikasi atau menandai selesai — perubahannya cuma kelihatan di tampilannya sendiri. Reload halaman, hilang. Siswa tidak akan pernah tahu statusnya berubah.
+* **Yang Perlu Diselesaikan**: Setiap aksi tombol di sisi admin harus memanggil endpoint `PUT /api/admin/pengaduan/{id}/status` supaya perubahan langsung masuk ke MySQL dan bisa dilacak oleh siswa secara real-time.
 
-### 🔴 4. Integrasi Otomatis Model AI (IndoBERT & HDBSCAN)
-* **Kenyataan Saat Ini**: Skrip IndoBERT dan klastering HDBSCAN sudah ada di folder backend, namun di antarmuka web skor keyakinan AI masih berupa angka acak tiruan.
-* **Yang Harus Dikerjakan**: Menghubungkan deskripsi kejadian yang dikirim siswa agar langsung diproses oleh model NLP backend untuk klasifikasi kategori otomatis dan pendeteksian pola klaster aduan.
+### 🔴 4. Model AI Belum Terhubung ke Sistem
+* **Kondisi Sekarang**: Skrip IndoBERT dan HDBSCAN sudah ada di folder backend dan sudah bisa jalan secara terpisah. Tapi di tampilan web, angka "skor keyakinan AI" yang muncul itu palsu — sekadar angka acak untuk memperlihatkan tampilan saja.
+* **Yang Perlu Diselesaikan**: Ketika siswa mengirim deskripsi kejadian, teks itu harus langsung diproses oleh model NLP backend — menghasilkan klasifikasi kategori bullying secara otomatis dan mendeteksi pola klaster dari aduan-aduan sebelumnya.
 
-### 🔴 5. Mengaktifkan Halaman Validasi AI
-* **Kenyataan Saat Ini**: Menu *Validasi AI* pada portal Guru BK saat ini masih berstatus kartu *Coming Soon*.
-* **Yang Harus Dikerjakan**: Membangun tabel kerja bagi Guru BK untuk meninjau, menyetujui, atau mengoreksi (*override*) hasil analisis kecerdasan buatan.
+### 🔴 5. Halaman Validasi AI Belum Dibuat
+* **Kondisi Sekarang**: Menu *Validasi AI* di portal Guru BK saat ini cuma menampilkan kartu bertuliskan *Coming Soon*. Tidak ada fungsi apa pun di sana.
+* **Yang Perlu Diselesaikan**: Halaman ini perlu dibangun sebagai ruang kerja Guru BK untuk meninjau hasil analisis AI — menyetujui kalau hasilnya tepat, atau mengoreksi kalau AI salah klasifikasi.
 
-### 🔴 6. Pencatatan Jejak Audit (*Audit Trail*) Nyata
-* **Kenyataan Saat Ini**: Log aktivitas penanganan aduan hanya tersimpan di browser lokal.
-* **Yang Harus Dikerjakan**: Mengalirkan setiap perubahan status dan catatan penanganan langsung ke tabel `audit_logs` di MySQL.
+### 🔴 6. Log Aktivitas Belum Masuk ke Database
+* **Kondisi Sekarang**: Jejak aktivitas penanganan aduan — siapa yang mengubah apa dan kapan — hanya ada di browser lokal. Artinya tidak ada catatan audit yang bisa dipertanggungjawabkan.
+* **Yang Perlu Diselesaikan**: Setiap perubahan status dan catatan penanganan harus langsung ditulis ke tabel `audit_logs` di MySQL agar ada rekam jejak yang permanen dan bisa diperiksa kapan saja.
 
-### 🔴 7. Pengujian Pengguna Nyata (UAT)
-* **Kenyataan Saat Ini**: Belum dilakukan uji coba alur secara menyeluruh oleh pihak guru BK maupun siswa sekolah.
-* **Yang Harus Dikerjakan**: Pelaksanaan skenario pengujian alur nyata (Siswa lapor $\rightarrow$ Notifikasi masuk ke Admin $\rightarrow$ Admin verifikasi $\rightarrow$ Siswa lacak status tiket).
+### 🔴 7. Belum Ada Pengujian dengan Pengguna Nyata (UAT)
+* **Kondisi Sekarang**: Sampai sekarang belum ada satu pun sesi uji coba yang melibatkan guru BK atau siswa sungguhan. Semua pengujian dilakukan sendiri oleh tim pengembang.
+* **Yang Perlu Diselesaikan**: Perlu dijalankan skenario pengujian end-to-end yang melibatkan pengguna nyata — mulai dari siswa membuat laporan, notifikasi masuk ke admin, admin memverifikasi, hingga siswa bisa melacak status tiketnya sendiri.
 
 ---
 
