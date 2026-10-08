@@ -2,7 +2,6 @@ name: sigap
 
 services:
 
-
   # ─── MySQL Database ────────────────────────────────────────────
   db:
     image: mysql:8.0
@@ -20,8 +19,9 @@ services:
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 10s
-      retries: 5
-      interval: 10s
+      retries: 10
+      interval: 5s
+      start_period: 30s
 
   # ─── FastAPI Backend ───────────────────────────────────────────
   backend:
@@ -32,11 +32,8 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
-    environment:
-      DATABASE_URL: mysql+pymysql://sigap_user:sigap_pass_2026@db:3306/sigap_db
-      JWT_SECRET_KEY: sigap_super_secret_jwt_key_lamongan_2026_change_in_production
-      JWT_ALGORITHM: HS256
-      JWT_EXPIRE_MINUTES: 120
+    env_file:
+      - ./backend/sigap-backend/.env
     volumes:
       - ./backend/sigap-backend:/app
       - ./dataset:/app/dataset
@@ -44,7 +41,7 @@ services:
       db:
         condition: service_healthy
 
-  # ─── React Frontend ────────────────────────────────────────────
+  # ─── React Frontend (Vite → build → Nginx) ─────────────────────
   frontend:
     build:
       context: ./Frontend
@@ -53,12 +50,10 @@ services:
     restart: unless-stopped
     ports:
       - "3000:80"
-    volumes:
-      - ./Frontend/dist:/usr/share/nginx/html:ro
     depends_on:
       - backend
 
-  # ─── phpMyAdmin (Tampilan identik dengan XAMPP) ─────────────────
+  # ─── phpMyAdmin ─────────────────────────────────────────────────
   phpmyadmin:
     image: phpmyadmin:latest
     container_name: sigap-phpmyadmin
