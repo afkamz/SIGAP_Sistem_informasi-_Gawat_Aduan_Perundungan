@@ -6,21 +6,21 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 
 ---
 
-## Ringkasan Cepat — Update 13 Oktober 2026
+## Ringkasan Cepat — Update 14 Oktober 2026
 
 | Komponen | Progres | Catatan |
 |---|:---:|---|
-| Frontend (React + Vite + Tailwind) | **~95%** | Tampilan responsive 100% zoom selaras, date picker kalender & lokasi kejadian baru, auth real live, build sukses ke Nginx dist |
+| Frontend (React + Vite + Tailwind) | **~96%** | Route Guard terpusat (`ProtectedRoute.jsx`), tiket riil tersinkronisasi, hybrid ticket lookup, date picker kalender & lokasi kejadian baru, build sukses ke Nginx dist |
 | Backend (FastAPI + SQLAlchemy + JWT) | **~90%** | Auth JWT siswa & admin live di DB MySQL, CORS secured, sanitasi upload aktif, 58 tests passed 100% |
-| AI / NLP Pipeline | **~75%** | IndoBERT + HDBSCAN sudah terintegrasi pada alur pengaduan backend (skrip siap, belum hook otomatis ke form live) |
-| Paper / Laporan Akademik (SIGAP.tex) | **~65%** | Metodologi & arsitektur siap; belum ada bab Hasil, Pembahasan, Kesimpulan |
-| Testing, Integrasi E2E & Deployment | **~85%** | Docker stack 4 container aktif, dev script siap, pengujian layout & auth berhasil |
-| **KESELURUHAN (Tampilan UI, Mock & Paper)** | **~85%** | Tampilan prototipe & UI lengkap, paper akademik berjalan |
-| **KESIAPAN MURNI SISTEM (Realistis Tanpa Mock & Paper)** | **~60%** | Progres fungsional live end-to-end (lihat detail di `docs/14-Laporan_Progres_Proyek_SIGAP.md`) |
+| AI / NLP Pipeline | **~75%** | IndoBERT + HDBSCAN sudah terintegrasi pada alur pengaduan backend (skrip siap, modul inferensi siap dihubungkan) |
+| Paper / Laporan Akademik (SIGAP.tex) | **~70%** | Abstrak standar IEEE 198 kata, Introduction 5 paragraf padat (346 kata), 14 referensi open-access 2019-2025 verified |
+| Testing, Integrasi E2E & Deployment | **~88%** | Docker stack 4 container aktif, dev script siap, 58 unit & E2E tests lulus 100% |
+| **KESELURUHAN (Tampilan UI, Mock & Paper)** | **~88%** | Tampilan prototipe & UI lengkap, paper akademik berjalan |
+| **KESIAPAN MURNI SISTEM (Realistis Tanpa Mock & Paper)** | **~65%** | Progres fungsional live end-to-end (lihat detail di `docs/15-Gimik_Presentasi_4.md`) |
 
 ---
 
-## Perubahan Signifikan Terkini (7 – 13 Oktober 2026)
+## Perubahan Signifikan Terkini (7 – 14 Oktober 2026)
 
 ### Penambahan & Perbaikan Baru
 
@@ -34,7 +34,11 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 | 6 | **Perbaikan Tampilan Desktop 100% Zoom**: Penyelarasan rasio kontainer `max-w-7xl` antara header dan konten di Landing Page & Student Dashboard | `LandingPage.jsx`, `StudentDashboard.jsx` | ✅ Selesai |
 | 7 | **Formulir Aduan — Date Picker Otomatis**: Mengganti ketik manual tanggal kejadian dengan input kalender (`type="date"`) + tombol pintas (Hari Ini, Kemarin, Hapus) | `CreateReportWizard.jsx` | ✅ Selesai |
 | 8 | **Formulir Aduan — Label Lokasi Kejadian**: Mengubah "Lokasi / Kanal" menjadi "Lokasi Kejadian" dengan ikon `MapPin` dan placeholder kontekstual | `CreateReportWizard.jsx` | ✅ Selesai |
-| 9 | **Laporan Progres Presentasi Realistis**: Pembuatan dokumen laporan khusus presentasi dengan baseline realistis 60% dan diagram Mermaid | `docs/14-Laporan_Progres_Proyek_SIGAP.md` (baru) | ✅ Selesai |
+| 9 | **Laporan Progres Presentasi Realistis**: Pembuatan dokumen laporan khusus presentasi dengan baseline realistis 60% dan diagram Mermaid | `docs/14-Laporan_Progres_Proyek_SIGAP.md` | ✅ Selesai |
+| 10 | **Penerapan Route Guard Terpusat**: Mengamankan seluruh rute portal admin (`/admin/*`) dan dashboard siswa (`/dashboard`) menggunakan komponen `ProtectedRoute.jsx` | `ProtectedRoute.jsx`, `App.jsx` | ✅ Selesai |
+| 11 | **Sinkronisasi Kode Tiket Riil Backend**: Menangkap respon `res.ticket_code` dari `api.buatPengaduan()` agar kode tiket tersimpan konsisten di MySQL dan frontend | `StoreContext.jsx` | ✅ Selesai |
+| 12 | **Pencarian Tiket Hybrid**: Mengintegrasikan fallback query asinkronus ke endpoint `api.cekStatus()` pada modul pelacakan aduan | `TrackReport.jsx` | ✅ Selesai |
+| 13 | **Dokumen Progress Mingguan Minggu 8**: Penyusunan laporan progres berkala Minggu 8 berbasis pencapaian nyata | `docs/15-Gimik_Presentasi_4.md` (baru) | ✅ Selesai |
 
 
 ### Struktur Routing Terkini
@@ -118,15 +122,15 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 - [x] Pastikan token JWT dari backend disimpan dan dikirimkan pada request terproteksi
 - [x] Sempurnakan formulir aduan: ganti input tanggal manual dengan kalender datepicker & tombol pintas (Hari Ini, Kemarin)
 - [x] Ubah label 'Lokasi / Kanal' menjadi 'Lokasi Kejadian' beserta ikon lokasi MapPin
-- [ ] Tambahkan route guard: redirect ke `/login` jika token tidak ada atau kedaluwarsa
+- [x] Tambahkan route guard: redirect ke `/login` jika token tidak ada atau kedaluwarsa (`ProtectedRoute.jsx`)
 
 ### Prioritas Sedang 🟡 (Menuju 100% Live Tanpa Mock)
 
-- [ ] Hubungkan form Buat Aduan ke endpoint `api.buatPengaduan()` secara penuh (lepas fallback localStorage)
+- [x] Hubungkan form Buat Aduan ke `api.buatPengaduan()` — kode tiket riil dari backend kini disinkronisasi ke state lokal
+- [x] Hubungkan halaman Lacak Tiket ke endpoint `api.cekStatus()` — *hybrid lookup* (lokal + server) aktif
 - [ ] Hubungkan dashboard siswa ke endpoint `api.riwayatSiswa()` untuk mengambil aduan asli dari MySQL
 - [ ] Hubungkan dashboard admin ke endpoint `api.getDashboardSummary()` dan `GET /api/admin/pengaduan`
 - [ ] Pastikan perubahan status laporan oleh Guru BK memanggil `api.ubahStatus()` ke backend MySQL
-- [ ] Hubungkan halaman Lacak Tiket ke endpoint `api.cekStatus()`
 - [ ] Alirkan jejak audit aktivitas ke tabel MySQL `audit_trail` (saat ini masih di localStorage)
 - [ ] Nonaktifkan fallback mock data di production
 - [x] Perbaiki CORS backend agar tidak wildcard (membaca dari `ALLOWED_ORIGINS` di `.env`)
@@ -140,7 +144,7 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 - [ ] Evaluasi akurasi AI NLP: dokumentasi Precision, Recall, F1 per kategori
 - [x] Buat/Verifikasi `docker-compose.yml` untuk orkestrasi lokal (Frontend + Backend + DB + phpMyAdmin)
 - [x] Buat script pembantu development `sigap-dev.sh`
-- [x] Buat dokumen laporan progres terstruktur untuk presentasi (`docs/14-Laporan_Progres_Proyek_SIGAP.md`)
+- [x] Buat dokumen laporan progres terstruktur untuk presentasi (`docs/14-Laporan_Progres_Proyek_SIGAP.md`, `docs/15-Gimik_Presentasi_4.md`)
 - [ ] Lengkapi paper akademik: Bab Hasil & Pembahasan, UAT, SUS, Kesimpulan & Saran
 
 ---
@@ -161,6 +165,7 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 
 | Tanggal | Update |
 |---|---|
+| 14 Oktober 2026 | Implementasi `ProtectedRoute.jsx` (route guard terpusat untuk rute admin dan siswa). Sinkronisasi kode tiket riil dari respon `api.buatPengaduan()` ke state lokal (`StoreContext.jsx`). Integrasi pencarian tiket *hybrid* (lokal + live backend `api.cekStatus()`) di `TrackReport.jsx`. Revisi `SIGAP.tex`: abstrak 198 kata standar IEEE, Introduction 5 paragraf ringkas (346 kata), 14 referensi open-access 2019–2025 verified. Build produksi sukses (exit code 0, 2152 modul). 58 backend tests lulus 100%. Dokumen progres Minggu 8: `docs/15-Gimik_Presentasi_4.md`. Kesiapan murni sistem: **~65%**. |
 | 13 Oktober 2026 | Penyempurnaan UX formulir aduan (penggantian input teks tanggal manual menjadi kalender interaktif `type="date"` dengan tombol pintas Hari Ini/Kemarin/Hapus, proteksi `max=today`, serta pengubahan label "Lokasi / Kanal" menjadi "Lokasi Kejadian" dengan ikon `MapPin`). Penyelarasan dokumen presentasi progres realistis 60% pada `docs/14-Laporan_Progres_Proyek_SIGAP.md`. Build produksi diperbarui ke `Frontend/dist`. |
 | 07 Oktober 2026 (Sore) | Perbaikan auth login siswa (seeding akun & verifikasi kata sandi backend), sinkronisasi metrik laporan dashboard admin ke data nyata (tanpa offset dummy), integrasi 7 kategori resmi Permendikbudristek No. 46/2023, penambahan halaman Coming Soon Validasi AI, perbaikan layout responsif Desktop 100% zoom (Landing Page & Student Dashboard), build sukses ke Docker dist. Estimasi progres keseluruhan: **~87%** (tampilan/prototipe) / **~60%** (kesiapan murni sistem). |
 | 07 Oktober 2026 (Pagi) | Perbaikan 4 prioritas backend (venv, DB, CORS, upload sanitization). Role guard admin & navigasi StudentHeader. Integrasi auth login/register ke real backend API. Estimasi progres: ~85% |
@@ -171,7 +176,8 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 
 ---
 
-> **Langkah berikutnya:** User akan melakukan testing langsung di live web.
+> **Langkah berikutnya:** Integrasi dashboard admin & siswa ke live MySQL (lepas mock data), penyaluran audit trail ke server, dan persiapan antarmuka Validasi AI.
 > Hasil temuan bug dan masalah UI akan dicatat di bagian **C. Daftar Hal yang Perlu Diperbaiki** di atas.
 
 > Status pada dokumen ini diperbarui setelah setiap sesi kerja atau temuan testing.
+

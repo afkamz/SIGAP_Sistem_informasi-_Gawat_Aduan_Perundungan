@@ -21,6 +21,8 @@ import { AuditTrail } from './pages/admin/AuditTrail';
 import { AdminSettings } from './pages/admin/AdminSettings';
 import { AiValidation } from './pages/admin/AiValidation';
 
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+
 export const App = () => {
   return (
     <StoreProvider>
@@ -32,18 +34,67 @@ export const App = () => {
           {/* Portal Siswa & Pelapor */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<StudentDashboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute requiredRole="siswa">
+                <StudentDashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/buat-laporan" element={<CreateReportWizard />} />
           <Route path="/lacak" element={<TrackReport />} />
 
           {/* Portal Admin / Guru BK */}
           <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/laporan" element={<ReportList />} />
-          <Route path="/admin/laporan-detail" element={<ReportDetail />} />
-          <Route path="/admin/validasi-ai" element={<AiValidation />} />
-          <Route path="/admin/audit" element={<AuditTrail />} />
-          <Route path="/admin/pengaturan" element={<AdminSettings />} />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/laporan"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <ReportList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/laporan-detail"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <ReportDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/validasi-ai"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <AiValidation />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/audit"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <AuditTrail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/pengaturan"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <AdminSettings />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />

@@ -95,17 +95,20 @@ export const StoreProvider = ({ children }) => {
 
   const createReport = async (formData) => {
     const randomSeq = String(Math.floor(100 + Math.random() * 900));
-    const ticketCode = `SGP-2026-${randomSeq}`;
+    let ticketCode = `SGP-2026-${randomSeq}`;
     const category = KATEGORI_DATA.find((k) => k.id === Number(formData.kategori_id)) || KATEGORI_DATA[0];
 
-    // Try sending to backend if reachable
+    // Mengirim ke real backend API jika aktif
     try {
-      await api.buatPengaduan({
+      const res = await api.buatPengaduan({
         kategori_id: category.id,
         deskripsi: formData.deskripsi,
         mode_anonim: !!formData.is_anonymous,
-        siswa_id: formData.is_anonymous ? null : (currentUser?.id || 1)
+        siswa_id: formData.is_anonymous ? null : (currentUser?.id || null)
       });
+      if (res && res.ticket_code) {
+        ticketCode = res.ticket_code;
+      }
     } catch (e) {
       console.warn('Backend API tidak merespons, menggunakan mode local store:', e.message);
     }

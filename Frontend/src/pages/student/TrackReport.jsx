@@ -29,6 +29,7 @@ import {
   RotateCw
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
+import { api } from '../../services/api';
 import { StudentHeader } from '../../components/layout/StudentHeader';
 import { StudentFooter } from '../../components/layout/StudentFooter';
 
@@ -77,7 +78,7 @@ export const TrackReport = () => {
     }
   }, [queryCode, reports]);
 
-  const handleSearch = (codeToSearch, triggerDetailOnFound = false) => {
+  const handleSearch = async (codeToSearch, triggerDetailOnFound = false) => {
     const raw = (codeToSearch !== undefined ? codeToSearch : ticketInput).trim().toUpperCase();
     const clean = raw.replace(/[#\s]/g, '');
 
@@ -98,9 +99,48 @@ export const TrackReport = () => {
       if (triggerDetailOnFound) {
         setViewMode('detail');
       }
-    } else {
-      setActiveReport(null);
+      return;
     }
+
+    // Fallback: cari ke live backend API jika tidak ada di penyimpanan lokal browser
+    try {
+      const res = await api.cekStatus(clean);
+      if (res && res.ticket_code) {
+        const liveReport = {
+          id: Date.now(),
+          ticket_code: res.ticket_code,
+          judul: `Pengaduan Insiden ${res.kategori_nama || 'Kekerasan'}`,
+          deskripsi: 'Data aduan resmi tercatat pada server pangkalan data SIGAP.',
+          kategori_id: 1,
+          kategori_nama: res.kategori_nama || 'Perundungan',
+          status: res.status || 'menunggu',
+          urgensi: 'Sedang',
+          is_active: true,
+          is_anonymous: true,
+          reporter_name: null,
+          reporter_label: 'Pelapor Terverifikasi / Anonim',
+          reporter_school: 'Satuan Pendidikan',
+          lokasi: 'Lingkungan Sekolah',
+          tanggal: new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(res.created_at || Date.now())) + ' WIB',
+          catatan_konselor: 'Laporan baru diterima oleh sistem. Menunggu verifikasi tim konselor BK.',
+          history: [
+            {
+              waktu: new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(res.created_at || Date.now())) + ' WIB',
+              status: res.status || 'menunggu',
+              pelaksana: 'Sistem SIGAP',
+              keterangan: 'Pengaduan berhasil didaftarkan ke server dan tersimpan di basis data.'
+            }
+          ]
+        };
+        setActiveReport(liveReport);
+        if (triggerDetailOnFound) {
+          setViewMode('detail');
+        }
+        return;
+      }
+    } catch (_) {}
+
+    setActiveReport(null);
   };
 
   const handleCopyTicket = (code) => {
