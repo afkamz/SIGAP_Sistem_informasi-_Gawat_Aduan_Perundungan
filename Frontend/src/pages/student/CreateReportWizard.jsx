@@ -10,6 +10,7 @@ import {
   User,
   Calendar,
   Hash,
+  MapPin,
   UploadCloud,
   FileText,
   Image as ImageIcon,
@@ -547,24 +548,62 @@ export const CreateReportWizard = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
                   <label className="text-[11px] font-semibold text-slate-600 block mb-1">
-                    Tanggal / Rentang Waktu
+                    Tanggal Kejadian
                   </label>
                   <div className="relative">
                     <input
-                      type="text"
+                      type="date"
                       name="waktu_kejadian"
                       value={formData.waktu_kejadian}
                       onChange={handleChange}
-                      placeholder="Contoh: Selasa, 14 Mei 2024"
-                      className="w-full pl-3.5 pr-10 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:border-sky-400"
+                      max={new Date().toISOString().split('T')[0]}
+                      onClick={(e) => {
+                        try {
+                          if (e.target.showPicker) e.target.showPicker();
+                        } catch (_) {}
+                      }}
+                      className="w-full pl-3.5 pr-10 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:border-sky-400 bg-white cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                     />
                     <Calendar className="w-4 h-4 text-slate-400 absolute right-3 top-3 pointer-events-none" />
+                  </div>
+                  <div className="flex items-center gap-1.5 mt-1.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const today = new Date().toISOString().split('T')[0];
+                        setFormData((prev) => ({ ...prev, waktu_kejadian: today }));
+                      }}
+                      className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 transition"
+                    >
+                      Hari Ini
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+                        setFormData((prev) => ({ ...prev, waktu_kejadian: yesterday }));
+                      }}
+                      className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 hover:bg-sky-50 hover:text-sky-700 text-slate-600 transition"
+                    >
+                      Kemarin
+                    </button>
+                    {formData.waktu_kejadian && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormData((prev) => ({ ...prev, waktu_kejadian: '' }));
+                        }}
+                        className="text-[10px] text-slate-400 hover:text-red-500 ml-auto transition"
+                      >
+                        Hapus
+                      </button>
+                    )}
                   </div>
                 </div>
 
                 <div>
                   <label className="text-[11px] font-semibold text-slate-600 block mb-1">
-                    Lokasi / Kanal
+                    Lokasi Kejadian
                   </label>
                   <div className="relative">
                     <input
@@ -572,10 +611,10 @@ export const CreateReportWizard = () => {
                       name="lokasi"
                       value={formData.lokasi}
                       onChange={handleChange}
-                      placeholder="Contoh: WhatsApp Grup Kelas & Area Kantin"
+                      placeholder="Contoh: Area Kantin, Lapangan Olahraga, Lorong Kelas, atau WhatsApp Grup"
                       className="w-full pl-3.5 pr-10 py-2.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-800 focus:outline-none focus:border-sky-400"
                     />
-                    <Hash className="w-4 h-4 text-slate-400 absolute right-3 top-3 pointer-events-none" />
+                    <MapPin className="w-4 h-4 text-slate-400 absolute right-3 top-3 pointer-events-none" />
                   </div>
                 </div>
               </div>
