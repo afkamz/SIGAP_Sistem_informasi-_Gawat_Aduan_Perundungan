@@ -60,6 +60,10 @@ class PengaduanTicketOut(BaseModel):
     ticket_code: str
     status: StatusLaporan
     kategori_nama: str
+    ai_kategori_rekomendasi_nama: str | None = None
+    ai_confidence_score: float | None = None
+    cluster_label: int | None = None
+    is_noise: bool | None = None
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

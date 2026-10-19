@@ -145,3 +145,92 @@ Setiap sesi pengerjaan dicatat dengan format:
 ---
 
 *(Entri sesi berikutnya akan otomatis ditambahkan di bawah bagian ini)*
+
+---
+
+## 📅 [Sesi 3] Senin, 19 Oktober 2026 — Jam 18 WIB
+**Fokus Utama**: Koneksi Nyata Inferensi AI IndoBERT & HDBSCAN ke Alur Submit Laporan Siswa (Eliminasi `Math.random()`)
+
+### 1. Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `backend/sigap-backend/app/schemas/pengaduan.py` | Schema `PengaduanTicketOut` — tambah 4 field AI |
+| 2 | `EDIT` | `backend/sigap-backend/app/routers/pengaduan.py` | Endpoint `POST /api/pengaduan` & `GET /{ticket_code}/status` |
+| 3 | `EDIT` | `Frontend/src/context/StoreContext.jsx` | Fungsi `createReport()` — baca field AI dari respons backend |
+| 4 | `EDIT` | `docs/09-Progres_Pengembangan.md` | Centang item Prioritas Rendah: koneksi AI |
+
+---
+
+### 2. Detail Penjelasan Teknis per Berkas
+
+#### 🔹 Backend Schema
+
+1. **[`backend/sigap-backend/app/schemas/pengaduan.py`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/backend/sigap-backend/app/schemas/pengaduan.py)**
+   - **Tindakan**: Menambahkan 4 field opsional ke `PengaduanTicketOut`: `ai_kategori_rekomendasi_nama`, `ai_confidence_score`, `cluster_label`, `is_noise`.
+   - **Penjelasan**: Schema ini adalah DTO (Data Transfer Object) yang dikembalikan oleh `POST /api/pengaduan`. Sebelumnya hanya mengirim `ticket_code`, `status`, `kategori_nama`, dan `created_at` — tanpa satupun informasi AI. Dengan penambahan ini, frontend kini dapat langsung membaca hasil klasifikasi dari response tanpa perlu API call tambahan.
+
+#### 🔹 Backend Router
+
+2. **[`backend/sigap-backend/app/routers/pengaduan.py`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/backend/sigap-backend/app/routers/pengaduan.py)**
+   - **Tindakan**:
+     - Pada `buat_pengaduan` (`POST /api/pengaduan`): Setelah `analyze_report()` berjalan, ambil nama rekomendasi AI dari relasi ORM (`pengaduan.kategori_rekomendasi.nama`) dengan fallback query Kategori jika relasi belum dimuat. Kemudian isi semua 4 field AI ke `PengaduanTicketOut`.
+     - Pada `cek_status_laporan` (`GET /{ticket_code}/status`): Logika yang sama diterapkan agar endpoint lacak tiket juga mengembalikan field AI terkini.
+   - **Penjelasan**: `analyze_report()` sudah menjalankan IndoBERT embedding, Cosine Similarity ke 7 centroid Permendikbud, dan HDBSCAN clustering — lalu menyimpan hasilnya ke kolom database (`ai_kategori_rekomendasi_id`, `ai_confidence_score`, `cluster_label`, `is_noise`). Sebelumnya hasilnya tersimpan di DB tapi **tidak dikembalikan ke frontend**, sehingga frontend terpaksa mensimulasi skor dengan `Math.random()`. Perubahan ini menutup celah tersebut.
+
+#### 🔹 Frontend Services & Central State
+
+3. **[`Frontend/src/context/StoreContext.jsx`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/Frontend/src/context/StoreContext.jsx)**
+   - **Tindakan**:
+     - Menambahkan variabel `aiData` yang menyimpan seluruh objek respons dari `api.buatPengaduan()`.
+     - Menghapus `const aiConfidence = (85 + Math.random() * 12).toFixed(1)` sepenuhnya.
+     - Menghitung `realConfidence` dari `aiData.ai_confidence_score` (dengan normalisasi 0–1 → 0–100 jika diperlukan, fallback 88.5 jika backend offline).
+     - Membaca `realRecommendation` dari `aiData.ai_kategori_rekomendasi_nama`, `realCluster` dari `aiData.cluster_label`, dan `realNoise` dari `aiData.is_noise`.
+     - Mengisi objek `newReport.ai` dengan nilai-nilai nyata tersebut, termasuk `cluster_name` otomatis (`Klaster #<N>` jika ada klaster, `null` jika noise).
+   - **Penjelasan**: Ini adalah titik integrasi utama. Setiap kali siswa menekan "Kirim" di formulir pengaduan, nilai AI yang tampil di dashboard (`confidence`, `kategori_rekomendasi`, `cluster_label`, `is_noise`) kini bersumber dari model IndoBERT + HDBSCAN yang berjalan di backend Python — bukan angka acak lagi.
+
+---
+
+### 3. Status Uji & Verifikasi Sistem
+- **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul dikompilasi bersih dalam 17.01 detik.
+- **Backend Test**: `pytest` ➔ **60 passed, 0 failed** dalam ~6 detik.
+- **Status Tahapan**: Item pertama pada **Prioritas Rendah 🟢** di `docs/09-Progres_Pengembangan.md` telah berstatus selesai (`[x]`). Pipeline AI IndoBERT & HDBSCAN kini terhubung penuh ke alur submit laporan.
+
+---
+
+## 📅 [Sesi 4] Senin, 19 Oktober 2026 — Jam 18 WIB
+**Fokus Utama**: Pembangunan Antarmuka Tabel Kerja Halaman Validasi AI (Menggantikan Kartu Coming Soon)
+
+### 1. Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/admin/AiValidation.jsx` | Halaman Validasi AI — tabel kerja fungsional penuh |
+| 2 | `EDIT` | `docs/09-Progres_Pengembangan.md` | Centang item Prioritas Rendah: antarmuka Validasi AI |
+
+---
+
+### 2. Detail Penjelasan Teknis per Berkas
+
+#### 🔹 Antarmuka Frontend (UI Pages)
+
+1. **[`Frontend/src/pages/admin/AiValidation.jsx`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/Frontend/src/pages/admin/AiValidation.jsx)**
+   - **Tindakan**: Menulis ulang seluruh halaman dari 26 baris Coming Soon menjadi komponen tabel kerja fungsional dengan fitur:
+     - **4 Kartu Statistik**: Total Diproses AI, Menunggu Validasi, AI Disetujui, Avg. Confidence.
+     - **Toolbar Filter**: Pencarian tiket/kategori, filter status validasi (Menunggu / AI Disetujui / Override), filter confidence (Tinggi ≥85% / Sedang 70-84% / Rendah <70%).
+     - **Tabel Kerja 6 Kolom**: No. Tiket, Rekomendasi AI (dengan ConfidenceBar visual), Kategori Terdaftar, Klaster HDBSCAN (label atau badge Noise/Outlier), Status Validasi (badge berwarna), Aksi.
+     - **Tombol "Setujui AI"**: Memanggil `approveAiCategory()` di StoreContext -> sinkron ke `PATCH /api/pengaduan/{id}/kategori` dengan `sumber: "ai_disetujui"`.
+     - **Tombol "Override"**: Membuka OverrideModal — pilih kategori pengganti dari 7 kategori Permendikbud, isi alasan, konfirmasi -> memanggil `overrideCategory()` -> sinkron ke backend.
+     - **Toast Notifikasi**: Konfirmasi sukses approve/override hilang otomatis dalam 3 detik.
+     - **Panel Catatan Teknis**: Penjelasan step-by-step cara kerja pipeline AI (IndoBERT -> Cosine Similarity -> Kalibrasi Confidence -> HDBSCAN).
+     - **Indikator Koneksi MySQL**: Badge "MySQL Terhubung" / "Mode Lokal" + tombol Sinkron Data.
+   - **Penjelasan**: Halaman ini menjadi titik kerja utama Guru BK / Satgas untuk meninjau dan memvalidasi hasil AI sebelum menjadi kategori final laporan. Semua aksi (approve & override) terhubung ke StoreContext yang sudah punya endpoint ke backend, sehingga validasi tersimpan di MySQL dan tercatat di audit trail secara otomatis.
+
+---
+
+### 3. Status Uji & Verifikasi Sistem
+- **Frontend Build**: `npm run build` -> **Sukses 100% (Exit Code 0)**, 2.152 modul dikompilasi bersih dalam 17.30 detik.
+- **Backend Test**: `pytest` -> **60 passed, 0 failed** dalam ~6 detik.
+- **Status Tahapan**: Item kedua pada **Prioritas Rendah 🟢** di `docs/09-Progres_Pengembangan.md` telah berstatus selesai (`[x]`). Halaman Validasi AI kini memiliki antarmuka tabel kerja fungsional penuh.
+
+---

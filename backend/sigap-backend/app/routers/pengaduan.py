@@ -164,10 +164,19 @@ def buat_pengaduan(payload: PengaduanCreate, db: Session = Depends(get_db)):
     except Exception as err:
         print(f"[Pengaduan] Peringatan: Proses AI Pipeline dilewati ({err})")
 
+    rekomendasi_nama = pengaduan.kategori_rekomendasi.nama if pengaduan.kategori_rekomendasi else None
+    if not rekomendasi_nama and pengaduan.ai_kategori_rekomendasi_id:
+        kat_rek = db.query(Kategori).filter(Kategori.id == pengaduan.ai_kategori_rekomendasi_id).first()
+        rekomendasi_nama = kat_rek.nama if kat_rek else None
+
     return PengaduanTicketOut(
         ticket_code=pengaduan.ticket_code,
         status=pengaduan.status,
         kategori_nama=kategori.nama,
+        ai_kategori_rekomendasi_nama=rekomendasi_nama,
+        ai_confidence_score=pengaduan.ai_confidence_score,
+        cluster_label=pengaduan.cluster_label,
+        is_noise=pengaduan.is_noise,
         created_at=pengaduan.created_at,
     )
 
@@ -222,10 +231,19 @@ def cek_status_laporan(ticket_code: str, db: Session = Depends(get_db)):
     if not pengaduan:
         raise HTTPException(status_code=404, detail="Kode tiket tidak ditemukan")
 
+    rekomendasi_nama = pengaduan.kategori_rekomendasi.nama if pengaduan.kategori_rekomendasi else None
+    if not rekomendasi_nama and pengaduan.ai_kategori_rekomendasi_id:
+        kat_rek = db.query(Kategori).filter(Kategori.id == pengaduan.ai_kategori_rekomendasi_id).first()
+        rekomendasi_nama = kat_rek.nama if kat_rek else None
+
     return PengaduanTicketOut(
         ticket_code=pengaduan.ticket_code,
         status=pengaduan.status,
-        kategori_nama=pengaduan.kategori.nama,
+        kategori_nama=pengaduan.kategori.nama if pengaduan.kategori else "-",
+        ai_kategori_rekomendasi_nama=rekomendasi_nama,
+        ai_confidence_score=pengaduan.ai_confidence_score,
+        cluster_label=pengaduan.cluster_label,
+        is_noise=pengaduan.is_noise,
         created_at=pengaduan.created_at,
     )
 

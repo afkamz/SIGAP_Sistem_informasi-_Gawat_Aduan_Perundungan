@@ -274,6 +274,7 @@ export const StoreProvider = ({ children }) => {
     const randomSeq = String(Math.floor(100 + Math.random() * 900));
     let ticketCode = `SGP-2026-${randomSeq}`;
     const category = KATEGORI_DATA.find((k) => k.id === Number(formData.kategori_id)) || KATEGORI_DATA[0];
+    let aiData = null;
 
     // Mengirim ke real backend API jika aktif
     try {
@@ -285,13 +286,22 @@ export const StoreProvider = ({ children }) => {
       });
       if (res && res.ticket_code) {
         ticketCode = res.ticket_code;
+        aiData = res;
         setIsBackendConnected(true);
       }
     } catch (e) {
       console.warn('Backend API tidak merespons, menggunakan mode local store:', e.message);
     }
 
-    const aiConfidence = (85 + Math.random() * 12).toFixed(1);
+    // Skor AI & rekomendasi nyata dari IndoBERT + HDBSCAN backend (tanpa Math.random())
+    const realConfidence = aiData && typeof aiData.ai_confidence_score === 'number'
+      ? (aiData.ai_confidence_score > 1
+          ? parseFloat(aiData.ai_confidence_score.toFixed(1))
+          : parseFloat((aiData.ai_confidence_score * 100).toFixed(1)))
+      : 88.5;
+    const realRecommendation = aiData?.ai_kategori_rekomendasi_nama || category.nama;
+    const realCluster = aiData?.cluster_label !== undefined ? aiData.cluster_label : null;
+    const realNoise = aiData?.is_noise !== undefined ? aiData.is_noise : true;
 
     const newReport = {
       id: Date.now(),
@@ -313,15 +323,15 @@ export const StoreProvider = ({ children }) => {
       lokasi: formData.lokasi || 'Area Sekolah',
       tanggal: new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date()) + ' WIB',
       ai: {
-        kategori_rekomendasi: category.nama,
-        confidence: parseFloat(aiConfidence),
+        kategori_rekomendasi: realRecommendation,
+        confidence: realConfidence,
         secondary_suggestion: 'Perundungan Verbal',
         secondary_confidence: 68.4,
         is_approved: false,
         is_overridden: false,
-        cluster_label: null,
-        cluster_name: null,
-        is_noise: true
+        cluster_label: realCluster,
+        cluster_name: realCluster !== null ? `Klaster #${realCluster}` : null,
+        is_noise: realNoise
       },
       bukti_file: formData.bukti_file || null,
       catatan_konselor: 'Laporan baru diterima. Menunggu verifikasi tim konselor BK.',

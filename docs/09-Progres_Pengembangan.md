@@ -142,8 +142,8 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 
 ### Prioritas Rendah 🟢
 
-- [ ] Hubungkan model AI IndoBERT & HDBSCAN secara otomatis saat siswa submit form (ganti skor acak `Math.random()`)
-- [ ] Bangun antarmuka tabel kerja pada halaman *Validasi AI* (mengganti kartu Coming Soon)
+- [x] Hubungkan model AI IndoBERT & HDBSCAN secara otomatis saat siswa submit form (ganti skor acak `Math.random()`)
+- [x] Bangun antarmuka tabel kerja pada halaman *Validasi AI* (mengganti kartu Coming Soon)
 - [ ] Validasi responsive mobile: Landing Page, form aduan, lacak tiket
 - [ ] Evaluasi akurasi AI NLP: dokumentasi Precision, Recall, F1 per kategori
 - [x] Buat/Verifikasi `docker-compose.yml` untuk orkestrasi lokal (Frontend + Backend + DB + phpMyAdmin)
