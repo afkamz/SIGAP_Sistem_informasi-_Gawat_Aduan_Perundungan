@@ -1,0 +1,12 @@
+# Aturan Otomatis AI Pengembangan Proyek SIGAP (Cursor / AI Rules)
+
+Instruksi ini mengikat asisten AI saat bekerja di repositori ini.
+
+1. BACA TERLEBIH DAHULU: Cek file `docs/09-Progres_Pengembangan.md` untuk melihat apa yang sudah selesai dan apa prioritas berikutnya.
+2. VERIFIKASI KODE: Jalankan `npm run build` di `Frontend/` dan `./venv/bin/pytest` di `backend/sigap-backend/`.
+3. UPDATE OTOMATIS:
+   - Centang `[x]` di `docs/09-Progres_Pengembangan.md`.
+   - Tambahkan entri sesi baru di `docs/16-Log_Implementasi_dan_Perubahan.md` dengan format:
+     `## 📅 [Sesi X] <Hari>, <Tanggal> <Bulan> <Tahun> — Jam <XX> WIB` (tanpa menit & detik), tabel berkas, dan detail penjelasan teknis per berkas.
+Detail lengkap ada di `AGENTS.md`.
+

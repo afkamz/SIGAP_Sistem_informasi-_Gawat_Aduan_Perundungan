@@ -54,6 +54,7 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 /admin/dashboard → Dashboard Admin (requires admin JWT)
 /admin/laporan   → Daftar Laporan Admin
 /admin/laporan-detail → Detail Laporan Admin
+/admin/validasi-ai → Peninjauan Validasi Rekomendasi AI (requires admin JWT)
 /admin/audit    → Jejak Audit Trail
 /admin/pengaturan → Pengaturan Admin
 ```
@@ -98,10 +99,13 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 | Fase 7 | **Testing frontend, perbaikan bug, validasi responsive** — **FOKUS BERIKUTNYA** | ❌ |
 | Fase 8 | Deployment frontend ke server/hosting | ❌ |
 
-### Catatan Frontend — Update 13 Oktober 2026
+### Catatan Frontend — Update 14 Oktober 2026
 
-- **Build produksi berhasil** ✅ — `vite build` exit code 0 tanpa error, aset terbaru aktif di Nginx Docker port 3000.
+- **Build produksi berhasil** ✅ — `vite build` exit code 0 tanpa error (2.152 modul), aset terbaru aktif di Nginx Docker port 3000.
+- **Route Guard Terpusat**: Selesai ✅ — Komponen `ProtectedRoute.jsx` mengamankan seluruh portal `/admin/*` dan `/dashboard` siswa dari akses tanpa izin via URL.
 - **Integrasi Login & Register Siswa ke Backend**: Selesai ✅ — Sudah tersambung ke `api.loginSiswa()` dan `api.registerSiswa()` dengan JWT dan verifikasi password di DB MySQL.
+- **Sinkronisasi Kode Tiket Riil**: Selesai ✅ — State `StoreContext` menangkap `res.ticket_code` resmi dari respon backend `api.buatPengaduan()`, menyelaraskan tiket frontend dengan data di MySQL.
+- **Lacak Tiket Hybrid**: Selesai ✅ — Modul pelacakan di `TrackReport.jsx` mencari data tiket di penyimpanan lokal peramban, dan otomatis melakukan query fallback asinkronus ke endpoint live backend `api.cekStatus()` jika dibuka dari perangkat lain.
 - **Formulir Aduan (Tahap 2)**: Selesai ✅ — Input tanggal manual diganti dengan kalender interaktif (`type="date"`) + tombol pintas (Hari Ini, Kemarin, Hapus) & proteksi `max=today`. Label lokasi diubah menjadi "Lokasi Kejadian" dengan ikon `MapPin`.
 - **Fallback localStorage/mockData**: Masih aktif pada penyimpanan laporan dan dashboard (fase transisi menuju integrasi live CRUD ke MySQL).
 - **Token/session**: Disimpan di `localStorage` (cukup untuk dev). Perlu dipertimbangkan cookie `HttpOnly` untuk production.
@@ -128,10 +132,10 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 
 - [x] Hubungkan form Buat Aduan ke `api.buatPengaduan()` — kode tiket riil dari backend kini disinkronisasi ke state lokal
 - [x] Hubungkan halaman Lacak Tiket ke endpoint `api.cekStatus()` — *hybrid lookup* (lokal + server) aktif
-- [ ] Hubungkan dashboard siswa ke endpoint `api.riwayatSiswa()` untuk mengambil aduan asli dari MySQL
-- [ ] Hubungkan dashboard admin ke endpoint `api.getDashboardSummary()` dan `GET /api/admin/pengaduan`
-- [ ] Pastikan perubahan status laporan oleh Guru BK memanggil `api.ubahStatus()` ke backend MySQL
-- [ ] Alirkan jejak audit aktivitas ke tabel MySQL `audit_trail` (saat ini masih di localStorage)
+- [x] Hubungkan dashboard siswa ke endpoint `api.riwayatSiswa()` untuk mengambil aduan asli dari MySQL
+- [x] Hubungkan dashboard admin & daftar laporan ke endpoint `api.getDashboardSummary()` dan `GET /api/pengaduan` (`api.daftarPengaduan()`)
+- [x] Pastikan perubahan status laporan oleh Guru BK memanggil `api.ubahStatus()` ke backend MySQL
+- [x] Alirkan jejak audit aktivitas ke tabel MySQL `audit_trail` via endpoint `GET /api/pengaduan/audit-trail/list` & sinkronisasi state
 - [ ] Nonaktifkan fallback mock data di production
 - [x] Perbaiki CORS backend agar tidak wildcard (membaca dari `ALLOWED_ORIGINS` di `.env`)
 - [x] Perbaiki upload berkas: validasi MIME, magic bytes, batas 10MB, UUID file name
