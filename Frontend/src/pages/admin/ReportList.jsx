@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Search,
@@ -27,10 +27,21 @@ export const ReportList = ({ defaultFilter = '' }) => {
   const [searchParams] = useSearchParams();
   const tabParam = searchParams.get('tab') || defaultFilter || 'semua';
 
-  const { reports, categories, getMetrics } = useStore();
+  const { reports, categories, getMetrics, fetchAdminReports, isBackendConnected, token } = useStore();
   const navigate = useNavigate();
 
   const metrics = getMetrics();
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  useEffect(() => {
+    fetchAdminReports();
+  }, []);
+
+  const handleSync = async () => {
+    setIsSyncing(true);
+    await fetchAdminReports();
+    setIsSyncing(false);
+  };
 
   // Active top KPI filter tab: 'semua', 'menunggu', 'low_ai', 'klaster', 'referensi'
   const [activeTab, setActiveTab] = useState(tabParam);
@@ -174,11 +185,27 @@ export const ReportList = ({ defaultFilter = '' }) => {
           </div>
 
           {/* Right Header Actions */}
-          <div className="flex items-center gap-3">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-medium text-slate-600 shadow-2xs">
-              <RotateCw className="w-3.5 h-3.5 text-slate-400" />
-              <span>Diperbarui 2 menit yang lalu</span>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition ${
+              isBackendConnected
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                : 'bg-white border-slate-200 text-slate-600'
+            }`}>
+              <span className={`w-2 h-2 rounded-full ${isBackendConnected ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`}></span>
+              <Database className="w-3.5 h-3.5" />
+              <span>{isBackendConnected ? 'MySQL Terhubung' : 'Offline / Standalone'}</span>
             </div>
+
+            <button
+              type="button"
+              onClick={handleSync}
+              disabled={isSyncing}
+              className="px-3 py-1.5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-xs font-semibold text-slate-700 shadow-2xs flex items-center gap-1.5 transition disabled:opacity-50"
+              title="Sinkronkan data dengan database MySQL"
+            >
+              <RotateCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-sky-600' : 'text-slate-500'}`} />
+              <span>Sinkronkan</span>
+            </button>
 
             <button
               onClick={handleExportCSV}

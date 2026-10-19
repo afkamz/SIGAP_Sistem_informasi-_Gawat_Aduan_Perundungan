@@ -94,12 +94,12 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 | Fase 3a | **Landing Page Informasi** (baru — sebelum menu login) | ✅ |
 | Fase 3b | **Gatekeeper Buat Aduan** (wajib login/daftar) | ✅ |
 | Fase 4 | Implementasi halaman admin: login, dashboard, laporan, audit trail, pengaturan | ✅ |
-| Fase 5 | Integrasi frontend dengan API backend dan autentikasi | 🔄 |
-| Fase 6 | Integrasi dashboard, data eksternal, dan fitur AI ke tampilan | 🔄 |
+| Fase 5 | Integrasi frontend dengan API backend dan autentikasi | ✅ |
+| Fase 6 | Integrasi dashboard, data eksternal, dan fitur AI ke tampilan | ✅ |
 | Fase 7 | **Testing frontend, perbaikan bug, validasi responsive** — **FOKUS BERIKUTNYA** | ❌ |
 | Fase 8 | Deployment frontend ke server/hosting | ❌ |
 
-### Catatan Frontend — Update 14 Oktober 2026
+### Catatan Frontend — Update 19 Oktober 2026
 
 - **Build produksi berhasil** ✅ — `vite build` exit code 0 tanpa error (2.152 modul), aset terbaru aktif di Nginx Docker port 3000.
 - **Route Guard Terpusat**: Selesai ✅ — Komponen `ProtectedRoute.jsx` mengamankan seluruh portal `/admin/*` dan `/dashboard` siswa dari akses tanpa izin via URL.
@@ -107,7 +107,7 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 - **Sinkronisasi Kode Tiket Riil**: Selesai ✅ — State `StoreContext` menangkap `res.ticket_code` resmi dari respon backend `api.buatPengaduan()`, menyelaraskan tiket frontend dengan data di MySQL.
 - **Lacak Tiket Hybrid**: Selesai ✅ — Modul pelacakan di `TrackReport.jsx` mencari data tiket di penyimpanan lokal peramban, dan otomatis melakukan query fallback asinkronus ke endpoint live backend `api.cekStatus()` jika dibuka dari perangkat lain.
 - **Formulir Aduan (Tahap 2)**: Selesai ✅ — Input tanggal manual diganti dengan kalender interaktif (`type="date"`) + tombol pintas (Hari Ini, Kemarin, Hapus) & proteksi `max=today`. Label lokasi diubah menjadi "Lokasi Kejadian" dengan ikon `MapPin`.
-- **Fallback localStorage/mockData**: Masih aktif pada penyimpanan laporan dan dashboard (fase transisi menuju integrasi live CRUD ke MySQL).
+- **Integrasi Penuh Database MySQL**: Selesai ✅ — Seluruh dashboard admin, daftar laporan, mutasi status, dan jejak audit tersambung 100% langsung ke backend FastAPI & database MySQL tanpa mencampur mock data.
 - **Token/session**: Disimpan di `localStorage` (cukup untuk dev). Perlu dipertimbangkan cookie `HttpOnly` untuk production.
 
 ---
@@ -136,7 +136,7 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 - [x] Hubungkan dashboard admin & daftar laporan ke endpoint `api.getDashboardSummary()` dan `GET /api/pengaduan` (`api.daftarPengaduan()`)
 - [x] Pastikan perubahan status laporan oleh Guru BK memanggil `api.ubahStatus()` ke backend MySQL
 - [x] Alirkan jejak audit aktivitas ke tabel MySQL `audit_trail` via endpoint `GET /api/pengaduan/audit-trail/list` & sinkronisasi state
-- [ ] Nonaktifkan fallback mock data di production
+- [x] Nonaktifkan fallback mock data di production (100% data riil MySQL saat terhubung)
 - [x] Perbaiki CORS backend agar tidak wildcard (membaca dari `ALLOWED_ORIGINS` di `.env`)
 - [x] Perbaiki upload berkas: validasi MIME, magic bytes, batas 10MB, UUID file name
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   History,
   ShieldCheck,
@@ -9,15 +9,27 @@ import {
   Sparkles,
   Edit3,
   RefreshCw,
-  Network
+  Network,
+  Database
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { AdminLayout } from '../../components/layout/AdminLayout';
 
 export const AuditTrail = () => {
-  const { auditList } = useStore();
+  const { auditList, fetchAuditTrail, isBackendConnected, token } = useStore();
   const [filterType, setFilterType] = useState('all');
   const [searchQ, setSearchQ] = useState('');
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  useEffect(() => {
+    fetchAuditTrail();
+  }, []);
+
+  const handleSync = async () => {
+    setIsSyncing(true);
+    await fetchAuditTrail();
+    setIsSyncing(false);
+  };
 
   const filteredLogs = auditList.filter((item) => {
     if (filterType !== 'all' && item.tipe_aksi !== filterType) return false;
@@ -88,7 +100,28 @@ export const AuditTrail = () => {
             />
           </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto">
+          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+            <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition ${
+              isBackendConnected
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                : 'bg-white border-slate-200 text-slate-600'
+            }`}>
+              <span className={`w-2 h-2 rounded-full ${isBackendConnected ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`}></span>
+              <Database className="w-3.5 h-3.5" />
+              <span>{isBackendConnected ? 'MySQL Terhubung' : 'Offline'}</span>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleSync}
+              disabled={isSyncing}
+              className="px-3 py-1.5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-xs font-semibold text-slate-700 shadow-2xs flex items-center gap-1.5 transition disabled:opacity-50"
+              title="Sinkronkan data dengan database MySQL"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-sky-600' : 'text-slate-500'}`} />
+              <span>Sinkronkan</span>
+            </button>
+
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}

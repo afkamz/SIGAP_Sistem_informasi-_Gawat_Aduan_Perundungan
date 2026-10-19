@@ -314,3 +314,23 @@ class TestValidasiKategori:
         assert resp.status_code == 200
         assert resp.json()["sumber_kategori"] == "ai_disetujui"
 
+
+class TestAuditTrail:
+    """Tes endpoint daftar jejak audit aktivitas admin."""
+
+    def test_daftar_audit_trail_tanpa_auth(self, client, seed_db):
+        """GET /api/pengaduan/audit-trail/list tanpa auth harus 401."""
+        resp = client.get("/api/pengaduan/audit-trail/list")
+        assert resp.status_code == 401
+
+    def test_daftar_audit_trail_dengan_auth(self, client, auth_admin, seed_db):
+        """GET /api/pengaduan/audit-trail/list dengan auth admin harus 200 dan mengembalikan list."""
+        resp = client.get("/api/pengaduan/audit-trail/list", headers=auth_admin)
+        assert resp.status_code == 200
+        logs = resp.json()
+        assert isinstance(logs, list)
+        for log in logs:
+            assert "id" in log
+            assert "tipe_aksi" in log
+            assert "created_at" in log
+

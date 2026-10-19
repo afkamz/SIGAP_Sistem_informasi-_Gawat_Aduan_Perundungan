@@ -102,4 +102,46 @@ Setiap sesi pengerjaan dicatat dengan format:
 
 ---
 
+## 📅 [Sesi 2] Senin, 19 Oktober 2026 — Jam 17 WIB
+**Fokus Utama**: Penonaktifan Fallback Mock Data di Lingkungan Produksi & Sinkronisasi Jejak Audit Real-Time saat Mutasi Status
+
+### 1. Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/context/StoreContext.jsx` | Sanitasi state awal mock data, pencegahan blending mock di `fetchAdminReports` & `fetchAuditTrail`, trigger otomatis `fetchAuditTrail` pada mutasi status |
+| 2 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Penonaktifan fallback array statis `queueCases` saat terhubung ke database atau di mode produksi, penambahan pesan data kosong bersih |
+| 3 | `EDIT` | `docs/09-Progres_Pengembangan.md` | Penyelesaian 100% item Prioritas Sedang 🟡 dan pembaruan status Fase 5 & Fase 6 menjadi selesai (✅) |
+
+---
+
+### 2. Detail Penjelasan Teknis per Berkas
+
+#### 🔹 Frontend Services & Central State
+
+1. **[`Frontend/src/context/StoreContext.jsx`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/Frontend/src/context/StoreContext.jsx)**
+   - **Tindakan**:
+     - Memperbarui inisialisasi state `reports` dan `auditList` agar tidak lagi memaksakan penggabungan (*forced injection*) array `INITIAL_LAPORAN` dan `INITIAL_AUDIT` saat mode produksi (`import.meta.env.PROD`).
+     - Pada `fetchAdminReports()`, hasil mapping server langsung menetapkan `setReports(mappedList)` secara murni tanpa menggabungkan (*blending*) tiket mock lama tahun 2024.
+     - Pada `fetchAuditTrail()`, hasil query `audit_trail` server langsung menggantikan list lama (`setAuditList(mappedList)`).
+     - Menambahkan panggilan otomatis `fetchAuditTrail(activeToken)` di dalam `updateReportStatus()`, `approveAiCategory()`, dan `overrideCategory()`. Sehingga setiap kali Guru BK melakukan aksi validasi atau pengalihan status, log mutasi di MySQL langsung ditarik detik itu juga ke tampilan.
+
+---
+
+#### 🔹 Antarmuka Frontend (UI Pages)
+
+2. **[`Frontend/src/pages/admin/AdminDashboard.jsx`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/Frontend/src/pages/admin/AdminDashboard.jsx)**
+   - **Tindakan**:
+     - Mengubah logika fallback `displayCases` agar mengembalikan array kosong (`[]`) alih-alih data contoh fiktif `queueCases` jika `isBackendConnected` bernilai `true` atau aplikasi berjalan dalam mode produksi.
+     - Menambahkan baris tabel ramah pengguna jika database belum memiliki kasus: *"Belum ada pengaduan aktif yang tercatat di database MySQL."*
+
+---
+
+### 3. Status Uji & Verifikasi Sistem
+- **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul dikompilasi bersih dalam 17.59 detik.
+- **Backend Test**: `pytest` ➔ **60 passed, 0 failed** dalam 6.27 detik.
+- **Status Tahapan**: Seluruh item pada **Prioritas Sedang 🟡** di `docs/09-Progres_Pengembangan.md` telah berstatus selesai (`[x]`), dan sistem kini siap melangkah ke **Prioritas Rendah 🟢** (otomasi AI NLP pipeline IndoBERT & antarmuka validasi AI).
+
+---
+
 *(Entri sesi berikutnya akan otomatis ditambahkan di bawah bagian ini)*

@@ -32,6 +32,19 @@ class AuditTrailOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class AuditTrailItemOut(BaseModel):
+    id: int
+    pengaduan_id: int
+    ticket_code: str | None = None
+    pelaksana_nama: str | None = None
+    pelaksana_role: str | None = None
+    tipe_aksi: str
+    keterangan: str | None = None
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 # ---------- Input dari Siswa ----------
 
 class PengaduanCreate(BaseModel):

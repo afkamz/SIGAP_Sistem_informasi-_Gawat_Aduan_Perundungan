@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Shield,
@@ -31,11 +31,29 @@ import { StudentHeader } from '../../components/layout/StudentHeader';
 import { StudentFooter } from '../../components/layout/StudentFooter';
 
 export const StudentDashboard = () => {
-  const { currentUser, reports } = useStore();
+  const { currentUser, reports, fetchRiwayatSiswa, isBackendConnected, token } = useStore();
   const navigate = useNavigate();
 
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortOrder, setSortOrder] = useState('newest'); // 'newest' | 'oldest'
+  const [isLoadingRiwayat, setIsLoadingRiwayat] = useState(false);
+
+  // Ambil riwayat aduan asli dari database MySQL saat dashboard dimuat
+  const handleRefreshRiwayat = async () => {
+    if (!currentUser?.id) return;
+    setIsLoadingRiwayat(true);
+    try {
+      await fetchRiwayatSiswa(currentUser.id, token);
+    } finally {
+      setIsLoadingRiwayat(false);
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser?.id) {
+      handleRefreshRiwayat();
+    }
+  }, [currentUser?.id, token]);
 
   // Nama siswa dinamis sesuai data akun SIGAP
   const studentName = currentUser?.nama || 'Dimas Prasetya';
@@ -43,21 +61,26 @@ export const StudentDashboard = () => {
     ? studentName
     : `Ananda ${studentName}`;
 
-  // Filter laporan milik siswa
+  // Filter laporan milik siswa (memprioritaskan ID riil dari MySQL)
   const myReports = useMemo(() => {
     return reports.filter((r) => {
       // Abaikan data arsip benchmarking nasional
       if (!r.is_active && r.urgensi === 'Selesai' && r.ticket_code.startsWith('REF-')) return false;
 
-      // Tiket bawaan referensi siswa
-      if (['TKT-2024-0891', 'TKT-2024-0742', 'TKT-2024-0511'].includes(r.ticket_code)) return true;
+      // 1. Cocokkan ID akun siswa (data riil MySQL)
+      if (currentUser?.id && r.siswa_id === currentUser.id) return true;
 
-      // Laporan yang dilaporkan oleh user saat ini
+      // 2. Cocokkan nama pelapor jika identik
       if (currentUser?.nama && r.reporter_name === currentUser.nama) return true;
-      if (r.reporter_name && r.reporter_name.toLowerCase().includes('dimas prasetya')) return true;
 
-      // Laporan yang baru saja dibuat di sesi ini
-      if (r.id > 1000000000000) return true;
+      // 3. Fallback demo untuk akun tamu / tanpa login akun spesifik
+      if (!currentUser?.id) {
+        if (['TKT-2024-0891', 'TKT-2024-0742', 'TKT-2024-0511'].includes(r.ticket_code)) return true;
+        if (r.reporter_name && r.reporter_name.toLowerCase().includes('dimas prasetya')) return true;
+      }
+
+      // 4. Laporan yang baru saja diajukan pada sesi ini
+      if (r.id > 1000000000000 && (!r.reporter_name || r.reporter_name === currentUser?.nama)) return true;
 
       return false;
     });
@@ -256,15 +279,34 @@ export const StudentDashboard = () => {
           {/* Section Header with Controls */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
-                Riwayat Laporan Saya
-              </h3>
+              <div className="flex items-center gap-2.5">
+                <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+                  Riwayat Laporan Saya
+                </h3>
+                {isBackendConnected && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Database MySQL Terhubung</span>
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-slate-500 mt-0.5">
                 Pantau perkembangan dan tindak lanjut aduan yang telah Anda kirimkan secara berkala.
               </p>
             </div>
 
             <div className="flex items-center gap-2 self-start sm:self-auto">
+              {/* Tombol Sinkronkan Data Database */}
+              <button
+                type="button"
+                onClick={handleRefreshRiwayat}
+                disabled={isLoadingRiwayat}
+                className="bg-[#F1F5F9] border border-slate-200/90 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 flex items-center gap-1.5 hover:bg-slate-200/60 transition cursor-pointer disabled:opacity-50"
+                title="Muat ulang aduan dari database MySQL"
+              >
+                <RotateCw className={`w-3.5 h-3.5 text-slate-600 ${isLoadingRiwayat ? 'animate-spin' : ''}`} />
+                <span className="hidden sm:inline">Sinkronkan</span>
+              </button>
               {/* Dropdown Filter Status */}
               <div className="relative">
                 <select

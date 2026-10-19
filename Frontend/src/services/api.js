@@ -140,6 +140,13 @@ export const api = {
     return handleResponse(response);
   },
 
+  async getAuditTrail(token, limit = 50) {
+    const response = await fetch(`${API_BASE_URL}/pengaduan/audit-trail/list?limit=${limit}`, {
+      headers: authHeader(token),
+    });
+    return handleResponse(response);
+  },
+
   // Dashboard
   async getDashboardSummary(token) {
     const response = await fetch(`${API_BASE_URL}/dashboard/summary`, {

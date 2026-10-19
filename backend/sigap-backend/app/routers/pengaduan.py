@@ -15,7 +15,7 @@ from app.models.bukti_pendukung import BuktiPendukung
 from app.models.enums import StatusLaporan, SumberKategori, URUTAN_STATUS
 from app.schemas.pengaduan import (
     PengaduanCreate, PengaduanTicketOut, PengaduanAdminOut, PengaduanDetailOut,
-    StatusUpdateRequest, KategoriUpdateRequest, KategoriOut, BuktiOut,
+    StatusUpdateRequest, KategoriUpdateRequest, KategoriOut, BuktiOut, AuditTrailItemOut,
 )
 from app.core.security import get_current_admin
 from app.ai.service import analyze_report
@@ -261,6 +261,36 @@ def daftar_pengaduan(
 
     laporan = query.order_by(Pengaduan.created_at.desc()).all()
     return [_ke_admin_out(p) for p in laporan]
+
+
+@router.get("/audit-trail/list", response_model=list[AuditTrailItemOut])
+def daftar_audit_trail(
+    limit: int = 50,
+    db: Session = Depends(get_db),
+    admin: Admin = Depends(get_current_admin),
+):
+    """Mengambil jejak audit aktivitas yang tersimpan di database MySQL."""
+    logs = (
+        db.query(AuditTrail)
+        .order_by(AuditTrail.created_at.desc())
+        .limit(limit)
+        .all()
+    )
+    result = []
+    for l in logs:
+        role_str = l.admin.jabatan if l.admin and l.admin.jabatan else "Konselor BK"
+
+        result.append(AuditTrailItemOut(
+            id=l.id,
+            pengaduan_id=l.pengaduan_id,
+            ticket_code=l.pengaduan.ticket_code if l.pengaduan else None,
+            pelaksana_nama=l.admin.nama if l.admin else "Petugas Sistem",
+            pelaksana_role=role_str,
+            tipe_aksi=l.aksi,
+            keterangan=l.keterangan,
+            created_at=l.created_at,
+        ))
+    return result
 
 
 @router.get("/{pengaduan_id}", response_model=PengaduanDetailOut)

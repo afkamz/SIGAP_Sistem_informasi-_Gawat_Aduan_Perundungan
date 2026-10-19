@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   FileText,
@@ -10,17 +10,30 @@ import {
   ChevronRight,
   Download,
   Info,
-  ExternalLink
+  ExternalLink,
+  Database
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { AdminLayout } from '../../components/layout/AdminLayout';
 import { TrendLineChart } from '../../components/charts/DashboardCharts';
 
 export const AdminDashboard = () => {
-  const { reports, getMetrics } = useStore();
+  const { reports, getMetrics, fetchDashboardSummary, fetchAdminReports, isBackendConnected, token } = useStore();
   const navigate = useNavigate();
 
   const metrics = getMetrics();
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  useEffect(() => {
+    fetchDashboardSummary();
+    fetchAdminReports();
+  }, []);
+
+  const handleSync = async () => {
+    setIsSyncing(true);
+    await Promise.all([fetchDashboardSummary(), fetchAdminReports()]);
+    setIsSyncing(false);
+  };
 
   // 7 Kategori Resmi Permendikbudristek No. 46/2023 (Data distribusi benchmark per kategori)
   const categoryData = [
@@ -85,6 +98,37 @@ export const AdminDashboard = () => {
     }
   ];
 
+  // Cases for the bottom table (derived dynamically from live reports if available)
+  const displayCases = (reports && reports.length > 0)
+    ? reports.slice(0, 5).map((r) => {
+        let badgeColor = 'amber';
+        let statusText = 'Menunggu Verifikasi BK';
+        if (r.status === 'diverifikasi') {
+          badgeColor = 'sky';
+          statusText = 'Investigasi Satgas';
+        } else if (r.status === 'ditindaklanjuti') {
+          badgeColor = 'purple';
+          statusText = 'Tindak Lanjut / Mediasi';
+        } else if (r.status === 'selesai') {
+          badgeColor = 'emerald';
+          statusText = 'Selesai & Termonitor';
+        }
+
+        return {
+          id: r.id,
+          type: r.is_active ? 'active' : 'reference',
+          ticket_code: r.ticket_code,
+          category: r.kategori_nama || 'Perundungan',
+          date: r.tanggal || 'Hari ini',
+          urgency: r.urgensi || 'Sedang',
+          status_text: statusText,
+          status_badge: badgeColor,
+          action_label: r.is_active ? 'Periksa Kasus' : 'Lihat Catatan',
+          is_internal: r.is_active
+        };
+      })
+    : (isBackendConnected || import.meta.env.PROD ? [] : queueCases);
+
   const handleDownloadReport = () => {
     // Generate clean CSV summary
     const csvContent =
@@ -122,6 +166,28 @@ export const AdminDashboard = () => {
 
           {/* Right Controls */}
           <div className="flex flex-wrap items-center gap-3">
+            {/* Database Status & Sync */}
+            <div className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition ${
+              isBackendConnected
+                ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                : 'bg-slate-100 border-slate-200 text-slate-600'
+            }`}>
+              <span className={`w-2 h-2 rounded-full ${isBackendConnected ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`}></span>
+              <Database className="w-3.5 h-3.5" />
+              <span>{isBackendConnected ? 'MySQL Terhubung' : 'Offline / Standalone'}</span>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleSync}
+              disabled={isSyncing}
+              className="px-3 py-2 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center gap-1.5 shadow-2xs transition disabled:opacity-50"
+              title="Sinkronkan data dengan database MySQL"
+            >
+              <RotateCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-sky-600' : 'text-slate-600'}`} />
+              <span>Sinkronkan</span>
+            </button>
+
             {/* Unduh Laporan Button */}
             <button
               onClick={handleDownloadReport}
@@ -395,84 +461,92 @@ export const AdminDashboard = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium">
-                {queueCases.map((item) => {
-                  let badgeUrgensi = 'text-slate-600 bg-slate-100';
-                  if (item.urgency === 'Tinggi') badgeUrgensi = 'text-rose-700 bg-rose-50 border border-rose-200';
-                  else if (item.urgency === 'Sedang') badgeUrgensi = 'text-amber-700 bg-amber-50 border border-amber-200';
+                {displayCases.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="py-10 text-center text-slate-400 text-xs">
+                      Belum ada pengaduan aktif yang tercatat di database MySQL.
+                    </td>
+                  </tr>
+                ) : (
+                  displayCases.map((item) => {
+                    let badgeUrgensi = 'text-slate-600 bg-slate-100';
+                    if (item.urgency === 'Tinggi') badgeUrgensi = 'text-rose-700 bg-rose-50 border border-rose-200';
+                    else if (item.urgency === 'Sedang') badgeUrgensi = 'text-amber-700 bg-amber-50 border border-amber-200';
 
-                  let badgeStatus = 'bg-slate-100 text-slate-700';
-                  if (item.status_badge === 'amber') badgeStatus = 'bg-amber-100 text-amber-900 border border-amber-200';
-                  else if (item.status_badge === 'sky') badgeStatus = 'bg-sky-100 text-sky-900 border border-sky-200';
-                  else if (item.status_badge === 'purple') badgeStatus = 'bg-purple-100 text-purple-900 border border-purple-200';
-                  else if (item.status_badge === 'emerald') badgeStatus = 'bg-emerald-100 text-emerald-900 border border-emerald-200';
+                    let badgeStatus = 'bg-slate-100 text-slate-700';
+                    if (item.status_badge === 'amber') badgeStatus = 'bg-amber-100 text-amber-900 border border-amber-200';
+                    else if (item.status_badge === 'sky') badgeStatus = 'bg-sky-100 text-sky-900 border border-sky-200';
+                    else if (item.status_badge === 'purple') badgeStatus = 'bg-purple-100 text-purple-900 border border-purple-200';
+                    else if (item.status_badge === 'emerald') badgeStatus = 'bg-emerald-100 text-emerald-900 border border-emerald-200';
 
-                  return (
-                    <tr key={item.id} className="hover:bg-slate-50/80 transition">
-                      {/* Tipe Data */}
-                      <td className="py-3 px-3 whitespace-nowrap">
-                        <span
-                          className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                            item.type === 'active'
-                              ? 'bg-sky-100 text-sky-900 border border-sky-200'
-                              : 'bg-slate-100 text-slate-600 border border-slate-200'
-                          }`}
-                        >
-                          {item.type === 'active' ? 'Data Aktif' : 'Data Referensi'}
-                        </span>
-                      </td>
+                    return (
+                      <tr key={item.id} className="hover:bg-slate-50/80 transition">
+                        {/* Tipe Data */}
+                        <td className="py-3 px-3 whitespace-nowrap">
+                          <span
+                            className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                              item.type === 'active'
+                                ? 'bg-sky-100 text-sky-900 border border-sky-200'
+                                : 'bg-slate-100 text-slate-600 border border-slate-200'
+                            }`}
+                          >
+                            {item.type === 'active' ? 'Data Aktif' : 'Data Referensi'}
+                          </span>
+                        </td>
 
-                      {/* Kode Tiket */}
-                      <td className="py-3 px-3 whitespace-nowrap">
-                        <span className={`font-mono font-bold ${item.type === 'active' ? 'text-sky-700' : 'text-slate-600'}`}>
-                          {item.ticket_code}
-                        </span>
-                      </td>
+                        {/* Kode Tiket */}
+                        <td className="py-3 px-3 whitespace-nowrap">
+                          <span className={`font-mono font-bold ${item.type === 'active' ? 'text-sky-700' : 'text-slate-600'}`}>
+                            {item.ticket_code}
+                          </span>
+                        </td>
 
-                      {/* Kategori Insiden */}
-                      <td className="py-3 px-3 text-slate-900 font-semibold">
-                        {item.category}
-                      </td>
+                        {/* Kategori Insiden */}
+                        <td className="py-3 px-3 text-slate-900 font-semibold">
+                          {item.category}
+                        </td>
 
-                      {/* Tanggal Masuk */}
-                      <td className="py-3 px-3 whitespace-nowrap text-slate-500">
-                        {item.date}
-                      </td>
+                        {/* Tanggal Masuk */}
+                        <td className="py-3 px-3 whitespace-nowrap text-slate-500">
+                          {item.date}
+                        </td>
 
-                      {/* Urgensi */}
-                      <td className="py-3 px-3 whitespace-nowrap">
-                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${badgeUrgensi}`}>
-                          {item.urgency === 'Tinggi' || item.urgency === 'Sedang' ? '• ' : ''}
-                          {item.urgency}
-                        </span>
-                      </td>
+                        {/* Urgensi */}
+                        <td className="py-3 px-3 whitespace-nowrap">
+                          <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${badgeUrgensi}`}>
+                            {item.urgency === 'Tinggi' || item.urgency === 'Sedang' ? '• ' : ''}
+                            {item.urgency}
+                          </span>
+                        </td>
 
-                      {/* Status Verifikasi */}
-                      <td className="py-3 px-3 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${badgeStatus}`}>
-                          {item.status_text}
-                        </span>
-                      </td>
+                        {/* Status Verifikasi */}
+                        <td className="py-3 px-3 whitespace-nowrap">
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${badgeStatus}`}>
+                            {item.status_text}
+                          </span>
+                        </td>
 
-                      {/* Tindakan */}
-                      <td className="py-3 px-3 text-right whitespace-nowrap">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (item.is_internal) {
-                              navigate('/admin/laporan-detail?id=1');
-                            } else {
-                              navigate('/admin/laporan');
-                            }
-                          }}
-                          className="px-3 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs shadow-2xs inline-flex items-center gap-1 transition"
-                        >
-                          <span>{item.action_label}</span>
-                          <ExternalLink className="w-3 h-3 text-slate-400" />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                        {/* Tindakan */}
+                        <td className="py-3 px-3 text-right whitespace-nowrap">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (item.is_internal) {
+                                navigate(`/admin/laporan-detail?id=${item.id}`);
+                              } else {
+                                navigate('/admin/laporan');
+                              }
+                            }}
+                            className="px-3 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs shadow-2xs inline-flex items-center gap-1 transition"
+                          >
+                            <span>{item.action_label}</span>
+                            <ExternalLink className="w-3 h-3 text-slate-400" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
@@ -480,7 +554,7 @@ export const AdminDashboard = () => {
           {/* Table Footer */}
           <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500">
             <span>
-              Menampilkan 4 dari {metrics.total || 142} rekaman data insiden yang terverifikasi
+              Menampilkan {displayCases.length} dari {metrics.total || 142} rekaman data insiden yang terverifikasi
             </span>
             <div className="flex items-center gap-1 self-end sm:self-auto">
               <button

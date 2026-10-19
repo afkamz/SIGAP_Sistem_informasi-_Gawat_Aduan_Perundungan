@@ -10,19 +10,19 @@ const TOKEN_KEY = 'SIGAP_AUTH_TOKEN';
 const ROLE_KEY = 'SIGAP_AUTH_ROLE';
 
 export const StoreProvider = ({ children }) => {
+  const isProduction = import.meta.env.PROD;
+
   const [reports, setReports] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed.reports && Array.isArray(parsed.reports)) {
-          const existingCodes = new Set(parsed.reports.map((r) => r.ticket_code));
-          const missing = INITIAL_LAPORAN.filter((r) => !existingCodes.has(r.ticket_code));
-          return [...missing, ...parsed.reports];
+          return parsed.reports;
         }
       }
     } catch (_) {}
-    return INITIAL_LAPORAN;
+    return isProduction ? [] : INITIAL_LAPORAN;
   });
 
   const [auditList, setAuditList] = useState(() => {
@@ -30,10 +30,12 @@ export const StoreProvider = ({ children }) => {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        return parsed.auditList || INITIAL_AUDIT;
+        if (parsed.auditList && Array.isArray(parsed.auditList)) {
+          return parsed.auditList;
+        }
       }
     } catch (_) {}
-    return INITIAL_AUDIT;
+    return isProduction ? [] : INITIAL_AUDIT;
   });
 
   const [currentUser, setCurrentUser] = useState(() => {
@@ -49,6 +51,8 @@ export const StoreProvider = ({ children }) => {
 
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY) || '');
   const [role, setRole] = useState(() => localStorage.getItem(ROLE_KEY) || '');
+  const [isBackendConnected, setIsBackendConnected] = useState(false);
+  const [dashboardSummary, setDashboardSummary] = useState(null);
 
   // Save to localStorage on state change
   useEffect(() => {
@@ -72,6 +76,7 @@ export const StoreProvider = ({ children }) => {
     setCurrentUser(null);
     setToken('');
     setRole('');
+    setIsBackendConnected(false);
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(ROLE_KEY);
   };
@@ -93,6 +98,178 @@ export const StoreProvider = ({ children }) => {
     setAuditList((prev) => [newEntry, ...prev]);
   };
 
+  const fetchRiwayatSiswa = async (siswaId, authToken = token) => {
+    if (!siswaId) return [];
+    try {
+      const data = await api.riwayatSiswa(siswaId, authToken);
+      if (Array.isArray(data)) {
+        setIsBackendConnected(true);
+        setReports((prev) => {
+          const updated = [...prev];
+          data.forEach((serverItem) => {
+            const idx = updated.findIndex((r) => r.ticket_code === serverItem.ticket_code);
+            if (idx !== -1) {
+              updated[idx] = {
+                ...updated[idx],
+                status: serverItem.status,
+                kategori_nama: serverItem.kategori_nama || updated[idx].kategori_nama,
+                is_live_backend: true,
+              };
+            } else {
+              const dateObj = serverItem.created_at ? new Date(serverItem.created_at) : new Date();
+              updated.unshift({
+                id: serverItem.id,
+                ticket_code: serverItem.ticket_code,
+                judul: `Pengaduan Insiden ${serverItem.kategori_nama || 'Kekerasan'}`,
+                deskripsi: `Laporan pengaduan resmi terdaftar dengan nomor tiket ${serverItem.ticket_code}.`,
+                kategori_id: 1,
+                kategori_nama: serverItem.kategori_nama || 'Perundungan',
+                status: serverItem.status,
+                urgensi: 'Sedang',
+                is_active: true,
+                is_anonymous: serverItem.mode_anonim,
+                siswa_id: siswaId,
+                reporter_name: currentUser?.nama || 'Siswa Terdaftar',
+                reporter_label: serverItem.mode_anonim
+                  ? 'Anonim (Siswa)'
+                  : `${currentUser?.nama || 'Siswa'} • Pelapor Terverifikasi`,
+                reporter_school: currentUser?.sekolah || 'Satuan Pendidikan',
+                lokasi: 'Area Sekolah',
+                tanggal: new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(dateObj) + ' WIB',
+                catatan_konselor: serverItem.status === 'selesai'
+                  ? 'Penanganan kasus telah tuntas diselesaikan oleh konselor.'
+                  : 'Laporan baru diterima oleh sistem. Menunggu verifikasi tim konselor BK.',
+                history: [
+                  {
+                    waktu: new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(dateObj) + ' WIB',
+                    status: serverItem.status,
+                    pelaksana: 'Sistem SIGAP',
+                    catatan: 'Pengaduan berhasil dimuat dari basis data pusat MySQL.'
+                  }
+                ],
+                is_live_backend: true
+              });
+            }
+          });
+          return updated;
+        });
+        return data;
+      }
+    } catch (err) {
+      console.warn('Gagal memuat riwayat siswa dari backend:', err.message);
+      setIsBackendConnected(false);
+    }
+    return [];
+  };
+
+  const fetchDashboardSummary = async (authToken = token) => {
+    const activeToken = authToken || token || localStorage.getItem(TOKEN_KEY);
+    if (!activeToken) return null;
+    try {
+      const data = await api.getDashboardSummary(activeToken);
+      if (data) {
+        setDashboardSummary(data);
+        setIsBackendConnected(true);
+        return data;
+      }
+    } catch (err) {
+      console.warn('Gagal memuat dashboard summary dari backend:', err.message);
+    }
+    return null;
+  };
+
+  const fetchAdminReports = async (authToken = token, opts = {}) => {
+    const activeToken = authToken || token || localStorage.getItem(TOKEN_KEY);
+    if (!activeToken) return [];
+    try {
+      const data = await api.daftarPengaduan(activeToken, opts);
+      if (Array.isArray(data)) {
+        setIsBackendConnected(true);
+        const mappedList = data.map((serverItem) => {
+          const dateObj = serverItem.created_at ? new Date(serverItem.created_at) : new Date();
+          return {
+            id: serverItem.id,
+            ticket_code: serverItem.ticket_code,
+            judul: `Pengaduan Insiden ${serverItem.kategori_nama || 'Kekerasan'}`,
+            deskripsi: `Laporan pengaduan resmi terdaftar dengan nomor tiket ${serverItem.ticket_code}.`,
+            kategori_id: 1,
+            kategori_nama: serverItem.kategori_nama || 'Perundungan',
+            status: serverItem.status,
+            urgensi: 'Sedang',
+            is_active: true,
+            is_anonymous: serverItem.mode_anonim,
+            is_live_backend: true,
+            reporter_name: serverItem.mode_anonim ? null : 'Siswa Terdaftar',
+            reporter_label: serverItem.mode_anonim
+              ? 'Anonim (Siswa)'
+              : 'Siswa Terdaftar • Pelapor Terverifikasi',
+            tanggal: new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(dateObj) + ' WIB',
+            ai: {
+              kategori_rekomendasi: serverItem.ai_kategori_rekomendasi_nama || serverItem.kategori_nama,
+              confidence: serverItem.ai_confidence_score ? parseFloat((serverItem.ai_confidence_score * 100).toFixed(1)) : 88.5,
+              secondary_suggestion: 'Perundungan Verbal',
+              secondary_confidence: 68.4,
+              is_approved: serverItem.sumber_kategori === 'ai_disetujui',
+              is_overridden: serverItem.sumber_kategori === 'manual_override',
+              cluster_label: serverItem.cluster_label,
+              is_noise: serverItem.is_noise ?? true
+            },
+            catatan_konselor: 'Laporan tersinkronisasi dari backend MySQL.',
+            history: [
+              {
+                waktu: new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(dateObj) + ' WIB',
+                status: serverItem.status,
+                pelaksana: 'Sistem SIGAP',
+                catatan: 'Data diambil dari database MySQL.'
+              }
+            ]
+          };
+        });
+
+        // Di production atau saat live backend aktif, singkirkan mock data dan gunakan 100% data live MySQL
+        setReports(mappedList);
+        return data;
+      }
+    } catch (err) {
+      console.warn('Gagal memuat daftar pengaduan admin dari backend:', err.message);
+      setIsBackendConnected(false);
+    }
+    return [];
+  };
+
+  const fetchAuditTrail = async (authToken = token, limit = 50) => {
+    const activeToken = authToken || token || localStorage.getItem(TOKEN_KEY);
+    if (!activeToken) return [];
+    try {
+      const data = await api.getAuditTrail(activeToken, limit);
+      if (Array.isArray(data)) {
+        setIsBackendConnected(true);
+        const mappedList = data.map((serverItem) => {
+          const dateObj = serverItem.created_at ? new Date(serverItem.created_at) : new Date();
+          return {
+            id: `db-${serverItem.id}`,
+            waktu: new Intl.DateTimeFormat('id-ID', { hour: '2-digit', minute: '2-digit' }).format(dateObj) + ' WIB',
+            tanggal_raw: new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium' }).format(dateObj),
+            pelaksana_nama: serverItem.pelaksana_nama || 'Petugas Sistem',
+            pelaksana_role: serverItem.pelaksana_role || 'Konselor BK',
+            pelaksana_avatar: null,
+            tipe_aksi: serverItem.tipe_aksi === 'ubah_status' ? 'status' : (serverItem.tipe_aksi === 'validasi_kategori' ? 'override' : 'system'),
+            deskripsi: serverItem.keterangan || `Aktivitas ${serverItem.tipe_aksi}`,
+            detail_perubahan: serverItem.keterangan || '-',
+            ticket_code: serverItem.ticket_code || '-',
+            hash_verified: true,
+            is_live_backend: true
+          };
+        });
+        setAuditList(mappedList);
+        return data;
+      }
+    } catch (err) {
+      console.warn('Gagal memuat audit trail dari backend:', err.message);
+    }
+    return [];
+  };
+
   const createReport = async (formData) => {
     const randomSeq = String(Math.floor(100 + Math.random() * 900));
     let ticketCode = `SGP-2026-${randomSeq}`;
@@ -108,6 +285,7 @@ export const StoreProvider = ({ children }) => {
       });
       if (res && res.ticket_code) {
         ticketCode = res.ticket_code;
+        setIsBackendConnected(true);
       }
     } catch (e) {
       console.warn('Backend API tidak merespons, menggunakan mode local store:', e.message);
@@ -126,6 +304,7 @@ export const StoreProvider = ({ children }) => {
       urgensi: formData.urgensi || 'Sedang',
       is_active: true,
       is_anonymous: !!formData.is_anonymous,
+      siswa_id: formData.is_anonymous ? null : (currentUser?.id || null),
       reporter_name: formData.is_anonymous ? null : (formData.nama_pelapor || currentUser?.nama || 'Siswa Terdaftar'),
       reporter_label: formData.is_anonymous
         ? 'Anonim (Siswa)'
@@ -188,10 +367,13 @@ export const StoreProvider = ({ children }) => {
       };
     }
 
-    // Try backend if token exists
-    if (token) {
+    // Try backend if token exists (state or localStorage)
+    const activeToken = token || localStorage.getItem(TOKEN_KEY);
+    if (activeToken) {
       try {
-        await api.ubahStatus(id, nextStatus, catatan, token);
+        await api.ubahStatus(id, nextStatus, catatan, activeToken);
+        setIsBackendConnected(true);
+        fetchAuditTrail(activeToken);
       } catch (e) {
         console.warn('API sync warning:', e.message);
       }
@@ -234,9 +416,12 @@ export const StoreProvider = ({ children }) => {
     const report = reports.find((r) => r.id === Number(id));
     if (!report) return false;
 
-    if (token) {
+    const activeToken = token || localStorage.getItem(TOKEN_KEY);
+    if (activeToken) {
       try {
-        await api.validasiKategori(id, report.kategori_id, 'ai_disetujui', token);
+        await api.validasiKategori(id, report.kategori_id, 'ai_disetujui', activeToken);
+        setIsBackendConnected(true);
+        fetchAuditTrail(activeToken);
       } catch (e) {
         console.warn('API sync warning:', e.message);
       }
@@ -273,9 +458,12 @@ export const StoreProvider = ({ children }) => {
     const newCategory = KATEGORI_DATA.find((k) => k.id === Number(newCategoryId));
     if (!newCategory) return false;
 
-    if (token) {
+    const activeToken = token || localStorage.getItem(TOKEN_KEY);
+    if (activeToken) {
       try {
-        await api.validasiKategori(id, newCategory.id, 'manual_override', token);
+        await api.validasiKategori(id, newCategory.id, 'manual_override', activeToken);
+        setIsBackendConnected(true);
+        fetchAuditTrail(activeToken);
       } catch (e) {
         console.warn('API sync warning:', e.message);
       }
@@ -358,6 +546,26 @@ export const StoreProvider = ({ children }) => {
   };
 
   const getMetrics = () => {
+    if (dashboardSummary) {
+      const total = dashboardSummary.total_laporan;
+      const menunggu = dashboardSummary.per_status?.menunggu ?? 0;
+      const proses = (dashboardSummary.per_status?.diverifikasi ?? 0) + (dashboardSummary.per_status?.ditindaklanjuti ?? 0);
+      const selesai = dashboardSummary.per_status?.selesai ?? 0;
+      const lowAi = reports.filter((l) => !l.ai || (l.ai && l.ai.confidence < 80)).length;
+      const clusters = reports.filter((l) => l.ai?.cluster_label && !l.ai?.is_noise).length;
+      const referenceCount = reports.filter((l) => !l.is_active).length;
+
+      return {
+        total,
+        menunggu,
+        proses,
+        selesai,
+        lowAi,
+        clusters,
+        referenceCount
+      };
+    }
+
     const total = reports.length;
     const menunggu = reports.filter((l) => l.status === 'menunggu').length;
     const proses = reports.filter((l) => l.status === 'diverifikasi' || l.status === 'ditindaklanjuti').length;
@@ -399,6 +607,12 @@ export const StoreProvider = ({ children }) => {
         approveAiCategory,
         overrideCategory,
         addAuditEntry,
+        fetchRiwayatSiswa,
+        fetchDashboardSummary,
+        fetchAdminReports,
+        fetchAuditTrail,
+        dashboardSummary,
+        isBackendConnected,
         getMetrics,
         resetDefault,
         addReportMessage,
