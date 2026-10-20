@@ -14,7 +14,9 @@ _CATEGORY_CENTROIDS: Dict[str, List[float]] = {}
 
 def _get_seed_cases_path() -> Path:
     candidates = [
+        Path(__file__).resolve().parent.parent.parent / "dataset" / "seed_narasi_7_kategori.json",
         Path(__file__).resolve().parent.parent.parent.parent / "dataset" / "seed_narasi_7_kategori.json",
+        Path("/app/dataset/seed_narasi_7_kategori.json"),
         Path("/home/afkam/Downloads/tes/dataset/seed_narasi_7_kategori.json"),
     ]
     for p in candidates:

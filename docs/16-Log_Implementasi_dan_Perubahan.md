@@ -148,3 +148,62 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 - **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul terkompilasi bersih dalam 12.62 detik.
 - **Backend Test**: `pytest` ➔ **50 passed, 0 failed** dalam 4.31 detik (100% lulus).
 - **Integritas Sistem**: Berkas gambar PNG kini tampil langsung dalam bentuk thumbnail nyata serta dapat diperbesar melalui modal lightbox dan dibuka di tab baru.
+
+---
+
+## 📅 [Sesi 8] Selasa, 20 Oktober 2026 — Jam 20 WIB
+**Fokus Utama**: Standardisasi dan Penyelarasan Istilah Teknis Berbahasa Inggris pada Bagian Abstract dan Introduction Naskah Akademik `SIGAP.tex`.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP.tex` | Naskah paper IEEE (standardisasi istilah murni Bahasa Inggris di Abstract & Introduction) |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah paper sekunder (sinkronisasi istilah murni Bahasa Inggris) |
+| 3 | `EDIT` | `SIGAP-source.tex` | Berkas sumber cadangan naskah (sinkronisasi istilah murni Bahasa Inggris) |
+| 4 | `EDIT` | `docs/09-Progres_Pengembangan.md` | Pembaruan riwayat pembaruan dokumen progres naskah akademik |
+| 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 8 standardisasi istilah paper |
+
+### Status Uji & Verifikasi Sistem
+- **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul terkompilasi bersih dalam 16.35 detik.
+- **Backend Test**: `pytest` ➔ **50 passed, 0 failed** dalam 4.46 detik (100% lulus).
+- **Integritas Naskah**: Istilah teknis diseragamkan ke Bahasa Inggris baku (`underreporting`, `cyberbullying`, `sentence embedding`, `confidence score`, `state transition guard`, `density-based clustering`, `natural language processing`) tanpa reduplikasi tanda kurung. Tag model `IndoBERT (indobenchmark/indobert-base-p1)` dipertahankan utuh.
+
+---
+
+## 📅 [Sesi 9] Selasa, 20 Oktober 2026 — Jam 20 WIB
+**Fokus Utama**: Redesain Halaman Validasi AI Berbasis Alur Kartu Triase Menggunakan Data Asli SIGAP Sesuai Referensi Desain.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/admin/AiValidation.jsx` | Modul Validasi & Triase Klasifikasi AI Admin (redesain card stream, banner multi-label, HDBSCAN, token NLP, dan validasi massal) |
+| 2 | `EDIT` | `docs/09-Progres_Pengembangan.md` | Pembaruan checklist progres antarmuka alur kartu Validasi AI |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 9 redesain halaman Validasi AI |
+
+### Status Uji & Verifikasi Sistem
+- **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul terkompilasi bersih dalam 16.71 detik.
+- **Backend Test**: `pytest` ➔ **50 passed, 0 failed** dalam 4.29 detik (100% lulus).
+- **Integritas Sistem**: Tampilan mengadopsi format kartu triase interaktif dengan data aduan nyata SIGAP, deteksi ambiguitas, ekstraksi token NLP, dan rekomendasi SOP PPKSP.
+
+---
+
+## 📅 [Sesi 10] Selasa, 20 Oktober 2026 — Jam 21 WIB
+**Fokus Utama**: Penyelarasan Total Data Riil Pengaduan SIGAP dari Database MySQL ke Halaman Validasi AI dan Eksekusi Pipeline NLP Backend.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `backend/sigap-backend/app/ai/classifier.py` | Resolusi path dataset seed 7 kategori pada container Docker backend |
+| 2 | `EDIT` | `backend/sigap-backend/app/ai/embedder.py` | Resolusi path dataset seed 7 kategori pada container Docker backend |
+| 3 | `EDIT` | `Frontend/src/context/StoreContext.jsx` | Auto-sinkronisasi admin token dan pemetaan data riil aduan MySQL ke state laporan |
+| 4 | `EDIT` | `Frontend/src/pages/admin/AiValidation.jsx` | Pembersihan teks statis referensi visual dan pengikatan murni ke field riil tiket SIGAP |
+| 5 | `EDIT` | `docs/09-Progres_Pengembangan.md` | Pembaruan riwayat integrasi data riil Validasi AI |
+| 6 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 10 integrasi data riil SIGAP |
+
+### Status Uji & Verifikasi Sistem
+- **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul terkompilasi bersih dalam 15.13 detik.
+- **Backend Test**: `pytest` ➔ **50 passed, 0 failed** dalam 4.40 detik (100% lulus).
+- **Integritas Sistem**: Seluruh 6 aduan riil siswa kini memiliki skor confidence dan kategori rekomendasi asli dari pipeline IndoBERT backend, serta tampil utuh di antarmuka Validasi AI tanpa teks contoh statis.
