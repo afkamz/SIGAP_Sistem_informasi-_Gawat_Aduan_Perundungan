@@ -49,9 +49,17 @@ def generate_ticket_code() -> str:
 
 def _ke_admin_out(p: Pengaduan) -> PengaduanAdminOut:
     """Helper: susun response admin dari objek Pengaduan + relasinya."""
+    rep_name = None
+    if p.siswa and not p.mode_anonim:
+        rep_name = p.siswa.nama
+    elif p.mode_anonim:
+        rep_name = "Anonim (Siswa)"
+
     return PengaduanAdminOut(
         id=p.id,
         ticket_code=p.ticket_code,
+        siswa_id=p.siswa_id,
+        reporter_name=rep_name,
         kategori_nama=p.kategori.nama if p.kategori else "-",
         deskripsi=p.deskripsi,
         ai_kategori_rekomendasi_nama=p.kategori_rekomendasi.nama if p.kategori_rekomendasi else None,

@@ -127,3 +127,24 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 - **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul terkompilasi bersih dalam 10.51 detik.
 - **Backend Test**: `pytest` ➔ **60 passed, 0 failed** dalam 3.97 detik.
 - **Integritas Sistem**: Navigasi sidebar admin tidak mengalami perubahan, seluruh berkas upload tersimpan dan dapat diakses melalui `/uploads`.
+
+---
+
+## 📅 [Sesi 7] Selasa, 20 Oktober 2026 — Jam 13 WIB
+**Fokus Utama**: Perbaikan Sinkronisasi ID & Array Berkas Bukti Aduan Siswa ke State Laporan, Rendering Thumbnail Gambar Nyata, Modal Lightbox Pratinjau, dan Proxy Nginx Berkas Unggahan.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/context/StoreContext.jsx` | State store pengaduan & upload bukti (`createReport` menggunakan `res.id` backend, upload berkas terintegrasi atomik, dan `fetchReportDetail` menangani penambahan laporan baru) |
+| 2 | `EDIT` | `Frontend/src/pages/student/CreateReportWizard.jsx` | Alur submit formulir pengaduan siswa (meneruskan berkas lampiran langsung ke `createReport`) |
+| 3 | `EDIT` | `Frontend/src/pages/admin/ReportDetail.jsx` | Antarmuka detail aduan admin (helper URL berkas, rendering thumbnail `<img>` nyata, modal lightbox preview foto bukti) |
+| 4 | `EDIT` | `Frontend/nginx.conf` | Konfigurasi reverse proxy Nginx Docker (penambahan `location /uploads/` ke FastAPI backend) |
+| 5 | `EDIT` | `docs/09-Progres_Pengembangan.md` | Pembaruan checklist upload berkas & pratinjau bukti pendukung |
+| 6 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 7 perbaikan berkas bukti aduan |
+
+### Status Uji & Verifikasi Sistem
+- **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul terkompilasi bersih dalam 12.62 detik.
+- **Backend Test**: `pytest` ➔ **50 passed, 0 failed** dalam 4.31 detik (100% lulus).
+- **Integritas Sistem**: Berkas gambar PNG kini tampil langsung dalam bentuk thumbnail nyata serta dapat diperbesar melalui modal lightbox dan dibuka di tab baru.

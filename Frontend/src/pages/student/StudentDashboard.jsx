@@ -65,13 +65,13 @@ export const StudentDashboard = () => {
   const myReports = useMemo(() => {
     return reports.filter((r) => {
       // Abaikan data arsip benchmarking nasional
-      if (!r.is_active && r.urgensi === 'Selesai' && r.ticket_code.startsWith('REF-')) return false;
+      if (!r.is_active && r.urgensi === 'Selesai' && r.ticket_code?.startsWith('REF-')) return false;
 
       // 1. Cocokkan ID akun siswa (data riil MySQL)
-      if (currentUser?.id && r.siswa_id === currentUser.id) return true;
+      if (currentUser?.id && r.siswa_id && Number(r.siswa_id) === Number(currentUser.id)) return true;
 
       // 2. Cocokkan nama pelapor jika identik
-      if (currentUser?.nama && r.reporter_name === currentUser.nama) return true;
+      if (currentUser?.nama && r.reporter_name && r.reporter_name.toLowerCase() === currentUser.nama.toLowerCase()) return true;
 
       // 3. Fallback demo untuk akun tamu / tanpa login akun spesifik
       if (!currentUser?.id) {

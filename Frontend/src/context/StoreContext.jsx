@@ -107,10 +107,13 @@ export const StoreProvider = ({ children }) => {
         setReports((prev) => {
           const updated = [...prev];
           data.forEach((serverItem) => {
-            const idx = updated.findIndex((r) => r.ticket_code === serverItem.ticket_code);
+            const idx = updated.findIndex((r) => r.ticket_code === serverItem.ticket_code || r.id === serverItem.id);
             if (idx !== -1) {
               updated[idx] = {
                 ...updated[idx],
+                id: serverItem.id,
+                siswa_id: serverItem.siswa_id || siswaId,
+                reporter_name: currentUser?.nama || updated[idx].reporter_name,
                 status: serverItem.status,
                 kategori_nama: serverItem.kategori_nama || updated[idx].kategori_nama,
                 deskripsi: serverItem.deskripsi || updated[idx].deskripsi,
@@ -137,7 +140,7 @@ export const StoreProvider = ({ children }) => {
                 urgensi: 'Sedang',
                 is_active: true,
                 is_anonymous: serverItem.mode_anonim,
-                siswa_id: siswaId,
+                siswa_id: serverItem.siswa_id || siswaId,
                 reporter_name: currentUser?.nama || 'Siswa Terdaftar',
                 reporter_label: serverItem.mode_anonim
                   ? 'Anonim (Siswa)'
@@ -199,6 +202,7 @@ export const StoreProvider = ({ children }) => {
           return {
             id: serverItem.id,
             ticket_code: serverItem.ticket_code,
+            siswa_id: serverItem.siswa_id,
             judul: `Pengaduan Insiden ${serverItem.kategori_nama || 'Kekerasan'}`,
             deskripsi: serverItem.deskripsi || '',
             bukti: serverItem.bukti || [],
@@ -258,11 +262,13 @@ export const StoreProvider = ({ children }) => {
       if (data) {
         setIsBackendConnected(true);
         setReports((prev) => {
-          const idx = prev.findIndex((r) => r.id === Number(reportId));
+          const idx = prev.findIndex((r) => r.id === Number(reportId) || r.ticket_code === data.ticket_code);
           if (idx !== -1) {
             const updated = [...prev];
             updated[idx] = {
               ...updated[idx],
+              id: data.id,
+              ticket_code: data.ticket_code,
               deskripsi: data.deskripsi || updated[idx].deskripsi,
               bukti: data.bukti || updated[idx].bukti || [],
               bukti_file: data.bukti && data.bukti.length > 0
@@ -281,8 +287,51 @@ export const StoreProvider = ({ children }) => {
               }
             };
             return updated;
+          } else {
+            const dateObj = data.created_at ? new Date(data.created_at) : new Date();
+            const newItem = {
+              id: data.id,
+              ticket_code: data.ticket_code,
+              judul: `Pengaduan Insiden ${data.kategori_nama || 'Kekerasan'}`,
+              deskripsi: data.deskripsi || '',
+              bukti: data.bukti || [],
+              bukti_file: data.bukti && data.bukti.length > 0
+                ? data.bukti.map((b) => b.file_path).join(', ')
+                : null,
+              kategori_id: 1,
+              kategori_nama: data.kategori_nama || 'Perundungan',
+              status: data.status,
+              urgensi: 'Sedang',
+              is_active: true,
+              is_anonymous: data.mode_anonim,
+              is_live_backend: true,
+              reporter_name: data.mode_anonim ? null : 'Siswa Terdaftar',
+              reporter_label: data.mode_anonim
+                ? 'Anonim (Siswa)'
+                : 'Siswa Terdaftar • Pelapor Terverifikasi',
+              tanggal: new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(dateObj) + ' WIB',
+              ai: {
+                kategori_rekomendasi: data.ai_kategori_rekomendasi_nama || data.kategori_nama,
+                confidence: data.ai_confidence_score ? parseFloat((data.ai_confidence_score * 100).toFixed(1)) : 88.5,
+                secondary_suggestion: 'Perundungan Verbal',
+                secondary_confidence: 68.4,
+                is_approved: data.sumber_kategori === 'ai_disetujui',
+                is_overridden: data.sumber_kategori === 'manual_override',
+                cluster_label: data.cluster_label,
+                is_noise: data.is_noise ?? true
+              },
+              catatan_konselor: 'Laporan tersinkronisasi dari backend MySQL.',
+              history: [
+                {
+                  waktu: new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(dateObj) + ' WIB',
+                  status: data.status,
+                  pelaksana: 'Sistem SIGAP',
+                  catatan: 'Data diambil dari database MySQL.'
+                }
+              ]
+            };
+            return [newItem, ...prev];
           }
-          return prev;
         });
         return data;
       }
@@ -325,11 +374,13 @@ export const StoreProvider = ({ children }) => {
     return [];
   };
 
-  const createReport = async (formData) => {
+  const createReport = async (formData, filesToUpload = []) => {
     const randomSeq = String(Math.floor(100 + Math.random() * 900));
     let ticketCode = `SGP-2026-${randomSeq}`;
+    let reportId = Date.now();
     const category = KATEGORI_DATA.find((k) => k.id === Number(formData.kategori_id)) || KATEGORI_DATA[0];
     let aiData = null;
+    let uploadedBukti = [];
 
     // Mengirim ke real backend API jika aktif
     try {
@@ -337,12 +388,30 @@ export const StoreProvider = ({ children }) => {
         kategori_id: category.id,
         deskripsi: formData.deskripsi,
         mode_anonim: !!formData.is_anonymous,
-        siswa_id: formData.is_anonymous ? null : (currentUser?.id || null)
+        siswa_id: currentUser?.id || null
       });
       if (res && res.ticket_code) {
         ticketCode = res.ticket_code;
+        if (res.id) reportId = res.id;
         aiData = res;
         setIsBackendConnected(true);
+
+        // Upload berkas bukti nyata ke backend jika ada file
+        if (Array.isArray(filesToUpload) && filesToUpload.length > 0) {
+          for (const item of filesToUpload) {
+            const raw = item.rawFile || (item instanceof File ? item : null);
+            if (raw) {
+              try {
+                const buktiRes = await api.uploadBukti(ticketCode, raw);
+                if (buktiRes) {
+                  uploadedBukti.push(buktiRes);
+                }
+              } catch (upErr) {
+                console.warn('Gagal upload berkas ke backend:', upErr.message);
+              }
+            }
+          }
+        }
       }
     } catch (e) {
       console.warn('Backend API tidak merespons, menggunakan mode local store:', e.message);
@@ -359,7 +428,7 @@ export const StoreProvider = ({ children }) => {
     const realNoise = aiData?.is_noise !== undefined ? aiData.is_noise : true;
 
     const newReport = {
-      id: Date.now(),
+      id: reportId,
       ticket_code: ticketCode,
       judul: formData.judul || `Pengaduan Insiden ${category.nama}`,
       deskripsi: formData.deskripsi || '',
@@ -369,8 +438,8 @@ export const StoreProvider = ({ children }) => {
       urgensi: formData.urgensi || 'Sedang',
       is_active: true,
       is_anonymous: !!formData.is_anonymous,
-      siswa_id: formData.is_anonymous ? null : (currentUser?.id || null),
-      reporter_name: formData.is_anonymous ? null : (formData.nama_pelapor || currentUser?.nama || 'Siswa Terdaftar'),
+      siswa_id: currentUser?.id || null,
+      reporter_name: formData.is_anonymous ? 'Anonim (Siswa)' : (formData.nama_pelapor || currentUser?.nama || 'Siswa Terdaftar'),
       reporter_label: formData.is_anonymous
         ? 'Anonim (Siswa)'
         : `${formData.nama_pelapor || currentUser?.nama || 'Siswa Terdaftar'} • Pelapor Terverifikasi`,
@@ -388,7 +457,14 @@ export const StoreProvider = ({ children }) => {
         cluster_name: realCluster !== null ? `Klaster #${realCluster}` : null,
         is_noise: realNoise
       },
-      bukti_file: formData.bukti_file || null,
+      bukti: uploadedBukti.length > 0
+        ? uploadedBukti
+        : (filesToUpload.length > 0
+            ? filesToUpload.map((f, i) => ({ id: i + 1, file_path: f.name }))
+            : []),
+      bukti_file: uploadedBukti.length > 0
+        ? uploadedBukti.map((b) => b.file_path).join(', ')
+        : (formData.bukti_file || null),
       catatan_konselor: 'Laporan baru diterima. Menunggu verifikasi tim konselor BK.',
       history: [
         {

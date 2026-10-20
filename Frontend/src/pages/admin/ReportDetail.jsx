@@ -45,8 +45,22 @@ export const ReportDetail = () => {
 
   const report = reports.find((r) => r.id === Number(reportId)) || reports[0];
 
+  // Helper URL file upload
+  const getFileUrl = (path) => {
+    if (!path) return '';
+    if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('blob:') || path.startsWith('data:')) {
+      return path;
+    }
+    const cleanPath = path.replace(/^\/+/, '');
+    if (cleanPath.startsWith('uploads/')) {
+      return `http://localhost:8000/${cleanPath}`;
+    }
+    return `http://localhost:8000/uploads/${cleanPath}`;
+  };
+
   // States
   const [copied, setCopied] = useState(false);
+  const [selectedImagePreview, setSelectedImagePreview] = useState(null);
   const [showOverrideModal, setShowOverrideModal] = useState(false);
   const [overrideCatId, setOverrideCatId] = useState(report?.kategori_id || 1);
   const [overrideNote, setOverrideNote] = useState('');
@@ -73,10 +87,10 @@ export const ReportDetail = () => {
         list.push({
           id: b.id || idx,
           name: path,
-          url: `http://localhost:8000/uploads/${path}`,
+          url: getFileUrl(path),
           ext: ext.toUpperCase() || 'FILE',
           type: ext === 'pdf' ? 'pdf' : ['mp3', 'm4a', 'wav', 'ogg'].includes(ext) ? 'audio' : 'image',
-          size: 'Terenkripsi SHA-256',
+          size: b.uploaded_at ? new Intl.DateTimeFormat('id-ID', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(b.uploaded_at)) : 'Terenkripsi SHA-256',
         });
       });
     } else if (report?.bukti_file && typeof report.bukti_file === 'string' && report.bukti_file.trim()) {
@@ -87,7 +101,7 @@ export const ReportDetail = () => {
         list.push({
           id: idx,
           name,
-          url: name.startsWith('http') ? name : `http://localhost:8000/uploads/${name}`,
+          url: getFileUrl(name),
           ext: ext.toUpperCase() || 'FILE',
           type: ext === 'pdf' ? 'pdf' : ['mp3', 'm4a', 'wav', 'ogg'].includes(ext) ? 'audio' : 'image',
           size: 'Lampiran Berkas',
@@ -403,8 +417,8 @@ export const ReportDetail = () => {
                       key={item.id || idx}
                       className="rounded-2xl border border-slate-200 bg-slate-50/50 overflow-hidden flex flex-col justify-between p-3 space-y-2 hover:bg-slate-100/60 transition"
                     >
-                      <div className="relative h-24 rounded-xl bg-slate-200/80 flex items-center justify-center overflow-hidden">
-                        <span className="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-slate-900/80 text-[9px] font-extrabold text-white">
+                      <div className="relative h-28 rounded-xl bg-slate-200/80 flex items-center justify-center overflow-hidden">
+                        <span className="absolute top-2 left-2 z-10 px-1.5 py-0.5 rounded bg-slate-900/80 text-[9px] font-extrabold text-white">
                           {item.ext}
                         </span>
                         {item.type === 'audio' ? (
@@ -418,7 +432,26 @@ export const ReportDetail = () => {
                             <span className="text-[9px] font-bold mt-1">DOKUMEN PDF</span>
                           </div>
                         ) : (
-                          <ImageIcon className="w-8 h-8 text-slate-400" />
+                          <div
+                            className="w-full h-full flex items-center justify-center cursor-pointer bg-slate-100 group relative"
+                            onClick={() => setSelectedImagePreview(item.url)}
+                            title="Klik untuk memperbesar foto bukti"
+                          >
+                            <img
+                              src={item.url}
+                              alt={item.name}
+                              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                const fallback = e.currentTarget.parentElement?.querySelector('.img-fallback');
+                                if (fallback) fallback.classList.remove('hidden');
+                              }}
+                            />
+                            <div className="img-fallback hidden flex-col items-center justify-center text-slate-400 p-2 text-center">
+                              <ImageIcon className="w-8 h-8 mb-1" />
+                              <span className="text-[10px]">Preview tidak tersedia</span>
+                            </div>
+                          </div>
                         )}
                       </div>
                       <div>
@@ -427,14 +460,24 @@ export const ReportDetail = () => {
                         </p>
                         <div className="flex items-center justify-between text-[11px] text-slate-500 mt-1">
                           <span>{item.size}</span>
-                          <a
-                            href={item.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-sky-600 font-bold hover:underline inline-flex items-center gap-1"
-                          >
-                            <Eye className="w-3 h-3" /> {item.type === 'audio' ? 'Putar' : 'Lihat'}
-                          </a>
+                          {item.type === 'image' ? (
+                            <button
+                              type="button"
+                              onClick={() => setSelectedImagePreview(item.url)}
+                              className="text-sky-600 font-bold hover:underline inline-flex items-center gap-1 cursor-pointer"
+                            >
+                              <Eye className="w-3 h-3" /> Lihat Foto
+                            </button>
+                          ) : (
+                            <a
+                              href={item.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-sky-600 font-bold hover:underline inline-flex items-center gap-1"
+                            >
+                              <Eye className="w-3 h-3" /> {item.type === 'audio' ? 'Putar' : 'Lihat'}
+                            </a>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -748,6 +791,51 @@ export const ReportDetail = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Lightbox Modal Preview Gambar Bukti */}
+      {selectedImagePreview && (
+        <div
+          className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setSelectedImagePreview(null)}
+        >
+          <div
+            className="bg-white rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl relative border border-slate-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50">
+              <div className="flex items-center gap-2">
+                <ImageIcon className="w-5 h-5 text-sky-600" />
+                <h4 className="text-sm font-bold text-slate-800">Pratinjau Berkas Bukti Pendukung</h4>
+              </div>
+              <div className="flex items-center gap-2">
+                <a
+                  href={selectedImagePreview}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3 py-1.5 text-slate-600 hover:text-sky-700 rounded-xl hover:bg-slate-200 text-xs font-bold inline-flex items-center gap-1.5 transition"
+                  title="Buka Ukuran Asli di Tab Baru"
+                >
+                  <Eye className="w-3.5 h-3.5" /> Buka Tab Baru
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setSelectedImagePreview(null)}
+                  className="p-1.5 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-200 transition cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            <div className="p-4 bg-slate-950 flex items-center justify-center max-h-[75vh] overflow-auto">
+              <img
+                src={selectedImagePreview}
+                alt="Berkas Bukti Pendukung"
+                className="max-h-[70vh] max-w-full object-contain rounded-lg shadow-lg"
+              />
+            </div>
           </div>
         </div>
       )}

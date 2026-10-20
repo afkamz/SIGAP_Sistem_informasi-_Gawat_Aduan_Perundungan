@@ -74,6 +74,8 @@ class PengaduanTicketOut(BaseModel):
 class PengaduanAdminOut(BaseModel):
     id: int
     ticket_code: str
+    siswa_id: int | None = None
+    reporter_name: str | None = None
     kategori_nama: str
     deskripsi: str | None = None
     ai_kategori_rekomendasi_nama: str | None = None

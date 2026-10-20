@@ -133,13 +133,13 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 
 - [x] Hubungkan form Buat Aduan ke `api.buatPengaduan()` — kode tiket riil dari backend kini disinkronisasi ke state lokal
 - [x] Hubungkan halaman Lacak Tiket ke endpoint `api.cekStatus()` — *hybrid lookup* (lokal + server) aktif
-- [x] Hubungkan dashboard siswa ke endpoint `api.riwayatSiswa()` untuk mengambil aduan asli dari MySQL
+- [x] Hubungkan dashboard siswa ke endpoint `api.riwayatSiswa()` untuk mengambil aduan asli dari MySQL (termasuk sinkronisasi kepemilikan `siswa_id` & mode anonim saat login ulang)
 - [x] Hubungkan dashboard admin & daftar laporan ke endpoint `api.getDashboardSummary()` dan `GET /api/pengaduan` (`api.daftarPengaduan()`)
 - [x] Pastikan perubahan status laporan oleh Guru BK memanggil `api.ubahStatus()` ke backend MySQL
 - [x] Alirkan jejak audit aktivitas ke tabel MySQL `audit_trail` via endpoint `GET /api/pengaduan/audit-trail/list` & sinkronisasi state
 - [x] Nonaktifkan fallback mock data di production (100% data riil MySQL saat terhubung)
 - [x] Perbaiki CORS backend agar tidak wildcard (membaca dari `ALLOWED_ORIGINS` di `.env`)
-- [x] Perbaiki upload berkas: validasi MIME, magic bytes, batas 10MB, UUID file name
+- [x] Perbaiki upload berkas: validasi MIME, magic bytes, batas 10MB, UUID file name, sinkronisasi state bukti upload & pratinjau gambar otentik di detail laporan admin
 
 ### Prioritas Rendah 🟢
 
