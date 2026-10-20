@@ -53,6 +53,7 @@ def _ke_admin_out(p: Pengaduan) -> PengaduanAdminOut:
         id=p.id,
         ticket_code=p.ticket_code,
         kategori_nama=p.kategori.nama if p.kategori else "-",
+        deskripsi=p.deskripsi,
         ai_kategori_rekomendasi_nama=p.kategori_rekomendasi.nama if p.kategori_rekomendasi else None,
         ai_confidence_score=p.ai_confidence_score,
         sumber_kategori=p.sumber_kategori,
@@ -60,6 +61,7 @@ def _ke_admin_out(p: Pengaduan) -> PengaduanAdminOut:
         mode_anonim=p.mode_anonim,
         cluster_label=p.cluster_label,
         is_noise=p.is_noise,
+        bukti=p.bukti if p.bukti else [],
         created_at=p.created_at,
     )
 
@@ -322,13 +324,10 @@ def detail_pengaduan(
         raise HTTPException(status_code=404, detail="Laporan tidak ditemukan")
 
     dasar = _ke_admin_out(p)
-    return PengaduanDetailOut(
-        **dasar.model_dump(),
-        deskripsi=p.deskripsi,
-        updated_at=p.updated_at,
-        bukti=p.bukti,
-        audit_trail=p.audit_trail,
-    )
+    data = dasar.model_dump()
+    data["updated_at"] = p.updated_at
+    data["audit_trail"] = p.audit_trail
+    return PengaduanDetailOut(**data)
 
 
 @router.patch("/{pengaduan_id}/status", response_model=PengaduanAdminOut)

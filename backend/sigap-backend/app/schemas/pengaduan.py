@@ -75,6 +75,7 @@ class PengaduanAdminOut(BaseModel):
     id: int
     ticket_code: str
     kategori_nama: str
+    deskripsi: str | None = None
     ai_kategori_rekomendasi_nama: str | None = None
     ai_confidence_score: float | None = None
     sumber_kategori: SumberKategori
@@ -82,15 +83,14 @@ class PengaduanAdminOut(BaseModel):
     mode_anonim: bool
     cluster_label: int | None = None
     is_noise: bool | None = None
+    bukti: list[BuktiOut] = []
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
 
 
 class PengaduanDetailOut(PengaduanAdminOut):
-    deskripsi: str
     updated_at: datetime
-    bukti: list[BuktiOut] = []
     audit_trail: list[AuditTrailOut] = []
 
 

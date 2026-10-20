@@ -1,23 +1,23 @@
 # 📋 Log Perubahan & Perkembangan Sistem SIGAP
 
 > **Catatan Hidup (Living Document)**  
-> Berkas ini mencatat seluruh riwayat penambahan, modifikasi, dan perbaikan kode pada sistem SIGAP. Format disusun ringkas, terstruktur, dan langsung pada poin perubahan agar mudah ditinjau sewaktu-waktu. Dokumen ini akan terus diperbarui pada setiap sesi pengerjaan berikutnya.
+> Berkas ini mencatat seluruh riwayat penambahan, modifikasi, dan perbaikan kode pada sistem SIGAP. Format disusun ringkas dan langsung pada poin perubahan berkas agar mudah ditinjau sewaktu-waktu. Dokumen ini diperbarui otomatis pada setiap sesi pengerjaan.
 
 ---
 
 ## 📌 Format Penulisan Log Sesi
-Setiap sesi pengerjaan dicatat dengan format:
-- **Waktu**: Hari, Tanggal Bulan Tahun | Jam (tanpa menit & detik)
-- **Fokus Utama**: Sasaran pengerjaan sesi tersebut
-- **Rincian Perubahan Berkas**: Tabel berkas + daftar detail penambahan/edit
-- **Status Uji & Verifikasi**: Hasil build dan automated testing
+Setiap sesi pengerjaan dicatat dengan format ringkas:
+1. **Waktu**: Hari, Tanggal Bulan Tahun | Jam (tanpa menit & detik)
+2. **Fokus Utama**: Sasaran pengerjaan sesi tersebut
+3. **Tabel Ringkasan Perubahan Berkas**: Tabel berkas (`No`, `Tipe Aksi`, `Berkas yang Diubah / Ditambah`, `Modul / Komponen Terkait`)
+4. **Status Uji & Verifikasi**: Hasil build frontend dan automated testing backend
 
 ---
 
 ## 📅 [Sesi 1] Senin, 19 Oktober 2026 — Jam 17 WIB
 **Fokus Utama**: Integrasi Penuh Admin Dashboard, Daftar Laporan, Perubahan Status, dan Jejak Audit ke Database MySQL (Eliminasi Mock Data)
 
-### 1. Ringkasan Perubahan Berkas
+### Ringkasan Perubahan Berkas
 
 | No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
 |:--:|:---------:|---|---|
@@ -32,70 +32,7 @@ Setiap sesi pengerjaan dicatat dengan format:
 | 9 | `EDIT` | `Frontend/src/pages/student/StudentDashboard.jsx` | Sinkronisasi riwayat siswa live ke MySQL, badge koneksi |
 | 10 | `EDIT` | `docs/09-Progres_Pengembangan.md` | Pembaruan status checklist Prioritas Sedang |
 
----
-
-### 2. Detail Penjelasan Teknis per Berkas
-
-#### 🔹 Backend
-
-1. **[`backend/sigap-backend/app/schemas/pengaduan.py`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/backend/sigap-backend/app/schemas/pengaduan.py)**
-   - **Tindakan**: Menambahkan skema Pydantic `AuditTrailItemOut`.
-   - **Penjelasan**: Mendefinisikan format JSON response untuk jejak audit publik/admin yang berisi `id`, `pengaduan_id`, `ticket_code`, `pelaksana_nama`, `pelaksana_role`, `tipe_aksi`, `keterangan`, dan `created_at`.
-
-2. **[`backend/sigap-backend/app/routers/pengaduan.py`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/backend/sigap-backend/app/routers/pengaduan.py)**
-   - **Tindakan**: Menambahkan endpoint `GET /api/pengaduan/audit-trail/list` dengan autentikasi `get_current_admin`.
-   - **Penjelasan**: Mengambil 50 log aktivitas terbaru dari tabel MySQL `audit_trail`, menggabungkannya dengan nomor tiket pengaduan dan nama admin serta jabatannya (`admin.jabatan`, misal: "Guru BK"). Diletakkan sebelum `/{pengaduan_id}` untuk mencegah benturan rute di FastAPI.
-
-3. **[`backend/sigap-backend/tests/test_pengaduan.py`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/backend/sigap-backend/tests/test_pengaduan.py)**
-   - **Tindakan**: Menambahkan class test `TestAuditTrail`.
-   - **Penjelasan**: Menguji keamanan endpoint jejak audit: memastikan `401 Unauthorized` jika diakses tanpa token, dan `200 OK` dengan payload log valid saat diakses dengan token Admin.
-
----
-
-#### 🔹 Frontend Services & Central State
-
-4. **[`Frontend/src/services/api.js`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/Frontend/src/services/api.js)**
-   - **Tindakan**: Menambahkan method `api.getAuditTrail(token, limit = 50)`.
-   - **Penjelasan**: Fungsi HTTP fetch dengan header Bearer token untuk memanggil endpoint audit trail backend FastAPI.
-
-5. **[`Frontend/src/context/StoreContext.jsx`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/Frontend/src/context/StoreContext.jsx)**
-   - **Tindakan**:
-     - Menambahkan state `dashboardSummary`.
-     - Menambahkan fungsi `fetchDashboardSummary(authToken)` (panggil `GET /api/dashboard/summary`).
-     - Menambahkan fungsi `fetchAdminReports(authToken, opts)` (panggil `GET /api/pengaduan` dan *merge* ke state `reports`).
-     - Menambahkan fungsi `fetchAuditTrail(authToken, limit)` (panggil `GET /api/pengaduan/audit-trail/list` dan *merge* ke state `auditList`).
-     - Memperbaiki `updateReportStatus()`, `approveAiCategory()`, dan `overrideCategory()` agar menggunakan token fallback `token || localStorage.getItem(TOKEN_KEY)` sehingga perubahan status dan kategori oleh Guru BK dijamin tersimpan ke MySQL meskipun browser baru di-refresh.
-     - Memperbarui fungsi `getMetrics()` agar langsung membaca agregasi data dari `dashboardSummary` server jika tersedia.
-
----
-
-#### 🔹 Antarmuka Frontend (UI Pages)
-
-6. **[`Frontend/src/pages/admin/AdminDashboard.jsx`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/Frontend/src/pages/admin/AdminDashboard.jsx)**
-   - **Tindakan**:
-     - `useEffect` memanggil `fetchDashboardSummary()` dan `fetchAdminReports()` saat halaman dibuka.
-     - Mengganti array dummy statis `queueCases` dengan komputasi dinamis `displayCases` dari data laporan riil MySQL.
-     - Menambahkan indikator visual status database (🟢 *MySQL Terhubung* / ⚪ *Offline*) dan tombol **"Sinkronkan"**.
-     - Mengubah link tombol aksi tabel agar dinamis mengarah ke ID laporan riil (`/admin/laporan-detail?id=${item.id}`).
-
-7. **[`Frontend/src/pages/admin/ReportList.jsx`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/Frontend/src/pages/admin/ReportList.jsx)**
-   - **Tindakan**:
-     - `useEffect` otomatis memuat laporan live melalui `fetchAdminReports()`.
-     - Menambahkan indikator status koneksi MySQL dan tombol **"Sinkronkan"** di header tindakan.
-
-8. **[`Frontend/src/pages/admin/AuditTrail.jsx`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/Frontend/src/pages/admin/AuditTrail.jsx)**
-   - **Tindakan**:
-     - `useEffect` otomatis memuat riwayat log dari server melalui `fetchAuditTrail()`.
-     - Menambahkan indikator status database MySQL dan tombol **"Sinkronkan"** di bilah filter.
-
-9. **[`Frontend/src/pages/student/StudentDashboard.jsx`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/Frontend/src/pages/student/StudentDashboard.jsx)**
-   - **Tindakan**:
-     - Menggunakan `fetchRiwayatSiswa(currentUser.id, token)` untuk menampilkan aduan asli milik siswa terdaftar dari MySQL.
-     - Menyediakan indikator koneksi dan tombol manual untuk sinkronisasi riwayat laporan.
-
----
-
-### 3. Status Uji & Verifikasi Sistem
+### Status Uji & Verifikasi Sistem
 - **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul ditransformasi tanpa error.
 - **Backend Test**: `pytest` ➔ **60 passed, 0 failed** dalam ~6 detik.
 - **Integritas Dokumen**: Status item Prioritas Sedang di `docs/09-Progres_Pengembangan.md` telah disinkronkan ke checklist selesai (`[x]`).
@@ -105,7 +42,7 @@ Setiap sesi pengerjaan dicatat dengan format:
 ## 📅 [Sesi 2] Senin, 19 Oktober 2026 — Jam 17 WIB
 **Fokus Utama**: Penonaktifan Fallback Mock Data di Lingkungan Produksi & Sinkronisasi Jejak Audit Real-Time saat Mutasi Status
 
-### 1. Ringkasan Perubahan Berkas
+### Ringkasan Perubahan Berkas
 
 | No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
 |:--:|:---------:|---|---|
@@ -113,45 +50,17 @@ Setiap sesi pengerjaan dicatat dengan format:
 | 2 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Penonaktifan fallback array statis `queueCases` saat terhubung ke database atau di mode produksi, penambahan pesan data kosong bersih |
 | 3 | `EDIT` | `docs/09-Progres_Pengembangan.md` | Penyelesaian 100% item Prioritas Sedang 🟡 dan pembaruan status Fase 5 & Fase 6 menjadi selesai (✅) |
 
----
-
-### 2. Detail Penjelasan Teknis per Berkas
-
-#### 🔹 Frontend Services & Central State
-
-1. **[`Frontend/src/context/StoreContext.jsx`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/Frontend/src/context/StoreContext.jsx)**
-   - **Tindakan**:
-     - Memperbarui inisialisasi state `reports` dan `auditList` agar tidak lagi memaksakan penggabungan (*forced injection*) array `INITIAL_LAPORAN` dan `INITIAL_AUDIT` saat mode produksi (`import.meta.env.PROD`).
-     - Pada `fetchAdminReports()`, hasil mapping server langsung menetapkan `setReports(mappedList)` secara murni tanpa menggabungkan (*blending*) tiket mock lama tahun 2024.
-     - Pada `fetchAuditTrail()`, hasil query `audit_trail` server langsung menggantikan list lama (`setAuditList(mappedList)`).
-     - Menambahkan panggilan otomatis `fetchAuditTrail(activeToken)` di dalam `updateReportStatus()`, `approveAiCategory()`, dan `overrideCategory()`. Sehingga setiap kali Guru BK melakukan aksi validasi atau pengalihan status, log mutasi di MySQL langsung ditarik detik itu juga ke tampilan.
-
----
-
-#### 🔹 Antarmuka Frontend (UI Pages)
-
-2. **[`Frontend/src/pages/admin/AdminDashboard.jsx`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/Frontend/src/pages/admin/AdminDashboard.jsx)**
-   - **Tindakan**:
-     - Mengubah logika fallback `displayCases` agar mengembalikan array kosong (`[]`) alih-alih data contoh fiktif `queueCases` jika `isBackendConnected` bernilai `true` atau aplikasi berjalan dalam mode produksi.
-     - Menambahkan baris tabel ramah pengguna jika database belum memiliki kasus: *"Belum ada pengaduan aktif yang tercatat di database MySQL."*
-
----
-
-### 3. Status Uji & Verifikasi Sistem
+### Status Uji & Verifikasi Sistem
 - **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul dikompilasi bersih dalam 17.59 detik.
 - **Backend Test**: `pytest` ➔ **60 passed, 0 failed** dalam 6.27 detik.
-- **Status Tahapan**: Seluruh item pada **Prioritas Sedang 🟡** di `docs/09-Progres_Pengembangan.md` telah berstatus selesai (`[x]`), dan sistem kini siap melangkah ke **Prioritas Rendah 🟢** (otomasi AI NLP pipeline IndoBERT & antarmuka validasi AI).
-
----
-
-*(Entri sesi berikutnya akan otomatis ditambahkan di bawah bagian ini)*
+- **Status Tahapan**: Seluruh item pada **Prioritas Sedang 🟡** di `docs/09-Progres_Pengembangan.md` telah berstatus selesai (`[x]`).
 
 ---
 
 ## 📅 [Sesi 3] Senin, 19 Oktober 2026 — Jam 18 WIB
 **Fokus Utama**: Koneksi Nyata Inferensi AI IndoBERT & HDBSCAN ke Alur Submit Laporan Siswa (Eliminasi `Math.random()`)
 
-### 1. Ringkasan Perubahan Berkas
+### Ringkasan Perubahan Berkas
 
 | No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
 |:--:|:---------:|---|---|
@@ -160,77 +69,61 @@ Setiap sesi pengerjaan dicatat dengan format:
 | 3 | `EDIT` | `Frontend/src/context/StoreContext.jsx` | Fungsi `createReport()` — baca field AI dari respons backend |
 | 4 | `EDIT` | `docs/09-Progres_Pengembangan.md` | Centang item Prioritas Rendah: koneksi AI |
 
----
-
-### 2. Detail Penjelasan Teknis per Berkas
-
-#### 🔹 Backend Schema
-
-1. **[`backend/sigap-backend/app/schemas/pengaduan.py`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/backend/sigap-backend/app/schemas/pengaduan.py)**
-   - **Tindakan**: Menambahkan 4 field opsional ke `PengaduanTicketOut`: `ai_kategori_rekomendasi_nama`, `ai_confidence_score`, `cluster_label`, `is_noise`.
-   - **Penjelasan**: Schema ini adalah DTO (Data Transfer Object) yang dikembalikan oleh `POST /api/pengaduan`. Sebelumnya hanya mengirim `ticket_code`, `status`, `kategori_nama`, dan `created_at` — tanpa satupun informasi AI. Dengan penambahan ini, frontend kini dapat langsung membaca hasil klasifikasi dari response tanpa perlu API call tambahan.
-
-#### 🔹 Backend Router
-
-2. **[`backend/sigap-backend/app/routers/pengaduan.py`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/backend/sigap-backend/app/routers/pengaduan.py)**
-   - **Tindakan**:
-     - Pada `buat_pengaduan` (`POST /api/pengaduan`): Setelah `analyze_report()` berjalan, ambil nama rekomendasi AI dari relasi ORM (`pengaduan.kategori_rekomendasi.nama`) dengan fallback query Kategori jika relasi belum dimuat. Kemudian isi semua 4 field AI ke `PengaduanTicketOut`.
-     - Pada `cek_status_laporan` (`GET /{ticket_code}/status`): Logika yang sama diterapkan agar endpoint lacak tiket juga mengembalikan field AI terkini.
-   - **Penjelasan**: `analyze_report()` sudah menjalankan IndoBERT embedding, Cosine Similarity ke 7 centroid Permendikbud, dan HDBSCAN clustering — lalu menyimpan hasilnya ke kolom database (`ai_kategori_rekomendasi_id`, `ai_confidence_score`, `cluster_label`, `is_noise`). Sebelumnya hasilnya tersimpan di DB tapi **tidak dikembalikan ke frontend**, sehingga frontend terpaksa mensimulasi skor dengan `Math.random()`. Perubahan ini menutup celah tersebut.
-
-#### 🔹 Frontend Services & Central State
-
-3. **[`Frontend/src/context/StoreContext.jsx`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/Frontend/src/context/StoreContext.jsx)**
-   - **Tindakan**:
-     - Menambahkan variabel `aiData` yang menyimpan seluruh objek respons dari `api.buatPengaduan()`.
-     - Menghapus `const aiConfidence = (85 + Math.random() * 12).toFixed(1)` sepenuhnya.
-     - Menghitung `realConfidence` dari `aiData.ai_confidence_score` (dengan normalisasi 0–1 → 0–100 jika diperlukan, fallback 88.5 jika backend offline).
-     - Membaca `realRecommendation` dari `aiData.ai_kategori_rekomendasi_nama`, `realCluster` dari `aiData.cluster_label`, dan `realNoise` dari `aiData.is_noise`.
-     - Mengisi objek `newReport.ai` dengan nilai-nilai nyata tersebut, termasuk `cluster_name` otomatis (`Klaster #<N>` jika ada klaster, `null` jika noise).
-   - **Penjelasan**: Ini adalah titik integrasi utama. Setiap kali siswa menekan "Kirim" di formulir pengaduan, nilai AI yang tampil di dashboard (`confidence`, `kategori_rekomendasi`, `cluster_label`, `is_noise`) kini bersumber dari model IndoBERT + HDBSCAN yang berjalan di backend Python — bukan angka acak lagi.
-
----
-
-### 3. Status Uji & Verifikasi Sistem
+### Status Uji & Verifikasi Sistem
 - **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul dikompilasi bersih dalam 17.01 detik.
 - **Backend Test**: `pytest` ➔ **60 passed, 0 failed** dalam ~6 detik.
-- **Status Tahapan**: Item pertama pada **Prioritas Rendah 🟢** di `docs/09-Progres_Pengembangan.md` telah berstatus selesai (`[x]`). Pipeline AI IndoBERT & HDBSCAN kini terhubung penuh ke alur submit laporan.
+- **Status Tahapan**: Item pertama pada **Prioritas Rendah 🟢** di `docs/09-Progres_Pengembangan.md` telah berstatus selesai (`[x]`).
 
 ---
 
 ## 📅 [Sesi 4] Senin, 19 Oktober 2026 — Jam 18 WIB
 **Fokus Utama**: Pembangunan Antarmuka Tabel Kerja Halaman Validasi AI (Menggantikan Kartu Coming Soon)
 
-### 1. Ringkasan Perubahan Berkas
+### Ringkasan Perubahan Berkas
 
 | No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
 |:--:|:---------:|---|---|
-| 1 | `EDIT` | `Frontend/src/pages/admin/AiValidation.jsx` | Halaman Validasi AI — tabel kerja fungsional penuh |
+| 1 | `EDIT` | `Frontend/src/pages/admin/AiValidation.jsx` | Halaman Validasi AI — tabel kerja fungsional penuh (stat cards, toolbar filter, action approve/override, audit trail log) |
 | 2 | `EDIT` | `docs/09-Progres_Pengembangan.md` | Centang item Prioritas Rendah: antarmuka Validasi AI |
 
----
-
-### 2. Detail Penjelasan Teknis per Berkas
-
-#### 🔹 Antarmuka Frontend (UI Pages)
-
-1. **[`Frontend/src/pages/admin/AiValidation.jsx`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/Frontend/src/pages/admin/AiValidation.jsx)**
-   - **Tindakan**: Menulis ulang seluruh halaman dari 26 baris Coming Soon menjadi komponen tabel kerja fungsional dengan fitur:
-     - **4 Kartu Statistik**: Total Diproses AI, Menunggu Validasi, AI Disetujui, Avg. Confidence.
-     - **Toolbar Filter**: Pencarian tiket/kategori, filter status validasi (Menunggu / AI Disetujui / Override), filter confidence (Tinggi ≥85% / Sedang 70-84% / Rendah <70%).
-     - **Tabel Kerja 6 Kolom**: No. Tiket, Rekomendasi AI (dengan ConfidenceBar visual), Kategori Terdaftar, Klaster HDBSCAN (label atau badge Noise/Outlier), Status Validasi (badge berwarna), Aksi.
-     - **Tombol "Setujui AI"**: Memanggil `approveAiCategory()` di StoreContext -> sinkron ke `PATCH /api/pengaduan/{id}/kategori` dengan `sumber: "ai_disetujui"`.
-     - **Tombol "Override"**: Membuka OverrideModal — pilih kategori pengganti dari 7 kategori Permendikbud, isi alasan, konfirmasi -> memanggil `overrideCategory()` -> sinkron ke backend.
-     - **Toast Notifikasi**: Konfirmasi sukses approve/override hilang otomatis dalam 3 detik.
-     - **Panel Catatan Teknis**: Penjelasan step-by-step cara kerja pipeline AI (IndoBERT -> Cosine Similarity -> Kalibrasi Confidence -> HDBSCAN).
-     - **Indikator Koneksi MySQL**: Badge "MySQL Terhubung" / "Mode Lokal" + tombol Sinkron Data.
-   - **Penjelasan**: Halaman ini menjadi titik kerja utama Guru BK / Satgas untuk meninjau dan memvalidasi hasil AI sebelum menjadi kategori final laporan. Semua aksi (approve & override) terhubung ke StoreContext yang sudah punya endpoint ke backend, sehingga validasi tersimpan di MySQL dan tercatat di audit trail secara otomatis.
+### Status Uji & Verifikasi Sistem
+- **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul dikompilasi bersih dalam 17.30 detik.
+- **Backend Test**: `pytest` ➔ **60 passed, 0 failed** dalam ~6 detik.
+- **Status Tahapan**: Item kedua pada **Prioritas Rendah 🟢** di `docs/09-Progres_Pengembangan.md` telah berstatus selesai (`[x]`).
 
 ---
 
-### 3. Status Uji & Verifikasi Sistem
-- **Frontend Build**: `npm run build` -> **Sukses 100% (Exit Code 0)**, 2.152 modul dikompilasi bersih dalam 17.30 detik.
-- **Backend Test**: `pytest` -> **60 passed, 0 failed** dalam ~6 detik.
-- **Status Tahapan**: Item kedua pada **Prioritas Rendah 🟢** di `docs/09-Progres_Pengembangan.md` telah berstatus selesai (`[x]`). Halaman Validasi AI kini memiliki antarmuka tabel kerja fungsional penuh.
+## 📅 [Sesi 5] Selasa, 20 Oktober 2026 — Jam 09 WIB
+**Fokus Utama**: Redesain Antarmuka Detail Laporan Admin (`ReportDetail.jsx`) Sesuai Referensi Visual Figma Satgas PPKSP
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/admin/ReportDetail.jsx` | Tampilan detail pengaduan admin (layout 2 kolom, kartu identitas terenkripsi, berkas bukti interaktif, panel AI & klaster, kartu rekomendasi konselor) |
+
+### Status Uji & Verifikasi Sistem
+- **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul dikompilasi bersih dalam 13.75 detik.
+- **Backend Test**: `pytest` ➔ **60 passed, 0 failed** dalam 3.97 detik.
+- **Integritas Sistem**: Sidebar navigasi admin tetap dipertahankan, alur API mutasi kategori dan status laporan berfungsi normal.
 
 ---
+
+## 📅 [Sesi 6] Selasa, 20 Oktober 2026 — Jam 09 WIB
+**Fokus Utama**: Integrasi Data Otentik Laporan Siswa (Deskripsi Transkripsi Riil & Berkas Lampiran Nyata) pada Tampilan Detail Laporan Admin (`ReportDetail.jsx`), Sinkronisasi Upload Siswa, dan Serving Berkas FastAPI
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `backend/sigap-backend/app/schemas/pengaduan.py` | Schema `PengaduanAdminOut` & `PengaduanDetailOut` (penambahan `deskripsi` dan relasi `bukti`) |
+| 2 | `EDIT` | `backend/sigap-backend/app/routers/pengaduan.py` | Router `pengaduan.py` (`_ke_admin_out` & `detail_pengaduan` memetakan deskripsi & berkas bukti otentik) |
+| 3 | `EDIT` | `backend/sigap-backend/app/main.py` | FastAPI main app (mount folder direktori `uploads/` via `StaticFiles` pada rute `/uploads`) |
+| 4 | `EDIT` | `Frontend/src/context/StoreContext.jsx` | State context (pembersihan placeholder teks deskripsi, penambahan fungsi `fetchReportDetail`) |
+| 5 | `EDIT` | `Frontend/src/pages/student/CreateReportWizard.jsx` | Wizard formulir aduan (penyimpanan instans `File` asli & eksekusi `api.uploadBukti` saat submit) |
+| 6 | `EDIT` | `Frontend/src/pages/admin/ReportDetail.jsx` | Detail laporan admin (rendering dinamis deskripsi siswa asli, kartu berkas bukti nyata / empty state interaktif, link download berkas) |
+
+### Status Uji & Verifikasi Sistem
+- **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul terkompilasi bersih dalam 10.51 detik.
+- **Backend Test**: `pytest` ➔ **60 passed, 0 failed** dalam 3.97 detik.
+- **Integritas Sistem**: Navigasi sidebar admin tidak mengalami perubahan, seluruh berkas upload tersimpan dan dapat diakses melalui `/uploads`.

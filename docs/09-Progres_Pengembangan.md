@@ -107,7 +107,8 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 - **Sinkronisasi Kode Tiket Riil**: Selesai ✅ — State `StoreContext` menangkap `res.ticket_code` resmi dari respon backend `api.buatPengaduan()`, menyelaraskan tiket frontend dengan data di MySQL.
 - **Lacak Tiket Hybrid**: Selesai ✅ — Modul pelacakan di `TrackReport.jsx` mencari data tiket di penyimpanan lokal peramban, dan otomatis melakukan query fallback asinkronus ke endpoint live backend `api.cekStatus()` jika dibuka dari perangkat lain.
 - **Formulir Aduan (Tahap 2)**: Selesai ✅ — Input tanggal manual diganti dengan kalender interaktif (`type="date"`) + tombol pintas (Hari Ini, Kemarin, Hapus) & proteksi `max=today`. Label lokasi diubah menjadi "Lokasi Kejadian" dengan ikon `MapPin`.
-- **Integrasi Penuh Database MySQL**: Selesai ✅ — Seluruh dashboard admin, daftar laporan, mutasi status, dan jejak audit tersambung 100% langsung ke backend FastAPI & database MySQL tanpa mencampur mock data.
+- **Integrasi Penuh Database MySQL**: Selesai ✅ — Seluruh dashboard admin, daftar laporan, mutasi status, jejak audit, dan detail laporan dengan deskripsi otentik siswa serta berkas bukti riil tersambung 100% langsung ke backend FastAPI & database MySQL tanpa mock data.
+- **Serving Berkas Unggahan Live**: Selesai ✅ — Endpoint `/uploads` statis di FastAPI aktif melayani pratinjau dan pengunduhan berkas lampiran siswa yang valid.
 - **Token/session**: Disimpan di `localStorage` (cukup untuk dev). Perlu dipertimbangkan cookie `HttpOnly` untuk production.
 
 ---

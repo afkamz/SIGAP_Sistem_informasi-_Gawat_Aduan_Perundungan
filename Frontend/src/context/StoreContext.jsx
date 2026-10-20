@@ -113,6 +113,11 @@ export const StoreProvider = ({ children }) => {
                 ...updated[idx],
                 status: serverItem.status,
                 kategori_nama: serverItem.kategori_nama || updated[idx].kategori_nama,
+                deskripsi: serverItem.deskripsi || updated[idx].deskripsi,
+                bukti: serverItem.bukti || updated[idx].bukti || [],
+                bukti_file: serverItem.bukti && serverItem.bukti.length > 0
+                  ? serverItem.bukti.map((b) => b.file_path).join(', ')
+                  : updated[idx].bukti_file,
                 is_live_backend: true,
               };
             } else {
@@ -121,7 +126,11 @@ export const StoreProvider = ({ children }) => {
                 id: serverItem.id,
                 ticket_code: serverItem.ticket_code,
                 judul: `Pengaduan Insiden ${serverItem.kategori_nama || 'Kekerasan'}`,
-                deskripsi: `Laporan pengaduan resmi terdaftar dengan nomor tiket ${serverItem.ticket_code}.`,
+                deskripsi: serverItem.deskripsi || '',
+                bukti: serverItem.bukti || [],
+                bukti_file: serverItem.bukti && serverItem.bukti.length > 0
+                  ? serverItem.bukti.map((b) => b.file_path).join(', ')
+                  : null,
                 kategori_id: 1,
                 kategori_nama: serverItem.kategori_nama || 'Perundungan',
                 status: serverItem.status,
@@ -191,7 +200,11 @@ export const StoreProvider = ({ children }) => {
             id: serverItem.id,
             ticket_code: serverItem.ticket_code,
             judul: `Pengaduan Insiden ${serverItem.kategori_nama || 'Kekerasan'}`,
-            deskripsi: `Laporan pengaduan resmi terdaftar dengan nomor tiket ${serverItem.ticket_code}.`,
+            deskripsi: serverItem.deskripsi || '',
+            bukti: serverItem.bukti || [],
+            bukti_file: serverItem.bukti && serverItem.bukti.length > 0
+              ? serverItem.bukti.map((b) => b.file_path).join(', ')
+              : null,
             kategori_id: 1,
             kategori_nama: serverItem.kategori_nama || 'Perundungan',
             status: serverItem.status,
@@ -235,6 +248,48 @@ export const StoreProvider = ({ children }) => {
       setIsBackendConnected(false);
     }
     return [];
+  };
+
+  const fetchReportDetail = async (reportId, authToken = token) => {
+    const activeToken = authToken || token || localStorage.getItem(TOKEN_KEY);
+    if (!activeToken || !reportId) return null;
+    try {
+      const data = await api.detailPengaduan(reportId, activeToken);
+      if (data) {
+        setIsBackendConnected(true);
+        setReports((prev) => {
+          const idx = prev.findIndex((r) => r.id === Number(reportId));
+          if (idx !== -1) {
+            const updated = [...prev];
+            updated[idx] = {
+              ...updated[idx],
+              deskripsi: data.deskripsi || updated[idx].deskripsi,
+              bukti: data.bukti || updated[idx].bukti || [],
+              bukti_file: data.bukti && data.bukti.length > 0
+                ? data.bukti.map((b) => b.file_path).join(', ')
+                : updated[idx].bukti_file,
+              status: data.status || updated[idx].status,
+              kategori_nama: data.kategori_nama || updated[idx].kategori_nama,
+              ai: {
+                ...updated[idx].ai,
+                kategori_rekomendasi: data.ai_kategori_rekomendasi_nama || updated[idx].ai?.kategori_rekomendasi,
+                confidence: data.ai_confidence_score ? parseFloat((data.ai_confidence_score * 100).toFixed(1)) : (updated[idx].ai?.confidence || 88.5),
+                cluster_label: data.cluster_label,
+                is_noise: data.is_noise ?? true,
+                is_approved: data.sumber_kategori === 'ai_disetujui',
+                is_overridden: data.sumber_kategori === 'manual_override',
+              }
+            };
+            return updated;
+          }
+          return prev;
+        });
+        return data;
+      }
+    } catch (err) {
+      console.warn('Gagal memuat detail pengaduan dari backend:', err.message);
+    }
+    return null;
   };
 
   const fetchAuditTrail = async (authToken = token, limit = 50) => {
@@ -620,6 +675,7 @@ export const StoreProvider = ({ children }) => {
         fetchRiwayatSiswa,
         fetchDashboardSummary,
         fetchAdminReports,
+        fetchReportDetail,
         fetchAuditTrail,
         dashboardSummary,
         isBackendConnected,

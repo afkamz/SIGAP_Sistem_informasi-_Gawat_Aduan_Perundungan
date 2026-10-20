@@ -4,11 +4,13 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.database import Base, engine
 import app.models  # noqa: F401 — wajib diimpor supaya semua tabel dikenali create_all()
 from app.routers import auth, pengaduan, dashboard
+from app.routers.pengaduan import UPLOAD_DIR
 
 logger = logging.getLogger(__name__)
 
@@ -80,3 +82,4 @@ def health_check():
 app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
 app.include_router(pengaduan.router, prefix="/api/pengaduan", tags=["Pengaduan"])
 app.include_router(dashboard.router, prefix="/api/dashboard", tags=["Dashboard"])
+app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")

@@ -169,6 +169,7 @@ export const CreateReportWizard = () => {
     const newFiles = Array.from(files).map((f, idx) => ({
       id: Date.now() + idx,
       name: f.name,
+      rawFile: f,
       bytes: f.size,
       size:
         f.size > 1024 * 1024
@@ -197,6 +198,20 @@ export const CreateReportWizard = () => {
 
       const report = await createReport(payload);
       setCreatedTicket(report.ticket_code);
+
+      // Upload berkas nyata ke server backend jika ada
+      if (uploadedFiles.length > 0 && report.ticket_code) {
+        for (const item of uploadedFiles) {
+          if (item.rawFile) {
+            try {
+              await api.uploadBukti(report.ticket_code, item.rawFile);
+            } catch (uploadErr) {
+              console.warn('Gagal upload berkas bukti ke backend:', uploadErr.message);
+            }
+          }
+        }
+      }
+
       setStep(5); // Step 5: Success confirmation
     } catch (err) {
       setErrorMsg('Terjadi kendala saat mengirim laporan: ' + err.message);
