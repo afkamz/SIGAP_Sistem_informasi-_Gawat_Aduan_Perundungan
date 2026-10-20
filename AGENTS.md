@@ -34,7 +34,7 @@ Setiap kali ada penambahan atau pengubahan kode/fitur yang selesai diuji, AI **W
 - Perbarui tabel fase/status jika ada kemajuan tahapan.
 
 #### B. Update Berkas [`docs/16-Log_Implementasi_dan_Perubahan.md`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/docs/16-Log_Implementasi_dan_Perubahan.md)
-Tambahkan entri sesi baru di bagian paling bawah berkas dengan mengikuti format standar:
+Tambahkan entri sesi baru di bagian paling bawah berkas dengan mengikuti format standar ringkas:
 1. **Header Sesi**:
    ```markdown
    ## 📅 [Sesi X] <Hari>, <Tanggal> <Bulan> <Tahun> — Jam <XX> WIB
@@ -43,11 +43,8 @@ Tambahkan entri sesi baru di bagian paling bawah berkas dengan mengikuti format 
 2. **Fokus Utama**: 1-2 kalimat ringkas mengenai tujuan dan sasaran sesi tersebut.
 3. **Tabel Ringkasan Perubahan Berkas**:
    Tabel dengan kolom: `No`, `Tipe Aksi` (`TAMBAH` / `EDIT`), `Berkas yang Diubah / Ditambah`, dan `Modul / Komponen Terkait`.
-4. **Detail Penjelasan Teknis per Berkas**:
-   Dikelompokkan rapi (Backend, Frontend Services & State, UI Pages) dengan dua sub-poin per berkas:
-   - **Tindakan**: Penjelasan ringkas apa kode/komponen yang ditambah atau diedit.
-   - **Penjelasan**: Alasan dan fungsi teknis perubahan tersebut secara padat, jelas, dan mudah dipahami saat di-review.
-5. **Status Uji & Verifikasi Sistem**:
+   *(PENTING: Jangan menyertakan detail penjelasan teknis per berkas / sub-poin Tindakan & Penjelasan untuk menjaga dokumen tetap padat dan ringkas).*
+4. **Status Uji & Verifikasi Sistem**:
    Catatan hasil build frontend (`npm run build`) dan hasil test backend (`pytest`).
 
 ---
