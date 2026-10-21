@@ -6,17 +6,17 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 
 ---
 
-## Ringkasan Cepat — Update 14 Oktober 2026
+## Ringkasan Cepat — Update 21 Oktober 2026 (Penutupan Minggu 9)
 
 | Komponen | Progres | Catatan |
 |---|:---:|---|
-| Frontend (React + Vite + Tailwind) | **~96%** | Route Guard terpusat (`ProtectedRoute.jsx`), tiket riil tersinkronisasi, hybrid ticket lookup, date picker kalender & lokasi kejadian baru, build sukses ke Nginx dist |
-| Backend (FastAPI + SQLAlchemy + JWT) | **~90%** | Auth JWT siswa & admin live di DB MySQL, CORS secured, sanitasi upload aktif, 58 tests passed 100% |
-| AI / NLP Pipeline | **~75%** | IndoBERT + HDBSCAN sudah terintegrasi pada alur pengaduan backend (skrip siap, modul inferensi siap dihubungkan) |
-| Paper / Laporan Akademik (SIGAP.tex) | **~70%** | Abstrak standar IEEE 198 kata, Introduction 5 paragraf padat (346 kata), 14 referensi open-access 2019-2025 verified |
-| Testing, Integrasi E2E & Deployment | **~88%** | Docker stack 4 container aktif, dev script siap, 58 unit & E2E tests lulus 100% |
-| **KESELURUHAN (Tampilan UI, Mock & Paper)** | **~88%** | Tampilan prototipe & UI lengkap, paper akademik berjalan |
-| **KESIAPAN MURNI SISTEM (Realistis Tanpa Mock & Paper)** | **~65%** | Progres fungsional live end-to-end (lihat detail di `docs/15-Gimik_Presentasi_4.md`) |
+| Frontend (React + Vite + Tailwind) | **~98%** | Eliminasi mock total, live fetching MySQL, alur kartu triase Validasi AI, detail laporan Satgas PPKSP, modal lightbox pratinjau bukti, build sukses 100% |
+| Backend (FastAPI + SQLAlchemy + JWT) | **~95%** | Live CRUD aduan, endpoint audit trail terpusat, serving berkas bukti via StaticFiles, sanitasi UUID, 60 tests passed 100% |
+| AI / NLP Pipeline | **~85%** | Inferensi IndoBERT (`indobenchmark/indobert-base-p1`) terhubung langsung saat submit laporan, multi-label anomaly flag (<80%), ekstraksi kata kunci |
+| Paper / Laporan Akademik (SIGAP.tex) | **~90%** | Naskah standar IEEE conference, terminologi bahasa Inggris baku, 14 referensi verified DOI & open-access |
+| Testing, Integrasi E2E & Deployment | **~92%** | Docker 4 container aktif, reverse proxy Nginx untuk uploads, 60 unit & E2E tests lulus 100% |
+| **KESELURUHAN (Tampilan UI, Mock & Paper)** | **~95%** | Sistem terintegrasi penuh dari antarmuka pengguna hingga pangkalan data |
+| **KESIAPAN MURNI SISTEM (Realistis Tanpa Mock & Paper)** | **~85%** | Fungsional end-to-end nyata tanpa ketergantungan mock (lihat detail di `docs/17-Gimik_Presentasi_5.md`) |
 
 ---
 
@@ -39,6 +39,7 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 | 11 | **Sinkronisasi Kode Tiket Riil Backend**: Menangkap respon `res.ticket_code` dari `api.buatPengaduan()` agar kode tiket tersimpan konsisten di MySQL dan frontend | `StoreContext.jsx` | ✅ Selesai |
 | 12 | **Pencarian Tiket Hybrid**: Mengintegrasikan fallback query asinkronus ke endpoint `api.cekStatus()` pada modul pelacakan aduan | `TrackReport.jsx` | ✅ Selesai |
 | 13 | **Dokumen Progress Mingguan Minggu 8**: Penyusunan laporan progres berkala Minggu 8 berbasis pencapaian nyata | `docs/15-Gimik_Presentasi_4.md` (baru) | ✅ Selesai |
+| 14 | **Dokumen Progress Mingguan Minggu 9**: Penyusunan laporan berkala Minggu 9 berbasis 10 sesi integrasi live MySQL, serving bukti, dan Validasi AI card stream | `docs/17-Gimik_Presentasi_5.md` (baru) | ✅ Selesai |
 
 
 ### Struktur Routing Terkini
@@ -170,6 +171,7 @@ Keterangan status: **✅ Selesai** | **🔄 Sebagian** | **❌ Belum selesai**
 
 | Tanggal | Update |
 |---|---|
+| 21 Oktober 2026 | Penutupan resmi siklus pengembangan Minggu ke-9 (Sesi 1 s.d. Sesi 10) pada dokumen log dan persiapan transisi agenda pengembangan Minggu ke-10. Verifikasi build frontend dan backend test suite lulus 100% (60 tests passed). |
 | 20 Oktober 2026 (Malam II) | Integrasi penuh data riil aduan MySQL ke halaman Validasi AI: perbaikan resolusi path dataset seed IndoBERT pada Docker container (`classifier.py`, `embedder.py`), eksekusi inferensi AI pipeline untuk seluruh 6 aduan riil siswa di database, auto-auth dev admin pada `fetchAdminReports()`, pembersihan fallback teks statis dari gambar referensi, dan pengikatan field otentik pelapor serta tanggal riil. Build frontend dan 50 backend tests lulus 100%. |
 | 20 Oktober 2026 (Malam) | Redesain antarmuka halaman Validasi AI (`Frontend/src/pages/admin/AiValidation.jsx`) mengadopsi struktur alur kartu triase (*card stream*), banner peringatan ambiguitas multi-label (<80%), deteksi klaster HDBSCAN, ekstraksi fitur kata kunci teks NLP, rekomendasi alur tindak lanjut SOP PPKSP, dan aksi validasi massal berbasis data riil SIGAP tanpa mock. Build frontend dan 50 backend tests lulus 100%. |
 | 20 Oktober 2026 | Standardisasi dan konsistensi peristilahan teknis pada naskah akademik `SIGAP.tex` (Abstract dan Introduction): penggunaan istilah baku bahasa Inggris secara murni (`underreporting`, `cyberbullying`, `sentence embedding`, `state transition guard`, `confidence score`, `density-based clustering`, `natural language processing`) tanpa reduplikasi terjemahan ganda dalam kurung. Build frontend dan 50 backend tests lulus 100%. |

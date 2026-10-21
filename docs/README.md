@@ -20,8 +20,12 @@ Folder `docs/` memuat seluruh dokumen spesifikasi produk, arsitektur sistem, ran
 | **09** | [**09-Progres_Pengembangan.md**](./09-Progres_Pengembangan.md) | **📊 Progres & Status Pengembangan**: Estimasi progres per komponen, log perubahan per sesi, daftar backlog testing, dan hal-hal yang perlu diperbaiki. |
 | **10** | [10-Alur_Detail_Arsitektur.md](./10-Alur_Detail_Arsitektur.md) | **Alur Detail Arsitektur SIGAP**: Rincian teknis alur data antar komponen sistem. |
 | **11** | [11-Gimik_Presentasi_1.md](./11-Gimik_Presentasi_1.md) | **Material Presentasi (Sesi 1)**: Naskah atau poin presentasi sesi pertama. |
-| **12** | [12-Gimik_Presentasi_2.md](./12-Gimik_Presentasi_2.md) | **Material Presentasi (Sesi 2)**: Naskah atau poin presentasi sesi kedua. |
-| **13** | [13-Gimik_Presentasi_3.md](./13-Gimik_Presentasi_3.md) | **Material Presentasi (Sesi 3)**: Naskah atau poin presentasi sesi ketiga. |
+| **12** | [12-Gimik_Presentasi_2.md](./12-Gimik_Presentasi_2.md) | **Material Presentasi (Sesi 2)**: Naskah atau poin presentasi sesi kedua (Minggu 6). |
+| **13** | [13-Gimik_Presentasi_3.md](./13-Gimik_Presentasi_3.md) | **Material Presentasi (Sesi 3)**: Naskah atau poin presentasi sesi ketiga (Minggu 7). |
+| **14** | [14-Laporan_Progres_Proyek_SIGAP.md](./14-Laporan_Progres_Proyek_SIGAP.md) | **Laporan Progres Realistis Proyek SIGAP**: Evaluasi capaian sistem berbasis fungsional riil (60%). |
+| **15** | [15-Gimik_Presentasi_4.md](./15-Gimik_Presentasi_4.md) | **Progress Mingguan (Minggu 8)**: Route guard terpusat, sinkronisasi tiket backend riil, dan lookup hybrid. |
+| **16** | [16-Log_Implementasi_dan_Perubahan.md](./16-Log_Implementasi_dan_Perubahan.md) | **Log Implementasi & Perubahan Sistem**: Catatan riwayat sesi teknis (Sesi 1 s.d. Sesi 10). |
+| **17** | [**17-Gimik_Presentasi_5.md**](./17-Gimik_Presentasi_5.md) | **Progress Mingguan (Minggu 9)**: Eliminasi mock data total, integrasi live CRUD MySQL, serving bukti nyata, dan kartu triase Validasi AI. |
 
 ---
 
