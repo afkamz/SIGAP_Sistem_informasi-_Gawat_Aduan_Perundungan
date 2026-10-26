@@ -299,6 +299,25 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 ---
 
 ## 📅 [Sesi 16] Senin, 26 Oktober 2026 — Jam 19 WIB
+**Fokus Utama**: Redesain visual menyeluruh pada antarmuka Siswa website SIGAP mengacu pada inspirasi desain Health Platform dashboard dengan palet biru cerah modern, kartu berlapis sudut tumpul, penataan tipografi ramah pelajar, dan penyelarasan tata letak tanpa mengubah logika data maupun fungsionalitas sistem.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/layout/StudentHeader.jsx` | Redesain header navigasi siswa dengan logo modern, tombol aksi biru tegas, dan drawer mobile responsif |
+| 2 | `EDIT` | `Frontend/src/components/layout/StudentFooter.jsx` | Pembaruan footer portal siswa dengan penanda jaminan kerahasiaan TLS 1.3 dan tipografi bersih |
+| 3 | `EDIT` | `Frontend/src/pages/student/Login.jsx` | Redesain halaman login siswa dengan kartu terpusat elegan, hero proteksi data, dan tombol lacak instan |
+| 4 | `EDIT` | `Frontend/src/pages/student/Register.jsx` | Redesain formulir pendaftaran akun siswa baru dengan tata letak presisi dan kartu terpusat modern |
+| 5 | `EDIT` | `Frontend/src/pages/student/StudentDashboard.jsx` | Redesain dasbor siswa dengan 4 KPI cards Health Platform, riwayat laporan terpadu, dan banner darurat 24/7 |
+| 6 | `EDIT` | `Frontend/src/pages/student/CreateReportWizard.jsx` | Penyelarasan palet warna modern pada form wizard pelaporan insiden dan konfirmasi kode tiket |
+| 7 | `EDIT` | `Frontend/src/pages/student/TrackReport.jsx` | Penyelarasan palet warna biru cerah dan status badge pada modul pelacakan tiket aduan |
+| 8 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 16 redesain visual antarmuka Siswa SIGAP |
+
+
+---
+
+## 📅 [Sesi 16] Senin, 26 Oktober 2026 — Jam 19 WIB
 **Fokus Utama**: Perbaikan kendala login admin dan siswa pada Docker melalui penambahan origin port 3000 pada CORS backend, penyelarasan token/role di frontend, serta penyesuaian template koneksi database MySQL.
 
 ### Ringkasan Perubahan Berkas

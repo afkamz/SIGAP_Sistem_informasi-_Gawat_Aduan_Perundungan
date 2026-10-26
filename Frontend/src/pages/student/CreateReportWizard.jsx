@@ -39,15 +39,15 @@ export const CreateReportWizard = () => {
   // Gatekeeper: Pengguna harus login atau daftar terlebih dahulu
   if (!currentUser) {
     return (
-      <div className="min-h-screen flex flex-col justify-between bg-slate-50 text-slate-800">
+      <div className="min-h-screen flex flex-col justify-between bg-[#EEF3FD] text-slate-800">
         <StudentHeader />
         <main className="max-w-md mx-auto w-full px-4 py-16 flex-1 flex flex-col justify-center">
-          <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm text-center space-y-6">
-            <div className="w-16 h-16 rounded-2xl bg-[#A7D8F0] text-slate-900 mx-auto flex items-center justify-center font-bold shadow-xs">
+          <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-xl text-center space-y-6">
+            <div className="w-16 h-16 rounded-2xl bg-[#3B7DE8] text-white mx-auto flex items-center justify-center font-bold shadow-md">
               <Lock className="w-8 h-8" />
             </div>
             <div className="space-y-2">
-              <h2 className="text-xl font-bold text-slate-900">Masuk atau Daftar Terlebih Dahulu</h2>
+              <h2 className="text-xl font-black text-slate-900 tracking-tight">Masuk atau Daftar Terlebih Dahulu</h2>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                 Untuk menjamin keaslian data, perlindungan identitas, serta tindak lanjut resmi oleh Guru BK & Satgas PPKSP, Anda harus memiliki akun terdaftar untuk membuat aduan.
               </p>
@@ -55,14 +55,14 @@ export const CreateReportWizard = () => {
             <div className="space-y-2.5 pt-2">
               <Link
                 to="/login?redirect=/buat-laporan"
-                className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition"
+                className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm transition active:scale-95"
               >
-                <LogIn className="w-4 h-4 text-[#A7D8F0]" />
+                <LogIn className="w-4 h-4 text-white" />
                 <span>Masuk ke Akun Siswa</span>
               </Link>
               <Link
                 to="/register?redirect=/buat-laporan"
-                className="w-full py-3 px-4 rounded-xl bg-[#A7D8F0] hover:bg-[#90C8E4] text-slate-900 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition"
+                className="w-full py-3 px-4 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition active:scale-95"
               >
                 <User className="w-4 h-4" />
                 <span>Daftar Akun Baru</span>
@@ -411,7 +411,7 @@ export const CreateReportWizard = () => {
                           {k.nama}
                         </h4>
                         {isSelected && (
-                          <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-[#A7D8F0]/70 text-sky-900">
+                          <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-[#3B7DE8]/70 text-sky-900">
                             Dipilih
                           </span>
                         )}
@@ -437,7 +437,7 @@ export const CreateReportWizard = () => {
               <button
                 type="button"
                 onClick={handleNext}
-                className="px-6 py-2.5 rounded-xl bg-[#7BBCE6] hover:bg-[#68AFDC] text-slate-900 font-bold text-xs flex items-center gap-1.5 transition active:scale-[0.98]"
+                className="px-6 py-2.5 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs flex items-center gap-1.5 shadow-md transition active:scale-[0.98]"
               >
                 <span>Lanjut</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -634,7 +634,7 @@ export const CreateReportWizard = () => {
               <button
                 type="button"
                 onClick={handleNext}
-                className="px-6 py-2.5 rounded-xl bg-[#7BBCE6] hover:bg-[#68AFDC] text-slate-900 font-bold text-xs flex items-center gap-1.5 transition active:scale-[0.98]"
+                className="px-6 py-2.5 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs flex items-center gap-1.5 shadow-md transition active:scale-[0.98]"
               >
                 <span>Lanjut</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -685,7 +685,7 @@ export const CreateReportWizard = () => {
                       <EyeOff className="w-5 h-5" />
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-[#A7D8F0]/70 text-sky-900">
+                      <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-[#3B7DE8]/70 text-sky-900">
                         Rekomendasi
                       </span>
                       {formData.is_anonymous && (
@@ -797,7 +797,7 @@ export const CreateReportWizard = () => {
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="px-6 py-2.5 rounded-xl bg-[#7BBCE6] hover:bg-[#68AFDC] text-slate-900 font-bold text-xs flex items-center gap-1.5 transition active:scale-[0.98]"
+                  className="px-6 py-2.5 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs flex items-center gap-1.5 shadow-md transition active:scale-[0.98]"
                 >
                   <span>Lanjut</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -933,7 +933,7 @@ export const CreateReportWizard = () => {
                 type="button"
                 disabled={isSubmitting}
                 onClick={handleSubmit}
-                className="w-full py-3.5 rounded-xl bg-[#7BBCE6] hover:bg-[#68AFDC] text-slate-900 font-bold text-sm shadow-2xs flex items-center justify-center gap-2 transition active:scale-[0.99] disabled:opacity-50"
+                className="w-full py-3.5 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 transition active:scale-[0.99] disabled:opacity-50"
               >
                 <span>{isSubmitting ? 'Mengirim Laporan...' : 'Kirim Laporan'}</span>
                 <Navigation className="w-4 h-4 rotate-90 fill-slate-900" />
@@ -996,7 +996,7 @@ export const CreateReportWizard = () => {
               <button
                 type="button"
                 onClick={() => navigate(`/lacak?code=${createdTicket}`)}
-                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#7BBCE6] hover:bg-[#68AFDC] text-slate-900 font-bold text-xs flex items-center justify-center gap-2 transition"
+                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition"
               >
                 <Search className="w-4 h-4" />
                 <span>Lacak Status Aduan Sekarang</span>

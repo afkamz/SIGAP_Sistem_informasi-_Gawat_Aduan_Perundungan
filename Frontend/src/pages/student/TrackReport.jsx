@@ -279,7 +279,7 @@ export const TrackReport = () => {
                 )}
                 <button
                   type="submit"
-                  className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-[#7BBCE6] hover:bg-[#68AFDC] text-slate-900 font-bold text-xs sm:text-sm flex items-center gap-2 shrink-0 transition active:scale-95 shadow-2xs"
+                  className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs sm:text-sm flex items-center gap-2 shrink-0 transition active:scale-95 shadow-md"
                 >
                   <Search className="w-4 h-4 text-slate-900" />
                   <span>Cek Status</span>
@@ -840,7 +840,7 @@ export const TrackReport = () => {
                   <div className="relative z-10 grid grid-cols-4 gap-2">
                     {/* Step 1: Menunggu */}
                     <div className="flex flex-col items-center text-center">
-                      <div className="w-10 h-10 rounded-full bg-[#7BBCE6] text-slate-900 flex items-center justify-center font-bold text-sm shadow-xs">
+                      <div className="w-10 h-10 rounded-full bg-[#3B7DE8] text-white flex items-center justify-center font-bold text-sm shadow-md">
                         <Check className="w-5 h-5 stroke-[2.5]" />
                       </div>
                       <span className="font-bold text-xs text-slate-900 mt-2.5 block">Menunggu</span>
@@ -854,7 +854,7 @@ export const TrackReport = () => {
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow-xs ${
                           currentStepIdx >= 1
-                            ? 'bg-[#7BBCE6] text-slate-900'
+                            ? 'bg-[#3B7DE8] text-white'
                             : 'bg-slate-200 text-slate-500'
                         }`}
                       >
@@ -877,7 +877,7 @@ export const TrackReport = () => {
                           currentStepIdx >= 2
                             ? currentStepIdx === 2
                               ? 'bg-sky-800 text-white ring-4 ring-sky-100'
-                              : 'bg-[#7BBCE6] text-slate-900'
+                              : 'bg-[#3B7DE8] text-white'
                             : 'bg-slate-200 text-slate-500'
                         }`}
                       >
@@ -1075,7 +1075,7 @@ export const TrackReport = () => {
                 <button
                   type="submit"
                   disabled={isSubmittingMessage}
-                  className="px-5 py-2.5 rounded-xl bg-[#7BBCE6] hover:bg-[#68AFDC] text-slate-900 font-bold text-xs flex items-center gap-2 transition shadow-2xs disabled:opacity-50"
+                  className="px-5 py-2.5 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs flex items-center gap-2 transition shadow-md disabled:opacity-50"
                 >
                   <Send className="w-3.5 h-3.5 text-slate-900" />
                   <span>{isSubmittingMessage ? 'Mengirim...' : 'Kirim Pesan'}</span>

@@ -52,7 +52,6 @@ export const Register = () => {
     setIsLoading(true);
 
     try {
-      // Panggil backend FastAPI
       const res = await api.registerSiswa({
         nisn: formData.nisn.trim(),
         nama: formData.nama.trim(),
@@ -60,7 +59,6 @@ export const Register = () => {
         password: formData.password
       });
 
-      // Otomatis login untuk mendapatkan token JWT
       let token = '';
       try {
         const loginRes = await api.loginSiswa(formData.nisn.trim(), formData.password);
@@ -84,7 +82,6 @@ export const Register = () => {
       setIsLoading(false);
       console.warn('Backend register error:', err.message);
       if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
-        // Fallback jika backend offline saat testing lokal
         setSuccessMsg('Pendaftaran berhasil (Mode Offline)! Mengarahkan...');
         setTimeout(() => {
           loginUser({
@@ -103,24 +100,24 @@ export const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-slate-50 text-slate-800">
+    <div className="min-h-screen flex flex-col justify-between bg-[#EEF3FD] text-slate-800">
       <StudentHeader />
 
       <main className="max-w-xl mx-auto w-full px-4 py-8 lg:py-12">
-        <div className="bg-white p-7 lg:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#A7D8F0] flex items-center justify-center text-slate-900">
-              <UserPlus className="w-5 h-5" />
+        <div className="bg-white p-7 lg:p-8 rounded-3xl border border-slate-100 shadow-xl space-y-6">
+          <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+            <div className="w-11 h-11 rounded-2xl bg-[#3B7DE8] flex items-center justify-center text-white shadow-md">
+              <UserPlus className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-slate-900">Pendaftaran Akun Siswa</h2>
-              <p className="text-xs text-slate-500">Daftarkan akun resmi untuk memudahkan tracking dan riwayat laporan terpadu.</p>
+              <h2 className="text-xl font-black text-slate-900 tracking-tight">Pendaftaran Akun Siswa</h2>
+              <p className="text-xs text-slate-400">Daftarkan akun resmi untuk memudahkan tracking dan riwayat laporan terpadu.</p>
             </div>
           </div>
 
           {isFromReport && (
-            <div className="p-3.5 rounded-xl bg-sky-50 border border-sky-200 text-xs text-sky-900 flex items-start gap-2.5">
-              <Info className="w-4 h-4 text-sky-700 flex-shrink-0 mt-0.5" />
+            <div className="p-3.5 rounded-2xl bg-[#EEF3FD] border border-[#3B7DE8]/20 text-xs text-slate-700 flex items-start gap-2.5">
+              <Info className="w-4 h-4 text-[#3B7DE8] shrink-0 mt-0.5" />
               <span>
                 <strong>Akses Buat Aduan:</strong> Silakan daftarkan akun Anda terlebih dahulu untuk melanjutkan proses pelaporan aduan di sistem SIGAP.
               </span>
@@ -128,33 +125,37 @@ export const Register = () => {
           )}
 
           {errorMsg && (
-            <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 font-semibold">
+            <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 font-semibold">
               {errorMsg}
             </div>
           )}
 
           {successMsg && (
-            <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-700 font-semibold">
+            <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-700 font-semibold">
               {successMsg}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">NISN (Nomor Induk Siswa Nasional) *</label>
+              <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+                NISN (Nomor Induk Siswa Nasional) *
+              </label>
               <input
                 type="text"
                 name="nisn"
                 required
                 value={formData.nisn}
                 onChange={handleChange}
-                placeholder="Contoh: 3125521007 (10 Digit)"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#A7D8F0]"
+                placeholder="Contoh: 1234567890 (10 Digit)"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:border-[#3B7DE8] focus:bg-white transition"
               />
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Nama Lengkap Siswa *</label>
+              <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+                Nama Lengkap Siswa *
+              </label>
               <input
                 type="text"
                 name="nama"
@@ -162,38 +163,44 @@ export const Register = () => {
                 value={formData.nama}
                 onChange={handleChange}
                 placeholder="Masukkan nama lengkap siswa"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#A7D8F0]"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:border-[#3B7DE8] focus:bg-white transition"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">Asal Sekolah *</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+                  Asal Sekolah *
+                </label>
                 <input
                   type="text"
                   name="sekolah"
                   required
                   value={formData.sekolah}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#A7D8F0]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:border-[#3B7DE8] focus:bg-white transition"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">Kelas *</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+                  Kelas *
+                </label>
                 <input
                   type="text"
                   name="kelas"
                   required
                   value={formData.kelas}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#A7D8F0]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:border-[#3B7DE8] focus:bg-white transition"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Kata Sandi Akun *</label>
+              <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+                Kata Sandi Akun *
+              </label>
               <input
                 type="password"
                 name="password"
@@ -201,12 +208,14 @@ export const Register = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Minimal 6 karakter"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#A7D8F0]"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:border-[#3B7DE8] focus:bg-white transition"
               />
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Konfirmasi Kata Sandi *</label>
+              <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+                Konfirmasi Kata Sandi *
+              </label>
               <input
                 type="password"
                 name="confirmPassword"
@@ -214,7 +223,7 @@ export const Register = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Ketik ulang kata sandi"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-[#A7D8F0]"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:border-[#3B7DE8] focus:bg-white transition"
               />
             </div>
 
@@ -225,29 +234,29 @@ export const Register = () => {
                 name="persetujuan"
                 checked={formData.persetujuan}
                 onChange={handleChange}
-                className="mt-1 rounded border-slate-300 text-sky-600 focus:ring-[#A7D8F0]"
+                className="mt-1 rounded border-slate-300 text-[#3B7DE8] focus:ring-[#3B7DE8]"
               />
               <label htmlFor="persetujuan" className="text-xs text-slate-600 leading-relaxed cursor-pointer">
-                Saya menyatakan data yang saya masukkan adalah benar dan saya menyetujui kebijakan privasi data siswa SIGAP.
+                Saya menyatakan data yang saya masukkan adalah benar dan saya menyetujui kebijakan privasi data perlindungan siswa SIGAP.
               </label>
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-2.5 px-4 rounded-xl bg-[#A7D8F0] hover:bg-[#90C8E4] text-slate-900 font-bold text-sm shadow-sm flex items-center justify-center gap-2 transition disabled:opacity-50"
+              className="w-full py-3 px-4 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 transition active:scale-95 disabled:opacity-50"
             >
-              <span>{isLoading ? 'Mendaftarkan...' : 'Daftarkan Akun'}</span>
+              <span>{isLoading ? 'Mendaftarkan Akun...' : 'Daftarkan Akun Siswa'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
 
-          <div className="text-center text-xs text-slate-600 pt-2 border-t border-slate-100 flex items-center justify-center gap-2">
+          <div className="text-center text-xs text-slate-500 pt-2 border-t border-slate-100 flex items-center justify-center gap-2">
             <Link
               to={redirectTarget ? `/login?redirect=${encodeURIComponent(redirectTarget)}` : '/login'}
-              className="text-slate-600 hover:text-slate-900 flex items-center gap-1 font-medium"
+              className="text-[#3B7DE8] hover:underline flex items-center gap-1 font-bold"
             >
-              <ArrowLeft className="w-3.5 h-3.5" /> Kembali ke halaman login
+              <ArrowLeft className="w-3.5 h-3.5" /> Sudah punya akun? Masuk ke portal
             </Link>
           </div>
         </div>
@@ -257,3 +266,5 @@ export const Register = () => {
     </div>
   );
 };
+
+export default Register;
