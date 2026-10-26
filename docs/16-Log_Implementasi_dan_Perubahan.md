@@ -283,3 +283,20 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 9 | `EDIT` | `Frontend/src/pages/admin/AdminSettings.jsx` | Redesain formulir pengaturan sistem, rentang ambang model AI, dan aksi pemulihan data simulasi |
 | 10 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 14 redesain antarmuka admin SIGAP |
 
+---
+
+## 📅 [Sesi 15] Senin, 26 Oktober 2026 — Jam 19 WIB
+**Fokus Utama**: Perbaikan kendala login admin pada lingkungan Docker melalui penambahan port origin Frontend (3000) pada konfigurasi CORS backend dan penyelarasan penanganan token/role di StoreContext serta fallback login admin.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `backend/sigap-backend/app/config.py` | Konfigurasi CORS origin (`http://localhost:3000` & `http://127.0.0.1:3000`) |
+| 2 | `EDIT` | `backend/sigap-backend/.env.example` | Template variabel lingkungan `ALLOWED_ORIGINS` |
+| 3 | `EDIT` | `backend/sigap-backend/.env` | Konfigurasi lokal variabel lingkungan `ALLOWED_ORIGINS` |
+| 4 | `EDIT` | `Frontend/src/context/StoreContext.jsx` | Penyimpanan persisten role pengguna dan token autentikasi |
+| 5 | `EDIT` | `Frontend/src/pages/admin/AdminLogin.jsx` | Penanganan fallback token pada kondisi backend offline |
+| 6 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 15 perbaikan otentikasi admin Docker |
+
+

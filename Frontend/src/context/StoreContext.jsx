@@ -63,12 +63,13 @@ export const StoreProvider = ({ children }) => {
   }, [reports, auditList, currentUser]);
 
   const loginUser = (user, jwtToken = '', userRole = 'siswa') => {
+    const effectiveRole = user?.role || userRole;
     setCurrentUser(user);
+    setRole(effectiveRole);
+    localStorage.setItem(ROLE_KEY, effectiveRole);
     if (jwtToken) {
       setToken(jwtToken);
-      setRole(userRole);
       localStorage.setItem(TOKEN_KEY, jwtToken);
-      localStorage.setItem(ROLE_KEY, userRole);
     }
   };
 

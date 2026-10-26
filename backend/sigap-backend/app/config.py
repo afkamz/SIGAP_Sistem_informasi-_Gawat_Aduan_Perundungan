@@ -11,9 +11,12 @@ class Settings(BaseSettings):
     jwt_expire_minutes: int = 120
 
     # CORS — comma-separated list origin yang diizinkan.
-    # Development: localhost Vite & Uvicorn. Production: ganti ke domain frontend resmi.
+    # Development: localhost Vite (3000 / 5173) & Uvicorn. Production: ganti ke domain frontend resmi.
     # Jika kosong atau "*", backend akan membuka wildcard (hanya untuk dev darurat).
-    allowed_origins: str = "http://localhost:5173,http://localhost:8000,http://127.0.0.1:5173,http://127.0.0.1:8000"
+    allowed_origins: str = (
+        "http://localhost:3000,http://localhost:5173,http://localhost:8000,"
+        "http://127.0.0.1:3000,http://127.0.0.1:5173,http://127.0.0.1:8000"
+    )
 
     model_config = SettingsConfigDict(
         env_file=".env",
