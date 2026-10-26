@@ -286,7 +286,7 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 ---
 
 ## 📅 [Sesi 15] Senin, 26 Oktober 2026 — Jam 19 WIB
-**Fokus Utama**: Implementasi navigasi sidebar YouTube-style dengan tombol burger hamburger pada antarmuka Admin SIGAP yang mendukung mode expanded/collapsed di desktop serta drawer overlay responsif pada perangkat mobile tanpa memengaruhi portal Siswa.
+**Fokus Utama**: Implementasi navigasi sidebar dengan tombol burger pada antarmuka Admin SIGAP, mendukung mode expanded/collapsed di desktop serta drawer overlay responsif pada perangkat mobile tanpa memengaruhi portal Siswa.
 
 ### Ringkasan Perubahan Berkas
 
@@ -296,21 +296,19 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 2 | `EDIT` | `Frontend/src/components/layout/AdminLayout.jsx` | Integrasi tombol burger hamburger di kiri atas navbar, manajemen state persistensi localStorage, dan mobile backdrop overlay |
 | 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 15 implementasi sidebar burger YouTube-style antarmuka Admin |
 
-
 ---
 
-## 📅 [Sesi 15] Senin, 26 Oktober 2026 — Jam 19 WIB
-**Fokus Utama**: Perbaikan kendala login admin pada lingkungan Docker melalui penambahan port origin Frontend (3000) pada konfigurasi CORS backend dan penyelarasan penanganan token/role di StoreContext serta fallback login admin.
+## 📅 [Sesi 16] Senin, 26 Oktober 2026 — Jam 19 WIB
+**Fokus Utama**: Perbaikan kendala login admin dan siswa pada Docker melalui penambahan origin port 3000 pada CORS backend, penyelarasan token/role di frontend, serta penyesuaian template koneksi database MySQL.
 
 ### Ringkasan Perubahan Berkas
 
 | No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `backend/sigap-backend/app/config.py` | Konfigurasi CORS origin (`http://localhost:3000` & `http://127.0.0.1:3000`) |
-| 2 | `EDIT` | `backend/sigap-backend/.env.example` | Template variabel lingkungan `ALLOWED_ORIGINS` |
-| 3 | `EDIT` | `backend/sigap-backend/.env` | Konfigurasi lokal variabel lingkungan `ALLOWED_ORIGINS` |
-| 4 | `EDIT` | `Frontend/src/context/StoreContext.jsx` | Penyimpanan persisten role pengguna dan token autentikasi |
-| 5 | `EDIT` | `Frontend/src/pages/admin/AdminLogin.jsx` | Penanganan fallback token pada kondisi backend offline |
-| 6 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 15 perbaikan otentikasi admin Docker |
+| 2 | `EDIT` | `backend/sigap-backend/.env.example` | Template variabel lingkungan `ALLOWED_ORIGINS` dan panduan `DATABASE_URL` MySQL Docker/lokal |
+| 3 | `EDIT` | `Frontend/src/context/StoreContext.jsx` | Penyimpanan persisten role pengguna dan token autentikasi |
+| 4 | `EDIT` | `Frontend/src/pages/admin/AdminLogin.jsx` | Penanganan fallback token pada kondisi backend offline |
+| 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 16 perbaikan autentikasi dan konfigurasi |
 
 
