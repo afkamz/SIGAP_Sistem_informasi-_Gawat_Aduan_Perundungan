@@ -248,3 +248,17 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 1 | `EDIT` | `AGENTS.md` | Penghapusan langkah pengecekan awal & build/test otomatis, hanya mempertahankan update log perubahan |
 | 2 | `EDIT` | `GEMINI.md` | Penyelarasan ringkasan protokol mandatori AI khusus update log perubahan ringkas |
 | 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 12 optimasi panduan AI |
+
+---
+
+## 📅 [Sesi 13] Senin, 26 Oktober 2026 — Jam 16 WIB
+**Fokus Utama**: Penyesuaian redaksi dan standardisasi penggunaan istilah teknis bahasa Inggris langsung pada bagian Introduction dan Tinjauan Pustaka di naskah LaTeX.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP.tex` | Penyesuaian kalimat usulan sistem & modul NLP di Introduction; penggantian istilah langsung ke bahasa Inggris di Tinjauan Pustaka |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Penyelarasan redaksi Introduction dan penggunaan istilah bahasa Inggris langsung di Tinjauan Pustaka |
+| 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi naskah sumber LaTeX pada bagian Source Code |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 13 penyesuaian terminologi naskah LaTeX |
