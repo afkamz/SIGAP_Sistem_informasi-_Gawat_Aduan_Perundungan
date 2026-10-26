@@ -286,6 +286,20 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 ---
 
 ## 📅 [Sesi 15] Senin, 26 Oktober 2026 — Jam 19 WIB
+**Fokus Utama**: Implementasi navigasi sidebar YouTube-style dengan tombol burger hamburger pada antarmuka Admin SIGAP yang mendukung mode expanded/collapsed di desktop serta drawer overlay responsif pada perangkat mobile tanpa memengaruhi portal Siswa.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/layout/AdminSidebar.jsx` | Penambahan dukungan mode dinamis (expanded w-60 vs collapsed 72px) desktop dan drawer overlay mobile dengan tombol close |
+| 2 | `EDIT` | `Frontend/src/components/layout/AdminLayout.jsx` | Integrasi tombol burger hamburger di kiri atas navbar, manajemen state persistensi localStorage, dan mobile backdrop overlay |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 15 implementasi sidebar burger YouTube-style antarmuka Admin |
+
+
+---
+
+## 📅 [Sesi 15] Senin, 26 Oktober 2026 — Jam 19 WIB
 **Fokus Utama**: Perbaikan kendala login admin pada lingkungan Docker melalui penambahan port origin Frontend (3000) pada konfigurasi CORS backend dan penyelarasan penanganan token/role di StoreContext serta fallback login admin.
 
 ### Ringkasan Perubahan Berkas
