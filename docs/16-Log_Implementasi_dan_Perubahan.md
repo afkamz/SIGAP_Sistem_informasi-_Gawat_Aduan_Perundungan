@@ -217,3 +217,34 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 >  
 > 📌 **Catatan Transisi Sesi Berikutnya**:  
 > Mulai sesi pengerjaan berikutnya (**Sesi 11 dan seterusnya**), seluruh catatan implementasi dan perubahan fitur akan masuk ke dalam agenda **Minggu ke-10**.
+
+---
+
+## 📅 [Sesi 11] Senin, 26 Oktober 2026 — Jam 15 WIB
+**Fokus Utama**: Penyesuaian Tipografi Naskah Paper LaTeX SIGAP (Index Terms Cetak Tebal, Unbold IndoBERT/HDBSCAN di Introduction), serta Penambahan Blok Author Format IEEEtran Berdasarkan Referensi Sampul.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP_Paper.tex` | Format Index Terms tebal, unbold IndoBERT/HDBSCAN, dan penambahan blok author IEEEtran |
+| 2 | `EDIT` | `SIGAP.tex` | Penyelarasan format Index Terms tebal, unbold IndoBERT/HDBSCAN, dan penambahan blok author IEEEtran |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 11 tipografi naskah dan blok author paper LaTeX |
+
+### Status Uji & Verifikasi Sistem
+- **Frontend Build**: `npm run build` ➔ **Sukses 100% (Exit Code 0)**, 2.152 modul terkompilasi bersih dalam 15.53 detik.
+- **Backend Test**: `pytest` ➔ **60 passed, 0 failed** dalam 6.11 detik (100% lulus).
+- **Integritas Dokumen**: Blok author IEEEtran (Ahmad Falihul Hikam & Arvin Dzaky Nugraha) serta format *Index Terms* dan istilah *Introduction* telah sesuai.
+
+---
+
+## 📅 [Sesi 12] Senin, 26 Oktober 2026 — Jam 15 WIB
+**Fokus Utama**: Penyederhanaan dan optimasi efisiensi token pada panduan aturan otomatis AI (`AGENTS.md` dan `GEMINI.md`).
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `AGENTS.md` | Penghapusan langkah pengecekan awal & build/test otomatis, hanya mempertahankan update log perubahan |
+| 2 | `EDIT` | `GEMINI.md` | Penyelarasan ringkasan protokol mandatori AI khusus update log perubahan ringkas |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 12 optimasi panduan AI |
