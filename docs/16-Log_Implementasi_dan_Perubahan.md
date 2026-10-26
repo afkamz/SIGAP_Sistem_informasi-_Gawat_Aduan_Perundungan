@@ -330,4 +330,17 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 4 | `EDIT` | `Frontend/src/pages/admin/AdminLogin.jsx` | Penanganan fallback token pada kondisi backend offline |
 | 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 16 perbaikan autentikasi dan konfigurasi |
 
+---
+
+## 📅 [Sesi 18] Senin, 26 Oktober 2026 — Jam 20 WIB
+**Fokus Utama**: Redesain visual menyeluruh pada Landing Page SIGAP mengacu pada inspirasi antarmuka Health Platform dashboard dengan tema biru modern `#3B7DE8`, kartu sudut membulat rounded-3xl, penataan tipografi ramah, dan pembaruan showcase interaktif tanpa mengubah alur fungsionalitas sistem.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Redesain visual menyeluruh landing page: hero section, interactive showcase card, dual mode pelaporan, grid 7 kategori kekerasan, 4 langkah alur pelaporan, panel keamanan, FAQ accordion, emergency hotlines, dan auth gate modal |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 18 redesain visual landing page SIGAP |
+
+
 
