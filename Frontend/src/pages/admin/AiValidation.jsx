@@ -106,7 +106,7 @@ const ModelConfigModal = ({ isOpen, onClose, avgConf }) => {
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg border border-slate-200 overflow-hidden">
         <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+            <div className="w-10 h-10 rounded-2xl bg-blue-50 flex items-center justify-center text-[#3B7DE8]">
               <Brain className="w-5 h-5" />
             </div>
             <div>
@@ -126,7 +126,7 @@ const ModelConfigModal = ({ isOpen, onClose, avgConf }) => {
           <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-2">
             <div className="flex justify-between items-center">
               <span className="font-semibold text-slate-700">Arsitektur Encoder:</span>
-              <span className="font-mono font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">
+              <span className="font-mono font-bold text-[#2563c0] bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
                 IndoBERT-Base-p1 (768-dim)
               </span>
             </div>
@@ -148,7 +148,7 @@ const ModelConfigModal = ({ isOpen, onClose, avgConf }) => {
 
           <div className="p-4 rounded-2xl bg-sky-50/60 border border-sky-200/60 text-sky-900 leading-relaxed">
             <p className="font-semibold mb-1 flex items-center gap-1.5">
-              <Info className="w-3.5 h-3.5 text-sky-600" /> Human-in-the-Loop Safety Guard:
+              <Info className="w-3.5 h-3.5 text-[#3B7DE8]" /> Human-in-the-Loop Safety Guard:
             </p>
             AI tidak pernah mengambil tindakan disipliner secara otomatis. Seluruh rekomendasi klasifikasi wajib diverifikasi oleh Guru Bimbingan Konseling atau Tim PPKSP satuan pendidikan.
           </div>
@@ -174,7 +174,7 @@ const BatchApproveModal = ({ isOpen, onClose, highConfidenceCount, onConfirm, is
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md border border-slate-200 overflow-hidden">
         <div className="p-6 text-center space-y-3">
-          <div className="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center mx-auto shadow-sm">
+          <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 text-[#3B7DE8] flex items-center justify-center mx-auto shadow-sm">
             <Sparkles className="w-7 h-7" />
           </div>
           <h3 className="text-base font-bold text-slate-900">Validasi Massal Rekomendasi AI</h3>
@@ -196,7 +196,7 @@ const BatchApproveModal = ({ isOpen, onClose, highConfidenceCount, onConfirm, is
           <button
             onClick={onConfirm}
             disabled={isProcessing || highConfidenceCount === 0}
-            className="flex-1 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-sm"
+            className="flex-1 px-4 py-2.5 rounded-xl bg-[#3B7DE8] text-white text-xs font-semibold hover:bg-[#2563c0] transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-sm"
           >
             {isProcessing ? (
               <>
@@ -241,12 +241,12 @@ const OverrideModal = ({ report, categories, onConfirm, onClose }) => {
         <div className="p-5 space-y-4">
           {/* Rekomendasi AI saat ini */}
           <div className="flex items-start gap-3 p-3.5 rounded-2xl bg-sky-50 border border-sky-200">
-            <Sparkles className="w-4 h-4 text-sky-600 mt-0.5 flex-shrink-0" />
+            <Sparkles className="w-4 h-4 text-[#3B7DE8] mt-0.5 flex-shrink-0" />
             <div>
               <p className="text-[11px] font-semibold text-sky-700">Rekomendasi Prediksi IndoBERT:</p>
               <p className="text-xs text-sky-950 font-bold mt-0.5">
                 {report.ai?.kategori_rekomendasi || report.kategori_nama || '—'}{' '}
-                <span className="text-sky-600 font-normal">
+                <span className="text-[#3B7DE8] font-normal">
                   ({(report.ai?.confidence || 0).toFixed(1)}% confidence)
                 </span>
               </p>
@@ -360,7 +360,7 @@ const CaseCard = ({ report, onApprove, onOverride, isApproving }) => {
         {/* Prediksi & Skor Kanan */}
         <div className="flex items-center gap-2 flex-wrap">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 text-sky-800 border border-sky-200 text-xs font-semibold">
-            <Brain className="w-3.5 h-3.5 text-sky-600" />
+            <Brain className="w-3.5 h-3.5 text-[#3B7DE8]" />
             {report.ai?.kategori_rekomendasi || report.kategori_nama}
           </div>
           <div className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold border ${confColor}`}>
@@ -393,8 +393,8 @@ const CaseCard = ({ report, onApprove, onOverride, isApproving }) => {
 
         {/* ── Banner Klaster HDBSCAN (Jika Bukan Noise) ── */}
         {!isNoise && clusterLabel !== null && clusterLabel !== undefined && (
-          <div className="rounded-xl bg-indigo-50/80 border border-indigo-200 p-3.5 flex items-start gap-2.5 text-xs">
-            <GitBranch className="w-4 h-4 text-indigo-600 mt-0.5 flex-shrink-0" />
+          <div className="rounded-xl bg-blue-50/80 border border-blue-200 p-3.5 flex items-start gap-2.5 text-xs">
+            <GitBranch className="w-4 h-4 text-[#3B7DE8] mt-0.5 flex-shrink-0" />
             <div>
               <p className="font-bold text-indigo-950">
                 Terdeteksi dalam Klaster Kemiripan HDBSCAN (#{`KLS-${String(clusterLabel).padStart(2, '0')}`})
@@ -489,7 +489,7 @@ const CaseCard = ({ report, onApprove, onOverride, isApproving }) => {
           {/* Link Detail Laporan */}
           <button
             onClick={() => navigate(`/admin/laporan-detail?id=${report.id}`)}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/50 text-xs font-semibold transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-slate-600 hover:text-[#3B7DE8] hover:bg-blue-50/50 text-xs font-semibold transition-colors"
           >
             Tinjau Detail Kasus
             <ChevronRight className="w-3.5 h-3.5" />
@@ -727,7 +727,7 @@ export const AiValidation = () => {
             <div className="flex items-center gap-2 text-xs text-slate-400 font-semibold mb-1">
               <span>Admin Panel</span>
               <span>&gt;</span>
-              <span className="text-indigo-600 font-bold">Validasi AI</span>
+              <span className="text-[#3B7DE8] font-bold">Validasi AI</span>
             </div>
             <h1 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2.5">
               Validasi & Triase Klasifikasi AI
@@ -751,7 +751,7 @@ export const AiValidation = () => {
             <button
               onClick={() => setIsBatchModalOpen(true)}
               disabled={stats.highConfidenceMenunggu === 0}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 active:scale-95 transition-all shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#3B7DE8] text-white text-xs font-bold hover:bg-[#2563c0] active:scale-95 transition-all shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Sparkles className="w-3.5 h-3.5" />
               Proses Validasi Massal
@@ -763,7 +763,7 @@ export const AiValidation = () => {
               title="Sinkronkan data dengan MySQL"
               className="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors shadow-xs"
             >
-              <RotateCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-indigo-600' : ''}`} />
+              <RotateCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-[#3B7DE8]' : ''}`} />
             </button>
           </div>
         </div>
@@ -930,7 +930,7 @@ export const AiValidation = () => {
         <div className="space-y-4">
           {totalItems === 0 ? (
             <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-500 flex items-center justify-center mx-auto">
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center mx-auto">
                 <Sparkles className="w-6 h-6" />
               </div>
               <h3 className="text-sm font-bold text-slate-800">Tidak ada tiket laporan ditemukan</h3>
@@ -989,10 +989,10 @@ export const AiValidation = () => {
         )}
 
         {/* ── Standar Akurasi & Etika AI PPKSP Footer Banner ── */}
-        <div className="rounded-2xl border border-indigo-100 bg-gradient-to-r from-slate-900 to-indigo-950 text-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-blue-100 bg-gradient-to-r from-slate-900 to-indigo-950 text-white p-6 shadow-sm">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center flex-shrink-0 text-indigo-300">
+              <div className="w-10 h-10 rounded-2xl bg-blue-500/20 border border-indigo-400/30 flex items-center justify-center flex-shrink-0 text-indigo-300">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <div className="space-y-1">

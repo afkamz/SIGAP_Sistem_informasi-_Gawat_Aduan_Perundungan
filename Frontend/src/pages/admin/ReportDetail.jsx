@@ -124,7 +124,7 @@ export const ReportDetail = () => {
       <AdminLayout>
         <div className="text-center py-16">
           <p className="text-slate-500 font-medium">Laporan pengaduan tidak ditemukan.</p>
-          <Link to="/admin/laporan" className="text-sky-600 font-bold text-xs mt-3 inline-flex items-center gap-1.5 hover:underline">
+          <Link to="/admin/laporan" className="text-[#3B7DE8] font-bold text-xs mt-3 inline-flex items-center gap-1.5 hover:underline">
             <ArrowLeft className="w-3.5 h-3.5" /> Kembali ke Daftar Laporan
           </Link>
         </div>
@@ -195,7 +195,7 @@ export const ReportDetail = () => {
       : report.status === 'ditindaklanjuti'
       ? 'bg-purple-500'
       : report.status === 'diverifikasi'
-      ? 'bg-sky-500'
+      ? 'bg-[#3B7DE8]'
       : 'bg-amber-500';
 
   return (
@@ -220,7 +220,7 @@ export const ReportDetail = () => {
             </div>
             <Link
               to="/admin/laporan"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-600 hover:text-sky-700"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#3B7DE8] hover:text-sky-700"
             >
               <ArrowLeft className="w-3.5 h-3.5" /> Kembali ke Daftar Laporan
             </Link>
@@ -250,7 +250,7 @@ export const ReportDetail = () => {
                   setNextTargetStatus(nextStatus);
                   setShowStatusModal(true);
                 }}
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold shadow-xs transition"
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white text-xs font-bold shadow-xs transition"
               >
                 <Edit3 className="w-3.5 h-3.5" />
                 Tindak Lanjuti Kasus
@@ -292,7 +292,7 @@ export const ReportDetail = () => {
               <div className="rounded-2xl bg-sky-50/50 border border-sky-100 p-4 sm:p-5 space-y-3.5">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex items-start gap-3">
-                    <div className="w-11 h-11 rounded-2xl bg-sky-500 text-white flex items-center justify-center flex-shrink-0 shadow-xs">
+                    <div className="w-11 h-11 rounded-2xl bg-[#3B7DE8] text-white flex items-center justify-center flex-shrink-0 shadow-xs">
                       {report.is_anonymous ? <ShieldAlert className="w-6 h-6" /> : <User className="w-6 h-6" />}
                     </div>
                     <div>
@@ -332,7 +332,7 @@ export const ReportDetail = () => {
                     onClick={() => alert('Informasi kontak darurat terenkripsi hanya dapat diakses dengan kunci otentikasi Satgas PPKSP.')}
                     className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-sky-200 text-xs font-bold text-sky-800 hover:bg-sky-50/80 transition shadow-2xs"
                   >
-                    <Lock className="w-3.5 h-3.5 text-sky-600" />
+                    <Lock className="w-3.5 h-3.5 text-[#3B7DE8]" />
                     Kontak Darurat Tersedia untuk BK (Terenkripsi)
                   </button>
                 </div>
@@ -373,7 +373,7 @@ export const ReportDetail = () => {
               <div className="space-y-2 pt-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-xs font-bold text-slate-800">
-                    <span className="text-sky-600 font-serif text-lg leading-none">“</span>
+                    <span className="text-[#3B7DE8] font-serif text-lg leading-none">“</span>
                     <span>Deskripsi Lengkap Kejadian (Transkripsi Pelapor)</span>
                   </div>
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
@@ -401,7 +401,7 @@ export const ReportDetail = () => {
                     onClick={() => {
                       evidenceList.forEach((e) => window.open(e.url, '_blank'));
                     }}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-sky-600 hover:text-sky-700"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#3B7DE8] hover:text-sky-700"
                   >
                     <FileArchive className="w-3.5 h-3.5" />
                     Buka Semua Berkas
@@ -422,7 +422,7 @@ export const ReportDetail = () => {
                           {item.ext}
                         </span>
                         {item.type === 'audio' ? (
-                          <div className="flex flex-col items-center justify-center text-sky-600">
+                          <div className="flex flex-col items-center justify-center text-[#3B7DE8]">
                             <Volume2 className="w-8 h-8" />
                             <span className="text-[9px] font-mono font-bold mt-1 tracking-wider">AUDIO BUKTI</span>
                           </div>
@@ -464,7 +464,7 @@ export const ReportDetail = () => {
                             <button
                               type="button"
                               onClick={() => setSelectedImagePreview(item.url)}
-                              className="text-sky-600 font-bold hover:underline inline-flex items-center gap-1 cursor-pointer"
+                              className="text-[#3B7DE8] font-bold hover:underline inline-flex items-center gap-1 cursor-pointer"
                             >
                               <Eye className="w-3 h-3" /> Lihat Foto
                             </button>
@@ -473,7 +473,7 @@ export const ReportDetail = () => {
                               href={item.url}
                               target="_blank"
                               rel="noreferrer"
-                              className="text-sky-600 font-bold hover:underline inline-flex items-center gap-1"
+                              className="text-[#3B7DE8] font-bold hover:underline inline-flex items-center gap-1"
                             >
                               <Eye className="w-3 h-3" /> {item.type === 'audio' ? 'Putar' : 'Lihat'}
                             </a>
@@ -501,7 +501,7 @@ export const ReportDetail = () => {
                   {new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date())} WIB
                 </span>
               </div>
-              <Link to="/admin/audit" className="text-sky-600 font-bold hover:underline">
+              <Link to="/admin/audit" className="text-[#3B7DE8] font-bold hover:underline">
                 Lihat Audit Trail Lengkap
               </Link>
             </div>
@@ -514,7 +514,7 @@ export const ReportDetail = () => {
             <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-2xs space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center border border-sky-100">
+                  <div className="w-9 h-9 rounded-xl bg-sky-50 text-[#3B7DE8] flex items-center justify-center border border-sky-100">
                     <Bot className="w-5 h-5" />
                   </div>
                   <div>
@@ -539,7 +539,7 @@ export const ReportDetail = () => {
                     </h2>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <div className="text-2xl font-black text-sky-600 leading-none">{confidence}%</div>
+                    <div className="text-2xl font-black text-[#3B7DE8] leading-none">{confidence}%</div>
                     <span className="text-[10px] font-semibold text-slate-500">Tingkat Keyakinan</span>
                   </div>
                 </div>
@@ -547,7 +547,7 @@ export const ReportDetail = () => {
                 {/* Progress Bar Meter */}
                 <div className="w-full bg-slate-200/80 rounded-full h-2 overflow-hidden">
                   <div
-                    className="bg-sky-500 h-2 rounded-full transition-all"
+                    className="bg-[#3B7DE8] h-2 rounded-full transition-all"
                     style={{ width: `${Math.min(Number(confidence), 100)}%` }}
                   ></div>
                 </div>
@@ -569,7 +569,7 @@ export const ReportDetail = () => {
                   <button
                     onClick={handleApproveAI}
                     disabled={isApproved}
-                    className="py-2.5 px-3 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition disabled:opacity-60"
+                    className="py-2.5 px-3 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition disabled:opacity-60"
                   >
                     <Check className="w-4 h-4" />
                     {isApproved ? 'Telah Disetujui' : 'Setujui Kategori Ini'}
@@ -600,7 +600,7 @@ export const ReportDetail = () => {
             <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-2xs space-y-3.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-lg bg-sky-50 text-[#3B7DE8] flex items-center justify-center">
                     <Sparkles className="w-4 h-4" />
                   </div>
                   <h3 className="text-sm font-extrabold text-slate-900">Deteksi Klaster Pola Berulang</h3>
@@ -614,7 +614,7 @@ export const ReportDetail = () => {
               {report.ai?.cluster_label !== null && report.ai?.cluster_label !== undefined && !report.ai?.is_noise ? (
                 <>
                   <div className="rounded-xl bg-sky-50/50 border border-sky-100 p-3 flex items-start gap-2 text-xs text-slate-700">
-                    <Link2 className="w-4 h-4 text-sky-600 flex-shrink-0 mt-0.5" />
+                    <Link2 className="w-4 h-4 text-[#3B7DE8] flex-shrink-0 mt-0.5" />
                     <p className="leading-relaxed">
                       Laporan ini terhubung ke <strong>Klaster #{report.ai.cluster_label}</strong> hasil analisis kedekatan embedding HDBSCAN.
                     </p>
@@ -680,7 +680,7 @@ export const ReportDetail = () => {
 
                 <button
                   onClick={() => flash('✓ Notifikasi kasus berhasil diteruskan ke tim Satgas PPKSP!')}
-                  className="py-2.5 px-3 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs transition"
+                  className="py-2.5 px-3 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs transition"
                 >
                   <Send className="w-3.5 h-3.5" />
                   Notifikasi Satgas
@@ -807,7 +807,7 @@ export const ReportDetail = () => {
           >
             <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50">
               <div className="flex items-center gap-2">
-                <ImageIcon className="w-5 h-5 text-sky-600" />
+                <ImageIcon className="w-5 h-5 text-[#3B7DE8]" />
                 <h4 className="text-sm font-bold text-slate-800">Pratinjau Berkas Bukti Pendukung</h4>
               </div>
               <div className="flex items-center gap-2">

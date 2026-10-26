@@ -26,57 +26,75 @@ export const AdminSettings = () => {
       title="Pengaturan Sistem SIGAP"
       subtitle="Kelola parameter satuan pendidikan, ambang model AI, dan sinkronisasi basis data"
     >
-      <div className="max-w-2xl space-y-6">
+      <div className="max-w-2xl space-y-5">
+
+        {/* Page Header */}
+        <div className="space-y-1">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-400">
+            <span>Admin Panel</span>
+            <span>&gt;</span>
+            <span className="text-slate-600">Pengaturan</span>
+          </div>
+          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Pengaturan Sistem</h1>
+          <p className="text-xs text-slate-500">Kelola parameter satuan pendidikan, ambang model AI, dan sinkronisasi basis data.</p>
+        </div>
+
         {savedMsg && (
-          <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2">
+          <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2 shadow-sm">
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             <span>{savedMsg}</span>
           </div>
         )}
 
-        <form onSubmit={handleSave} className="space-y-6">
+        <form onSubmit={handleSave} className="space-y-5">
           {/* Informasi Satuan Pendidikan */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-2xs space-y-4">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">
-              Informasi Satuan Pendidikan
-            </h3>
+          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-md space-y-4">
+            <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+              <Shield className="w-4 h-4 text-[#3B7DE8]" />
+              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                Informasi Satuan Pendidikan
+              </h3>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Nama Satuan Pendidikan</label>
+                <label className="font-bold text-slate-600 block mb-1.5">Nama Satuan Pendidikan</label>
                 <input
                   type="text"
                   defaultValue="SMAN 1 Teladan"
-                  className="w-full p-2.5 rounded-xl border border-slate-300 font-semibold"
+                  className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 font-semibold text-slate-800 focus:outline-none focus:border-[#3B7DE8] focus:bg-white transition"
                 />
               </div>
               <div>
-                <label className="font-bold text-slate-700 block mb-1">NPSN</label>
+                <label className="font-bold text-slate-600 block mb-1.5">NPSN</label>
                 <input
                   type="text"
                   defaultValue="20512345"
-                  className="w-full p-2.5 rounded-xl border border-slate-300 font-semibold"
+                  className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 font-semibold text-slate-800 focus:outline-none focus:border-[#3B7DE8] focus:bg-white transition"
                 />
               </div>
             </div>
           </div>
 
           {/* Konfigurasi AI Pipeline */}
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-2xs space-y-4">
-            <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">
-              Parameter Modul AI & NLP Pipeline
-            </h3>
+          <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-md space-y-4">
+            <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+              <Sliders className="w-4 h-4 text-[#3B7DE8]" />
+              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                Parameter Modul AI &amp; NLP Pipeline
+              </h3>
+            </div>
             <div className="space-y-4 text-xs">
               <div>
-                <label className="font-bold text-slate-700 block mb-1">Arsitektur NLP Terpasang</label>
-                <span className="font-mono text-xs bg-slate-100 px-3 py-1.5 rounded-xl text-slate-800 inline-block border border-slate-200">
+                <label className="font-bold text-slate-600 block mb-1.5">Arsitektur NLP Terpasang</label>
+                <span className="font-mono text-xs bg-[#EEF3FD] px-3 py-2 rounded-xl text-[#3B7DE8] inline-block border border-[#3B7DE8]/20">
                   IndoBERT-Base-Indonesian (512-dim embedding) + HDBSCAN
                 </span>
               </div>
 
               <div>
-                <div className="flex justify-between items-center mb-1">
-                  <label className="font-bold text-slate-700">Ambang Batas Kepercayaan (Confidence Threshold)</label>
-                  <span className="font-bold text-sky-800">{confidenceThreshold}%</span>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="font-bold text-slate-600">Ambang Batas Kepercayaan (Confidence Threshold)</label>
+                  <span className="font-black text-[#3B7DE8] text-sm">{confidenceThreshold}%</span>
                 </div>
                 <input
                   type="range"
@@ -84,11 +102,11 @@ export const AdminSettings = () => {
                   max="95"
                   value={confidenceThreshold}
                   onChange={(e) => setConfidenceThreshold(Number(e.target.value))}
-                  className="w-full cursor-pointer accent-[#A7D8F0]"
+                  className="w-full cursor-pointer accent-[#3B7DE8]"
                 />
                 <div className="flex justify-between text-[10px] text-slate-400 mt-1">
                   <span>50% (Longgar)</span>
-                  <span className="font-bold text-slate-700">80% (Standar Rekomendasi)</span>
+                  <span className="font-bold text-slate-600">80% (Standar Rekomendasi)</span>
                   <span>95% (Sangat Ketat)</span>
                 </div>
               </div>
@@ -96,7 +114,7 @@ export const AdminSettings = () => {
 
             <button
               type="submit"
-              className="px-5 py-2.5 rounded-xl bg-[#A7D8F0] hover:bg-[#90C8E4] text-slate-900 font-bold text-xs transition"
+              className="px-5 py-2.5 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs transition shadow-sm"
             >
               Simpan Pengaturan
             </button>
@@ -104,10 +122,13 @@ export const AdminSettings = () => {
         </form>
 
         {/* Reset Uji Coba */}
-        <div className="bg-white p-6 rounded-3xl border border-red-200 shadow-2xs space-y-3">
-          <h3 className="text-xs font-bold text-red-700 uppercase tracking-wider border-b border-red-100 pb-2">
-            Pemulihan Data & Reset Uji Coba
-          </h3>
+        <div className="bg-white p-6 rounded-2xl border border-red-200 shadow-md space-y-3">
+          <div className="flex items-center gap-2 border-b border-red-100 pb-3">
+            <Trash2 className="w-4 h-4 text-red-500" />
+            <h3 className="text-xs font-bold text-red-700 uppercase tracking-wider">
+              Pemulihan Data &amp; Reset Uji Coba
+            </h3>
+          </div>
           <p className="text-xs text-slate-500 leading-relaxed">
             Kembalikan seluruh aduan dan jejak audit ke data simulasi bawaan awal jika diperlukan untuk demonstrasi sidang atau pengujian ulang.
           </p>
@@ -123,4 +144,3 @@ export const AdminSettings = () => {
     </AdminLayout>
   );
 };
-

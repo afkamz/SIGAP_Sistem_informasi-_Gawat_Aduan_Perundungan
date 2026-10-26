@@ -262,3 +262,24 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 2 | `EDIT` | `SIGAP_Paper.tex` | Penyelarasan redaksi Introduction dan penggunaan istilah bahasa Inggris langsung di Tinjauan Pustaka |
 | 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi naskah sumber LaTeX pada bagian Source Code |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 13 penyesuaian terminologi naskah LaTeX |
+
+---
+
+## 📅 [Sesi 14] Senin, 26 Oktober 2026 — Jam 17 WIB
+**Fokus Utama**: Redesain visual menyeluruh pada antarmuka admin website SIGAP mengacu pada inspirasi modern Health Platform dashboard dengan palet biru cerah, kartu berlapis sudut tumpul, sidebar ikon ringkas, serta mempertahankan seluruh fungsionalitas dan logika data sistem.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/layout/AdminSidebar.jsx` | Redesain bilah sisi ikonik ringkas (72px) dengan tooltip responsif, indikator aktif kuning, dan badge |
+| 2 | `EDIT` | `Frontend/src/components/layout/AdminLayout.jsx` | Pembaruan layout pembungkus dengan bilah pencarian atas, notifikasi, profil pengguna, dan latar belakang modern |
+| 3 | `EDIT` | `Frontend/src/pages/admin/AdminLogin.jsx` | Redesain halaman login admin dengan kartu terpusat, latar belakang gradien biru, dan tata letak elegan |
+| 4 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Redesain dashboard utama dengan 4 KPI cards, chart tren, distribusi kategori, tabel antrean prioritas, dan bilah AI Summary |
+| 5 | `EDIT` | `Frontend/src/pages/admin/ReportList.jsx` | Redesain daftar laporan dengan kartu filter KPI dinamis, toolbar pencarian & filter terpadu, dan paginasi modern |
+| 6 | `EDIT` | `Frontend/src/pages/admin/ReportDetail.jsx` | Penyelarasan palet warna dan aksen visual biru cerah pada detail laporan pengaduan siswa |
+| 7 | `EDIT` | `Frontend/src/pages/admin/AiValidation.jsx` | Penyelarasan palet tema biru cerah pada antarmuka triase dan validasi rekomendasi AI |
+| 8 | `EDIT` | `Frontend/src/pages/admin/AuditTrail.jsx` | Redesain jejak audit dengan kartu verifikasi integritas hash SHA-256 dan daftar riwayat aktivitas sistem |
+| 9 | `EDIT` | `Frontend/src/pages/admin/AdminSettings.jsx` | Redesain formulir pengaturan sistem, rentang ambang model AI, dan aksi pemulihan data simulasi |
+| 10 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 14 redesain antarmuka admin SIGAP |
+
