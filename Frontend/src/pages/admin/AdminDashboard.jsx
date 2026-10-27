@@ -19,7 +19,7 @@ import { AdminLayout } from '../../components/layout/AdminLayout';
 import { TrendLineChart } from '../../components/charts/DashboardCharts';
 
 export const AdminDashboard = () => {
-  const { reports, getMetrics, fetchDashboardSummary, fetchAdminReports, isBackendConnected, token, currentUser } = useStore();
+  const { reports, getMetrics, fetchDashboardSummary, fetchAdminReports, isBackendConnected, currentUser } = useStore();
   const navigate = useNavigate();
 
   const metrics = getMetrics();
@@ -157,28 +157,28 @@ export const AdminDashboard = () => {
         {/* Top Header Section */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-400">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
               <span>Admin Panel</span>
               <span>&gt;</span>
-              <span className="text-slate-600">Dashboard Analitik</span>
+              <span className="text-slate-800 font-bold">Dashboard Analitik</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
               {greeting}, {adminName}
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 max-w-2xl leading-relaxed">
-              Monitoring real-time penanganan insiden, perbandingan tren laporan sekolah terhadap data referensi nasional PPKSP.
+            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed">
+              Monitoring real-time penanganan insiden, perbandingan tren laporan sekolah terhadap data referensi nasional PPKSP bergaya Liquid Glass.
             </p>
           </div>
 
           {/* Right Controls */}
           <div className="flex flex-wrap items-center gap-2.5">
             {/* DB Status */}
-            <div className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition ${
+            <div className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition shadow-xs ${
               isBackendConnected
-                ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
-                : 'bg-white border-slate-200 text-slate-600'
+                ? 'glass-pill-green'
+                : 'glass-card text-slate-600'
             }`}>
-              <span className={`w-2 h-2 rounded-full ${isBackendConnected ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
+              <span className={`w-2 h-2 rounded-full ${isBackendConnected ? 'bg-emerald-500 animate-pulse shadow-[0_0_6px_#10b981]' : 'bg-slate-400'}`} />
               <Database className="w-3.5 h-3.5" />
               <span>{isBackendConnected ? 'MySQL Terhubung' : 'Offline'}</span>
             </div>
@@ -187,7 +187,7 @@ export const AdminDashboard = () => {
               type="button"
               onClick={handleSync}
               disabled={isSyncing}
-              className="px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center gap-1.5 shadow-sm transition disabled:opacity-50"
+              className="px-3.5 py-2 rounded-2xl glass-card text-slate-700 font-bold text-xs flex items-center gap-1.5 transition disabled:opacity-50"
             >
               <RotateCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-[#3B7DE8]' : 'text-slate-500'}`} />
               <span>Sinkronkan</span>
@@ -195,7 +195,7 @@ export const AdminDashboard = () => {
 
             <button
               onClick={handleDownloadReport}
-              className="px-4 py-2 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs flex items-center gap-2 shadow-sm transition active:scale-95"
+              className="px-4 py-2 rounded-2xl glass-button-primary text-white font-bold text-xs flex items-center gap-2"
             >
               <Download className="w-4 h-4" />
               <span>Unduh Laporan</span>
@@ -203,21 +203,21 @@ export const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* 4 Summary KPI Cards */}
+        {/* 4 Summary KPI Cards — Frosted Glass with Color Tints */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
           {/* Card 1: Total Laporan */}
-          <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-md space-y-3 hover:shadow-lg transition">
+          <div className="glass-card p-5 rounded-3xl border border-white/80 shadow-md space-y-3">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-2xl bg-[#EEF3FD] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-2xl glass-pill-blue flex items-center justify-center">
                 <FileText className="w-5 h-5 text-[#3B7DE8]" />
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#EEF3FD] text-[#3B7DE8]">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold glass-pill-blue">
                 Data Aktif
               </span>
             </div>
             <div>
-              <span className="text-xs font-semibold text-slate-400 block">Total Laporan</span>
+              <span className="text-xs font-semibold text-slate-500 block">Total Laporan</span>
               <div className="flex items-baseline gap-2 mt-0.5">
                 <span className="text-3xl font-black text-slate-900 leading-none">
                   {metrics.total ?? 0}
@@ -231,17 +231,17 @@ export const AdminDashboard = () => {
           </div>
 
           {/* Card 2: Menunggu Verifikasi */}
-          <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-md space-y-3 hover:shadow-lg transition">
+          <div className="glass-card p-5 rounded-3xl border border-amber-200/50 shadow-md space-y-3">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-2xl bg-amber-50 flex items-center justify-center">
-                <ClipboardList className="w-5 h-5 text-amber-500" />
+              <div className="w-10 h-10 rounded-2xl glass-pill-yellow flex items-center justify-center">
+                <ClipboardList className="w-5 h-5 text-amber-600" />
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold glass-pill-yellow">
                 Prioritas
               </span>
             </div>
             <div>
-              <span className="text-xs font-semibold text-slate-400 block">Menunggu Verifikasi</span>
+              <span className="text-xs font-semibold text-slate-500 block">Menunggu Verifikasi</span>
               <div className="flex items-baseline gap-2 mt-0.5">
                 <span className="text-3xl font-black text-slate-900 leading-none">
                   {metrics.menunggu ?? 0}
@@ -256,22 +256,22 @@ export const AdminDashboard = () => {
           </div>
 
           {/* Card 3: Ditindaklanjuti */}
-          <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-md space-y-3 hover:shadow-lg transition">
+          <div className="glass-card p-5 rounded-3xl border border-purple-200/50 shadow-md space-y-3">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-2xl bg-purple-50 flex items-center justify-center">
-                <RotateCw className="w-5 h-5 text-purple-500" />
+              <div className="w-10 h-10 rounded-2xl glass-pill flex items-center justify-center text-purple-600 border border-purple-200">
+                <RotateCw className="w-5 h-5 text-purple-600" />
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold glass-pill text-purple-700 border border-purple-200">
                 Proses
               </span>
             </div>
             <div>
-              <span className="text-xs font-semibold text-slate-400 block">Ditindaklanjuti</span>
+              <span className="text-xs font-semibold text-slate-500 block">Ditindaklanjuti</span>
               <div className="flex items-baseline gap-2 mt-0.5">
                 <span className="text-3xl font-black text-slate-900 leading-none">
                   {metrics.proses ?? 0}
                 </span>
-                <span className="text-xs font-bold text-slate-400">
+                <span className="text-xs font-bold text-slate-500">
                   {metrics.total ? `${((metrics.proses / metrics.total) * 100).toFixed(1)}% beban` : '0%'}
                 </span>
               </div>
@@ -280,17 +280,17 @@ export const AdminDashboard = () => {
           </div>
 
           {/* Card 4: Selesai & Ditutup */}
-          <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-md space-y-3 hover:shadow-lg transition">
+          <div className="glass-card p-5 rounded-3xl border border-emerald-200/50 shadow-md space-y-3">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center">
-                <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+              <div className="w-10 h-10 rounded-2xl glass-pill-green flex items-center justify-center">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold glass-pill-green">
                 Efektif
               </span>
             </div>
             <div>
-              <span className="text-xs font-semibold text-slate-400 block">Selesai &amp; Ditutup</span>
+              <span className="text-xs font-semibold text-slate-500 block">Selesai &amp; Ditutup</span>
               <div className="flex items-baseline gap-2 mt-0.5">
                 <span className="text-3xl font-black text-slate-900 leading-none">
                   {metrics.selesai ?? 0}
@@ -307,21 +307,21 @@ export const AdminDashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
           {/* Left: Tren Kasus per Bulan */}
-          <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-100 shadow-md space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div className="lg:col-span-7 glass-panel-elevated p-6 rounded-3xl border border-white/80 shadow-md space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/50 pb-3">
               <div>
                 <h3 className="text-sm font-bold text-slate-900">Tren Kasus per Bulan</h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 mt-0.5">
                   Perbandingan volume insiden internal sekolah vs. baseline nasional (Kemendikbudristek).
                 </p>
               </div>
               <div className="flex items-center gap-3 text-xs shrink-0">
-                <span className="flex items-center gap-1.5 text-[#3B7DE8] font-semibold">
-                  <span className="w-4 h-0.5 bg-[#3B7DE8] inline-block rounded" />
+                <span className="flex items-center gap-1.5 text-[#3B7DE8] font-semibold glass-pill px-2.5 py-1 rounded-full">
+                  <span className="w-3.5 h-1 bg-[#3B7DE8] inline-block rounded-full" />
                   Internal
                 </span>
-                <span className="flex items-center gap-1.5 text-slate-400 font-semibold">
-                  <span className="w-4 h-0.5 border-t-2 border-dashed border-slate-300 inline-block" />
+                <span className="flex items-center gap-1.5 text-slate-500 font-semibold glass-pill px-2.5 py-1 rounded-full">
+                  <span className="w-3.5 h-0.5 border-t-2 border-dashed border-slate-400 inline-block" />
                   Nasional
                 </span>
               </div>
@@ -331,7 +331,7 @@ export const AdminDashboard = () => {
               <TrendLineChart />
             </div>
 
-            <div className="bg-[#EEF3FD] border border-[#3B7DE8]/15 rounded-xl p-4 flex items-start gap-3 text-xs text-slate-700">
+            <div className="glass-card border border-white/80 rounded-2xl p-4 flex items-start gap-3 text-xs text-slate-700">
               <Info className="w-4 h-4 text-[#3B7DE8] shrink-0 mt-0.5" />
               <p className="leading-relaxed text-[11px] sm:text-xs">
                 <strong>Catatan Analisis:</strong> Terjadi penurunan aduan sebesar 15% pada bulan April pasca-sosialisasi anti-perundungan di pekan MPLS, namun kembali meningkat di bulan Mei akibat laporan siber luar jam sekolah.
@@ -340,13 +340,13 @@ export const AdminDashboard = () => {
           </div>
 
           {/* Right: Distribusi per Kategori */}
-          <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-100 shadow-md space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="lg:col-span-5 glass-panel-elevated p-6 rounded-3xl border border-white/80 shadow-md space-y-4">
+            <div className="flex items-center justify-between border-b border-white/50 pb-3">
               <div>
                 <h3 className="text-sm font-bold text-slate-900">Distribusi per Kategori</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Klasifikasi 7 jenis kekerasan (Permendikbudristek 46/2023).</p>
+                <p className="text-xs text-slate-500 mt-0.5">Klasifikasi 7 jenis kekerasan (Permendikbudristek 46/2023).</p>
               </div>
-              <span className="px-2.5 py-1 rounded-xl text-[11px] font-bold bg-[#EEF3FD] text-[#3B7DE8]">
+              <span className="px-3 py-1 rounded-full text-[11px] font-extrabold glass-pill-blue">
                 7 Kategori
               </span>
             </div>
@@ -359,7 +359,7 @@ export const AdminDashboard = () => {
                 return (
                   <div key={cat.id} className="space-y-1">
                     <div className="flex items-center justify-between text-xs">
-                      <span className={`font-semibold ${cat.isAlert ? 'text-rose-700 font-bold' : 'text-slate-700'}`}>
+                      <span className={`font-semibold ${cat.isAlert ? 'text-rose-700 font-bold' : 'text-slate-800'}`}>
                         {cat.name}
                       </span>
                       <div className="flex items-center gap-1.5">
@@ -369,14 +369,14 @@ export const AdminDashboard = () => {
                         <span className="text-slate-400 text-[11px]">(Ref: {cat.refCount})</span>
                       </div>
                     </div>
-                    <div className="h-2 w-full bg-slate-100 rounded-full relative overflow-hidden">
+                    <div className="h-2 w-full bg-slate-200/60 rounded-full relative overflow-hidden">
                       <div
-                        className="absolute left-0 top-0 bottom-0 bg-slate-200/80 rounded-full"
+                        className="absolute left-0 top-0 bottom-0 bg-slate-300/80 rounded-full"
                         style={{ width: `${refPercent}%` }}
                       />
                       <div
-                        className={`absolute left-0 top-0 bottom-0 rounded-full transition-all duration-500 ${
-                          cat.isAlert ? 'bg-rose-500' : 'bg-[#3B7DE8]'
+                        className={`absolute left-0 top-0 bottom-0 rounded-full transition-all duration-500 shadow-xs ${
+                          cat.isAlert ? 'bg-rose-500' : 'bg-gradient-to-r from-[#3B7DE8] to-blue-600'
                         }`}
                         style={{ width: `${activePercent}%` }}
                       />
@@ -386,13 +386,13 @@ export const AdminDashboard = () => {
               })}
             </div>
 
-            <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+            <div className="pt-2 border-t border-white/50 flex items-center justify-between text-[11px] text-slate-500">
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-sm bg-[#3B7DE8] inline-block" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#3B7DE8] inline-block" />
                 Data Sekolah (Aktif)
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-sm bg-slate-200 inline-block" />
+                <span className="w-2.5 h-2.5 rounded-full bg-slate-300 inline-block" />
                 Benchmark Nasional (PPKSP)
               </span>
             </div>
@@ -401,15 +401,15 @@ export const AdminDashboard = () => {
         </div>
 
         {/* Bottom Section: Priority Queue Table */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-md p-6 space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div className="glass-panel-elevated rounded-3xl border border-white/80 shadow-md p-6 space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/50 pb-4">
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#EEF3FD] flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-2xl glass-pill-blue flex items-center justify-center shrink-0">
                 <ShieldCheck className="w-5 h-5 text-[#3B7DE8]" />
               </div>
               <div>
                 <h3 className="text-sm font-bold text-slate-900">Antrean Verifikasi &amp; Pemantauan Kasus Terkini</h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 mt-0.5">
                   Daftar laporan masuk yang membutuhkan validasi administratif dan tindak lanjut segera.
                 </p>
               </div>
@@ -417,7 +417,7 @@ export const AdminDashboard = () => {
 
             <Link
               to="/admin/laporan"
-              className="text-xs font-bold text-[#3B7DE8] hover:text-[#2563c0] border border-[#3B7DE8]/30 hover:border-[#3B7DE8] px-3.5 py-2 rounded-xl bg-[#EEF3FD] hover:bg-[#dde9fa] transition flex items-center gap-1.5 self-start sm:self-auto shrink-0"
+              className="text-xs font-bold text-[#3B7DE8] glass-pill-blue hover:bg-[#3B7DE8]/20 px-4 py-2 rounded-2xl transition flex items-center gap-1.5 self-start sm:self-auto shrink-0"
             >
               <span>Lihat Semua Arsip</span>
               <span>→</span>
@@ -428,7 +428,7 @@ export const AdminDashboard = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                <tr className="border-b border-white/50 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
                   <th className="py-3 px-3">TIPE DATA</th>
                   <th className="py-3 px-3">KODE TIKET</th>
                   <th className="py-3 px-3">KATEGORI INSIDEN</th>
@@ -438,7 +438,7 @@ export const AdminDashboard = () => {
                   <th className="py-3 px-3 text-right">TINDAKAN</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50 font-medium">
+              <tbody className="divide-y divide-white/40 font-medium">
                 {displayCases.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="py-10 text-center text-slate-400 text-xs">
@@ -447,23 +447,23 @@ export const AdminDashboard = () => {
                   </tr>
                 ) : (
                   displayCases.map((item) => {
-                    let badgeUrgensi = 'text-slate-600 bg-slate-100';
-                    if (item.urgency === 'Tinggi') badgeUrgensi = 'text-rose-700 bg-rose-50 border border-rose-200';
-                    else if (item.urgency === 'Sedang') badgeUrgensi = 'text-amber-700 bg-amber-50 border border-amber-200';
+                    let badgeUrgensi = 'glass-pill text-slate-600';
+                    if (item.urgency === 'Tinggi') badgeUrgensi = 'glass-pill-red';
+                    else if (item.urgency === 'Sedang') badgeUrgensi = 'glass-pill-yellow';
 
-                    let badgeStatus = 'bg-slate-100 text-slate-700';
-                    if (item.status_badge === 'amber') badgeStatus = 'bg-amber-100 text-amber-800 border border-amber-200';
-                    else if (item.status_badge === 'sky') badgeStatus = 'bg-blue-100 text-blue-800 border border-blue-200';
-                    else if (item.status_badge === 'purple') badgeStatus = 'bg-purple-100 text-purple-800 border border-purple-200';
-                    else if (item.status_badge === 'emerald') badgeStatus = 'bg-emerald-100 text-emerald-800 border border-emerald-200';
+                    let badgeStatus = 'glass-pill text-slate-700';
+                    if (item.status_badge === 'amber') badgeStatus = 'glass-pill-yellow';
+                    else if (item.status_badge === 'sky') badgeStatus = 'glass-pill-blue';
+                    else if (item.status_badge === 'purple') badgeStatus = 'glass-pill text-purple-700 border-purple-200';
+                    else if (item.status_badge === 'emerald') badgeStatus = 'glass-pill-green';
 
                     return (
-                      <tr key={item.id} className="hover:bg-[#EEF3FD]/40 transition">
+                      <tr key={item.id} className="hover:bg-white/60 transition">
                         <td className="py-3 px-3 whitespace-nowrap">
-                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                             item.type === 'active'
-                              ? 'bg-[#EEF3FD] text-[#3B7DE8] border border-[#3B7DE8]/20'
-                              : 'bg-slate-100 text-slate-500 border border-slate-200'
+                              ? 'glass-pill-blue'
+                              : 'glass-pill text-slate-500'
                           }`}>
                             {item.type === 'active' ? 'Data Aktif' : 'Data Referensi'}
                           </span>
@@ -477,7 +477,7 @@ export const AdminDashboard = () => {
 
                         <td className="py-3 px-3 text-slate-800 font-semibold">{item.category}</td>
 
-                        <td className="py-3 px-3 whitespace-nowrap text-slate-400">{item.date}</td>
+                        <td className="py-3 px-3 whitespace-nowrap text-slate-500">{item.date}</td>
 
                         <td className="py-3 px-3 whitespace-nowrap">
                           <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${badgeUrgensi}`}>
@@ -502,7 +502,7 @@ export const AdminDashboard = () => {
                                 navigate('/admin/laporan');
                               }
                             }}
-                            className="px-3 py-1.5 rounded-xl border border-[#3B7DE8]/30 bg-[#EEF3FD] hover:bg-[#dde9fa] text-[#3B7DE8] font-bold text-xs inline-flex items-center gap-1 transition"
+                            className="px-3.5 py-1.5 rounded-xl glass-button-secondary text-[#3B7DE8] hover:text-[#2563c0] font-bold text-xs inline-flex items-center gap-1 transition"
                           >
                             <span>{item.action_label}</span>
                             <ExternalLink className="w-3 h-3" />
@@ -517,36 +517,36 @@ export const AdminDashboard = () => {
           </div>
 
           {/* Table Footer */}
-          <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-400">
+          <div className="pt-3 border-t border-white/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500">
             <span>
               Menampilkan {displayCases.length} dari {metrics.total || 142} rekaman data insiden yang terverifikasi
             </span>
             <div className="flex items-center gap-1">
-              <button type="button" disabled className="px-3 py-1 rounded-lg border border-slate-200 text-slate-300 text-xs disabled:opacity-50">
+              <button type="button" disabled className="px-3 py-1 rounded-xl glass-card text-slate-400 text-xs disabled:opacity-50">
                 Sebelumnya
               </button>
-              <span className="px-3 py-1 rounded-lg bg-[#3B7DE8] text-white font-bold text-xs">1</span>
-              <button type="button" disabled className="px-3 py-1 rounded-lg border border-slate-200 text-slate-300 text-xs disabled:opacity-50">
+              <span className="px-3 py-1 rounded-xl glass-button-primary text-white font-bold text-xs">1</span>
+              <button type="button" disabled className="px-3 py-1 rounded-xl glass-card text-slate-400 text-xs disabled:opacity-50">
                 Selanjutnya
               </button>
             </div>
           </div>
         </div>
 
-        {/* AI Summary Bar */}
-        <div className="rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3" style={{ background: 'linear-gradient(135deg, #3B7DE8 0%, #2563c0 100%)' }}>
+        {/* AI Summary Bar — Frosted Accent Pill */}
+        <div className="rounded-3xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 glass-button-primary shadow-lg border border-white/30">
           <div className="flex items-center gap-3">
-            <Sparkles className="w-5 h-5 text-[#F5C518] flex-shrink-0" />
+            <Sparkles className="w-6 h-6 text-[#F5C518] flex-shrink-0" />
             <div>
-              <span className="text-white font-extrabold text-sm">AI Summary</span>
-              <p className="text-white/80 text-xs mt-0.5">
+              <span className="text-white font-extrabold text-sm">AI Summary Liquid Assistant</span>
+              <p className="text-white/85 text-xs mt-0.5">
                 {metrics.menunggu ?? 0} laporan butuh perhatian segera. Pola siber meningkat 23% minggu ini. Intervensi awal dapat meningkatkan efektivitas penanganan.
               </p>
             </div>
           </div>
           <Link
             to="/admin/validasi-ai"
-            className="flex-shrink-0 px-4 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs flex items-center gap-1.5 transition border border-white/20"
+            className="flex-shrink-0 px-4 py-2 rounded-2xl glass-card text-slate-800 hover:text-[#3B7DE8] font-bold text-xs flex items-center gap-1.5 transition"
           >
             Tinjau Analisis AI
             <ExternalLink className="w-3.5 h-3.5" />

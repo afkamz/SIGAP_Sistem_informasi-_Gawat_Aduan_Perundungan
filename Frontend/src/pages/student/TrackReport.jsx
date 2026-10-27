@@ -208,7 +208,13 @@ export const TrackReport = () => {
   );
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#F8FAFC] text-slate-800 font-sans antialiased">
+    <div className="min-h-screen flex flex-col justify-between bg-liquid-mesh text-slate-800 font-sans antialiased relative">
+      {/* Ambient glow orbs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/4 w-80 h-80 bg-violet-400/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/3 w-72 h-72 bg-cyan-400/15 rounded-full blur-3xl" />
+      </div>
       <StudentHeader />
 
       <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-10 space-y-7">
@@ -220,7 +226,7 @@ export const TrackReport = () => {
           <div className="space-y-8 animate-fade-in">
             {/* Top Pill Badge */}
             <div className="flex justify-center">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-xs font-semibold text-sky-800 shadow-2xs">
+              <div className="glass-pill inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold text-sky-800 shadow-sm">
                 <Lock className="w-3.5 h-3.5 text-sky-700" />
                 <span>Pelacakan Aman & Anonim Tanpa Perlu Masuk</span>
               </div>
@@ -244,7 +250,7 @@ export const TrackReport = () => {
                   if (!ticketInput.trim()) return;
                   handleSearch(ticketInput, false);
                 }}
-                className="flex items-center bg-white rounded-2xl border-2 border-sky-200/90 shadow-sm hover:border-sky-300 focus-within:border-sky-400 p-1.5 transition"
+                className="glass-panel flex items-center rounded-2xl border border-white/70 p-1.5 transition hover:border-white/90 focus-within:ring-2 focus-within:ring-sky-300/40"
               >
                 <div className="pl-3.5 pr-1 text-slate-400">
                   <Mail className="w-5 h-5 text-slate-400" />
@@ -261,7 +267,7 @@ export const TrackReport = () => {
                     }
                   }}
                   placeholder="Masukkan kode tiket (contoh: SGP-2026-0091)"
-                  className="w-full px-3 py-2.5 bg-transparent font-mono font-bold text-sm sm:text-base text-slate-800 uppercase tracking-wider focus:outline-none placeholder:text-slate-300 placeholder:font-medium placeholder:font-sans"
+                  className="w-full px-3 py-2.5 bg-transparent font-mono font-bold text-sm sm:text-base text-slate-800 uppercase tracking-wider focus:outline-none placeholder:text-slate-400 placeholder:font-medium placeholder:font-sans placeholder:normal-case"
                 />
                 {ticketInput && (
                   <button
@@ -271,7 +277,7 @@ export const TrackReport = () => {
                       setActiveReport(null);
                       setSearchAttempted(false);
                     }}
-                    className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 mr-1 transition"
+                    className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-white/60 mr-1 transition"
                     title="Hapus"
                   >
                     <X className="w-4 h-4" />
@@ -279,9 +285,9 @@ export const TrackReport = () => {
                 )}
                 <button
                   type="submit"
-                  className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs sm:text-sm flex items-center gap-2 shrink-0 transition active:scale-95 shadow-md"
+                  className="glass-button-primary px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 shrink-0 transition active:scale-95"
                 >
-                  <Search className="w-4 h-4 text-slate-900" />
+                  <Search className="w-4 h-4" />
                   <span>Cek Status</span>
                 </button>
               </form>
@@ -315,8 +321,8 @@ export const TrackReport = () => {
                   }}
                   className={`font-mono text-xs px-2.5 py-1 rounded-lg border transition ${
                     activeReport?.ticket_code === code
-                      ? 'bg-sky-100 text-sky-900 border-sky-300 font-bold'
-                      : 'bg-white hover:bg-slate-100 text-slate-600 border-slate-200'
+                      ? 'bg-sky-100/80 text-sky-900 border-sky-300/70 font-bold backdrop-blur-sm'
+                      : 'glass-card text-slate-600 border-white/60 hover:border-sky-200/60'
                   }`}
                 >
                   {code}
@@ -324,17 +330,17 @@ export const TrackReport = () => {
               ))}
             </div>
 
-            {/* Status Result Card (Exact layout matching Image 2) */}
+            {/* Status Result Card */}
             {activeReport ? (
-              <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-7 space-y-6 animate-fade-in">
+              <div className="glass-panel-elevated rounded-3xl p-6 sm:p-7 space-y-6 animate-fade-in">
                 {/* Header Row */}
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 border-b border-slate-100 pb-5">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 border-b border-white/50 pb-5">
                   <div className="space-y-1.5">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-[11px] font-bold tracking-wider text-slate-400 uppercase">
                         KODE TIKET TERVERIFIKASI
                       </span>
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/80">
+                      <span className="glass-pill-yellow inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold">
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                         {activeReport.status_badge || activeReport.status_label || 'Sedang Ditelaah Konselor'}
                       </span>
@@ -347,7 +353,7 @@ export const TrackReport = () => {
                         type="button"
                         onClick={() => handleCopyTicket(activeReport.ticket_code)}
                         title="Salin Kode Tiket"
-                        className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-500 transition relative"
+                        className="p-1.5 rounded-lg border border-white/70 hover:bg-white/60 text-slate-500 transition relative backdrop-blur-sm"
                       >
                         {copied ? (
                           <Check className="w-4 h-4 text-emerald-600" />
@@ -365,7 +371,7 @@ export const TrackReport = () => {
 
                   {/* 3 Info Boxes on Right */}
                   <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
-                    <div className="bg-slate-50/90 border border-slate-100 px-3.5 py-2 rounded-xl text-left min-w-[120px]">
+                    <div className="glass-card border border-white/60 px-3.5 py-2 rounded-xl text-left min-w-[120px]">
                       <span className="text-[10px] font-bold text-slate-400 uppercase block tracking-wider">
                         KATEGORI
                       </span>
@@ -374,7 +380,7 @@ export const TrackReport = () => {
                       </span>
                     </div>
 
-                    <div className="bg-slate-50/90 border border-slate-100 px-3.5 py-2 rounded-xl text-left min-w-[130px]">
+                    <div className="glass-card border border-white/60 px-3.5 py-2 rounded-xl text-left min-w-[130px]">
                       <span className="text-[10px] font-bold text-slate-400 uppercase block tracking-wider">
                         DIKIRIM PADA
                       </span>
@@ -383,7 +389,7 @@ export const TrackReport = () => {
                       </span>
                     </div>
 
-                    <div className="bg-slate-50/90 border border-slate-100 px-3.5 py-2 rounded-xl text-left min-w-[110px]">
+                    <div className="glass-card border border-white/60 px-3.5 py-2 rounded-xl text-left min-w-[110px]">
                       <span className="text-[10px] font-bold text-slate-400 uppercase block tracking-wider">
                         SIFAT PELAPORAN
                       </span>
@@ -525,8 +531,8 @@ export const TrackReport = () => {
                 </div>
 
                 {/* Catatan Petugas Konselor BK Box */}
-                <div className="bg-sky-50/60 border border-sky-100 rounded-2xl p-4 sm:p-5 flex items-start gap-3.5">
-                  <div className="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center shrink-0 mt-0.5">
+                <div className="glass-card border border-sky-200/50 rounded-2xl p-4 sm:p-5 flex items-start gap-3.5">
+                  <div className="w-8 h-8 rounded-xl bg-sky-100/80 text-sky-700 flex items-center justify-center shrink-0 mt-0.5">
                     <MessageSquare className="w-4 h-4" />
                   </div>
                   <div className="space-y-1.5 flex-1 min-w-0">
@@ -550,7 +556,7 @@ export const TrackReport = () => {
                   <button
                     type="button"
                     onClick={() => setViewMode('detail')}
-                    className="inline-flex items-center gap-2 text-xs font-bold text-sky-800 hover:text-sky-950 bg-sky-50 hover:bg-sky-100 px-4 py-2.5 rounded-xl border border-sky-200 transition"
+                    className="glass-button-secondary inline-flex items-center gap-2 text-xs font-bold text-sky-800 px-4 py-2.5 rounded-xl transition"
                   >
                     <span>Lihat Progres Penanganan Lengkap & Dokumen Bukti</span>
                     <ChevronRight className="w-4 h-4" />
@@ -558,14 +564,14 @@ export const TrackReport = () => {
                 </div>
               </div>
             ) : searchAttempted ? (
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 text-center space-y-3">
-                <div className="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center mx-auto">
+              <div className="glass-panel-elevated p-8 rounded-3xl text-center space-y-3">
+                <div className="w-12 h-12 rounded-full bg-red-400/20 text-red-500 flex items-center justify-center mx-auto border border-red-300/50">
                   <AlertCircle className="w-6 h-6" />
                 </div>
                 <h4 className="text-sm font-bold text-slate-800">Kode Tiket Tidak Ditemukan</h4>
                 <p className="text-xs text-slate-500 max-w-md mx-auto">
                   Pastikan Anda memasukkan kode tiket dengan format yang benar (misal:{' '}
-                  <code className="bg-slate-100 px-1.5 py-0.5 rounded font-mono font-bold">SGP-2026-0091</code>).
+                  <code className="bg-white/60 px-1.5 py-0.5 rounded font-mono font-bold">SGP-2026-0091</code>).
                 </p>
               </div>
             ) : null}
@@ -636,28 +642,28 @@ export const TrackReport = () => {
                   const isDone = report.status === 'selesai';
                   const isMediasi = report.status_badge === 'Mediasi Terjadwal' || report.status === 'ditindaklanjuti';
                   
-                  let badgeClass = 'bg-amber-50 text-amber-800 border-amber-200';
+                  let badgeClass = 'glass-pill-yellow';
                   let badgeText = report.status_badge || 'Penelaahan';
                   if (isDone) {
-                    badgeClass = 'bg-emerald-50 text-emerald-800 border-emerald-200';
+                    badgeClass = 'glass-pill-green';
                     badgeText = 'Terselesaikan';
                   } else if (isMediasi) {
-                    badgeClass = 'bg-sky-50 text-sky-800 border-sky-200';
+                    badgeClass = 'glass-pill-blue';
                     badgeText = report.status_badge || 'Mediasi Terjadwal';
                   }
 
                   return (
                     <div
                       key={report.id}
-                      className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-xs hover:border-slate-300 transition flex flex-col justify-between space-y-3.5"
+                      className="glass-card p-5 rounded-2xl flex flex-col justify-between space-y-3.5 hover:shadow-md transition"
                     >
                       <div className="space-y-2.5">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="font-mono text-xs font-bold text-sky-900 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-200">
+                          <span className="font-mono text-xs font-bold text-sky-900 glass-pill-blue px-2 py-0.5 rounded-md">
                             {report.ticket_code}
                           </span>
                           <span
-                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${badgeClass}`}
+                            className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${badgeClass}`}
                           >
                             <span
                               className={`w-1.5 h-1.5 rounded-full ${
@@ -676,7 +682,7 @@ export const TrackReport = () => {
                         </p>
                       </div>
 
-                      <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                      <div className="pt-2 border-t border-white/50 flex items-center justify-between text-xs">
                         <span className="text-[11px] text-slate-400">
                           Tanggal Kirim<br />
                           <strong className="text-slate-600 font-semibold">{report.tanggal?.split('•')[0] || report.tanggal}</strong>
@@ -718,7 +724,7 @@ export const TrackReport = () => {
                     setViewMode('overview');
                   }
                 }}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition"
+                className="glass-button-secondary inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl transition"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>
@@ -739,23 +745,23 @@ export const TrackReport = () => {
 
             {/* Success notification if additional message sent */}
             {submitSuccessNotice && (
-              <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2 animate-fade-in">
+              <div className="p-3.5 rounded-2xl bg-emerald-500/10 backdrop-blur-sm border border-emerald-300/60 text-emerald-800 text-xs flex items-center gap-2 animate-fade-in">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Pesan tambahan / bukti baru berhasil diteruskan ke Konselor BK & Satgas.</span>
               </div>
             )}
 
             {/* Main Detail Card (Exact Match to Image 1) */}
-            <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8 space-y-7">
+            <div className="glass-panel-elevated rounded-3xl p-6 sm:p-8 space-y-7">
               
               {/* Row 1: Badges Row */}
               <div className="flex items-center justify-between gap-3 flex-wrap">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-sky-50 border border-sky-200 text-xs font-semibold text-sky-900">
+                <span className="glass-pill-blue inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold">
                   <Tag className="w-3.5 h-3.5 text-sky-700" />
                   <span>{activeReport.kategori_nama}</span>
                 </span>
 
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-sky-100 text-sky-900 border border-sky-200">
+                <span className="glass-pill-blue inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold">
                   <span className="w-2 h-2 rounded-full bg-sky-600"></span>
                   <span>{activeReport.status_label || 'Sedang Ditindaklanjuti'}</span>
                 </span>
@@ -775,7 +781,7 @@ export const TrackReport = () => {
                       type="button"
                       onClick={() => handleCopyTicket(activeReport.ticket_code)}
                       title="Salin Kode Tiket"
-                      className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-500 transition relative"
+                      className="p-1.5 rounded-lg border border-white/70 hover:bg-white/60 text-slate-500 transition relative backdrop-blur-sm"
                     >
                       {copied ? (
                         <Check className="w-4 h-4 text-emerald-600" />
@@ -791,13 +797,13 @@ export const TrackReport = () => {
                   </div>
                 </div>
 
-                <div className="w-11 h-11 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-700 shrink-0">
+                <div className="w-11 h-11 rounded-2xl glass-card flex items-center justify-center text-sky-700 shrink-0">
                   <Shield className="w-5 h-5" strokeWidth={1.8} />
                 </div>
               </div>
 
               {/* Row 3: Date & Anonymity */}
-              <div className="flex items-center gap-3 text-xs text-slate-500 border-b border-slate-100 pb-5 flex-wrap">
+              <div className="flex items-center gap-3 text-xs text-slate-500 border-b border-white/50 pb-5 flex-wrap">
                 <div className="flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5 text-slate-400" />
                   <span>{activeReport.tanggal || '14 Mei 2024 • 14:15 WIB'}</span>
@@ -822,9 +828,9 @@ export const TrackReport = () => {
 
                 <div className="relative pt-2 pb-4">
                   {/* Track line */}
-                  <div className="absolute left-6 right-6 top-7 -translate-y-1/2 h-0.5 bg-slate-200 z-0"></div>
+                  <div className="absolute left-6 right-6 top-7 -translate-y-1/2 h-0.5 bg-white/40 z-0"></div>
                   <div
-                    className="absolute left-6 top-7 -translate-y-1/2 h-0.5 bg-sky-600 z-0 transition-all duration-500"
+                    className="absolute left-6 top-7 -translate-y-1/2 h-0.5 bg-sky-500 z-0 transition-all duration-500"
                     style={{
                       width:
                         currentStepIdx === 0
@@ -840,7 +846,7 @@ export const TrackReport = () => {
                   <div className="relative z-10 grid grid-cols-4 gap-2">
                     {/* Step 1: Menunggu */}
                     <div className="flex flex-col items-center text-center">
-                      <div className="w-10 h-10 rounded-full bg-[#3B7DE8] text-white flex items-center justify-center font-bold text-sm shadow-md">
+                      <div className="w-10 h-10 rounded-full bg-sky-500 text-white flex items-center justify-center font-bold text-sm shadow-md">
                         <Check className="w-5 h-5 stroke-[2.5]" />
                       </div>
                       <span className="font-bold text-xs text-slate-900 mt-2.5 block">Menunggu</span>
@@ -854,8 +860,8 @@ export const TrackReport = () => {
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow-xs ${
                           currentStepIdx >= 1
-                            ? 'bg-[#3B7DE8] text-white'
-                            : 'bg-slate-200 text-slate-500'
+                            ? 'bg-sky-500 text-white'
+                            : 'bg-white/50 backdrop-blur-sm border border-white/60 text-slate-400'
                         }`}
                       >
                         {currentStepIdx >= 1 ? (
@@ -876,9 +882,9 @@ export const TrackReport = () => {
                         className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow-xs ${
                           currentStepIdx >= 2
                             ? currentStepIdx === 2
-                              ? 'bg-sky-800 text-white ring-4 ring-sky-100'
-                              : 'bg-[#3B7DE8] text-white'
-                            : 'bg-slate-200 text-slate-500'
+                              ? 'bg-sky-600 text-white ring-4 ring-sky-200/60 shadow-md'
+                              : 'bg-sky-500 text-white'
+                            : 'bg-white/50 backdrop-blur-sm border border-white/60 text-slate-400'
                         }`}
                       >
                         {currentStepIdx > 2 ? (
@@ -909,8 +915,8 @@ export const TrackReport = () => {
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow-xs ${
                           currentStepIdx === 3
-                            ? 'bg-emerald-600 text-white ring-4 ring-emerald-100'
-                            : 'bg-white border-2 border-dashed border-slate-300 text-slate-400'
+                            ? 'bg-emerald-600 text-white ring-4 ring-emerald-200/60 shadow-md'
+                            : 'bg-white/40 border-2 border-dashed border-white/70 text-slate-400 backdrop-blur-sm'
                         }`}
                       >
                         {currentStepIdx === 3 ? (
@@ -929,17 +935,17 @@ export const TrackReport = () => {
               </div>
 
               {/* Row 5: Catatan Petugas Penanganan (Exact Box from Image 1) */}
-              <div className="bg-slate-50/90 border border-slate-200/80 rounded-2xl p-5 space-y-3">
+              <div className="glass-card rounded-2xl p-5 space-y-3">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center shrink-0">
+                    <div className="w-7 h-7 rounded-lg bg-sky-100/80 text-sky-700 flex items-center justify-center shrink-0">
                       <FileText className="w-4 h-4" />
                     </div>
                     <h5 className="font-bold text-xs sm:text-sm text-slate-900">
                       Catatan Petugas Penanganan
                     </h5>
                   </div>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 text-slate-600 shadow-2xs">
+                  <span className="glass-pill inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold text-slate-600 shadow-2xs">
                     <CheckCircle2 className="w-3.5 h-3.5 text-sky-600" />
                     <span>Tim BK & Satgas PPKSP</span>
                   </span>
@@ -962,8 +968,8 @@ export const TrackReport = () => {
               </div>
 
               {/* Row 6: Jaminan Kerahasiaan & Perlindungan Siswa Box (Exact from Image 1) */}
-              <div className="bg-sky-50/70 border border-sky-200/90 rounded-2xl p-5 flex items-start gap-4">
-                <div className="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="glass-card rounded-2xl p-5 flex items-start gap-4 border border-sky-200/50">
+                <div className="w-8 h-8 rounded-xl bg-sky-100/80 text-sky-700 flex items-center justify-center shrink-0 mt-0.5">
                   <ShieldCheck className="w-5 h-5 text-sky-700" />
                 </div>
                 <div className="space-y-1 text-xs">
@@ -981,11 +987,11 @@ export const TrackReport = () => {
               </div>
 
               {/* Row 7: Action Footer Buttons (Exact from Image 1) */}
-              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-100">
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/50">
                 <button
                   type="button"
                   onClick={() => setShowMessageModal(true)}
-                  className="w-full sm:w-auto px-5 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-sm border border-slate-200 hover:border-slate-300 shadow-2xs flex items-center justify-center gap-2 transition active:scale-98"
+                  className="glass-button-secondary w-full sm:w-auto px-5 py-3 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition active:scale-98"
                 >
                   <MessageSquare className="w-4 h-4 text-sky-700" />
                   <span>Kirim Pesan Tambahan / Bukti Baru</span>
@@ -1011,9 +1017,9 @@ export const TrackReport = () => {
       {/* MODAL 1: Kirim Pesan Tambahan / Bukti Baru                               */}
       {/* ========================================================================= */}
       {showMessageModal && activeReport && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-xl border border-slate-200 space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-md p-4 animate-fade-in">
+          <div className="glass-panel-elevated rounded-3xl max-w-lg w-full p-6 sm:p-7 space-y-5">
+            <div className="flex items-center justify-between border-b border-white/50 pb-3">
               <div className="space-y-0.5">
                 <h3 className="font-bold text-base text-slate-900">
                   Kirim Pesan Tambahan / Bukti Baru
@@ -1025,7 +1031,7 @@ export const TrackReport = () => {
               <button
                 type="button"
                 onClick={() => setShowMessageModal(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-white/60 transition"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1042,7 +1048,7 @@ export const TrackReport = () => {
                   value={additionalMessage}
                   onChange={(e) => setAdditionalMessage(e.target.value)}
                   placeholder="Tuliskan perkembangan terbaru, kronologi susulan, atau tanggapan untuk konselor BK..."
-                  className="w-full p-3 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-sky-400 leading-relaxed"
+                  className="glass-input w-full p-3 text-xs rounded-xl focus:outline-none leading-relaxed"
                 />
               </div>
 
@@ -1050,7 +1056,7 @@ export const TrackReport = () => {
                 <label className="text-xs font-bold text-slate-700 block mb-1.5">
                   Lampirkan Berkas / Screenshot Bukti Tambahan (Opsional)
                 </label>
-                <label className="border-2 border-dashed border-slate-200 hover:border-sky-300 rounded-xl p-4 flex flex-col items-center justify-center text-center cursor-pointer transition bg-slate-50/50">
+                <label className="border-2 border-dashed border-sky-300/60 hover:border-sky-400 rounded-xl p-4 flex flex-col items-center justify-center text-center cursor-pointer transition bg-white/40 backdrop-blur-sm">
                   <UploadCloud className="w-6 h-6 text-sky-600 mb-1" />
                   <span className="text-xs font-semibold text-slate-700">
                     {attachedFile ? attachedFile.name : 'Pilih file tangkapan layar atau dokumen'}
@@ -1068,16 +1074,16 @@ export const TrackReport = () => {
                 <button
                   type="button"
                   onClick={() => setShowMessageModal(false)}
-                  className="px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition"
+                  className="glass-button-secondary px-4 py-2.5 rounded-xl text-xs font-semibold transition"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmittingMessage}
-                  className="px-5 py-2.5 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs flex items-center gap-2 transition shadow-md disabled:opacity-50"
+                  className="glass-button-primary px-5 py-2.5 rounded-xl font-bold text-xs flex items-center gap-2 transition disabled:opacity-50"
                 >
-                  <Send className="w-3.5 h-3.5 text-slate-900" />
+                  <Send className="w-3.5 h-3.5" />
                   <span>{isSubmittingMessage ? 'Mengirim...' : 'Kirim Pesan'}</span>
                 </button>
               </div>
@@ -1090,9 +1096,9 @@ export const TrackReport = () => {
       {/* MODAL 2: Lupa Kode Tiket Help Modal                                      */}
       {/* ========================================================================= */}
       {showHelpModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-xl border border-slate-200 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-md p-4 animate-fade-in">
+          <div className="glass-panel-elevated rounded-3xl max-w-md w-full p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-white/50 pb-3">
               <div className="flex items-center gap-2">
                 <HelpCircle className="w-5 h-5 text-sky-700" />
                 <h3 className="font-bold text-sm text-slate-900">Bantuan: Lupa Kode Tiket</h3>
@@ -1100,7 +1106,7 @@ export const TrackReport = () => {
               <button
                 type="button"
                 onClick={() => setShowHelpModal(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-white/60 transition"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1108,9 +1114,9 @@ export const TrackReport = () => {
 
             <div className="space-y-3 text-xs text-slate-600 leading-relaxed">
               <p>
-                Kode tiket (contoh: <code className="font-mono font-bold bg-slate-100 px-1 py-0.5 rounded">SGP-2026-0091</code>) diberikan pada layar saat pengaduan Anda berhasil terkirim.
+                Kode tiket (contoh: <code className="font-mono font-bold bg-white/60 px-1 py-0.5 rounded border border-white/70">SGP-2026-0091</code>) diberikan pada layar saat pengaduan Anda berhasil terkirim.
               </p>
-              <div className="p-3 bg-sky-50 rounded-xl border border-sky-100 space-y-1.5 text-slate-700">
+              <div className="p-3 glass-card rounded-xl border border-sky-200/50 space-y-1.5 text-slate-700">
                 <strong className="block text-sky-900">Cara Menemukan Kode Tiket:</strong>
                 <ul className="list-disc list-inside space-y-1 text-[11px]">
                   <li>Periksa tangkapan layar atau catatan saat mengirim formulir pengaduan.</li>
@@ -1124,7 +1130,7 @@ export const TrackReport = () => {
               <button
                 type="button"
                 onClick={() => setShowHelpModal(false)}
-                className="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold text-xs"
+                className="glass-button-secondary px-4 py-2 rounded-xl font-bold text-xs"
               >
                 Tutup
               </button>
@@ -1137,10 +1143,10 @@ export const TrackReport = () => {
       {/* MODAL 3: Cetak / Unduh Bukti Tanda Terima (PDF Print)                     */}
       {/* ========================================================================= */}
       {showReceiptModal && activeReport && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 overflow-y-auto animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-6 my-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-md p-4 overflow-y-auto animate-fade-in">
+          <div className="glass-panel-elevated rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-6 my-auto">
             {/* Modal Actions Header */}
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3 print:hidden">
+            <div className="flex items-center justify-between border-b border-white/50 pb-3 print:hidden">
               <h3 className="font-bold text-sm text-slate-900 flex items-center gap-2">
                 <FileText className="w-4 h-4 text-sky-700" />
                 <span>Bukti Tanda Terima Registrasi Laporan</span>
@@ -1149,7 +1155,7 @@ export const TrackReport = () => {
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs flex items-center gap-1.5 transition"
+                  className="glass-button-primary px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition"
                 >
                   <Printer className="w-3.5 h-3.5" />
                   <span>Cetak / Simpan PDF</span>
@@ -1157,7 +1163,7 @@ export const TrackReport = () => {
                 <button
                   type="button"
                   onClick={() => setShowReceiptModal(false)}
-                  className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100"
+                  className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-white/60"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1235,7 +1241,7 @@ export const TrackReport = () => {
               <button
                 type="button"
                 onClick={() => setShowReceiptModal(false)}
-                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition"
+                className="glass-button-secondary px-4 py-2 rounded-xl font-semibold text-xs transition"
               >
                 Tutup
               </button>

@@ -116,22 +116,28 @@ export const LandingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#EEF3FD] text-slate-800">
-      {/* Top Emergency Announcement Bar */}
-      <div className="bg-slate-900 text-white text-xs py-2.5 px-4 border-b border-slate-800">
+    <div className="min-h-screen flex flex-col bg-liquid-mesh text-slate-800 relative overflow-hidden">
+      {/* ─── Ambient Glow Blobs (iOS 26 Liquid Mesh Reflections) ─── */}
+      <div className="fixed top-[-12%] left-[-10%] w-[55vw] h-[55vw] rounded-full bg-blue-400/20 blur-3xl pointer-events-none -z-10" />
+      <div className="fixed top-[30%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-indigo-300/25 blur-3xl pointer-events-none -z-10" />
+      <div className="fixed bottom-[-10%] left-[20%] w-[50vw] h-[50vw] rounded-full bg-sky-200/25 blur-3xl pointer-events-none -z-10" />
+      <div className="fixed top-[60%] right-[30%] w-[35vw] h-[35vw] rounded-full bg-amber-200/20 blur-3xl pointer-events-none -z-10" />
+
+      {/* Top Emergency Announcement Bar — Liquid Dark Glass */}
+      <div className="glass-panel-dark text-white text-xs py-2.5 px-4 border-b border-white/10 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
           <div className="flex items-center gap-2">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
             <span className="text-slate-300">
               Layanan Siaga Aduan Kekerasan Sekolah Sesuai <strong className="text-white">Permendikbudristek No. 46/2023</strong>
             </span>
           </div>
           <div className="flex items-center gap-3 text-slate-300 text-[11px]">
-            <span className="flex items-center gap-1.5 font-semibold text-[#EEF3FD]">
+            <span className="flex items-center gap-1.5 font-semibold text-white glass-pill px-2.5 py-0.5 rounded-full border border-white/20">
               <PhoneCall className="w-3.5 h-3.5 text-[#3B7DE8]" /> Hotline Darurat: SAPA 129 | Polisi 110
             </span>
-            <span className="hidden md:inline text-slate-600">•</span>
-            <Link to="/lacak" className="hover:text-white underline underline-offset-2 transition hidden md:inline">
+            <span className="hidden md:inline text-slate-500">•</span>
+            <Link to="/lacak" className="hover:text-white underline underline-offset-2 transition hidden md:inline font-medium">
               Lacak Tiket Aduan
             </Link>
           </div>
@@ -141,22 +147,22 @@ export const LandingPage = () => {
       {/* Main Navigation Header */}
       <StudentHeader />
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden pt-8 pb-14 lg:pt-12 lg:pb-20">
+      {/* Hero Section — Liquid Glass iOS 26 */}
+      <section className="relative overflow-hidden pt-10 pb-16 lg:pt-16 lg:pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              {/* Official Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#3B7DE8]/20 text-[#3B7DE8] text-xs font-bold shadow-xs">
+              {/* Official Badge — Glass Pill */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill-blue text-xs font-bold shadow-xs">
                 <ShieldCheck className="w-4 h-4 text-[#3B7DE8]" />
-                <span>SIGAP • SISTEM INFORMASI GAWAT ADUAN PERUNDUNGAN</span>
+                <span>SIGAP • LIQUID GLASS OS 26 • PERLINDUNGAN SISWA</span>
               </div>
 
               {/* Main Headline */}
-              <h1 className="text-3xl sm:text-4xl lg:text-[46px] font-black text-slate-900 tracking-tight leading-[1.18]">
+              <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-black text-slate-900 tracking-tight leading-[1.18]">
                 Suarakan Kebenaran. <br className="hidden sm:inline" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3B7DE8] via-blue-700 to-indigo-800">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3B7DE8] via-blue-600 to-indigo-700">
                   Ciptakan Sekolah Bebas Kekerasan
                 </span>{' '}
                 &amp; Perundungan.
@@ -164,7 +170,7 @@ export const LandingPage = () => {
 
               {/* Subtitle */}
               <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Kanal aduan terpadu resmi bagi seluruh pelajar dan warga sekolah. Laporkan kejadian secara aman dengan proteksi identitas berlapis, verifikasi cerdas asisten AI, dan pendampingan terpadu Tim Bimbingan Konseling (BK) &amp; Satgas PPKSP.
+                Kanal aduan terpadu resmi bagi seluruh pelajar dan warga sekolah. Laporkan kejadian secara aman dengan proteksi identitas berlapis, verifikasi cerdas asisten AI NLP, dan pendampingan terpadu Tim Bimbingan Konseling (BK) &amp; Satgas PPKSP.
               </p>
 
               {/* Primary Call-to-Actions */}
@@ -172,7 +178,7 @@ export const LandingPage = () => {
                 <button
                   type="button"
                   onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 group cursor-pointer active:scale-95"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-2xl glass-button-primary text-white font-bold text-sm flex items-center justify-center gap-2 group cursor-pointer"
                 >
                   <ShieldAlert className="w-4 h-4 text-white group-hover:scale-110 transition" />
                   <span>Buat Laporan Sekarang</span>
@@ -181,18 +187,18 @@ export const LandingPage = () => {
 
                 <Link
                   to="/login"
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm border border-slate-200 shadow-sm transition flex items-center justify-center gap-2 active:scale-95"
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-2xl glass-button-secondary text-slate-800 font-bold text-sm flex items-center justify-center gap-2"
                 >
                   <LogIn className="w-4 h-4 text-[#3B7DE8]" />
                   <span>Masuk Portal Siswa</span>
                 </Link>
               </div>
 
-              {/* Quick Ticket Tracking Form */}
+              {/* Quick Ticket Tracking Form — Translucent Glass Bubble */}
               <div className="pt-2 max-w-md mx-auto lg:mx-0">
                 <form
                   onSubmit={handleQuickTrack}
-                  className="p-2 bg-white rounded-2xl border border-slate-200/90 shadow-sm flex items-center gap-2"
+                  className="p-2.5 glass-panel rounded-3xl border border-white/80 shadow-[0_8px_30px_rgba(59,125,232,0.08)] flex items-center gap-2"
                 >
                   <div className="pl-3 text-slate-400">
                     <Search className="w-4 h-4 text-[#3B7DE8]" />
@@ -202,114 +208,116 @@ export const LandingPage = () => {
                     placeholder="Punya Kode Tiket? (Contoh: SGP-2024-0142)"
                     value={quickTicketCode}
                     onChange={(e) => setQuickTicketCode(e.target.value)}
-                    className="w-full bg-transparent text-xs sm:text-sm text-slate-800 focus:outline-none placeholder:text-slate-400"
+                    className="w-full bg-transparent text-xs sm:text-sm text-slate-800 focus:outline-none placeholder:text-slate-400 font-medium"
                   />
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white text-xs font-bold transition flex-shrink-0 cursor-pointer shadow-xs"
+                    className="px-5 py-2.5 rounded-2xl glass-button-primary text-white text-xs font-bold flex-shrink-0 cursor-pointer"
                   >
                     Lacak
                   </button>
                 </form>
-                <p className="text-[11px] text-slate-500 mt-2 flex items-center justify-center lg:justify-start gap-1.5">
+                <p className="text-[11px] text-slate-500 mt-2 flex items-center justify-center lg:justify-start gap-1.5 font-medium">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Pantau status perkembangan laporan kapan saja dengan nomor tiket</span>
                 </p>
               </div>
 
-              {/* Trust Indicators */}
-              <div className="pt-3 grid grid-cols-3 gap-4 border-t border-slate-200/60 max-w-lg mx-auto lg:mx-0 text-left">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-white text-emerald-600 shadow-xs flex items-center justify-center flex-shrink-0 border border-slate-100">
-                    <EyeOff className="w-4 h-4" />
+              {/* Trust Indicators — Frosted Glass Mini Badges */}
+              <div className="pt-4 grid grid-cols-3 gap-3 border-t border-white/50 max-w-lg mx-auto lg:mx-0 text-left">
+                <div className="p-2.5 rounded-2xl glass-card flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl glass-pill-green flex items-center justify-center flex-shrink-0">
+                    <EyeOff className="w-4 h-4 text-emerald-600" />
                   </div>
                   <div>
                     <h5 className="text-xs font-bold text-slate-900">100% Rahasia</h5>
-                    <p className="text-[10px] text-slate-400">Privasi Terjaga</p>
+                    <p className="text-[10px] text-slate-500">Privasi Terjaga</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-white text-[#3B7DE8] shadow-xs flex items-center justify-center flex-shrink-0 border border-slate-100">
-                    <Sparkles className="w-4 h-4" />
+                <div className="p-2.5 rounded-2xl glass-card flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl glass-pill-blue flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-4 h-4 text-[#3B7DE8]" />
                   </div>
                   <div>
                     <h5 className="text-xs font-bold text-slate-900">Bantuan AI</h5>
-                    <p className="text-[10px] text-slate-400">7 Kategori Cerdas</p>
+                    <p className="text-[10px] text-slate-500">7 Kategori Cerdas</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-white text-purple-600 shadow-xs flex items-center justify-center flex-shrink-0 border border-slate-100">
+                <div className="p-2.5 rounded-2xl glass-card flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl glass-pill flex items-center justify-center flex-shrink-0 text-purple-600 border border-purple-200">
                     <UserCheck className="w-4 h-4" />
                   </div>
                   <div>
                     <h5 className="text-xs font-bold text-slate-900">Tim BK Resmi</h5>
-                    <p className="text-[10px] text-slate-400">Satgas Terpadu</p>
+                    <p className="text-[10px] text-slate-500">Satgas Terpadu</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Right Interactive Showcase Card */}
+            {/* Right Interactive Showcase Card — iOS 26 Glass Tablet */}
             <div className="lg:col-span-5 w-full flex justify-center lg:justify-end">
-              <div className="bg-white rounded-3xl border border-slate-100 shadow-xl overflow-hidden relative w-full max-w-md lg:max-w-[480px]">
-                {/* Header Mock Card */}
-                <div className="bg-slate-900 p-5 text-white">
+              <div className="glass-panel-elevated rounded-3xl border border-white/90 shadow-[0_24px_64px_rgba(59,125,232,0.18)] overflow-hidden relative w-full max-w-md lg:max-w-[480px]">
+                {/* Header Mock Card — Frosted Dark Bar */}
+                <div className="glass-panel-dark p-5 text-white border-b border-white/10">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-2xl bg-[#3B7DE8] flex items-center justify-center text-white font-black text-sm shadow-sm">
+                      <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 flex items-center justify-center text-white font-black text-sm shadow-[0_4px_12px_rgba(59,125,232,0.4)] border border-white/30">
                         <Shield className="w-5 h-5 text-white" />
                       </div>
                       <div>
                         <h4 className="font-extrabold text-sm text-white flex items-center gap-2">
                           Tiket Aduan Terlindungi
-                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#34d399]" />
                         </h4>
-                        <p className="text-[11px] text-slate-400 font-mono">ID: #SGP-2024-0142</p>
+                        <p className="text-[11px] text-slate-300 font-mono">ID: #SGP-2024-0142</p>
                       </div>
                     </div>
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/30">
-                      Terenkripsi TLS 1.3
+                    <span className="px-3 py-1 rounded-full glass-pill-green text-[10px] font-extrabold">
+                      TLS 1.3 Terenkripsi
                     </span>
                   </div>
                 </div>
 
                 {/* Body of Mock Card */}
                 <div className="p-6 space-y-5">
-                  {/* Status Timeline Snippet */}
-                  <div className="bg-[#EEF3FD] rounded-2xl p-4 border border-[#3B7DE8]/15 space-y-3">
+                  {/* Status Timeline Snippet — Frosted Bubble */}
+                  <div className="glass-card rounded-2xl p-4 border border-white/80 space-y-3">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="font-bold text-slate-700">Status Penanganan:</span>
-                      <span className="px-2.5 py-1 rounded-lg bg-blue-100 text-[#3B7DE8] font-bold text-[11px]">
+                      <span className="font-bold text-slate-800">Status Penanganan:</span>
+                      <span className="px-3 py-1 rounded-full glass-pill-blue font-black text-[11px]">
                         Sedang Ditindaklanjuti
                       </span>
                     </div>
 
-                    <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
-                      <div className="bg-[#3B7DE8] h-2 rounded-full w-3/4 transition-all" />
+                    <div className="w-full bg-slate-200/80 rounded-full h-2 overflow-hidden p-0.5">
+                      <div className="bg-gradient-to-r from-[#3B7DE8] to-blue-600 h-1.5 rounded-full w-3/4 transition-all shadow-xs" />
                     </div>
 
-                    <div className="flex justify-between text-[10px] text-slate-400 font-medium">
+                    <div className="flex justify-between text-[10px] text-slate-500 font-medium">
                       <span>Laporan Masuk</span>
                       <span className="font-bold text-[#3B7DE8]">Verifikasi BK</span>
-                      <span className="font-bold text-slate-700">Tindakan Satgas</span>
+                      <span className="font-bold text-slate-800">Tindakan Satgas</span>
                       <span>Selesai</span>
                     </div>
                   </div>
 
-                  {/* AI Detection Pill */}
-                  <div className="p-4 rounded-2xl bg-white border border-slate-100 shadow-xs flex items-start gap-3">
-                    <div className="p-2 rounded-xl bg-purple-50 text-purple-600 shrink-0">
+                  {/* AI Detection Pill — Frosted Accent Bubble */}
+                  <div className="p-4 rounded-2xl glass-card border border-white/80 flex items-start gap-3">
+                    <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-600 border border-purple-200/50 shrink-0">
                       <Sparkles className="w-4 h-4" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="text-[11px] font-bold text-slate-900">Inferensi IndoBERT NLP:</span>
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-bold">96% Akurasi</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-bold border border-purple-200">
+                          96% Akurasi
+                        </span>
                       </div>
                       <p className="text-xs font-bold text-slate-800 mt-1">Perundungan Siber (Cyberbullying)</p>
-                      <p className="text-[11px] text-slate-400 mt-0.5">
+                      <p className="text-[11px] text-slate-500 mt-0.5">
                         Diverifikasi resmi oleh Konselor Utama Satgas PPKSP.
                       </p>
                     </div>
@@ -320,19 +328,19 @@ export const LandingPage = () => {
                     <button
                       type="button"
                       onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-center transition shadow-sm cursor-pointer active:scale-95"
+                      className="flex-1 py-2.5 px-3 rounded-2xl glass-button-primary text-white font-bold text-center cursor-pointer"
                     >
                       Coba Buat Aduan
                     </button>
                     <Link
                       to="/lacak"
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-center transition"
+                      className="flex-1 py-2.5 px-3 rounded-2xl glass-button-secondary text-slate-700 font-bold text-center"
                     >
                       Lacak Tiket
                     </Link>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-100 flex items-center gap-2 text-[11px] text-slate-400">
+                  <div className="pt-2 border-t border-white/50 flex items-center gap-2 text-[11px] text-slate-500 font-medium">
                     <Lock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                     <span>Garansi tanpa intimidasi balasan (zero-retaliation guarantee).</span>
                   </div>
@@ -343,23 +351,23 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Trust Metrics Bar */}
-      <section className="py-8 bg-white border-y border-slate-100">
+      {/* Trust Metrics Bar — Floating Frosted Glass Banner */}
+      <section className="py-8 glass-panel border-y border-white/60 relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div className="p-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div className="p-4 rounded-2xl glass-card">
               <div className="text-2xl lg:text-3xl font-black text-slate-900">100%</div>
               <div className="text-xs font-semibold text-slate-500 mt-1">Jaminan Anonimitas &amp; Kerahasiaan</div>
             </div>
-            <div className="p-3">
+            <div className="p-4 rounded-2xl glass-card">
               <div className="text-2xl lg:text-3xl font-black text-[#3B7DE8]">7 Kategori</div>
               <div className="text-xs font-semibold text-slate-500 mt-1">Resmi Permendikbudristek 46/2023</div>
             </div>
-            <div className="p-3">
+            <div className="p-4 rounded-2xl glass-card">
               <div className="text-2xl lg:text-3xl font-black text-slate-900">&lt; 24 Jam</div>
               <div className="text-xs font-semibold text-slate-500 mt-1">Standar Respons Awal Verifikasi</div>
             </div>
-            <div className="p-3">
+            <div className="p-4 rounded-2xl glass-card">
               <div className="text-2xl lg:text-3xl font-black text-emerald-600">Audit Trail</div>
               <div className="text-xs font-semibold text-slate-500 mt-1">Rekam Penanganan Akuntabel</div>
             </div>
@@ -367,11 +375,11 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Dual Mode Section */}
-      <section className="py-14 lg:py-20 bg-[#EEF3FD]">
+      {/* Dual Mode Section — Liquid Glass Cards */}
+      <section className="py-16 lg:py-24 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-[#3B7DE8]/20 text-[#3B7DE8] text-xs font-bold shadow-xs">
+            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full glass-pill-blue text-xs font-bold">
               <Shield className="w-3.5 h-3.5 text-[#3B7DE8]" />
               <span>DUAL-MODE REPORTING</span>
             </div>
@@ -385,13 +393,13 @@ export const LandingPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {/* Mode 1: Anonim */}
-            <div className="bg-white rounded-3xl p-7 lg:p-8 border border-slate-100 shadow-md hover:shadow-lg transition space-y-6 flex flex-col justify-between">
+            <div className="glass-panel-elevated rounded-3xl p-7 lg:p-8 border border-white/80 shadow-lg space-y-6 flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-bold shadow-sm">
+                  <div className="w-12 h-12 rounded-2xl glass-panel-dark text-white flex items-center justify-center font-bold shadow-md">
                     <EyeOff className="w-6 h-6 text-white" />
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">
+                  <span className="px-3 py-1 rounded-full glass-pill text-slate-700 text-xs font-bold">
                     Mode Anonim Terproteksi
                   </span>
                 </div>
@@ -417,11 +425,11 @@ export const LandingPage = () => {
                 </ul>
               </div>
 
-              <div className="pt-4 border-t border-slate-100">
+              <div className="pt-4 border-t border-white/50">
                 <button
                   type="button"
                   onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                  className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition cursor-pointer shadow-sm active:scale-95"
+                  className="w-full py-3 px-4 rounded-2xl glass-button-secondary text-slate-900 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>Mulai Lapor Anonim</span>
                   <ArrowRight className="w-4 h-4" />
@@ -430,17 +438,17 @@ export const LandingPage = () => {
             </div>
 
             {/* Mode 2: Terverifikasi */}
-            <div className="bg-white rounded-3xl p-7 lg:p-8 border-2 border-[#3B7DE8]/40 shadow-md hover:shadow-lg transition space-y-6 flex flex-col justify-between relative">
-              <span className="absolute -top-3 right-6 px-3 py-1 rounded-full bg-[#3B7DE8] text-white text-[10px] font-extrabold shadow-sm">
+            <div className="glass-panel-elevated rounded-3xl p-7 lg:p-8 border-2 border-[#3B7DE8]/40 shadow-xl space-y-6 flex flex-col justify-between relative">
+              <span className="absolute -top-3 right-6 px-3.5 py-1 rounded-full glass-button-primary text-white text-[10px] font-extrabold shadow-sm">
                 DIREKOMENDASIKAN
               </span>
 
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-[#EEF3FD] text-[#3B7DE8] flex items-center justify-center font-bold shadow-sm">
+                  <div className="w-12 h-12 rounded-2xl glass-pill-blue flex items-center justify-center font-bold shadow-md">
                     <UserCheck className="w-6 h-6 text-[#3B7DE8]" />
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-[#EEF3FD] text-[#3B7DE8] text-xs font-bold">
+                  <span className="px-3 py-1 rounded-full glass-pill-blue text-xs font-bold">
                     Konseling Terpadu
                   </span>
                 </div>
@@ -466,18 +474,18 @@ export const LandingPage = () => {
                 </ul>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row gap-2">
+              <div className="pt-4 border-t border-white/50 flex flex-col sm:flex-row gap-2">
                 <button
                   type="button"
                   onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                  className="flex-1 py-3 px-4 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition cursor-pointer shadow-md active:scale-95"
+                  className="flex-1 py-3 px-4 rounded-2xl glass-button-primary text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <LogIn className="w-4 h-4" />
                   <span>Buat Aduan Terverifikasi</span>
                 </button>
                 <Link
                   to="/register?redirect=/buat-laporan"
-                  className="py-3 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm text-center transition"
+                  className="py-3 px-4 rounded-2xl glass-button-secondary text-slate-800 font-bold text-xs sm:text-sm text-center"
                 >
                   Daftar Akun
                 </Link>
@@ -487,11 +495,11 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* 7 Kategori Resmi Permendikbudristek Section */}
-      <section className="py-14 lg:py-20 bg-white border-y border-slate-100">
+      {/* 7 Kategori Resmi Permendikbudristek Section — Liquid Glass Grid */}
+      <section className="py-16 lg:py-24 glass-panel border-y border-white/60 relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#EEF3FD] text-[#3B7DE8] text-xs font-bold">
+            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full glass-pill-blue text-xs font-bold">
               <School className="w-3.5 h-3.5 text-[#3B7DE8]" />
               <span>PERMENDIKBUDRISTEK NO. 46 TAHUN 2023</span>
             </div>
@@ -507,18 +515,18 @@ export const LandingPage = () => {
             {KATEGORI_DATA.map((kat) => (
               <div
                 key={kat.id}
-                className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm hover:shadow-md hover:border-[#3B7DE8] transition-all flex flex-col justify-between group"
+                className="glass-card rounded-3xl p-5 border border-white/70 shadow-sm hover:border-[#3B7DE8]/50 transition-all flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
                     <div
-                      className="w-10 h-10 rounded-2xl flex items-center justify-center text-white shadow-xs"
+                      className="w-10 h-10 rounded-2xl flex items-center justify-center text-white shadow-md border border-white/30"
                       style={{ backgroundColor: kat.color }}
                     >
                       {getCategoryIcon(kat.icon)}
                     </div>
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">
-                      Kategori #{kat.id}
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider glass-pill px-2 py-0.5 rounded-full">
+                      #{kat.id}
                     </span>
                   </div>
 
@@ -530,7 +538,7 @@ export const LandingPage = () => {
                   </p>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
+                <div className="pt-4 mt-4 border-t border-white/40 flex items-center justify-between">
                   <button
                     type="button"
                     onClick={(e) => handleReportAction(e, `/buat-laporan?kategori=${kat.id}`)}
@@ -544,9 +552,9 @@ export const LandingPage = () => {
             ))}
 
             {/* Extra Card: Konseling Umum & Keluhan */}
-            <div className="bg-slate-900 text-white rounded-3xl p-5 shadow-md flex flex-col justify-between">
+            <div className="glass-panel-dark text-white rounded-3xl p-5 shadow-xl flex flex-col justify-between border border-white/15">
               <div>
-                <div className="w-10 h-10 rounded-2xl bg-[#3B7DE8] text-white flex items-center justify-center font-bold mb-3 shadow-sm">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 text-white flex items-center justify-center font-bold mb-3 shadow-md border border-white/30">
                   <HeartHandshake className="w-5 h-5 text-white" />
                 </div>
                 <h4 className="text-base font-black text-white">Konseling &amp; Keluhan Lainnya</h4>
@@ -559,7 +567,7 @@ export const LandingPage = () => {
                 <button
                   type="button"
                   onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                  className="text-xs font-bold text-[#EEF3FD] hover:text-white flex items-center gap-1 transition cursor-pointer"
+                  className="text-xs font-bold text-sky-300 hover:text-white flex items-center gap-1 transition cursor-pointer"
                 >
                   <span>Mulai Konsultasi Aduan</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -570,11 +578,11 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Alur Pengaduan Section */}
-      <section className="py-14 lg:py-20 bg-[#EEF3FD]">
+      {/* Alur Pengaduan Section — Liquid Step Cards */}
+      <section className="py-16 lg:py-24 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-[#3B7DE8] text-xs font-bold shadow-xs">
+            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full glass-pill-blue text-xs font-bold">
               <Activity className="w-3.5 h-3.5 text-[#3B7DE8]" />
               <span>LANGKAH PENANGANAN</span>
             </div>
@@ -587,8 +595,8 @@ export const LandingPage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-md space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-slate-900 text-white font-black text-sm flex items-center justify-center">
+            <div className="glass-card rounded-3xl p-6 border border-white/80 shadow-md space-y-3">
+              <div className="w-10 h-10 rounded-2xl glass-panel-dark text-white font-black text-sm flex items-center justify-center shadow-xs">
                 01
               </div>
               <h4 className="font-extrabold text-slate-900 text-base">Kirim Aduan</h4>
@@ -597,8 +605,8 @@ export const LandingPage = () => {
               </p>
             </div>
 
-            <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-md space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-[#3B7DE8] text-white font-black text-sm flex items-center justify-center shadow-sm">
+            <div className="glass-card rounded-3xl p-6 border border-white/80 shadow-md space-y-3">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 text-white font-black text-sm flex items-center justify-center shadow-[0_4px_12px_rgba(59,125,232,0.35)] border border-white/30">
                 02
               </div>
               <h4 className="font-extrabold text-slate-900 text-base">Dapatkan Kode Tiket</h4>
@@ -607,8 +615,8 @@ export const LandingPage = () => {
               </p>
             </div>
 
-            <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-md space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-indigo-600 text-white font-black text-sm flex items-center justify-center">
+            <div className="glass-card rounded-3xl p-6 border border-white/80 shadow-md space-y-3">
+              <div className="w-10 h-10 rounded-2xl bg-indigo-600 text-white font-black text-sm flex items-center justify-center shadow-xs">
                 03
               </div>
               <h4 className="font-extrabold text-slate-900 text-base">Verifikasi &amp; AI NLP</h4>
@@ -617,8 +625,8 @@ export const LandingPage = () => {
               </p>
             </div>
 
-            <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-md space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center">
+            <div className="glass-card rounded-3xl p-6 border border-white/80 shadow-md space-y-3">
+              <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center shadow-xs">
                 04
               </div>
               <h4 className="font-extrabold text-slate-900 text-base">Tindakan &amp; Solusi</h4>
@@ -632,7 +640,7 @@ export const LandingPage = () => {
             <button
               type="button"
               onClick={(e) => handleReportAction(e, '/buat-laporan')}
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-2xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs sm:text-sm shadow-md transition active:scale-95 cursor-pointer"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl glass-button-primary text-white font-bold text-xs sm:text-sm cursor-pointer"
             >
               <span>Mulai Buat Aduan Anda</span>
               <ArrowRight className="w-4 h-4" />
@@ -641,16 +649,16 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Fitur & Teknologi Keamanan SIGAP */}
-      <section className="py-14 lg:py-20 bg-slate-900 text-white">
+      {/* Fitur & Teknologi Keamanan SIGAP — Liquid Dark Glass */}
+      <section className="py-16 lg:py-24 glass-panel-dark text-white relative z-20 border-y border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-5 space-y-4">
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/10 text-[#EEF3FD] text-xs font-bold">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full glass-pill text-xs font-bold border border-white/20">
                 <Sparkles className="w-3.5 h-3.5 text-[#F5C518]" />
-                <span>KEUNGGULAN SISTEM</span>
+                <span className="text-white">KEUNGGULAN SISTEM</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
                 Teknologi Cerdas untuk Perlindungan Nyata
               </h2>
               <p className="text-slate-300 text-sm leading-relaxed">
@@ -660,7 +668,7 @@ export const LandingPage = () => {
               <div className="pt-2">
                 <Link
                   to="/admin/login"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-bold transition"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl glass-pill hover:bg-white/20 text-white text-xs font-bold transition border border-white/20"
                 >
                   <Lock className="w-3.5 h-3.5 text-white" />
                   <span>Akses Khusus Guru BK &amp; Admin</span>
@@ -669,7 +677,7 @@ export const LandingPage = () => {
             </div>
 
             <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-6 rounded-3xl bg-white/5 border border-white/10 space-y-2 hover:bg-white/10 transition">
+              <div className="p-6 rounded-3xl glass-card text-white space-y-2 border border-white/15 hover:bg-white/10 transition">
                 <div className="w-10 h-10 rounded-2xl bg-[#3B7DE8] text-white flex items-center justify-center font-bold">
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
@@ -679,7 +687,7 @@ export const LandingPage = () => {
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl bg-white/5 border border-white/10 space-y-2 hover:bg-white/10 transition">
+              <div className="p-6 rounded-3xl glass-card text-white space-y-2 border border-white/15 hover:bg-white/10 transition">
                 <div className="w-10 h-10 rounded-2xl bg-[#3B7DE8] text-white flex items-center justify-center font-bold">
                   <Lock className="w-5 h-5 text-white" />
                 </div>
@@ -689,7 +697,7 @@ export const LandingPage = () => {
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl bg-white/5 border border-white/10 space-y-2 hover:bg-white/10 transition">
+              <div className="p-6 rounded-3xl glass-card text-white space-y-2 border border-white/15 hover:bg-white/10 transition">
                 <div className="w-10 h-10 rounded-2xl bg-[#3B7DE8] text-white flex items-center justify-center font-bold">
                   <FileText className="w-5 h-5 text-white" />
                 </div>
@@ -699,7 +707,7 @@ export const LandingPage = () => {
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl bg-white/5 border border-white/10 space-y-2 hover:bg-white/10 transition">
+              <div className="p-6 rounded-3xl glass-card text-white space-y-2 border border-white/15 hover:bg-white/10 transition">
                 <div className="w-10 h-10 rounded-2xl bg-[#3B7DE8] text-white flex items-center justify-center font-bold">
                   <Search className="w-5 h-5 text-white" />
                 </div>
@@ -713,18 +721,18 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-14 lg:py-20 bg-white">
+      {/* FAQ Section — Glass Accordion */}
+      <section className="py-16 lg:py-24 relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-12">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#EEF3FD] text-[#3B7DE8] text-xs font-bold">
+            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full glass-pill-blue text-xs font-bold">
               <HelpCircle className="w-3.5 h-3.5 text-[#3B7DE8]" />
               <span>TANYA JAWAB</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
               Pertanyaan yang Sering Diajukan
             </h2>
-            <p className="text-slate-500 text-xs sm:text-sm">
+            <p className="text-slate-600 text-xs sm:text-sm">
               Temukan jawaban seputar akses login, keamanan privasi, alur aduan, dan penanganan perundungan di SIGAP.
             </p>
           </div>
@@ -733,12 +741,12 @@ export const LandingPage = () => {
             {faqs.map((faq, idx) => (
               <div
                 key={idx}
-                className="border border-slate-100 rounded-2xl overflow-hidden transition shadow-xs"
+                className="glass-card rounded-2xl overflow-hidden transition border border-white/80 shadow-xs"
               >
                 <button
                   type="button"
                   onClick={() => toggleFaq(idx)}
-                  className="w-full p-4 sm:p-5 text-left font-bold text-slate-900 text-xs sm:text-sm flex justify-between items-center gap-4 hover:bg-[#EEF3FD]/40 transition"
+                  className="w-full p-4 sm:p-5 text-left font-bold text-slate-900 text-xs sm:text-sm flex justify-between items-center gap-4 hover:bg-white/60 transition"
                 >
                   <span>{faq.q}</span>
                   <ChevronDown
@@ -748,7 +756,7 @@ export const LandingPage = () => {
                   />
                 </button>
                 {activeFaq === idx && (
-                  <div className="px-4 sm:px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 bg-[#EEF3FD]/20">
+                  <div className="px-4 sm:px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-white/40 bg-white/40">
                     {faq.a}
                   </div>
                 )}
@@ -758,12 +766,12 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Emergency Crisis Contact Box */}
-      <section className="py-10 bg-[#EEF3FD] border-t border-slate-200/60">
+      {/* Emergency Crisis Contact Box — Glass Elevated */}
+      <section className="py-10 relative">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-md flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="glass-panel-elevated rounded-3xl p-6 sm:p-8 border border-white/90 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-2 text-center md:text-left">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 text-rose-700 text-xs font-bold border border-rose-200">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill-red text-xs font-bold">
                 <AlertTriangle className="w-3.5 h-3.5" />
                 <span>HOTLINE BANTUAN DARURAT</span>
               </div>
@@ -778,14 +786,14 @@ export const LandingPage = () => {
             <div className="flex flex-wrap items-center justify-center gap-3">
               <a
                 href="tel:129"
-                className="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center gap-2 shadow-sm transition active:scale-95"
+                className="px-5 py-3 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center gap-2 shadow-md transition active:scale-95"
               >
                 <PhoneCall className="w-4 h-4" />
                 <span>SAPA 129 (KemenPPPA)</span>
               </a>
               <a
                 href="tel:110"
-                className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-2 shadow-sm transition active:scale-95"
+                className="px-5 py-3 rounded-2xl glass-panel-dark text-white font-bold text-xs flex items-center gap-2 shadow-md transition active:scale-95 border border-white/20"
               >
                 <ShieldAlert className="w-4 h-4" />
                 <span>Polisi 110</span>
@@ -796,7 +804,7 @@ export const LandingPage = () => {
       </section>
 
       {/* Final Call to Action Banner */}
-      <section className="py-16 bg-white border-t border-slate-100">
+      <section className="py-16 glass-panel border-t border-white/60 relative z-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
             Sekolah yang Sehat Dimulai dari Keberanian Bersuara
@@ -809,7 +817,7 @@ export const LandingPage = () => {
             <button
               type="button"
               onClick={(e) => handleReportAction(e, '/buat-laporan')}
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-sm shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl glass-button-primary text-white font-bold text-sm cursor-pointer"
             >
               <ShieldAlert className="w-4 h-4 text-white" />
               <span>Buat Laporan Sekarang</span>
@@ -817,15 +825,15 @@ export const LandingPage = () => {
 
             <Link
               to="/login"
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-[#EEF3FD] hover:bg-[#dde9fa] text-[#3B7DE8] font-bold text-sm border border-[#3B7DE8]/20 transition flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl glass-button-secondary text-slate-800 font-bold text-sm flex items-center justify-center gap-2"
             >
-              <LogIn className="w-4 h-4" />
+              <LogIn className="w-4 h-4 text-[#3B7DE8]" />
               <span>Masuk ke Akun Siswa</span>
             </Link>
 
             <Link
               to="/lacak"
-              className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm border border-slate-200 shadow-2xs transition flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-7 py-3.5 rounded-2xl glass-pill text-slate-700 hover:text-slate-900 font-bold text-sm flex items-center justify-center gap-2"
             >
               <Search className="w-4 h-4 text-[#3B7DE8]" />
               <span>Lacak Tiket Aduan</span>
@@ -834,20 +842,20 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Auth Gate Modal if User Not Logged In */}
+      {/* Auth Gate Modal if User Not Logged In — iOS 26 Liquid Modal */}
       {showAuthModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative space-y-6 animate-in fade-in zoom-in-95 duration-150">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md animate-fade-in">
+          <div className="glass-panel-elevated rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-[0_24px_70px_rgba(0,0,0,0.25)] border border-white/90 relative space-y-6">
             <button
               type="button"
               onClick={() => setShowAuthModal(false)}
-              className="absolute right-5 top-5 p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+              className="absolute right-5 top-5 p-2 rounded-2xl glass-pill text-slate-400 hover:text-slate-700 hover:bg-white transition"
               aria-label="Tutup"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="w-14 h-14 rounded-2xl bg-[#EEF3FD] text-[#3B7DE8] flex items-center justify-center mx-auto shadow-sm">
+            <div className="w-14 h-14 rounded-2xl glass-pill-blue text-[#3B7DE8] flex items-center justify-center mx-auto shadow-md">
               <Lock className="w-7 h-7" />
             </div>
 
@@ -867,7 +875,7 @@ export const LandingPage = () => {
                   setShowAuthModal(false);
                   navigate(`/login?redirect=${encodeURIComponent(targetRedirect)}`);
                 }}
-                className="w-full py-3 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm transition cursor-pointer active:scale-95"
+                className="w-full py-3.5 px-4 rounded-2xl glass-panel-dark text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition active:scale-95 border border-white/20"
               >
                 <LogIn className="w-4 h-4 text-white" />
                 <span>Masuk dengan Akun Siswa</span>
@@ -879,7 +887,7 @@ export const LandingPage = () => {
                   setShowAuthModal(false);
                   navigate(`/register?redirect=${encodeURIComponent(targetRedirect)}`);
                 }}
-                className="w-full py-3 px-4 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md transition cursor-pointer active:scale-95"
+                className="w-full py-3.5 px-4 rounded-2xl glass-button-primary text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
               >
                 <UserPlus className="w-4 h-4" />
                 <span>Daftar Akun Baru</span>
@@ -888,13 +896,13 @@ export const LandingPage = () => {
               <button
                 type="button"
                 onClick={() => setShowAuthModal(false)}
-                className="w-full py-2.5 px-4 text-xs font-semibold text-slate-400 hover:text-slate-700 transition cursor-pointer"
+                className="w-full py-2.5 px-4 text-xs font-semibold text-slate-500 hover:text-slate-800 transition cursor-pointer"
               >
                 Batal
               </button>
             </div>
 
-            <div className="pt-3 border-t border-slate-100 flex items-center gap-2 text-[11px] text-slate-500">
+            <div className="pt-3 border-t border-white/50 flex items-center gap-2 text-[11px] text-slate-500">
               <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
               <span>Privasi data Anda dijamin 100% dan terenkripsi secara aman.</span>
             </div>

@@ -79,12 +79,12 @@ export const AdminSidebar = ({
   return (
     <>
       <aside
-        className={`bg-white border-r border-slate-100 flex flex-col justify-between py-4 select-none shadow-sm transition-all duration-300 ease-in-out
+        className={`glass-panel border-r border-white/60 flex flex-col justify-between py-4 select-none shadow-[0_8px_32px_rgba(31,38,135,0.06)] transition-all duration-300 ease-in-out
           /* Mode Mobile / Tablet (< lg): Drawer Overlay */
           fixed inset-y-0 left-0 z-50 w-64 lg:static lg:h-screen lg:sticky lg:top-0 lg:z-30
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
           /* Mode Desktop (>= lg): Dynamic Width based on isExpanded */
-          ${isExpanded ? 'lg:w-60' : 'lg:w-[72px]'}
+          ${isExpanded ? 'lg:w-60' : 'lg:w-[76px]'}
         `}
       >
         {/* Top: Logo & Brand + Nav Items */}
@@ -92,16 +92,16 @@ export const AdminSidebar = ({
           {/* Header Brand */}
           <div className={`flex items-center justify-between px-4 h-10 ${!isExpanded ? 'lg:justify-center lg:px-2' : ''}`}>
             <div className="flex items-center gap-3 overflow-hidden">
-              <div className="w-9 h-9 rounded-xl bg-[#3B7DE8] flex items-center justify-center shadow-md flex-shrink-0">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 flex items-center justify-center shadow-[0_4px_14px_rgba(59,125,232,0.35)] border border-white/40 flex-shrink-0">
                 <ShieldCheck className="w-5 h-5 text-white" />
               </div>
               {/* Teks Brand (Hanya tampil saat Expanded di desktop atau saat drawer di mobile) */}
               <div className={`overflow-hidden transition-opacity duration-200 ${!isExpanded ? 'lg:hidden' : 'block'}`}>
-                <span className="font-extrabold text-base text-slate-900 tracking-tight block leading-tight">
+                <span className="font-black text-base text-slate-900 tracking-tight block leading-tight">
                   SIGAP
                 </span>
-                <span className="text-[10px] text-slate-400 font-semibold block leading-tight">
-                  Portal Satgas PPKSP
+                <span className="text-[10px] text-slate-500 font-semibold block leading-tight">
+                  Satgas PPKSP Liquid OS
                 </span>
               </div>
             </div>
@@ -110,7 +110,7 @@ export const AdminSidebar = ({
             <button
               type="button"
               onClick={() => setIsMobileOpen(false)}
-              className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+              className="lg:hidden p-1.5 rounded-xl text-slate-400 hover:text-slate-700 glass-pill hover:bg-white/80 transition"
               title="Tutup Menu"
             >
               <X className="w-5 h-5" />
@@ -118,7 +118,7 @@ export const AdminSidebar = ({
           </div>
 
           {/* Navigation Items */}
-          <nav className="flex flex-col gap-1.5 px-2.5">
+          <nav className="flex flex-col gap-1.5 px-3">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isExact = location.pathname === item.path.split('?')[0];
@@ -137,14 +137,14 @@ export const AdminSidebar = ({
                   <Link
                     to={item.path}
                     onClick={() => setIsMobileOpen(false)}
-                    className={`relative w-full flex items-center rounded-xl transition-all ${
+                    className={`relative w-full flex items-center rounded-2xl transition-all duration-200 ${
                       isExpanded
                         ? 'px-3.5 py-2.5 gap-3 justify-between'
                         : 'p-2.5 justify-center'
                     } ${
                       isActive
-                        ? 'bg-[#3B7DE8] text-white shadow-md font-bold'
-                        : 'text-slate-500 hover:bg-[#EEF3FD] hover:text-[#3B7DE8]'
+                        ? 'glass-button-primary text-white font-bold'
+                        : 'glass-card text-slate-600 hover:text-[#3B7DE8]'
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
@@ -162,7 +162,7 @@ export const AdminSidebar = ({
                     {/* Indikator Kuning saat Aktif */}
                     {isActive && (
                       <span
-                        className={`bg-[#F5C518] rounded-full ${
+                        className={`bg-[#F5C518] rounded-full shadow-[0_0_8px_#F5C518] ${
                           isExpanded
                             ? 'w-2 h-2 mr-0.5'
                             : 'absolute -right-1 top-1/2 -translate-y-1/2 w-1.5 h-6'
@@ -173,7 +173,7 @@ export const AdminSidebar = ({
                     {/* Badge Notifikasi */}
                     {item.badge && !isActive && (
                       <span
-                        className={`rounded-full bg-red-500 text-white font-extrabold flex items-center justify-center ${
+                        className={`rounded-full bg-red-500 text-white font-extrabold flex items-center justify-center shadow-xs ${
                           isExpanded
                             ? 'px-2 py-0.5 text-[10px]'
                             : 'absolute top-1 right-1 w-4 h-4 text-[9px]'
@@ -184,17 +184,17 @@ export const AdminSidebar = ({
                     )}
                   </Link>
 
-                  {/* Tooltip on Hover (Hanya di mode Collapsed Desktop) */}
+                  {/* Tooltip on Hover (Collapsed Desktop) */}
                   {!isExpanded && hoveredItem === item.name && (
                     <div className="hidden lg:block absolute left-full top-1/2 -translate-y-1/2 ml-3 z-50 pointer-events-none animate-fade-in">
-                      <div className="bg-slate-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap shadow-xl flex items-center gap-1.5">
+                      <div className="glass-panel-dark text-white text-xs font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap shadow-2xl flex items-center gap-1.5 border border-white/20">
                         {item.name}
                         {item.badge && (
                           <span className="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
                             {item.badge}
                           </span>
                         )}
-                        <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-slate-900" />
+                        <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-slate-900/90" />
                       </div>
                     </div>
                   )}
@@ -205,7 +205,7 @@ export const AdminSidebar = ({
         </div>
 
         {/* Bottom Controls & User Info */}
-        <div className="flex flex-col gap-2.5 px-2.5 pt-3 border-t border-slate-100">
+        <div className="flex flex-col gap-2.5 px-3 pt-3 border-t border-white/40">
           {/* TLS Encrypted Banner */}
           <div
             className="relative"
@@ -213,10 +213,10 @@ export const AdminSidebar = ({
             onMouseLeave={() => setHoveredItem(null)}
           >
             {isExpanded ? (
-              <div className="p-3 rounded-2xl bg-emerald-50/80 border border-emerald-100 flex items-start gap-2.5">
+              <div className="p-2.5 rounded-2xl glass-pill-green flex items-start gap-2.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                 <div className="overflow-hidden">
-                  <span className="font-bold text-[11px] block leading-tight text-emerald-900">
+                  <span className="font-bold text-[11px] block leading-tight text-emerald-950">
                     TLS 1.3 Terenkripsi
                   </span>
                   <span className="text-[10px] text-emerald-700 block leading-tight truncate">
@@ -226,7 +226,7 @@ export const AdminSidebar = ({
               </div>
             ) : (
               <div className="w-full flex items-center justify-center">
-                <div className="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-2xl glass-pill-green flex items-center justify-center">
                   <ShieldCheck className="w-4 h-4 text-emerald-600" />
                 </div>
               </div>
@@ -234,9 +234,9 @@ export const AdminSidebar = ({
 
             {!isExpanded && hoveredItem === 'tls' && (
               <div className="hidden lg:block absolute left-full top-1/2 -translate-y-1/2 ml-3 z-50 pointer-events-none">
-                <div className="bg-slate-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap shadow-xl">
+                <div className="glass-panel-dark text-white text-xs font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap shadow-2xl border border-white/20">
                   Koneksi TLS 1.3 Terenkripsi
-                  <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-slate-900" />
+                  <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-slate-900/90" />
                 </div>
               </div>
             )}
@@ -249,16 +249,16 @@ export const AdminSidebar = ({
             onMouseLeave={() => setHoveredItem(null)}
           >
             {isExpanded ? (
-              <div className="p-2.5 rounded-2xl bg-slate-50 border border-slate-200/70 flex items-center justify-between gap-2">
+              <div className="p-2.5 rounded-2xl glass-card flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5 overflow-hidden">
-                  <div className="w-8 h-8 rounded-xl bg-[#3B7DE8] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-sm">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 text-white flex items-center justify-center font-black text-xs shrink-0 shadow-xs border border-white/30">
                     {userInitials}
                   </div>
                   <div className="overflow-hidden">
                     <span className="font-bold text-xs text-slate-900 block truncate">
                       {currentUser?.nama || 'Ibu Rahmawati'}
                     </span>
-                    <span className="text-[10px] text-slate-400 block truncate">
+                    <span className="text-[10px] text-slate-500 block truncate">
                       {currentUser?.jabatan || 'Konselor BK'}
                     </span>
                   </div>
@@ -267,14 +267,14 @@ export const AdminSidebar = ({
                   type="button"
                   onClick={handleLogout}
                   title="Keluar"
-                  className="p-1.5 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition"
+                  className="p-1.5 text-slate-400 hover:text-red-600 rounded-xl glass-pill hover:bg-white transition"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
               </div>
             ) : (
               <div className="w-full flex items-center justify-center">
-                <div className="w-9 h-9 rounded-xl bg-[#3B7DE8] text-white flex items-center justify-center font-black text-xs shadow-md">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 text-white flex items-center justify-center font-black text-xs shadow-md border border-white/40">
                   {userInitials}
                 </div>
               </div>
@@ -282,9 +282,9 @@ export const AdminSidebar = ({
 
             {!isExpanded && hoveredItem === 'user' && (
               <div className="hidden lg:block absolute left-full top-1/2 -translate-y-1/2 ml-3 z-50 pointer-events-none">
-                <div className="bg-slate-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap shadow-xl">
+                <div className="glass-panel-dark text-white text-xs font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap shadow-2xl border border-white/20">
                   {currentUser?.nama || 'Ibu Rahmawati'} • {currentUser?.jabatan || 'Konselor BK'}
-                  <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-slate-900" />
+                  <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-slate-900/90" />
                 </div>
               </div>
             )}
@@ -301,15 +301,15 @@ export const AdminSidebar = ({
               >
                 <Link
                   to="/"
-                  className="w-9 h-9 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center transition"
+                  className="w-10 h-10 rounded-2xl glass-card text-slate-500 hover:text-[#3B7DE8] flex items-center justify-center transition"
                 >
                   <ArrowLeft className="w-4 h-4" />
                 </Link>
                 {hoveredItem === 'home' && (
                   <div className="hidden lg:block absolute left-full top-1/2 -translate-y-1/2 ml-3 z-50 pointer-events-none">
-                    <div className="bg-slate-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap shadow-xl">
+                    <div className="glass-panel-dark text-white text-xs font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap shadow-2xl border border-white/20">
                       Kembali ke Beranda
-                      <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-slate-900" />
+                      <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-slate-900/90" />
                     </div>
                   </div>
                 )}
@@ -324,15 +324,15 @@ export const AdminSidebar = ({
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="w-9 h-9 rounded-xl border border-red-100 bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 flex items-center justify-center transition"
+                  className="w-10 h-10 rounded-2xl glass-pill-red flex items-center justify-center transition"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
                 {hoveredItem === 'logout' && (
                   <div className="hidden lg:block absolute left-full top-1/2 -translate-y-1/2 ml-3 z-50 pointer-events-none">
-                    <div className="bg-slate-900 text-white text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap shadow-xl">
+                    <div className="glass-panel-dark text-white text-xs font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap shadow-2xl border border-white/20">
                       Keluar dari Panel Admin
-                      <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-slate-900" />
+                      <span className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-slate-900/90" />
                     </div>
                   </div>
                 )}
@@ -344,7 +344,7 @@ export const AdminSidebar = ({
           {isExpanded && (
             <Link
               to="/"
-              className="w-full py-2 px-3 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-50 text-xs font-semibold flex items-center justify-center gap-2 transition"
+              className="w-full py-2 px-3 rounded-2xl glass-card text-slate-500 hover:text-slate-900 text-xs font-semibold flex items-center justify-center gap-2 transition"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Kembali ke Beranda</span>

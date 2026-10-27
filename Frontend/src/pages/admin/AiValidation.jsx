@@ -335,12 +335,12 @@ const CaseCard = ({ report, onApprove, onOverride, isApproving }) => {
       : 'bg-rose-50 text-rose-700 border-rose-200';
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden">
+    <div className="glass-panel-elevated rounded-3xl border border-white/80 shadow-md hover:border-white/95 transition-all duration-200 overflow-hidden">
       {/* ── Header Kartu ── */}
-      <div className="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white">
+      <div className="p-5 border-b border-white/50 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white/40">
         <div className="flex flex-wrap items-center gap-2 text-xs">
           {/* Nomor Tiket */}
-          <span className="font-mono font-bold px-2.5 py-1 rounded-lg bg-slate-900 text-white text-[11px] tracking-wide shadow-xs">
+          <span className="font-mono font-bold px-3 py-1 rounded-xl bg-slate-900 text-white text-[11px] tracking-wide shadow-xs border border-white/20">
             #{report.ticket_code}
           </span>
           <span className="text-slate-300">•</span>
@@ -359,11 +359,11 @@ const CaseCard = ({ report, onApprove, onOverride, isApproving }) => {
 
         {/* Prediksi & Skor Kanan */}
         <div className="flex items-center gap-2 flex-wrap">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 text-sky-800 border border-sky-200 text-xs font-semibold">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill-blue text-xs font-semibold">
             <Brain className="w-3.5 h-3.5 text-[#3B7DE8]" />
             {report.ai?.kategori_rekomendasi || report.kategori_nama}
           </div>
-          <div className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold border ${confColor}`}>
+          <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-extrabold ${confColor}`}>
             Akurasi: {confidence.toFixed(1)}%
           </div>
         </div>
@@ -771,13 +771,13 @@ export const AiValidation = () => {
         {/* ── Top 4 KPI Metrics Card (Sesuai Referensi Gambar) ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Card 1: Perlu Validasi */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs flex flex-col justify-between">
+          <div className="glass-card rounded-3xl border border-white/80 p-5 shadow-sm flex flex-col justify-between">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold text-slate-500">Perlu Validasi</p>
                 <p className="text-3xl font-black text-slate-900 mt-2">{stats.menunggu}</p>
               </div>
-              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+              <span className="px-3 py-1 rounded-full text-[10px] font-extrabold glass-pill-red">
                 Butuh Tindakan
               </span>
             </div>
@@ -787,13 +787,13 @@ export const AiValidation = () => {
           </div>
 
           {/* Card 2: Akurasi Rata-rata AI */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs flex flex-col justify-between">
+          <div className="glass-card rounded-3xl border border-white/80 p-5 shadow-sm flex flex-col justify-between">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold text-slate-500">Akurasi Rata-rata AI</p>
                 <p className="text-3xl font-black text-slate-900 mt-2">{stats.avgConf.toFixed(1)}%</p>
               </div>
-              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
+              <span className="px-3 py-1 rounded-full text-[10px] font-extrabold glass-pill-blue">
                 IndoBERT v2.1
               </span>
             </div>
@@ -803,13 +803,13 @@ export const AiValidation = () => {
           </div>
 
           {/* Card 3: Rekomendasi Ambigu (<80%) */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs flex flex-col justify-between">
+          <div className="glass-card rounded-3xl border border-amber-200/50 p-5 shadow-sm flex flex-col justify-between">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold text-slate-500">Rekomendasi Ambigu (&lt;80%)</p>
                 <p className="text-3xl font-black text-slate-900 mt-2">{stats.ambigu}</p>
               </div>
-              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+              <span className="px-3 py-1 rounded-full text-[10px] font-extrabold glass-pill-yellow">
                 Peninjauan Manual
               </span>
             </div>
@@ -819,13 +819,13 @@ export const AiValidation = () => {
           </div>
 
           {/* Card 4: Tervalidasi Hari Ini */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs flex flex-col justify-between">
+          <div className="glass-card rounded-3xl border border-emerald-200/50 p-5 shadow-sm flex flex-col justify-between">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold text-slate-500">Tervalidasi Hari Ini</p>
                 <p className="text-3xl font-black text-slate-900 mt-2">{stats.tervalidasi}</p>
               </div>
-              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span className="px-3 py-1 rounded-full text-[10px] font-extrabold glass-pill-green">
                 100% Sesuai SOP
               </span>
             </div>
@@ -836,7 +836,7 @@ export const AiValidation = () => {
         </div>
 
         {/* ── Search & Filter Bar Toolbar ── */}
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-3.5 shadow-xs flex flex-col md:flex-row gap-3 items-stretch md:items-center">
+        <div className="glass-panel-elevated rounded-3xl border border-white/80 p-3.5 shadow-sm flex flex-col md:flex-row gap-3 items-stretch md:items-center">
           {/* Search Box */}
           <div className="relative flex-1 min-w-0">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
@@ -845,7 +845,7 @@ export const AiValidation = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari nomor tiket, katakunci aduan, atau indikasi..."
-              className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-slate-50/60"
+              className="w-full pl-10 pr-4 py-2 rounded-2xl glass-input text-xs text-slate-800 placeholder-slate-400 focus:outline-none"
             />
           </div>
 
@@ -854,7 +854,7 @@ export const AiValidation = () => {
             <select
               value={filterAcc}
               onChange={(e) => setFilterAcc(e.target.value)}
-              className="w-full appearance-none pl-3 pr-8 py-2 rounded-xl border border-slate-200 text-xs text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-300 bg-white"
+              className="w-full appearance-none pl-3.5 pr-8 py-2 rounded-2xl glass-input text-xs text-slate-700 font-medium focus:outline-none cursor-pointer"
             >
               <option value="semua">Tingkat Akurasi: Semua</option>
               <option value="tinggi">Tinggi (≥ 85%)</option>

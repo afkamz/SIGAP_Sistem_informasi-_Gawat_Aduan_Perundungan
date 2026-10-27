@@ -100,23 +100,27 @@ export const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-[#EEF3FD] text-slate-800">
+    <div className="min-h-screen flex flex-col justify-between bg-liquid-mesh text-slate-800 relative overflow-hidden selection:bg-[#3B7DE8]/20">
+      {/* ─── Ambient Glow Blobs ─── */}
+      <div className="fixed top-[-10%] right-[-5%] w-[45vw] h-[45vw] rounded-full bg-blue-400/20 blur-3xl pointer-events-none -z-10" />
+      <div className="fixed bottom-[-10%] left-[-5%] w-[45vw] h-[45vw] rounded-full bg-indigo-300/25 blur-3xl pointer-events-none -z-10" />
+
       <StudentHeader />
 
-      <main className="max-w-xl mx-auto w-full px-4 py-8 lg:py-12">
-        <div className="bg-white p-7 lg:p-8 rounded-3xl border border-slate-100 shadow-xl space-y-6">
-          <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
-            <div className="w-11 h-11 rounded-2xl bg-[#3B7DE8] flex items-center justify-center text-white shadow-md">
+      <main className="max-w-xl mx-auto w-full px-4 py-8 lg:py-12 relative z-20">
+        <div className="glass-panel-elevated p-7 lg:p-8 rounded-3xl border border-white/90 shadow-[0_24px_70px_rgba(59,125,232,0.18)] space-y-6">
+          <div className="flex items-center gap-3 pb-3 border-b border-white/50">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 flex items-center justify-center text-white shadow-md border border-white/30">
               <UserPlus className="w-6 h-6 text-white" />
             </div>
             <div>
               <h2 className="text-xl font-black text-slate-900 tracking-tight">Pendaftaran Akun Siswa</h2>
-              <p className="text-xs text-slate-400">Daftarkan akun resmi untuk memudahkan tracking dan riwayat laporan terpadu.</p>
+              <p className="text-xs text-slate-500">Daftarkan akun resmi untuk memudahkan tracking dan riwayat laporan terpadu.</p>
             </div>
           </div>
 
           {isFromReport && (
-            <div className="p-3.5 rounded-2xl bg-[#EEF3FD] border border-[#3B7DE8]/20 text-xs text-slate-700 flex items-start gap-2.5">
+            <div className="p-3.5 rounded-2xl glass-pill-blue text-xs text-slate-700 flex items-start gap-2.5">
               <Info className="w-4 h-4 text-[#3B7DE8] shrink-0 mt-0.5" />
               <span>
                 <strong>Akses Buat Aduan:</strong> Silakan daftarkan akun Anda terlebih dahulu untuk melanjutkan proses pelaporan aduan di sistem SIGAP.
@@ -125,13 +129,13 @@ export const Register = () => {
           )}
 
           {errorMsg && (
-            <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 font-semibold">
+            <div className="p-3.5 rounded-2xl glass-pill-red text-xs font-semibold animate-fade-in">
               {errorMsg}
             </div>
           )}
 
           {successMsg && (
-            <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-700 font-semibold">
+            <div className="p-3.5 rounded-2xl glass-pill-green text-xs font-semibold animate-fade-in">
               {successMsg}
             </div>
           )}
@@ -148,7 +152,7 @@ export const Register = () => {
                 value={formData.nisn}
                 onChange={handleChange}
                 placeholder="Contoh: 1234567890 (10 Digit)"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:border-[#3B7DE8] focus:bg-white transition"
+                className="w-full px-4 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
               />
             </div>
 
@@ -163,7 +167,7 @@ export const Register = () => {
                 value={formData.nama}
                 onChange={handleChange}
                 placeholder="Masukkan nama lengkap siswa"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:border-[#3B7DE8] focus:bg-white transition"
+                className="w-full px-4 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
               />
             </div>
 
@@ -178,7 +182,7 @@ export const Register = () => {
                   required
                   value={formData.sekolah}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:border-[#3B7DE8] focus:bg-white transition"
+                  className="w-full px-4 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
                 />
               </div>
 
@@ -192,7 +196,7 @@ export const Register = () => {
                   required
                   value={formData.kelas}
                   onChange={handleChange}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:border-[#3B7DE8] focus:bg-white transition"
+                  className="w-full px-4 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
                 />
               </div>
             </div>
@@ -208,7 +212,7 @@ export const Register = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Minimal 6 karakter"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:border-[#3B7DE8] focus:bg-white transition"
+                className="w-full px-4 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
               />
             </div>
 
@@ -223,7 +227,7 @@ export const Register = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Ketik ulang kata sandi"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm focus:outline-none focus:border-[#3B7DE8] focus:bg-white transition"
+                className="w-full px-4 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
               />
             </div>
 
@@ -244,14 +248,14 @@ export const Register = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-4 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 transition active:scale-95 disabled:opacity-50"
+              className="w-full py-3.5 px-4 rounded-2xl glass-button-primary text-white font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <span>{isLoading ? 'Mendaftarkan Akun...' : 'Daftarkan Akun Siswa'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
 
-          <div className="text-center text-xs text-slate-500 pt-2 border-t border-slate-100 flex items-center justify-center gap-2">
+          <div className="text-center text-xs text-slate-500 pt-2 border-t border-white/50 flex items-center justify-center gap-2">
             <Link
               to={redirectTarget ? `/login?redirect=${encodeURIComponent(redirectTarget)}` : '/login'}
               className="text-[#3B7DE8] hover:underline flex items-center gap-1 font-bold"

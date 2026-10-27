@@ -209,7 +209,7 @@ export const ReportDetail = () => {
 
       <div className="space-y-4">
         {/* TOP BAR: Breadcrumb + Action Controls */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-3 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-2xs">
+        <div className="glass-panel-elevated rounded-3xl border border-white/80 p-3 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm">
           <div className="space-y-1">
             <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
               <Link to="/admin/dashboard" className="hover:text-slate-800">Admin Panel</Link>
@@ -228,7 +228,7 @@ export const ReportDetail = () => {
 
           <div className="flex items-center gap-2.5 flex-wrap">
             {/* Status Pill Dropdown */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50/80 text-xs font-medium text-slate-700">
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl glass-card text-xs font-medium text-slate-700">
               <span className={`w-2 h-2 rounded-full ${statusColor}`}></span>
               <span>Status: <strong className="text-slate-900">{statusLabel}</strong></span>
               <ChevronDown className="w-3.5 h-3.5 text-slate-400 ml-0.5" />
@@ -237,7 +237,7 @@ export const ReportDetail = () => {
             {/* Cetak Berita Acara */}
             <button
               onClick={() => window.print()}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 transition"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl glass-card hover:bg-white text-xs font-semibold text-slate-700 transition"
             >
               <Printer className="w-3.5 h-3.5 text-slate-500" />
               Cetak Berita Acara
@@ -250,7 +250,7 @@ export const ReportDetail = () => {
                   setNextTargetStatus(nextStatus);
                   setShowStatusModal(true);
                 }}
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white text-xs font-bold shadow-xs transition"
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded-2xl glass-button-primary text-white text-xs font-bold transition"
               >
                 <Edit3 className="w-3.5 h-3.5" />
                 Tindak Lanjuti Kasus
@@ -266,7 +266,7 @@ export const ReportDetail = () => {
           <div className="lg:col-span-7 space-y-5">
 
             {/* Ticket Header & Protected Identity Card */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-2xs space-y-4">
+            <div className="glass-panel-elevated rounded-3xl border border-white/80 p-5 sm:p-6 shadow-md space-y-4">
               {/* Ticket Code Row */}
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2.5">
@@ -274,11 +274,11 @@ export const ReportDetail = () => {
                   <button
                     onClick={handleCopyTicket}
                     title="Salin Kode Tiket"
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+                    className="p-1.5 rounded-xl glass-pill text-slate-500 hover:text-slate-800 transition"
                   >
                     {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
                   </button>
-                  <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
+                  <span className="px-3 py-0.5 rounded-full text-[11px] font-extrabold glass-pill-blue">
                     Data Aktif
                   </span>
                 </div>
@@ -289,38 +289,38 @@ export const ReportDetail = () => {
               </div>
 
               {/* Blue Protected Identity Box */}
-              <div className="rounded-2xl bg-sky-50/50 border border-sky-100 p-4 sm:p-5 space-y-3.5">
+              <div className="rounded-3xl glass-card border border-blue-200/50 p-4 sm:p-5 space-y-3.5">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex items-start gap-3">
-                    <div className="w-11 h-11 rounded-2xl bg-[#3B7DE8] text-white flex items-center justify-center flex-shrink-0 shadow-xs">
+                    <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 text-white flex items-center justify-center flex-shrink-0 shadow-md border border-white/30">
                       {report.is_anonymous ? <ShieldAlert className="w-6 h-6" /> : <User className="w-6 h-6" />}
                     </div>
                     <div>
                       <h3 className="text-sm font-extrabold text-slate-900">
                         {report.is_anonymous ? 'Anonim (Identitas Dilindungi)' : (report.reporter_name || 'Pelapor Terverifikasi')}
                       </h3>
-                      <p className="text-xs text-sky-700 font-semibold mt-0.5">
+                      <p className="text-xs text-[#3B7DE8] font-bold mt-0.5">
                         Protokol Kerahasiaan Korban Satgas PPKSP
                       </p>
                     </div>
                   </div>
 
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold glass-pill-green">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     Enkripsi TLS 1.3
                   </span>
                 </div>
 
                 {/* Sub-pills: Pelapor & Peran */}
                 <div className="flex flex-wrap items-center gap-2 pt-0.5">
-                  <span className="px-3 py-1 rounded-lg bg-white border border-slate-200 text-xs font-semibold text-slate-700">
+                  <span className="px-3 py-1 rounded-xl glass-card text-xs font-semibold text-slate-700">
                     Pelapor: <strong className="text-slate-900">{report.is_anonymous ? 'Identitas Dirahasiakan' : (report.reporter_name || 'Siswa Terdaftar')}</strong>
                   </span>
-                  <span className="px-3 py-1 rounded-lg bg-white border border-slate-200 text-xs font-semibold text-slate-700">
+                  <span className="px-3 py-1 rounded-xl glass-card text-xs font-semibold text-slate-700">
                     Peran: <strong className="text-slate-900">Pelapor / Korban Langsung</strong>
                   </span>
                   {!report.is_anonymous && report.reporter_school && (
-                    <span className="px-3 py-1 rounded-lg bg-white border border-slate-200 text-xs font-semibold text-slate-700">
+                    <span className="px-3 py-1 rounded-xl glass-card text-xs font-semibold text-slate-700">
                       Asal: <strong className="text-slate-900">{report.reporter_school}</strong>
                     </span>
                   )}
@@ -330,21 +330,21 @@ export const ReportDetail = () => {
                 <div>
                   <button
                     onClick={() => alert('Informasi kontak darurat terenkripsi hanya dapat diakses dengan kunci otentikasi Satgas PPKSP.')}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-sky-200 text-xs font-bold text-sky-800 hover:bg-sky-50/80 transition shadow-2xs"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl glass-pill-blue text-xs font-bold hover:bg-[#3B7DE8]/20 transition"
                   >
                     <Lock className="w-3.5 h-3.5 text-[#3B7DE8]" />
                     Kontak Darurat Tersedia untuk BK (Terenkripsi)
                   </button>
                 </div>
 
-                <p className="text-[11px] text-slate-500 leading-relaxed pt-1 border-t border-sky-100">
+                <p className="text-[11px] text-slate-500 leading-relaxed pt-1 border-t border-white/50">
                   Sesuai Permendikbudristek No. 46/2023, data identitas asli pelapor dienkripsi dan hanya dapat dibuka atas izin formal Kepala Satgas PPKSP untuk perlindungan psikososial siswa.
                 </p>
               </div>
 
               {/* 3-Card Incident Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-3.5 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-1">
+                <div className="p-3.5 rounded-2xl glass-card border border-white/70 space-y-1">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">WAKTU LAPORAN</span>
                   <p className="text-xs font-bold text-slate-900 leading-tight">
                     {report.tanggal || 'Tercatat di sistem'}
@@ -352,7 +352,7 @@ export const ReportDetail = () => {
                   <p className="text-[11px] text-slate-500">Status: {statusLabel}</p>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-1">
+                <div className="p-3.5 rounded-2xl glass-card border border-white/70 space-y-1">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">LOKASI KEJADIAN</span>
                   <p className="text-xs font-bold text-slate-900 leading-tight">
                     {report.lokasi || 'Area Satuan Pendidikan'}
@@ -360,9 +360,9 @@ export const ReportDetail = () => {
                   <p className="text-[11px] text-slate-500">Urgensi: {report.urgensi || 'Sedang'}</p>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-1">
+                <div className="p-3.5 rounded-2xl glass-card border border-white/70 space-y-1">
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">KATEGORI LAPORAN</span>
-                  <p className="text-xs font-bold text-sky-700 leading-tight">
+                  <p className="text-xs font-bold text-[#3B7DE8] leading-tight">
                     {report.kategori_nama}
                   </p>
                   <p className="text-[11px] text-slate-500">Permendikbudristek No. 46/2023</p>
@@ -381,18 +381,18 @@ export const ReportDetail = () => {
                   </span>
                 </div>
 
-                <div className="p-4 sm:p-5 rounded-2xl bg-sky-50/30 border-l-4 border-l-sky-500 border-y border-r border-slate-200/80 text-xs sm:text-[13px] text-slate-800 font-medium italic leading-relaxed whitespace-pre-wrap">
+                <div className="p-4 sm:p-5 rounded-3xl glass-card border-l-4 border-l-[#3B7DE8] border-white/80 text-xs sm:text-[13px] text-slate-800 font-medium italic leading-relaxed whitespace-pre-wrap">
                   {report.deskripsi ? `“${report.deskripsi}”` : '(Belum ada teks kronologi yang tersimpan)'}
                 </div>
               </div>
             </div>
 
             {/* Evidence & Attachments Card (Real Uploaded Files) */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-2xs space-y-4">
+            <div className="glass-panel-elevated rounded-3xl border border-white/80 p-5 sm:p-6 shadow-md space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <h3 className="text-sm font-extrabold text-slate-900">Berkas &amp; Bukti Pendukung</h3>
-                  <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-slate-100 text-slate-700">
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold glass-pill text-slate-700">
                     {evidenceList.length} Berkas
                   </span>
                 </div>
@@ -401,7 +401,7 @@ export const ReportDetail = () => {
                     onClick={() => {
                       evidenceList.forEach((e) => window.open(e.url, '_blank'));
                     }}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#3B7DE8] hover:text-sky-700"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#3B7DE8] hover:text-sky-700 cursor-pointer"
                   >
                     <FileArchive className="w-3.5 h-3.5" />
                     Buka Semua Berkas
@@ -493,7 +493,7 @@ export const ReportDetail = () => {
             </div>
 
             {/* Access Audit Footer Card */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-4 flex flex-wrap items-center justify-between gap-3 text-xs shadow-2xs">
+            <div className="glass-card rounded-2xl border border-white/80 p-4 flex flex-wrap items-center justify-between gap-3 text-xs shadow-xs">
               <div className="flex items-center gap-2 text-slate-600">
                 <Clock className="w-4 h-4 text-slate-400" />
                 <span>
@@ -511,10 +511,10 @@ export const ReportDetail = () => {
           <div className="lg:col-span-5 space-y-5">
 
             {/* CARD 1: Analisis AI & Klasifikasi Otomatis */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-2xs space-y-4">
+            <div className="glass-panel-elevated rounded-3xl border border-white/80 p-5 sm:p-6 shadow-md space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-sky-50 text-[#3B7DE8] flex items-center justify-center border border-sky-100">
+                  <div className="w-9 h-9 rounded-2xl glass-pill-blue flex items-center justify-center">
                     <Bot className="w-5 h-5" />
                   </div>
                   <div>
@@ -522,13 +522,13 @@ export const ReportDetail = () => {
                     <p className="text-[11px] text-slate-500">Mesin Inferensi Regulasi PPKSP</p>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2.5 py-1 rounded-lg">
+                <span className="text-[10px] font-extrabold text-slate-600 glass-pill px-2.5 py-1 rounded-full">
                   Model IndoBERT v2.4
                 </span>
               </div>
 
               {/* Rekomendasi Kategori Utama Container */}
-              <div className="rounded-2xl bg-sky-50/70 border border-sky-100 p-4 space-y-3">
+              <div className="rounded-3xl glass-card border border-blue-200/50 p-4 space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <span className="text-[10px] font-bold text-sky-800 uppercase tracking-wider block">
@@ -545,9 +545,9 @@ export const ReportDetail = () => {
                 </div>
 
                 {/* Progress Bar Meter */}
-                <div className="w-full bg-slate-200/80 rounded-full h-2 overflow-hidden">
+                <div className="w-full bg-slate-200/80 rounded-full h-2 overflow-hidden p-0.5">
                   <div
-                    className="bg-[#3B7DE8] h-2 rounded-full transition-all"
+                    className="bg-gradient-to-r from-[#3B7DE8] to-blue-600 h-1.5 rounded-full transition-all"
                     style={{ width: `${Math.min(Number(confidence), 100)}%` }}
                   ></div>
                 </div>
@@ -559,9 +559,9 @@ export const ReportDetail = () => {
                 </p>
 
                 {/* Alternatif */}
-                <div className="pt-2 border-t border-sky-100 flex items-center justify-between text-xs text-slate-600">
+                <div className="pt-2 border-t border-white/50 flex items-center justify-between text-xs text-slate-600">
                   <span>Kategori Alternatif: <strong>Perundungan Verbal</strong></span>
-                  <span className="text-sky-700 font-bold">Akurasi: 38%</span>
+                  <span className="text-[#3B7DE8] font-bold">Akurasi: 38%</span>
                 </div>
 
                 {/* Action Buttons */}
@@ -569,7 +569,7 @@ export const ReportDetail = () => {
                   <button
                     onClick={handleApproveAI}
                     disabled={isApproved}
-                    className="py-2.5 px-3 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition disabled:opacity-60"
+                    className="py-2.5 px-3 rounded-2xl glass-button-primary text-white font-bold text-xs flex items-center justify-center gap-1.5 transition disabled:opacity-60"
                   >
                     <Check className="w-4 h-4" />
                     {isApproved ? 'Telah Disetujui' : 'Setujui Kategori Ini'}
@@ -577,7 +577,7 @@ export const ReportDetail = () => {
 
                   <button
                     onClick={() => setShowOverrideModal(true)}
-                    className="py-2.5 px-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center gap-1.5 transition"
+                    className="py-2.5 px-3 rounded-2xl glass-card text-slate-700 font-bold text-xs flex items-center justify-center gap-1.5 transition"
                   >
                     Pilih Kategori Lain
                     <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
@@ -586,7 +586,7 @@ export const ReportDetail = () => {
               </div>
 
               {/* Protocol Alert Box */}
-              <div className="rounded-xl bg-amber-50 border border-amber-200/80 p-3 flex items-start gap-2.5 text-xs text-amber-800">
+              <div className="rounded-2xl glass-pill-yellow p-3 flex items-start gap-2.5 text-xs text-amber-800">
                 <span className="w-4 h-4 rounded-full bg-amber-100 border border-amber-300 text-amber-700 flex items-center justify-center flex-shrink-0 font-bold text-[10px]">
                   i
                 </span>
@@ -597,10 +597,10 @@ export const ReportDetail = () => {
             </div>
 
             {/* CARD 2: Deteksi Klaster Pola Berulang (HDBSCAN Real) */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-2xs space-y-3.5">
+            <div className="glass-panel-elevated rounded-3xl border border-white/80 p-5 sm:p-6 shadow-md space-y-3.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-lg bg-sky-50 text-[#3B7DE8] flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-xl glass-pill-blue flex items-center justify-center">
                     <Sparkles className="w-4 h-4" />
                   </div>
                   <h3 className="text-sm font-extrabold text-slate-900">Deteksi Klaster Pola Berulang</h3>
@@ -613,7 +613,7 @@ export const ReportDetail = () => {
               {/* Cluster Explanation Box */}
               {report.ai?.cluster_label !== null && report.ai?.cluster_label !== undefined && !report.ai?.is_noise ? (
                 <>
-                  <div className="rounded-xl bg-sky-50/50 border border-sky-100 p-3 flex items-start gap-2 text-xs text-slate-700">
+                  <div className="rounded-2xl glass-card border border-white/80 p-3 flex items-start gap-2 text-xs text-slate-700">
                     <Link2 className="w-4 h-4 text-[#3B7DE8] flex-shrink-0 mt-0.5" />
                     <p className="leading-relaxed">
                       Laporan ini terhubung ke <strong>Klaster #{report.ai.cluster_label}</strong> hasil analisis kedekatan embedding HDBSCAN.
@@ -627,10 +627,10 @@ export const ReportDetail = () => {
                         <Link
                           key={rel.id}
                           to={`/admin/laporan-detail?id=${rel.id}`}
-                          className="p-3 rounded-xl border border-slate-200 bg-slate-50/60 flex items-center justify-between text-xs hover:bg-slate-100/70 transition block"
+                          className="p-3 rounded-2xl glass-card flex items-center justify-between text-xs hover:bg-white/80 transition block"
                         >
                           <div>
-                            <p className="font-bold text-sky-700">#{rel.ticket_code}</p>
+                            <p className="font-bold text-[#3B7DE8]">#{rel.ticket_code}</p>
                             <p className="text-slate-600 font-medium mt-0.5">{rel.kategori_nama}</p>
                           </div>
                           <span className="text-[11px] text-slate-400">{rel.tanggal}</span>
@@ -642,14 +642,14 @@ export const ReportDetail = () => {
                   )}
                 </>
               ) : (
-                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
+                <div className="p-3.5 rounded-2xl glass-card text-xs text-slate-600">
                   Kasus ini ditandai sebagai <strong className="text-slate-800">kejadian tunggal (is_noise = True)</strong> tanpa korelasi langsung ke klaster lain.
                 </div>
               )}
             </div>
 
             {/* CARD 3: Tindakan & Rekomendasi Konselor */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-2xs space-y-3.5">
+            <div className="glass-panel-elevated rounded-3xl border border-white/80 p-5 sm:p-6 shadow-md space-y-3.5">
               <div className="flex items-center gap-2">
                 <Edit3 className="w-4 h-4 text-slate-600" />
                 <h3 className="text-sm font-extrabold text-slate-900">Tindakan &amp; Rekomendasi Konselor</h3>
@@ -664,7 +664,7 @@ export const ReportDetail = () => {
                   value={counselorInterventionNote}
                   onChange={(e) => setCounselorInterventionNote(e.target.value)}
                   placeholder="Tulis rekomendasi intervensi mediasi tertutup atau rujukan penanganan..."
-                  className="w-full text-xs p-3 rounded-2xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-200 transition resize-none"
+                  className="w-full text-xs p-3 rounded-2xl glass-input focus:outline-none transition resize-none"
                 ></textarea>
               </div>
 
@@ -672,7 +672,7 @@ export const ReportDetail = () => {
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <button
                   onClick={() => alert('Jadwal konseling telah dimasukkan ke agenda BK.')}
-                  className="py-2.5 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 transition"
+                  className="py-2.5 px-3 rounded-2xl glass-card hover:bg-white text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 transition"
                 >
                   <Calendar className="w-3.5 h-3.5 text-slate-500" />
                   Jadwal Konseling
@@ -680,7 +680,7 @@ export const ReportDetail = () => {
 
                 <button
                   onClick={() => flash('✓ Notifikasi kasus berhasil diteruskan ke tim Satgas PPKSP!')}
-                  className="py-2.5 px-3 rounded-xl bg-[#3B7DE8] hover:bg-[#2563c0] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs transition"
+                  className="py-2.5 px-3 rounded-2xl glass-button-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 transition"
                 >
                   <Send className="w-3.5 h-3.5" />
                   Notifikasi Satgas
@@ -694,11 +694,11 @@ export const ReportDetail = () => {
 
       {/* OVERRIDE CATEGORY MODAL */}
       {showOverrideModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-xl animate-fade-in">
-            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="glass-panel-elevated rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-white/90 animate-fade-in">
+            <div className="flex justify-between items-center border-b border-white/50 pb-3">
               <h4 className="text-sm font-bold text-slate-900">Override Kategori Manual</h4>
-              <button onClick={() => setShowOverrideModal(false)} className="text-slate-400 hover:text-slate-600">
+              <button onClick={() => setShowOverrideModal(false)} className="p-1 rounded-xl glass-pill text-slate-400 hover:text-slate-600">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -709,7 +709,7 @@ export const ReportDetail = () => {
                 <select
                   value={overrideCatId}
                   onChange={(e) => setOverrideCatId(e.target.value)}
-                  className="w-full p-2.5 rounded-xl border border-slate-300 font-semibold text-xs"
+                  className="w-full p-2.5 rounded-2xl glass-input font-semibold text-xs text-slate-800 focus:outline-none"
                 >
                   {categories.map((c) => (
                     <option key={c.id} value={c.id}>{c.nama}</option>
@@ -725,7 +725,7 @@ export const ReportDetail = () => {
                   value={overrideNote}
                   onChange={(e) => setOverrideNote(e.target.value)}
                   placeholder="Contoh: Terkonfirmasi bukti foto luka fisik saat verifikasi..."
-                  className="w-full p-2.5 rounded-xl border border-slate-300 text-xs"
+                  className="w-full p-2.5 rounded-2xl glass-input text-xs text-slate-800 focus:outline-none"
                 ></textarea>
               </div>
 
@@ -733,13 +733,13 @@ export const ReportDetail = () => {
                 <button
                   type="button"
                   onClick={() => setShowOverrideModal(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 font-bold"
+                  className="px-4 py-2 rounded-2xl glass-card text-slate-600 font-bold"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold"
+                  className="px-5 py-2 rounded-2xl glass-button-primary text-white font-bold"
                 >
                   Simpan Override
                 </button>
@@ -751,13 +751,13 @@ export const ReportDetail = () => {
 
       {/* STATUS TRANSITION MODAL */}
       {showStatusModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-xl animate-fade-in">
-            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="glass-panel-elevated rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-white/90 animate-fade-in">
+            <div className="flex justify-between items-center border-b border-white/50 pb-3">
               <h4 className="text-sm font-bold text-slate-900">
-                Transisi Status ke: <span className="uppercase text-sky-700">{nextTargetStatus}</span>
+                Transisi Status ke: <span className="uppercase text-[#3B7DE8]">{nextTargetStatus}</span>
               </h4>
-              <button onClick={() => setShowStatusModal(false)} className="text-slate-400 hover:text-slate-600">
+              <button onClick={() => setShowStatusModal(false)} className="p-1 rounded-xl glass-pill text-slate-400 hover:text-slate-600">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -771,7 +771,7 @@ export const ReportDetail = () => {
                   value={counselorNote}
                   onChange={(e) => setCounselorNote(e.target.value)}
                   placeholder="Masukkan catatan resmi yang akan tercatat di riwayat audit dan alur penanganan..."
-                  className="w-full p-2.5 rounded-xl border border-slate-300 text-xs"
+                  className="w-full p-2.5 rounded-2xl glass-input text-xs text-slate-800 focus:outline-none"
                 ></textarea>
               </div>
 
@@ -779,13 +779,13 @@ export const ReportDetail = () => {
                 <button
                   type="button"
                   onClick={() => setShowStatusModal(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 font-bold"
+                  className="px-4 py-2 rounded-2xl glass-card text-slate-600 font-bold"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold"
+                  className="px-5 py-2 rounded-2xl glass-button-primary text-white font-bold"
                 >
                   Konfirmasi Transisi
                 </button>
@@ -798,14 +798,14 @@ export const ReportDetail = () => {
       {/* Lightbox Modal Preview Gambar Bukti */}
       {selectedImagePreview && (
         <div
-          className="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in"
+          className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in"
           onClick={() => setSelectedImagePreview(null)}
         >
           <div
-            className="bg-white rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl relative border border-slate-200"
+            className="glass-panel-elevated rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl relative border border-white/90"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50">
+            <div className="flex items-center justify-between p-4 border-b border-white/50 bg-white/40">
               <div className="flex items-center gap-2">
                 <ImageIcon className="w-5 h-5 text-[#3B7DE8]" />
                 <h4 className="text-sm font-bold text-slate-800">Pratinjau Berkas Bukti Pendukung</h4>
@@ -815,7 +815,7 @@ export const ReportDetail = () => {
                   href={selectedImagePreview}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-3 py-1.5 text-slate-600 hover:text-sky-700 rounded-xl hover:bg-slate-200 text-xs font-bold inline-flex items-center gap-1.5 transition"
+                  className="px-3.5 py-1.5 text-slate-700 hover:text-[#3B7DE8] rounded-2xl glass-card text-xs font-bold inline-flex items-center gap-1.5 transition"
                   title="Buka Ukuran Asli di Tab Baru"
                 >
                   <Eye className="w-3.5 h-3.5" /> Buka Tab Baru
@@ -823,17 +823,17 @@ export const ReportDetail = () => {
                 <button
                   type="button"
                   onClick={() => setSelectedImagePreview(null)}
-                  className="p-1.5 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-200 transition cursor-pointer"
+                  className="p-1.5 text-slate-400 hover:text-slate-700 rounded-2xl glass-pill transition cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
             </div>
-            <div className="p-4 bg-slate-950 flex items-center justify-center max-h-[75vh] overflow-auto">
+            <div className="p-4 bg-slate-950/90 flex items-center justify-center max-h-[75vh] overflow-auto">
               <img
                 src={selectedImagePreview}
                 alt="Berkas Bukti Pendukung"
-                className="max-h-[70vh] max-w-full object-contain rounded-lg shadow-lg"
+                className="max-h-[70vh] max-w-full object-contain rounded-2xl shadow-xl"
               />
             </div>
           </div>
