@@ -80,11 +80,9 @@ export const AdminSidebar = ({
     <>
       <aside
         className={`glass-panel border-r border-white/60 flex flex-col justify-between py-4 select-none shadow-[0_8px_32px_rgba(31,38,135,0.06)] transition-all duration-300 ease-in-out
-          /* Mode Mobile / Tablet (< lg): Drawer Overlay */
-          fixed inset-y-0 left-0 z-50 w-64 lg:static lg:h-screen lg:sticky lg:top-0 lg:z-30
+          fixed inset-y-0 left-0 h-screen h-[100dvh] z-50 lg:z-30 overflow-y-auto lg:overflow-visible
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-          /* Mode Desktop (>= lg): Dynamic Width based on isExpanded */
-          ${isExpanded ? 'lg:w-60' : 'lg:w-[76px]'}
+          w-64 ${isExpanded ? 'lg:w-60' : 'lg:w-[76px]'}
         `}
       >
         {/* Top: Logo & Brand + Nav Items */}

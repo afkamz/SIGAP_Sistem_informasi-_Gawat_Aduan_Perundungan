@@ -66,7 +66,11 @@ export const AdminLayout = ({ children, showHeader = false, title = '', subtitle
       />
 
       {/* ─── Konten Area Utama ─── */}
-      <div className="flex-1 flex flex-col min-w-0 transition-all duration-300 relative z-10">
+      <div
+        className={`flex-1 flex flex-col min-w-0 transition-all duration-300 relative z-10 ${
+          isExpanded ? 'lg:ml-60' : 'lg:ml-[76px]'
+        }`}
+      >
         {/* Top Header Bar — iOS 26 Liquid Glass */}
         <header className="h-16 glass-panel px-4 sm:px-6 flex items-center justify-between sticky top-0 z-20 border-b border-white/60">
           {/* Sisi Kiri: Tombol Burger + Brand SIGAP + Search */}

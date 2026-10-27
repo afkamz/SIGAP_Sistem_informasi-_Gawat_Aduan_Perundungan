@@ -371,6 +371,20 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 18 | `EDIT` | `Frontend/src/pages/student/TrackReport.jsx` | Redesain Liquid Glass modul pelacakan tiket aduan |
 | 19 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 19 implementasi sistem desain Liquid Glass iOS 26 |
 
+---
+
+## 📅 [Sesi 20] Selasa, 27 Oktober 2026 — Jam 10 WIB
+**Fokus Utama**: Perbaikan tata letak sidebar antarmuka Admin SIGAP agar membentang penuh sepanjang tinggi viewport (`height: 100vh` / `100dvh`) dari atas hingga bawah layar dengan `position: fixed`, penyelarasan margin konten utama, serta penataan kelompok kontrol bawah.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/layout/AdminSidebar.jsx` | Penerapan `fixed inset-y-0 left-0 h-screen h-[100dvh]` serta penyesuaian flex layout penuh pada sidebar |
+| 2 | `EDIT` | `Frontend/src/components/layout/AdminLayout.jsx` | Penyesuaian margin offset konten utama (`lg:ml-60` / `lg:ml-[76px]`) terhadap sidebar tetap |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 20 perbaikan tinggi penuh viewport sidebar admin |
+
+
 
 
 
