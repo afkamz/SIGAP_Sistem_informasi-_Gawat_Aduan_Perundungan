@@ -119,6 +119,153 @@ Arsitektur \textit{backend} SIGAP dibangun menggunakan kerangka kerja FastAPI de
 \subsection{Audit Trail dan Akuntabilitas Penanganan}
 Pencatatan \textit{audit trail} merupakan komponen vital dalam sistem informasi yang mengelola data sensitif, seperti rekaman perundungan dan kekerasan anak. Audit trail yang komprehensif mendokumentasikan setiap riwayat mutasi data, meliputi identitas aktor, \textit{timestamp}, status sebelum dan sesudah perubahan, serta catatan justifikasi, sehingga integritas data terlindungi dan keputusan penanganan dapat dipertanggungjawabkan secara hukum maupun etika \cite{regueiro2021}. Dalam konteks SIGAP, setiap mutasi status laporan (dari \textit{Menunggu Verifikasi} $\rightarrow$ \textit{Sedang Ditangani} $\rightarrow$ \textit{Selesai}), persetujuan atau penolakan rekomendasi AI, serta pencatatan konseling dicatat secara otomatis ke tabel \texttt{audit\_trail} yang dilindungi oleh \textit{state transition guard}, menjamin bahwa tidak ada tahapan penanganan yang dapat dimanipulasi atau dilewati secara sepihak.
 
+\section{METHODOLOGY}
+
+Bagian ini menguraikan pendekatan perancangan dan implementasi sistem SIGAP secara sistematis, mencakup arsitektur sistem, \textit{AI pipeline}, tata kelola penanganan berbasis \textit{human-in-the-loop}, serta protokol pengujian dan evaluasi yang diterapkan.
+
+\subsection{System Architecture and Operational Workflow}
+
+SIGAP dirancang menggunakan arsitektur tiga lapisan yang memisahkan \textit{frontend}, \textit{backend}, dan \textit{AI pipeline}. Aplikasi berbasis \textit{Single Page Application} (SPA) dibangun menggunakan React.js dan Tailwind CSS, berkomunikasi secara asinkronus dengan layanan \textit{backend} FastAPI melalui protokol REST API terautentikasi JWT \cite{chakravarthy2019}. Basis data relasional MySQL 8.0 digunakan sebagai lapisan persistensi utama, sedangkan berkas bukti lampiran pengaduan disimpan pada penyimpanan lokal terisolasi dengan validasi MIME dan \textit{magic bytes} untuk menjamin integritas berkas.
+
+Sistem mendukung \textit{dual-mode reporting}: (1) \textit{Anonymous Mode}, di mana sistem membangkitkan kode tiket unik acak sebagai satu-satunya penghubung pelapor dengan laporannya tanpa menyimpan identitas, alamat IP, maupun sidik jari peramban; dan (2) \textit{Verified Mode}, yang mengaitkan laporan dengan akun siswa terdaftar untuk memfasilitasi pendampingan personal dan pemantauan progres. Mekanisme ini sejalan dengan temuan bahwa anonimitas yang terjamin secara teknis merupakan faktor determinan utama ketersediaan siswa untuk melapor \cite{kasturiratna2025,mbimbi2024}. Hak akses dipartisi ketat menggunakan \textit{Role-Based Access Control} (RBAC) melalui \textit{payload} JWT yang memuat klaim \texttt{role} (\texttt{siswa}/\texttt{admin}) dan masa berlaku token (\texttt{exp}).
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\rule{0pt}{3.5cm}\rule{\columnwidth-2\fboxsep-2\fboxrule}{0pt}}
+  \caption{Arsitektur sistem SIGAP: alur dari pelaporan siswa secara \textit{dual-mode}, pemrosesan \textit{backend} FastAPI, \textit{AI pipeline} (IndoBERT + HDBSCAN), hingga \textit{dashboard} penanganan oleh Guru BK.}
+  \label{fig:arsitektur}
+\end{figure}
+
+\subsection{NLP Pipeline for Triage Classification}
+
+Setiap narasi pengaduan yang masuk diproses melalui serangkaian tahapan \textit{natural language processing} untuk menghasilkan rekomendasi kategori secara otomatis. Tahap pertama adalah \textit{text preprocessing}, yang mencakup \textit{case folding}, normalisasi singkatan dan kata slang bahasa Indonesia, serta pembersihan karakter non-alfanumerik. Pendekatan ini terbukti meningkatkan akurasi representasi semantik pada teks informal berbahasa Indonesia \cite{jazuli2025}.
+
+Selanjutnya, teks yang telah diproses diumpankan ke model \textit{pre-trained} IndoBERT (\texttt{indobenchmark/indobert-base-p1}) \cite{wilie2020} guna menghasilkan representasi \textit{sentence embedding} berdimensi 768. Untuk menentukan kategori yang paling relevan, sistem menghitung \textit{cosine similarity} antara vektor \textit{embedding} deskripsi aduan $\vec{u}$ terhadap vektor \textit{centroid} $\vec{v}_k$ dari masing-masing $K = 7$ kategori yuridis Permendikbudristek No. 46 Tahun 2023:
+
+\begin{equation}
+  \text{sim}(\vec{u}, \vec{v}_k) = \frac{\vec{u} \cdot \vec{v}_k}{\|\vec{u}\|\,\|\vec{v}_k\|} = \frac{\displaystyle\sum_{i=1}^{n} u_i v_{k,i}}{\sqrt{\displaystyle\sum_{i=1}^{n} u_i^2}\;\sqrt{\displaystyle\sum_{i=1}^{n} v_{k,i}} }
+  \label{eq:cosine}
+\end{equation}
+
+Kategori dengan nilai $\text{sim}(\vec{u}, \vec{v}_k)$ tertinggi dipilih sebagai rekomendasi, dengan \textit{confidence score} dinormalisasi ke rentang persentase 0--100\% menggunakan fungsi \textit{softmax} terhadap seluruh skor kemiripan. Rekomendasi AI berstatus \textit{pending review} dan tidak langsung diterapkan; verifikasi serta keputusan akhir tetap berada pada Guru BK \cite{nabiilah2024}.
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\rule{0pt}{3cm}\rule{\columnwidth-2\fboxsep-2\fboxrule}{0pt}}
+  \caption{Pipeline NLP klasifikasi aduan: \textit{preprocessing} narasi, ekstraksi \textit{sentence embedding} IndoBERT, perhitungan \textit{cosine similarity} terhadap vektor \textit{centroid} kategori (Persamaan~\ref{eq:cosine}), dan keluaran rekomendasi beserta \textit{confidence score}.}
+  \label{fig:nlp-pipeline}
+\end{figure}
+
+\subsection{Incident Pattern Detection via HDBSCAN Clustering}
+
+Untuk mendeteksi pola perundungan sistemik dan titik rawan insiden berulang secara proaktif, SIGAP mengintegrasikan algoritma \textit{Hierarchical Density-Based Spatial Clustering of Applications with Noise} (HDBSCAN). Berbeda dari K-Means yang memerlukan pra-penentuan jumlah klaster $k$ dan menghasilkan partisi keras, HDBSCAN mengestimasi densitas lokal secara hierarkis dan mampu: (1) mendeteksi klaster berdensitas heterogen dengan bentuk geometri arbitrer; (2) mengidentifikasi laporan terisolasi sebagai \textit{noise} (label $-1$) tanpa memaksakan pengelompokan; serta (3) beradaptasi terhadap volume data yang bertumbuh secara dinamis \cite{malzer2020,hanny2024}.
+
+Vektor \textit{embedding} 768 dimensi yang dihasilkan IndoBERT terlebih dahulu direduksi ke dimensi yang lebih rendah menggunakan UMAP (\textit{Uniform Manifold Approximation and Projection}) guna mengatasi \textit{curse of dimensionality} sebelum diumpankan ke HDBSCAN \cite{grootendorst2022}. Hasil klasterisasi divisualisasikan pada \textit{dashboard} admin sebagai peta klaster kasus, memungkinkan Guru BK mengidentifikasi laporan yang berasal dari kelompok pelaku yang sama atau berlokasi di titik yang berulang, sehingga intervensi preventif dapat dilakukan sebelum eskalasi kekerasan meluas.
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\rule{0pt}{3cm}\rule{\columnwidth-2\fboxsep-2\fboxrule}{0pt}}
+  \caption{Ilustrasi hasil klasterisasi HDBSCAN pada ruang vektor laporan: setiap warna merepresentasikan satu klaster insiden berulang, sedangkan titik abu-abu menunjukkan laporan yang diklasifikasikan sebagai \textit{noise} (insiden terisolasi).}
+  \label{fig:hdbscan}
+\end{figure}
+
+\subsection{Human-in-the-Loop Governance and Audit Trail}
+
+SIGAP mengadopsi paradigma \textit{human-in-the-loop} (HITL) di mana seluruh rekomendasi AI---baik kategori maupun klaster---berstatus \textit{pending review} dan hanya berfungsi sebagai \textit{decision support}. Keputusan akhir penetapan kategori, tindakan intervensi, dan penutupan kasus secara eksklusif berada di tangan Guru BK atau Satgas PPKSP. Pendekatan ini sejalan dengan temuan bahwa integrasi pengawasan manusia pada sistem AI meningkatkan kepercayaan pengguna, meski dapat mempengaruhi efisiensi waktu pengambilan keputusan \cite{sele2024}.
+
+Alur transisi status laporan dimodelkan sebagai \textit{Finite State Machine} (FSM) dengan tiga kondisi utama: \textit{Menunggu Verifikasi} $\rightarrow$ \textit{Sedang Ditangani} $\rightarrow$ \textit{Selesai}. Setiap perpindahan status dilindungi oleh \textit{state transition guard} yang mencegah lompatan status tidak sah maupun pembalikan status yang tidak diizinkan. Setiap mutasi status, persetujuan atau penolakan rekomendasi AI, dan catatan konseling dicatat secara otomatis dan \textit{immutable} ke tabel \texttt{audit\_trail} yang dilindungi dengan verifikasi integritas \textit{hash} \cite{regueiro2021,mbimbi2024}. Rekaman ini memuat identitas pelaksana, \textit{timestamp} presisi, nilai status sebelum dan sesudah, serta justifikasi tindakan---menjamin akuntabilitas hukum dan etika penanganan kasus.
+
+\begin{figure}[htbp]
+  \centering
+  \fbox{\rule{0pt}{2.8cm}\rule{\columnwidth-2\fboxsep-2\fboxrule}{0pt}}
+  \caption{Diagram transisi status laporan (\textit{Finite State Machine}): setiap perpindahan status dari \textit{Menunggu Verifikasi} $\rightarrow$ \textit{Sedang Ditangani} $\rightarrow$ \textit{Selesai} dilindungi \textit{state transition guard} dan dicatat otomatis ke tabel \texttt{audit\_trail}.}
+  \label{fig:fsm}
+\end{figure}
+
+\subsection{Evaluation and Testing Protocol}
+
+Pengujian sistem SIGAP dilaksanakan melalui empat jalur komplementer sebagaimana dirangkum pada Tabel~\ref{tab:testing}.
+
+\begin{table}[htbp]
+\caption{Ringkasan Protokol Pengujian Sistem SIGAP}
+\label{tab:testing}
+\begin{center}
+\begin{tabular}{|p{1.5cm}|p{2.5cm}|p{3.5cm}|}
+\hline
+\textbf{Jalur Uji} & \textbf{Metode} & \textbf{Metrik} \\
+\hline
+Fungsional & \textit{Black-Box Testing} & Persentase skenario berhasil \\
+\hline
+Model AI & Evaluasi Klasifikasi & \textit{Accuracy, Precision, Recall, F1-Score} \\
+\hline
+Klasterisasi & \textit{Silhouette Score} & Kohesi \& separasi klaster \\
+\hline
+Penerimaan & SUS + TAM & Skor SUS (0--100), PEOU, PU \\
+\hline
+Kinerja & Uji Beban API & Latensi (ms), \textit{throughput} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\textit{Black-Box Testing} memvalidasi seluruh skenario fungsional, mencakup pelaporan anonim dan terverifikasi, validasi MIME berkas lampiran, proteksi otorisasi RBAC, dan transisi status FSM. Evaluasi model AI menggunakan metrik \textit{accuracy}, \textit{precision}, \textit{recall}, dan \textit{F1-score} pada dataset aduan berlabel kategori, serta \textit{Silhouette Coefficient} untuk mengukur kualitas pemisahan klaster HDBSCAN.
+
+Pengujian penerimaan pengguna mengintegrasikan \textit{System Usability Scale} (SUS) dan \textit{Technology Acceptance Model} (TAM). SUS mengukur kebergunaan antarmuka melalui 10 item pernyataan terstandar dengan rentang skor 0--100; skor $\geq 70$ dikategorikan \textit{Good} \cite{zerovnik2024}. TAM mengukur konstruk \textit{Perceived Usefulness} (PU) dan \textit{Perceived Ease of Use} (PEOU) melalui kuesioner skala Likert lima poin yang diberikan kepada pengguna akhir dari kalangan siswa dan tenaga pendidik. Pengujian kinerja sistem mengukur latensi respons API rata-rata dan \textit{throughput} penanganan permintaan bersamaan.
+
+\section{DATASET PROFILE}
+
+Bagian ini menguraikan karakteristik korpus data yang digunakan dalam pengembangan dan evaluasi SIGAP, mencakup taksonomi kategori yuridis, formulasi korpus primer teks aduan, strategi \textit{data augmentation}, serta dataset pembanding eksternal pemerintah.
+
+\subsection{Taxonomy and Ground Truth Formulation}
+
+Taksonomi klasifikasi pengaduan pada SIGAP disusun mengacu secara ketat pada regulasi resmi Permendikbudristek No. 46 Tahun 2023 tentang Pencegahan dan Penanganan Kekerasan di Lingkungan Satuan Pendidikan. Regulasi ini mendefinisikan 7 bentuk kekerasan spesifik sebagai \textit{ground truth} kategori sistem: (1) Perundungan Verbal, (2) Perundungan Fisik, (3) \textit{Cyberbullying}, (4) Kekerasan Seksual, (5) Hukuman Fisik oleh Tenaga Pendidik, (6) Kekerasan Psikis/Pengucilan Sosial, dan (7) Penyalahgunaan Narkoba/Rokok/Minuman Keras.
+
+Pemilihan taksonomi ini didukung oleh temuan empiris Marta dkk. \cite{marta2026} yang mengonfirmasi bahwa keterlibatan siswa sekolah menengah di Indonesia dalam insiden kekerasan didominasi oleh korban (82,7\%) dan pelaku sebaya (16,2\%), di mana ketidakjelasan saluran klasifikasi memperparah fenomena tidak terlaporkannya kasus. Setiap kategori dalam korpus SIGAP dipetakan ke dalam representasi vektor \textit{centroid} semantik yang merefleksikan definisi yuridis serta variasi ungkapan faktual yang kerap digunakan peserta didik.
+
+\subsection{Text Preprocessing and Data Augmentation}
+
+Korpus teks primer dihimpun dari kombinasi narasi pengaduan siswa, simulasi studi kasus bimbingan konseling, serta teks media sosial bertema perundungan pelajar berbahasa Indonesia. Karakteristik utama teks aduan siswa adalah penggunaan ragam bahasa nonformal, singkatan digital, serta istilah gaul lokal (slang). Prapemrosesan teks dilakukan melalui: (1) \textit{case folding}; (2) normalisasi kata slang ke bentuk baku menggunakan kamus leksikon informal bahasa Indonesia; (3) eliminasi tautan URL, tanda baca berlebih, dan karakter non-alfanumerik; serta (4) pemotongan spasi ganda.
+
+Tantangan utama pada data kekerasan anak di sekolah adalah \textit{class imbalance}, di mana kategori seperti perundungan verbal dan \textit{cyberbullying} memiliki frekuensi laporan yang jauh lebih masif dibandingkan kategori sensitif seperti kekerasan seksual atau hukuman fisik. Guna mengatasi disparitas tersebut tanpa mendistorsi esensi semantik teks, sistem menerapkan teknik \textit{data augmentation} melalui substitusi sinonim terkonteks dan parafrase kalimat \cite{tang2023}. Pendekatan augmentasi ini memperkaya variasi leksikal pada kategori minoritas sekaligus meningkatkan \textit{robustness} representasi vektor \textit{embedding} model IndoBERT saat menghadapi variasi narasi laporan baru.
+
+\subsection{Class Distribution and Data Partitioning}
+
+Rincian komposisi dataset aduan teks SIGAP disajikan pada Tabel~\ref{tab:dataset}. Korpus teks terdiri dari total 1.400 sampel narasi aduan yang terdistribusi secara seimbang (masing-masing 200 sampel per kategori setelah proses augmentasi).
+
+\begin{table}[htbp]
+\caption{Distribusi Korpus Teks Aduan 7 Kategori Yuridis SIGAP}
+\label{tab:dataset}
+\begin{center}
+\begin{tabular}{|c|p{3.4cm}|c|c|}
+\hline
+\textbf{No} & \textbf{Kategori Kekerasan Resmi} & \textbf{Sampel} & \textbf{Proporsi (\%)} \\
+\hline
+1 & Perundungan Verbal & 200 & 14,28\% \\
+\hline
+2 & Perundungan Fisik & 200 & 14,28\% \\
+\hline
+3 & \textit{Cyberbullying} & 200 & 14,28\% \\
+\hline
+4 & Kekerasan Seksual & 200 & 14,28\% \\
+\hline
+5 & Hukuman Fisik Tenaga Pendidik & 200 & 14,28\% \\
+\hline
+6 & Kekerasan Psikis/Pengucilan & 200 & 14,28\% \\
+\hline
+7 & Penyalahgunaan Zat/Narkoba/Rokok & 200 & 14,28\% \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Total Sampel Korpus}} & \textbf{1.400} & \textbf{100,0\%} \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Dataset dipartisi menggunakan metode \textit{stratified split} menjadi dua subset independen: 80\% (1.120 sampel) dialokasikan sebagai data latih dan pembentukan vektor \textit{centroid} kategori semantik, sedangkan 20\% (280 sampel) dialokasikan sebagai data uji tertutup untuk mengevaluasi akurasi, presisi, \textit{recall}, dan \textit{F1-score} rekomendasi triase AI.
+
+\subsection{External Benchmark Aggregation}
+
+Melengkapi data teks aduan internal, SIGAP mengintegrasikan data agregat makro melalui modul \textit{Extract, Transform, Load} (ETL) dari portal Satu Data Indonesia, Sistem Informasi Online Perlindungan Perempuan dan Anak (SIMFONI PPA) Kementerian PPPA, serta Open Data Provinsi Aceh dan Kalimantan Timur. Dataset benchmark ini mencakup 1.250 rekaman agregat kasus kekerasan anak tingkat kabupaten/kota dan nasional dalam kurun waktu 2021--2024. Data benchmark eksternal ini disimpan pada tabel \texttt{external\_benchmark} dan dimanfaatkan pada \textit{dashboard} admin sebagai tolok ukur kontekstual untuk membandingkan eskalasi insiden di tingkat satuan pendidikan terhadap tren agregat regional.
+
 \begin{thebibliography}{00}
 \bibitem{zhang2022}
 W. Zhang, S. Huang, L. Lam, R. Evans, and C. Zhu, ``Cyberbullying definitions and measurements in children and adolescents,'' \textit{Front. Public Health}, vol. 10, Art. no. 1000504, 2022, doi: 10.3389/fpubh.2022.1000504. [Online]. Available: \url{https://doi.org/10.3389/fpubh.2022.1000504}
@@ -161,6 +308,27 @@ S. S. S. S. Chakravarthy, ``JSON Web Token (JWT) based client authentication in 
 
 \bibitem{regueiro2021}
 C. Regueiro, I. Seco, I. Gutiérrez-Agüero, B. Urquizu, and J. Mansell, ``A Blockchain-Based Audit Trail Mechanism: Design and Implementation,'' \textit{Algorithms}, vol. 14, no. 12, Art. no. 341, 2021, doi: 10.3390/a14120341. [Online]. Available: \url{https://www.mdpi.com/1999-4893/14/12/341/pdf}
+
+\bibitem{jazuli2025}
+A. Jazuli, Widowati, and R. Kusumaningrum, ``Optimizing Aspect-Based Sentiment Analysis Using BERT for Comprehensive Analysis of Indonesian Student Feedback,'' \textit{Appl. Sci.}, vol. 15, no. 1, Art. no. 172, 2025, doi: 10.3390/app15010172. [Online]. Available: \url{https://doi.org/10.3390/app15010172}
+
+\bibitem{sele2024}
+D. Sele and M. Chugunova, ``Putting a human in the loop: Increasing uptake, but decreasing accuracy of automated decision-making,'' \textit{PLOS ONE}, vol. 19, no. 3, Art. no. e0298037, 2024, doi: 10.1371/journal.pone.0298037. [Online]. Available: \url{https://doi.org/10.1371/journal.pone.0298037}
+
+\bibitem{hanny2024}
+D. Hanny and B. Resch, ``Clustering-Based Joint Topic-Sentiment Modeling of Social Media Data: A Neural Networks Approach,'' \textit{Information}, vol. 15, no. 4, Art. no. 200, 2024, doi: 10.3390/info15040200. [Online]. Available: \url{https://doi.org/10.3390/info15040200}
+
+\bibitem{mbimbi2024}
+B. Mbimbi, D. Murray, and M. Wilson, ``Preserving Whistleblower Anonymity Through Zero-Knowledge Proofs and Private Blockchain: A Secure Digital Evidence Management Framework,'' \textit{Blockchains}, vol. 3, no. 2, pp. 101--123, 2024, doi: 10.3390/blockchains3020007. [Online]. Available: \url{https://doi.org/10.3390/blockchains3020007}
+
+\bibitem{zerovnik2024}
+A. \v{Z}erovnik, ``Technology-Enhanced Feedback System Usability in the Context of Self-Regulation Promotion,'' \textit{Educ. Sci.}, vol. 14, no. 9, Art. no. 948, 2024, doi: 10.3390/educsci14090948. [Online]. Available: \url{https://doi.org/10.3390/educsci14090948}
+
+\bibitem{marta2026}
+D. S. Marta, I. G. A. T. Windiani, I. G. A. P. E. Pratiwi, I. G. L. Sidiartha, I. M. Arimbawa, and D. S. Mahalini, ``Prevalence and factors associated with bullying based on the Indonesian version of revised Olweus/Bully Victim Questionnaire (OBVQ-R) among senior high school students,'' \textit{BMJ Paediatr. Open}, vol. 10, Art. no. e004704, 2026, doi: 10.1136/bmjpo-2026-004704. [Online]. Available: \url{https://doi.org/10.1136/bmjpo-2026-004704}
+
+\bibitem{tang2023}
+H. Tang, S. Kamei, and Y. Morimoto, ``Data Augmentation Methods for Enhancing Robustness in Text Classification Tasks,'' \textit{Algorithms}, vol. 16, no. 1, Art. no. 59, 2023, doi: 10.3390/a16010059. [Online]. Available: \url{https://doi.org/10.3390/a16010059}
 \end{thebibliography}
 
 \end{document}

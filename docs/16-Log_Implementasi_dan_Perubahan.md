@@ -384,6 +384,49 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 2 | `EDIT` | `Frontend/src/components/layout/AdminLayout.jsx` | Penyesuaian margin offset konten utama (`lg:ml-60` / `lg:ml-[76px]`) terhadap sidebar tetap |
 | 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 20 perbaikan tinggi penuh viewport sidebar admin |
 
+---
+
+## 📅 [Sesi 21] Senin, 27 Oktober 2026 — Jam 17 WIB
+**Fokus Utama**: Penulisan Bab III. METHODOLOGY format IEEE pada naskah LaTeX, penambahan 5 referensi jurnal *open access* baru (2024–2025), serta penyisipan 4 *placeholder* gambar dan 1 tabel protokol pengujian.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP_Paper.tex` | Penambahan `\section{METHODOLOGY}` (5 sub-bab A–E, 4 *placeholder* gambar, 1 tabel, persamaan *cosine similarity*, 5 `\bibitem` baru) |
+| 2 | `EDIT` | `SIGAP.tex` | Sinkronisasi Bab III Methodology dan 5 referensi baru identik dengan `SIGAP_Paper.tex` |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 21 penulisan Bab III Methodology |
+
+---
+
+## 📅 [Sesi 22] Senin, 27 Oktober 2026 — Jam 18 WIB
+**Fokus Utama**: Penulisan Bab IV. DATASET PROFILE format IEEE pada naskah LaTeX mencakup taksonomi 7 kategori yuridis Permendikbudristek No. 46 Tahun 2023, prapemrosesan teks dan augmentasi korpus, tabel distribusi partisi data, agregasi data benchmark eksternal pemerintah, serta penambahan 2 referensi jurnal *open access* baru.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP_Paper.tex` | Penambahan `\section{DATASET PROFILE}` (4 sub-bab A–D, Tabel distribusi 7 kategori yuridis, 2 `\bibitem` baru) |
+| 2 | `EDIT` | `SIGAP.tex` | Sinkronisasi Bab IV Dataset Profile dan 2 referensi baru identik dengan `SIGAP_Paper.tex` |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 22 penulisan Bab IV Dataset Profile |
+
+---
+
+## 📅 [Sesi 23] Senin, 27 Oktober 2026 — Jam 18 WIB
+**Fokus Utama**: Penyelarasan dan standardisasi istilah teknis bahasa Inggris langsung pada Bab III dan Bab IV naskah LaTeX guna mengeliminasi redundansi penulisan ganda bahasa Indonesia dan Inggris dalam tanda kurung.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP_Paper.tex` | Standardisasi istilah teknis bahasa Inggris langsung pada Bab III dan Bab IV |
+| 2 | `EDIT` | `SIGAP.tex` | Sinkronisasi terminologi langsung bahasa Inggris pada Bab III dan Bab IV |
+| 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi naskah sumber kode LaTeX |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 23 standardisasi terminologi naskah LaTeX |
+
+
+
+
 
 
 
