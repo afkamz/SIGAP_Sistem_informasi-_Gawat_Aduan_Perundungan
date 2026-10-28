@@ -424,6 +424,39 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi naskah sumber kode LaTeX |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 23 standardisasi terminologi naskah LaTeX |
 
+---
+
+## 📅 [Sesi 24] Rabu, 28 Oktober 2026 — Jam 11 WIB
+**Fokus Utama**: Integrasi diagram arsitektur sistem nyata (`ARSITEK_MERMAID.png`) menggantikan kotak *placeholder* pada Bab III naskah LaTeX.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `TAMBAH` | `ARSITEK_MERMAID.png` | Salinan berkas gambar arsitektur format aman penamaan LaTeX |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Penggantian placeholder Gambar 1 arsitektur sistem dengan `ARSITEK_MERMAID.png` |
+| 3 | `EDIT` | `SIGAP.tex` | Sinkronisasi Gambar 1 arsitektur sistem pada naskah utama LaTeX |
+| 4 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi naskah sumber kode LaTeX |
+| 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 24 integrasi diagram arsitektur |
+
+---
+
+## 📅 [Sesi 25] Rabu, 28 Oktober 2026 — Jam 11 WIB
+**Fokus Utama**: Restrukturisasi ringkas Bab III (Metodologi) menjadi tiga pilar utama dan integrasi berkas mockup antarmuka pelaporan multi-langkah (`mock_langkah1.png`, `mock_langkah2.png`, `mock_langkah3.png`).
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `TAMBAH` | `mock_langkah1.png` | Gambar mockup formulir pengaduan Langkah 1 (Identitas & Kerahasiaan) |
+| 2 | `TAMBAH` | `mock_langkah2.png` | Gambar mockup formulir pengaduan Langkah 2 (Data Kasus & Lokasi) |
+| 3 | `TAMBAH` | `mock_langkah3.png` | Gambar mockup formulir pengaduan Langkah 3 (Unggah Bukti & Tiket) |
+| 4 | `EDIT` | `SIGAP.tex` | Perampingan Bab III menjadi 3 pilar dan penyematan mockup Gambar 2, 3, 4 |
+| 5 | `EDIT` | `SIGAP_Paper.tex` | Sinkronisasi struktur ramping Bab III dan integrasi mockup antarmuka |
+| 6 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi kode sumber naskah LaTeX Bab III |
+| 7 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 25 restrukturisasi Bab III dan integrasi mockup |
+
+
 
 
 
