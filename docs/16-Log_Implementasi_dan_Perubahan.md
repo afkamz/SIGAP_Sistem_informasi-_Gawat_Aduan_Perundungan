@@ -456,6 +456,18 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 6 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi kode sumber naskah LaTeX Bab III |
 | 7 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 25 restrukturisasi Bab III dan integrasi mockup |
 
+---
+
+## 📅 [Sesi 26] Rabu, 28 Oktober 2026 — Jam 13 WIB
+**Fokus Utama**: Optimasi berkas Dockerfile backend dengan mengeliminasi instalasi paket compiler C yang redundan guna mempercepat waktu build Docker secara signifikan.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `backend/sigap-backend/Dockerfile` | Penghapusan instruksi instalasi gcc Debian lambat untuk akselerasi build |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 26 optimasi Dockerfile backend |
+
 
 
 
