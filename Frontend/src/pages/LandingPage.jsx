@@ -649,70 +649,70 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Fitur & Teknologi Keamanan SIGAP — Liquid Dark Glass */}
-      <section className="py-16 lg:py-24 glass-panel-dark text-white relative z-20 border-y border-white/10">
+      {/* Fitur & Teknologi Keamanan SIGAP — Liquid Glass Light */}
+      <section className="py-16 lg:py-24 glass-panel border-y border-white/60 relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-5 space-y-4">
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full glass-pill text-xs font-bold border border-white/20">
-                <Sparkles className="w-3.5 h-3.5 text-[#F5C518]" />
-                <span className="text-white">KEUNGGULAN SISTEM</span>
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full glass-pill-blue text-xs font-bold">
+                <Sparkles className="w-3.5 h-3.5 text-[#3B7DE8]" />
+                <span className="text-[#1D4ED8]">KEUNGGULAN SISTEM</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-slate-900">
                 Teknologi Cerdas untuk Perlindungan Nyata
               </h2>
-              <p className="text-slate-300 text-sm leading-relaxed">
+              <p className="text-slate-600 text-sm leading-relaxed">
                 SIGAP dirancang dengan standar teknologi institusi modern guna memastikan tidak ada suara aduan yang hilang, diabaikan, atau bocor.
               </p>
 
               <div className="pt-2">
                 <Link
                   to="/admin/login"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl glass-pill hover:bg-white/20 text-white text-xs font-bold transition border border-white/20"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl glass-button-secondary hover:border-[#3B7DE8]/40 text-slate-800 text-xs font-bold transition shadow-sm"
                 >
-                  <Lock className="w-3.5 h-3.5 text-white" />
+                  <Lock className="w-3.5 h-3.5 text-[#3B7DE8]" />
                   <span>Akses Khusus Guru BK &amp; Admin</span>
                 </Link>
               </div>
             </div>
 
             <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-6 rounded-3xl glass-card text-white space-y-2 border border-white/15 hover:bg-white/10 transition">
-                <div className="w-10 h-10 rounded-2xl bg-[#3B7DE8] text-white flex items-center justify-center font-bold">
+              <div className="p-6 rounded-3xl glass-card space-y-3 border border-white/80 shadow-sm hover:shadow-md hover:border-[#3B7DE8]/40 transition group">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#3B7DE8] to-blue-600 text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
-                <h4 className="font-bold text-base text-white">AI NLP Multi-Label</h4>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <h4 className="font-bold text-base text-slate-900 group-hover:text-[#3B7DE8] transition-colors">AI NLP Multi-Label</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
                   Rekomendasi otomatis 7 kategori kekerasan resmi berdasarkan analisis teks kronologi aduan untuk mempercepat telaah awal tim konselor.
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl glass-card text-white space-y-2 border border-white/15 hover:bg-white/10 transition">
-                <div className="w-10 h-10 rounded-2xl bg-[#3B7DE8] text-white flex items-center justify-center font-bold">
+              <div className="p-6 rounded-3xl glass-card space-y-3 border border-white/80 shadow-sm hover:shadow-md hover:border-[#3B7DE8]/40 transition group">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#3B7DE8] to-blue-600 text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
                   <Lock className="w-5 h-5 text-white" />
                 </div>
-                <h4 className="font-bold text-base text-white">Enkripsi &amp; Kerahasiaan</h4>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <h4 className="font-bold text-base text-slate-900 group-hover:text-[#3B7DE8] transition-colors">Enkripsi &amp; Kerahasiaan</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
                   Data aduan dilindungi mekanisme Role-Based Access Control (RBAC) dan JWT. Hanya konselor sekolah yang terverifikasi yang dapat mengakses.
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl glass-card text-white space-y-2 border border-white/15 hover:bg-white/10 transition">
-                <div className="w-10 h-10 rounded-2xl bg-[#3B7DE8] text-white flex items-center justify-center font-bold">
+              <div className="p-6 rounded-3xl glass-card space-y-3 border border-white/80 shadow-sm hover:shadow-md hover:border-[#3B7DE8]/40 transition group">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#3B7DE8] to-blue-600 text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
                   <FileText className="w-5 h-5 text-white" />
                 </div>
-                <h4 className="font-bold text-base text-white">Digital Audit Trail</h4>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <h4 className="font-bold text-base text-slate-900 group-hover:text-[#3B7DE8] transition-colors">Digital Audit Trail</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
                   Setiap perpindahan status laporan dicatat secara permanen dengan timestamp dan identitas konselor, mencegah kelalaian dan manipulasi.
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl glass-card text-white space-y-2 border border-white/15 hover:bg-white/10 transition">
-                <div className="w-10 h-10 rounded-2xl bg-[#3B7DE8] text-white flex items-center justify-center font-bold">
+              <div className="p-6 rounded-3xl glass-card space-y-3 border border-white/80 shadow-sm hover:shadow-md hover:border-[#3B7DE8]/40 transition group">
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#3B7DE8] to-blue-600 text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
                   <Search className="w-5 h-5 text-white" />
                 </div>
-                <h4 className="font-bold text-base text-white">Pelacakan Real-Time</h4>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <h4 className="font-bold text-base text-slate-900 group-hover:text-[#3B7DE8] transition-colors">Pelacakan Real-Time</h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
                   Transparansi progres aduan melalui kode tiket unik tanpa perlu login, menjaga kenyamanan dan ketenangan pikiran pelapor.
                 </p>
               </div>

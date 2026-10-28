@@ -16,9 +16,10 @@
 * Pemantapan infrastruktur container Docker (MySQL, FastAPI, Frontend Nginx, phpMyAdmin).
 * Pembersihan tampilan desktop 100% zoom dan penyelarasan rasio kontainer.
 
-### 💻 Minggu 8–11 : Integrasi Live API, Penguatan Keamanan, & Pipeline AI (📍 Posisi Saat Ini: Minggu 10 — Redesain Glassmorphism iOS 26, Sidebar Full Viewport, Resolusi CORS Docker, Harmonisasi Bab III & IV Naskah IEEE, Integrasi Aset Gambar Nyata, serta Akselerasi Build Docker)
+### 💻 Minggu 8–11 : Integrasi Live API, Penguatan Keamanan, & Pipeline AI (📍 Posisi Saat Ini: Minggu 10 — Redesain Glassmorphism iOS 26, Sidebar Full Viewport, Notifikasi Lonceng Interaktif, Resolusi CORS Docker, Harmonisasi Bab III & IV Naskah IEEE, Integrasi Aset Gambar Nyata, serta Akselerasi Build Docker)
 * Transformasi visual menyeluruh mengadopsi sistem desain *Liquid Glass / Glassmorphism iOS 26* pada seluruh portal publik (Landing Page), portal Admin, dan portal Siswa.
 * Perbaikan dan pemantapan navigasi Admin dengan bilah sisi (*sidebar*) tetap sepanjang layar penuh (`100vh` / `100dvh`), dukungan mode dinamis (*expanded* 240px vs *collapsed* 76px), serta *drawer overlay* responsif pada perangkat *mobile*.
+* Implementasi sistem notifikasi lonceng interaktif pada navbar admin dengan panel *dropdown* laporan baru berstatus menunggu dan *counter badge* merah dinamis.
 * Resolusi kendala autentikasi dan otorisasi login siswa/admin pada Docker melalui penambahan CORS origin `http://localhost:3000` dan penyelarasan persistensi token/role.
 * Harmonisasi dan penulisan Bab III (METHODOLOGY) format IEEE menjadi 3 pilar padat (Arsitektur Sistem, Rancangan Formulir Multi-Step, AI Pipeline) yang selaras dengan panduan PRD namun tetap mempertahankan keunggulan riset AI.
 * Penulisan Bab IV (DATASET PROFILE) format IEEE mencakup taksonomi 7 kategori yuridis Permendikbudristek No. 46/2023, augmentasi teks, distribusi 1.400 sampel seimbang, dan benchmark eksternal 1.250 data.
@@ -67,6 +68,13 @@
     * **Langkah 2**: Pengisian Substansi Kasus, Tanggal, Jam, dan Lokasi Kejadian di Sekolah.
     * **Langkah 3**: Unggah Bukti Digital (validasi 10 MB & MIME), Kebutuhan Bantuan Darurat, dan Konfirmasi Tiket.
   * Mengekspor tangkapan layar antarmuka resolusi tinggi (`mock_langkah1.png`, `mock_langkah2.png`, `mock_langkah3.png`) untuk diintegrasikan ke dalam naskah ilmiah.
+
+### Task 6 ✅
+* **Implementasi Fitur Notifikasi Lonceng Interaktif Live (`AdminLayout.jsx`)**
+  * Mengubah tombol lonceng statis pada top navbar admin menjadi sistem *dropdown* notifikasi *real-time* yang terhubung langsung ke antrean laporan berstatus `menunggu`.
+  * Menghadirkan *counter badge* merah dinamis yang menghitung total laporan yang butuh tindakan verifikasi dari database MySQL (misal: "7", atau "9+").
+  * Menyajikan panel notifikasi berkas kaca (*glass-panel-elevated*) interaktif dengan daftar hingga 8 laporan terbaru, lengkap dengan judul aduan, kategori kekerasan, tanggal masuk, penanda status *Menunggu*, serta tombol navigasi instan ke halaman Detail Laporan.
+  * Dilengkapi penanganan *empty state* bersih ketika seluruh laporan telah terverifikasi, tombol footer *Lihat Semua Laporan*, serta penutup otomatis saat klik di luar area (*click outside listener* via `useRef`).
 
 ---
 
@@ -173,6 +181,7 @@
 |---|:---:|---|
 | **Sistem Desain Liquid Glass iOS 26** | **100% Nyata** | Konsisten pada Landing Page, Portal Siswa, dan Portal Admin. |
 | **Navigasi Sidebar Admin Full Viewport** | **100% Nyata** | Sidebar kokoh `100vh`, mode dinamis expanded/collapsed, drawer mobile aktif. |
+| **Notifikasi Lonceng Live (Top Navbar Admin)** | **100% Nyata** | Panel dropdown interaktif, counter badge dinamis laporan menunggu, navigasi langsung. |
 | **Autentikasi (JWT + Bcrypt + RBAC)** | **100% Nyata** | Login siswa & admin terhubung ke MySQL, CORS port 3000 teratasi. |
 | **Infrastruktur Kontainer Docker** | **100% Nyata** | Dockerfile backend dioptimasi, 4 container (MySQL, FastAPI, Nginx, PMA) siap pakai. |
 | **Alur Formulir Multi-Step Pelaporan** | **100% Nyata** | Wizard 3 tahap (Identitas $\rightarrow$ Data Kasus $\rightarrow$ Unggah Bukti & Tiket). |

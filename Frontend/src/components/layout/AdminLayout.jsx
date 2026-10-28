@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AdminSidebar } from './AdminSidebar';
-import { Menu, Bell, Search, ShieldCheck } from 'lucide-react';
+import { Menu, Bell, Search, ShieldCheck, Clock, AlertCircle, ChevronRight, X } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
+import { useNavigate } from 'react-router-dom';
 
 export const AdminLayout = ({ children, showHeader = false, title = '', subtitle = '' }) => {
-  const { currentUser } = useStore();
+  const { currentUser, reports } = useStore();
+  const navigate = useNavigate();
 
   // Preferensi desktop sidebar tersimpan di localStorage (seperti YouTube)
   const [isExpanded, setIsExpanded] = useState(() => {
@@ -14,6 +16,31 @@ export const AdminLayout = ({ children, showHeader = false, title = '', subtitle
 
   // State untuk drawer mobile overlay
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  // State untuk dropdown notifikasi
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const notifRef = useRef(null);
+
+  // Laporan menunggu verifikasi (prioritas notifikasi tertinggi)
+  const notifLaporan = (reports || [])
+    .filter((r) => r.status === 'menunggu')
+    .sort((a, b) => new Date(b.tanggal || b.created_at || 0) - new Date(a.tanggal || a.created_at || 0))
+    .slice(0, 8);
+
+  const notifCount = notifLaporan.length;
+
+  // Tutup dropdown saat klik di luar
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (notifRef.current && !notifRef.current.contains(e.target)) {
+        setIsNotifOpen(false);
+      }
+    };
+    if (isNotifOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isNotifOpen]);
 
   // Simpan perubahan preferensi desktop ke localStorage
   useEffect(() => {
@@ -120,15 +147,113 @@ export const AdminLayout = ({ children, showHeader = false, title = '', subtitle
 
           {/* Sisi Kanan: Notifikasi + User Profile Badge */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Tombol Notifikasi */}
-            <button
-              type="button"
-              className="relative w-9 h-9 rounded-2xl glass-pill hover:bg-white/90 text-slate-600 hover:text-slate-900 flex items-center justify-center transition active:scale-95 shadow-xs"
-              title="Notifikasi Sistem"
-            >
-              <Bell className="w-4 h-4" />
-              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500 ring-2 ring-white/90" />
-            </button>
+            {/* Tombol Notifikasi + Dropdown */}
+            <div className="relative" ref={notifRef}>
+              <button
+                type="button"
+                onClick={() => setIsNotifOpen((prev) => !prev)}
+                className="relative w-9 h-9 rounded-2xl glass-pill hover:bg-white/90 text-slate-600 hover:text-slate-900 flex items-center justify-center transition active:scale-95 shadow-xs"
+                title="Notifikasi Sistem"
+              >
+                <Bell className="w-4 h-4" />
+                {notifCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-red-500 ring-2 ring-white/90 text-white text-[9px] font-extrabold flex items-center justify-center leading-none">
+                    {notifCount > 9 ? '9+' : notifCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Dropdown Panel Notifikasi */}
+              {isNotifOpen && (
+                <div className="absolute right-0 top-12 w-80 sm:w-96 z-50 animate-fade-in">
+                  <div className="glass-panel-elevated rounded-3xl border border-white/80 shadow-2xl overflow-hidden">
+                    {/* Header Dropdown */}
+                    <div className="flex items-center justify-between px-5 py-4 border-b border-white/50">
+                      <div className="flex items-center gap-2">
+                        <Bell className="w-4 h-4 text-[#3B7DE8]" />
+                        <span className="text-sm font-bold text-slate-900">Notifikasi</span>
+                        {notifCount > 0 && (
+                          <span className="px-2 py-0.5 rounded-full bg-red-500 text-white text-[10px] font-extrabold">
+                            {notifCount} baru
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setIsNotifOpen(false)}
+                        className="w-6 h-6 rounded-xl glass-pill hover:bg-white/90 text-slate-500 hover:text-slate-900 flex items-center justify-center transition active:scale-95"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    {/* Daftar Notifikasi */}
+                    <div className="max-h-72 overflow-y-auto">
+                      {notifLaporan.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-10 gap-2 text-center">
+                          <div className="w-10 h-10 rounded-2xl glass-pill flex items-center justify-center">
+                            <Bell className="w-5 h-5 text-slate-400" />
+                          </div>
+                          <p className="text-xs font-semibold text-slate-600">Semua laporan sudah ditangani</p>
+                          <p className="text-[11px] text-slate-400">Tidak ada laporan yang menunggu verifikasi saat ini.</p>
+                        </div>
+                      ) : (
+                        notifLaporan.map((lap) => (
+                          <button
+                            key={lap.id}
+                            type="button"
+                            onClick={() => {
+                              setIsNotifOpen(false);
+                              navigate(`/admin/laporan-detail?id=${lap.id}`);
+                            }}
+                            className="w-full flex items-start gap-3.5 px-5 py-4 hover:bg-white/60 transition border-b border-white/40 last:border-0 text-left group"
+                          >
+                            <div className="mt-0.5 shrink-0 w-8 h-8 rounded-xl bg-amber-100 border border-amber-200 flex items-center justify-center">
+                              <AlertCircle className="w-4 h-4 text-amber-600" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-bold text-slate-900 truncate group-hover:text-[#3B7DE8] transition-colors">
+                                {lap.judul || `Laporan #${lap.id}`}
+                              </p>
+                              <p className="text-[11px] text-slate-500 truncate mt-0.5">
+                                {lap.kategori_nama || 'Kategori belum diverifikasi'}
+                              </p>
+                              <div className="flex items-center gap-1 mt-1">
+                                <Clock className="w-3 h-3 text-slate-400" />
+                                <span className="text-[10px] text-slate-400">
+                                  {lap.tanggal
+                                    ? new Date(lap.tanggal).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+                                    : 'Tanggal tidak diketahui'}
+                                </span>
+                                <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[9px] font-bold uppercase">
+                                  Menunggu
+                                </span>
+                              </div>
+                            </div>
+                            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#3B7DE8] mt-1 shrink-0 transition-colors" />
+                          </button>
+                        ))
+                      )}
+                    </div>
+
+                    {/* Footer Dropdown */}
+                    <div className="px-5 py-3 border-t border-white/50">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsNotifOpen(false);
+                          navigate('/admin/laporan');
+                        }}
+                        className="w-full py-2 rounded-2xl glass-pill-blue text-[#3B7DE8] text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-blue-50 transition"
+                      >
+                        <span>Lihat Semua Laporan</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* User Profile Mini Badge */}
             <div className="flex items-center gap-2.5 pl-2 sm:p-1.5 sm:px-2 rounded-2xl glass-pill">
