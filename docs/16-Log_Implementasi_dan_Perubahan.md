@@ -636,6 +636,19 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi kode sumber naskah LaTeX paper IEEE |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 38 |
 
+---
+
+## 📅 [Sesi 39] Selasa, 3 November 2026 — Jam 19 WIB
+**Fokus Utama**: Penambahan modul Konfigurasi Notifikasi & Saluran Darurat serta Manajemen Akun Petugas & Hak Akses pada halaman Pengaturan Admin SIGAP lengkap dengan modal tambah staf dan kontrol izin privasi pelapor anonim.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/admin/AdminSettings.jsx` | Penambahan seksi konfigurasi notifikasi darurat (email/WhatsApp/alert instan) dan tabel manajemen hak akses petugas bimbingan konseling/Satgas |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 39 penambahan pengaturan notifikasi dan hak akses petugas |
+
+
 
 
 
