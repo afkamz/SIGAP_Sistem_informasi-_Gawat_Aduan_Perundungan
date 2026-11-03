@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Settings, Trash2, CheckCircle2, Shield, Sliders } from 'lucide-react';
+import { Settings, Trash2, CheckCircle2, Shield } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { AdminLayout } from '../../components/layout/AdminLayout';
 
 export const AdminSettings = () => {
   const { resetDefault } = useStore();
-  const [confidenceThreshold, setConfidenceThreshold] = useState(80);
   const [savedMsg, setSavedMsg] = useState('');
 
   const handleSave = (e) => {
@@ -75,50 +74,6 @@ export const AdminSettings = () => {
             </div>
           </div>
 
-          {/* Konfigurasi AI Pipeline */}
-          <div className="glass-panel-elevated p-6 rounded-3xl border border-white/80 shadow-md space-y-4">
-            <div className="flex items-center gap-2 border-b border-white/50 pb-3">
-              <Sliders className="w-4 h-4 text-[#3B7DE8]" />
-              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-                Parameter Modul AI &amp; NLP Pipeline
-              </h3>
-            </div>
-            <div className="space-y-4 text-xs">
-              <div>
-                <label className="font-bold text-slate-700 block mb-1.5">Arsitektur NLP Terpasang</label>
-                <span className="font-mono text-xs glass-pill-blue px-3.5 py-2 rounded-2xl inline-block font-semibold">
-                  IndoBERT-Base-Indonesian (512-dim embedding) + HDBSCAN
-                </span>
-              </div>
-
-              <div>
-                <div className="flex justify-between items-center mb-2">
-                  <label className="font-bold text-slate-700">Ambang Batas Kepercayaan (Confidence Threshold)</label>
-                  <span className="font-black text-[#3B7DE8] text-sm">{confidenceThreshold}%</span>
-                </div>
-                <input
-                  type="range"
-                  min="50"
-                  max="95"
-                  value={confidenceThreshold}
-                  onChange={(e) => setConfidenceThreshold(Number(e.target.value))}
-                  className="w-full cursor-pointer accent-[#3B7DE8]"
-                />
-                <div className="flex justify-between text-[10px] text-slate-400 mt-1">
-                  <span>50% (Longgar)</span>
-                  <span className="font-bold text-slate-600">80% (Standar Rekomendasi)</span>
-                  <span>95% (Sangat Ketat)</span>
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="px-6 py-2.5 rounded-2xl glass-button-primary text-white font-bold text-xs"
-            >
-              Simpan Pengaturan
-            </button>
-          </div>
         </form>
 
         {/* Reset Uji Coba */}

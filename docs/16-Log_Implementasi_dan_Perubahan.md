@@ -526,6 +526,117 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 1 | `EDIT` | `docs/18-Gimik_Presentasi_6.md` | Penambahan Task 6 notifikasi lonceng live pada progress frontend dan status kesiapan |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 30 pemutakhiran Gimik 6 |
 
+---
+
+## 📅 [Sesi 31] Kamis, 29 Oktober 2026 — Jam 08 WIB
+**Fokus Utama**: Penyelarasan naskah artikel paper IEEE pada `SIGAP_Paper.tex` dan `SIGAP-source.tex` agar identik 100% dengan naskah utama `SIGAP.tex`.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP_Paper.tex` | Sinkronisasi kalimat metrik pengujian pada Abstrak agar konsisten dengan `SIGAP.tex` |
+| 2 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi kode sumber naskah LaTeX paper IEEE |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 31 sinkronisasi naskah paper LaTeX |
+
+---
+
+## 📅 [Sesi 32] Kamis, 29 Oktober 2026 — Jam 08 WIB
+**Fokus Utama**: Koreksi notasi kuadrat magnitude vektor kategori ($v_{k,i}^2$) pada formula Cosine Similarity (Persamaan 1) di seluruh berkas naskah LaTeX.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP.tex` | Koreksi matematis suku pembagi norma vektor kategori $v_{k,i}^2$ |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Sinkronisasi formula Cosine Similarity Persamaan 1 |
+| 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi kode sumber naskah LaTeX paper IEEE |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 32 koreksi notasi rumus matematis |
+
+---
+
+## 📅 [Sesi 33] Senin, 2 November 2026 — Jam 18 WIB
+**Fokus Utama**: Penyesuaian tata letak Index Terms tepat di bawah abstrak tanpa spasi vertikal, eliminasi kata kunci SIGAP pada Index Terms, penghapusan repetisi kepanjangan singkatan (NLP, HDBSCAN, SIGAP), dan klarifikasi terminologi label -1 pada naskah LaTeX.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP.tex` | Penyesuaian posisi Index Terms, reduksi repetisi singkatan, dan klarifikasi label -1 |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Sinkronisasi perbaikan tata letak Index Terms dan efisiensi singkatan |
+| 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi naskah kode sumber LaTeX paper IEEE |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 33 revisi dosen naskah LaTeX |
+
+---
+
+## 📅 [Sesi 34] Senin, 2 November 2026 — Jam 18 WIB
+**Fokus Utama**: Penggabungan blok author menjadi satu kesatuan dengan alamat email institusi mahasiswa serta peniadaan jarak vertikal sebelum Index Terms menggunakan pemutus baris langsung dalam satu paragraf.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP.tex` | Penyatuan blok author dengan email institusi dan eliminasi jeda vertikal Index Terms |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Sinkronisasi format author tunggal dengan email dan penataan baris Index Terms |
+| 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi kode sumber naskah LaTeX paper IEEE |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 34 perapian blok author dan Index Terms |
+
+---
+
+## 📅 [Sesi 35] Senin, 2 November 2026 — Jam 19 WIB
+**Fokus Utama**: Penjelasan detail metodologi asal korpus data 7 kategori Tabel I, perampingan narasi Tinjauan Pustaka dan prapemrosesan teks, serta substitusi galeri mockup formulir Bab III-B dengan diagram alur sistem (User Flow) terpandu.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `TAMBAH` | `userflow_pelaporan.png` | Aset diagram alur pengguna (User Flow) formulir multi-langkah pelaporan |
+| 2 | `EDIT` | `SIGAP.tex` | Integrasi rincian dataset Tabel I, pemangkasan narasi Tinjauan Pustaka, dan pembaruan Bab III-B |
+| 3 | `EDIT` | `SIGAP_Paper.tex` | Sinkronisasi penuh naskah paper IEEE dengan diagram User Flow dan rincian dataset |
+| 4 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi naskah kode sumber LaTeX paper IEEE untuk lampiran laporan |
+| 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 35 pembaruan naskah LaTeX dan diagram alur sistem |
+
+---
+
+## 📅 [Sesi 36] Senin, 2 November 2026 — Jam 19 WIB
+**Fokus Utama**: Penambahan Bab V (RESULTS AND DISCUSSION) pada naskah paper IEEE dengan struktur evaluasi multidimensi menggunakan placeholder nilai XX,XX% untuk Black-Box Testing, NLP classification, UAT (SUS & TAM), dan API performance.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP.tex` | Penambahan Bab V: Results & Discussion (Black-Box Testing, NLP eval, SUS, TAM, Diskusi) |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Sinkronisasi penuh naskah paper IEEE dengan Bab V hasil pengujian |
+| 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi kode sumber naskah LaTeX paper IEEE |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 36 penambahan Bab V hasil pengujian |
+
+---
+
+## 📅 [Sesi 37] Senin, 2 November 2026 — Jam 19 WIB
+**Fokus Utama**: Penghapusan panel "Parameter Modul AI & NLP Pipeline" dari halaman Pengaturan Sistem admin beserta pembersihan state dan import yang tidak lagi digunakan.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/admin/AdminSettings.jsx` | Hapus panel Parameter Modul AI & NLP Pipeline, bersihkan state confidenceThreshold dan import Sliders |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 37 |
+
+---
+
+## 📅 [Sesi 38] Senin, 3 November 2026 — Jam 09 WIB
+**Fokus Utama**: Konsistensi terminologi naskah LaTeX — mengganti seluruh pola bilingual "frasa Indonesia (\\textit{English})" menjadi langsung istilah Inggris saja untuk menjaga kekonsistenan gaya penulisan paper IEEE.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP.tex` | Eliminasi pola bilingual: user flow, decision support, class imbalance, slang, black-box testing, success rate, AI pipeline, dll |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Sinkronisasi konsistensi terminologi Inggris |
+| 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi kode sumber naskah LaTeX paper IEEE |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 38 |
+
+
 
 
 
