@@ -6,7 +6,7 @@ from app.database import get_db
 from app.models.admin import Admin
 from app.models.siswa import Siswa
 from app.schemas.auth import (
-    TokenResponse, AdminLoginResponse, AdminOut, UserInfo,
+    TokenResponse, AdminLoginResponse, AdminOut, AdminCreateRequest, UserInfo,
     SiswaRegisterRequest, SiswaLoginRequest, SiswaOut,
 )
 from app.core.security import (
@@ -43,6 +43,90 @@ def login_admin(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
         jabatan=admin.jabatan,
     )
     return TokenResponse(access_token=access_token, role="admin", user=user_info)
+
+
+@router.get("/admin/list", response_model=list[AdminOut])
+def list_admin(
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """
+    Mengambil daftar akun petugas / admin yang terdaftar di sistem.
+    """
+    if current_user.get("role") != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Hanya petugas berwenang yang dapat melihat daftar admin",
+        )
+    return db.query(Admin).order_by(Admin.id.asc()).all()
+
+
+@router.post("/admin/register", response_model=AdminOut, status_code=status.HTTP_201_CREATED)
+def register_admin(
+    payload: AdminCreateRequest,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """
+    Menambahkan akun petugas penanganan / admin baru ke database MySQL.
+    """
+    if current_user.get("role") != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Hanya petugas berwenang yang dapat mendaftarkan admin baru",
+        )
+
+    ada = db.query(Admin).filter(Admin.nip == payload.nip).first()
+    if ada:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"NIP '{payload.nip}' sudah terdaftar dalam sistem",
+        )
+
+    admin = Admin(
+        nip=payload.nip,
+        nama=payload.nama,
+        jabatan=payload.jabatan or "Guru BK",
+        password_hash=hash_password(payload.password),
+    )
+    db.add(admin)
+    db.commit()
+    db.refresh(admin)
+    return admin
+
+
+@router.delete("/admin/{admin_id}", status_code=status.HTTP_200_OK)
+def delete_admin(
+    admin_id: int,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """
+    Menghapus / menonaktifkan akun petugas penanganan dari database.
+    """
+    if current_user.get("role") != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Hanya admin yang dapat menghapus akun petugas",
+        )
+
+    # Cegah admin menghapus akunnya sendiri
+    if str(admin_id) == str(current_user.get("id")):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Anda tidak dapat menghapus akun yang sedang Anda gunakan",
+        )
+
+    admin = db.query(Admin).filter(Admin.id == admin_id).first()
+    if not admin:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Akun petugas tidak ditemukan",
+        )
+
+    db.delete(admin)
+    db.commit()
+    return {"message": f"Petugas {admin.nama} berhasil dihapus dari sistem"}
 
 
 # ============================================================

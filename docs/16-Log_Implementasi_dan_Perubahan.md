@@ -648,6 +648,35 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 1 | `EDIT` | `Frontend/src/pages/admin/AdminSettings.jsx` | Penambahan seksi konfigurasi notifikasi darurat (email/WhatsApp/alert instan) dan tabel manajemen hak akses petugas bimbingan konseling/Satgas |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 39 penambahan pengaturan notifikasi dan hak akses petugas |
 
+---
+
+## 📅 [Sesi 40] Rabu, 4 November 2026 — Jam 17 WIB
+**Fokus Utama**: Integrasi penuh Manajemen Akun Petugas dengan basis data MySQL — penambahan endpoint REST API pendaftaran/daftar/penghapusan admin, hashing bcrypt, input NIP dan Kata Sandi pada modal, serta sinkronisasi otomatis agar akun petugas baru dapat langsung login.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `backend/sigap-backend/app/schemas/auth.py` | Penambahan schema `AdminCreateRequest` dengan validasi NIP, nama, jabatan, dan password |
+| 2 | `EDIT` | `backend/sigap-backend/app/routers/auth.py` | Penambahan endpoint API `GET /api/auth/admin/list`, `POST /api/auth/admin/register`, dan `DELETE /api/auth/admin/{id}` |
+| 3 | `EDIT` | `Frontend/src/services/api.js` | Penambahan fungsi service API frontend `getAdminList`, `registerAdmin`, dan `deleteAdmin` |
+| 4 | `EDIT` | `Frontend/src/pages/admin/AdminSettings.jsx` | Integrasi modal Tambah Petugas dengan input NIP & Password, sinkronisasi tabel real-time dari MySQL, dan aksi hapus admin |
+| 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 40 integrasi database akun petugas admin |
+
+---
+
+## 📅 [Sesi 41] Rabu, 4 November 2026 — Jam 17 WIB
+**Fokus Utama**: Penghapusan seksi Konfigurasi Notifikasi & Saluran Darurat dari halaman Pengaturan Sistem Admin serta pembersihan state dan impor ikon yang tidak lagi digunakan.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/admin/AdminSettings.jsx` | Pengaturan Sistem Admin (`AdminSettings`) |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Log Implementasi dan Perubahan Sistem |
+
+
+
 
 
 

@@ -33,6 +33,13 @@ class AdminOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class AdminCreateRequest(BaseModel):
+    nip: str = Field(..., min_length=4, max_length=50)
+    nama: str = Field(..., min_length=2, max_length=150)
+    jabatan: str | None = Field(default="Guru BK", max_length=100)
+    password: str = Field(..., min_length=4)
+
+
 class SiswaRegisterRequest(BaseModel):
     nisn: str = Field(..., min_length=4, max_length=20)
     nama: str = Field(..., min_length=2, max_length=150)

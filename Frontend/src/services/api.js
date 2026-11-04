@@ -38,6 +38,30 @@ export const api = {
     return handleResponse(response);
   },
 
+  async getAdminList(token) {
+    const response = await fetch(`${API_BASE_URL}/auth/admin/list`, {
+      headers: authHeader(token),
+    });
+    return handleResponse(response);
+  },
+
+  async registerAdmin(payload, token) {
+    const response = await fetch(`${API_BASE_URL}/auth/admin/register`, {
+      method: 'POST',
+      headers: authHeader(token),
+      body: JSON.stringify(payload),
+    });
+    return handleResponse(response);
+  },
+
+  async deleteAdmin(adminId, token) {
+    const response = await fetch(`${API_BASE_URL}/auth/admin/${adminId}`, {
+      method: 'DELETE',
+      headers: authHeader(token),
+    });
+    return handleResponse(response);
+  },
+
   async registerSiswa(payload) {
     const response = await fetch(`${API_BASE_URL}/auth/siswa/register`, {
       method: 'POST',
