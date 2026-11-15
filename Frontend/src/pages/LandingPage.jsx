@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Shield,
   ShieldCheck,
   ShieldAlert,
   Lock,
-  Clock,
   Search,
   ArrowRight,
   Sparkles,
@@ -27,20 +26,67 @@ import {
   School,
   Activity,
   X,
-  UserPlus
+  UserPlus,
+  Compass,
+  ArrowUpRight,
+  Menu,
+  ChevronRight
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
-import { StudentHeader } from '../components/layout/StudentHeader';
 import { StudentFooter } from '../components/layout/StudentFooter';
 import { KATEGORI_DATA } from '../data/categories';
+import { InteractivePhotoCube } from '../components/3d/InteractivePhotoCube';
+import { BackgroundMediaBackdrop } from '../components/3d/BackgroundMediaBackdrop';
+import { CinematicCategoriesShowcase } from '../components/3d/CinematicCategoriesShowcase';
+import { AboutEditorialShowcase } from '../components/landing/AboutEditorialShowcase';
 
 export const LandingPage = () => {
   const navigate = useNavigate();
-  const { currentUser } = useStore();
+  const { currentUser, logout } = useStore();
   const [activeFaq, setActiveFaq] = useState(null);
   const [quickTicketCode, setQuickTicketCode] = useState('');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [targetRedirect, setTargetRedirect] = useState('/buat-laporan');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // ─── Scroll-Driven Cinematic Stage Tracker (Scene 01 -> Scene 05) ───
+  const scrollStageRef = useRef(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    let ticking = false;
+
+    const updateScroll = () => {
+      if (!scrollStageRef.current) {
+        ticking = false;
+        return;
+      }
+      const rect = scrollStageRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const scrollableDistance = rect.height - windowHeight;
+
+      if (scrollableDistance > 0) {
+        const scrolled = -rect.top;
+        const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
+        setScrollProgress(progress);
+      }
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(updateScroll);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    updateScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const isAdmin = currentUser?.role === 'admin';
+  const profilePath = isAdmin ? '/admin/dashboard' : '/dashboard';
 
   const toggleFaq = (index) => {
     setActiveFaq(activeFaq === index ? null : index);
@@ -64,6 +110,15 @@ export const LandingPage = () => {
       navigate('/admin/dashboard');
     } else {
       navigate(path);
+    }
+  };
+
+  const scrollToSection = (e, sectionId) => {
+    e.preventDefault();
+    setMobileMenuOpen(false);
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -99,7 +154,7 @@ export const LandingPage = () => {
     },
     {
       q: 'Bagaimana cara memantau perkembangan penanganan laporan saya?',
-      a: 'Setiap aduan yang berhasil diajukan akan menerima Kode Tiket Unik (misal: SG-2026-8921). Anda dapat memantau status secara langsung melalui menu "Lacak Tiket" atau melalui Dashboard Siswa terdaftar Anda.'
+      a: 'Setiap aduan yang berhasil diajukan akan menerima Kode Tiket Unik (misal: SGP-2026-8921). Anda dapat memantau status secara langsung melalui menu "Lacak Tiket" atau melalui Dashboard Siswa terdaftar Anda.'
     },
     {
       q: 'Siapa pihak yang menerima dan memproses laporan saya?',
@@ -115,70 +170,288 @@ export const LandingPage = () => {
     }
   ];
 
-  return (
-    <div className="min-h-screen flex flex-col bg-liquid-mesh text-slate-800 relative overflow-hidden">
-      {/* ─── Ambient Glow Blobs (iOS 26 Liquid Mesh Reflections) ─── */}
-      <div className="fixed top-[-12%] left-[-10%] w-[55vw] h-[55vw] rounded-full bg-blue-400/20 blur-3xl pointer-events-none -z-10" />
-      <div className="fixed top-[30%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-indigo-300/25 blur-3xl pointer-events-none -z-10" />
-      <div className="fixed bottom-[-10%] left-[20%] w-[50vw] h-[50vw] rounded-full bg-sky-200/25 blur-3xl pointer-events-none -z-10" />
-      <div className="fixed top-[60%] right-[30%] w-[35vw] h-[35vw] rounded-full bg-amber-200/20 blur-3xl pointer-events-none -z-10" />
+  // Opasitas headline spotlight di tengah saat progress 0.35 s.d. 0.60 (Scene 03)
+  const centerSpotlightOpacity =
+    scrollProgress >= 0.32 && scrollProgress <= 0.64
+      ? Math.max(0, Math.min(1, (scrollProgress - 0.32) * 8)) *
+        Math.max(0, Math.min(1, (0.64 - scrollProgress) * 8))
+      : 0;
 
-      {/* Top Emergency Announcement Bar — Liquid Dark Glass */}
-      <div className="glass-panel-dark text-white text-xs py-2.5 px-4 border-b border-white/10 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
-          <div className="flex items-center gap-2">
-            <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
-            <span className="text-slate-300">
-              Layanan Siaga Aduan Kekerasan Sekolah Sesuai <strong className="text-white">Permendikbudristek No. 46/2023</strong>
-            </span>
-          </div>
-          <div className="flex items-center gap-3 text-slate-300 text-[11px]">
-            <span className="flex items-center gap-1.5 font-semibold text-white glass-pill px-2.5 py-0.5 rounded-full border border-white/20">
-              <PhoneCall className="w-3.5 h-3.5 text-[#3B7DE8]" /> Hotline Darurat: SAPA 129 | Polisi 110
-            </span>
-            <span className="hidden md:inline text-slate-500">•</span>
-            <Link to="/lacak" className="hover:text-white underline underline-offset-2 transition hidden md:inline font-medium">
-              Lacak Tiket Aduan
-            </Link>
+  return (
+    <div
+      className="min-h-screen flex flex-col text-slate-800 font-sans relative"
+      style={{ background: '#FFFFFF', overflowX: 'clip' }}
+    >
+
+      {/* ─── FIXED GLOBAL HEADER ─── */}
+      <header className="fixed top-0 inset-x-0 z-50 w-full pointer-events-auto">
+        {/* Top Micro-Ticker Bar */}
+        <div style={{ background: '#1D294B' }} className="text-white text-[11px] py-1.5 px-4 border-b border-white/10">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+            <div className="flex items-center gap-2">
+              <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span style={{ color: '#C9D0DA' }}>
+                Layanan Siaga Aduan Kekerasan Sekolah Sesuai <strong className="text-white">Permendikbudristek No. 46/2023</strong>
+              </span>
+            </div>
+            <div className="flex items-center gap-3 text-[11px]">
+              <span className="flex items-center gap-1.5 font-semibold text-white px-2.5 py-0.5 rounded-full border border-white/20">
+                <PhoneCall className="w-3.5 h-3.5" style={{ color: '#E9A7BF' }} />
+                Hotline Darurat: SAPA 129 | Polisi 110
+              </span>
+              <span className="hidden md:inline" style={{ color: '#667085' }}>•</span>
+              <Link
+                to="/lacak"
+                className="hover:text-white underline underline-offset-2 transition hidden md:inline font-medium"
+                style={{ color: '#C9D0DA' }}
+              >
+                Lacak Tiket Aduan
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Main Navigation Header */}
-      <StudentHeader />
+        {/* ─── NAVIGATION BAR — Pink & White Minimalist ─── */}
+        <nav className="bg-white border-b" style={{ borderColor: '#E8E3E5' }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            {/* Brand Logo */}
+            <Link to="/" className="flex items-center gap-3 group">
+              <div
+                className="w-10 h-10 rounded-2xl flex items-center justify-center text-white group-hover:scale-105 transition-all duration-200"
+                style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
+              >
+                <ShieldCheck className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-black text-xl tracking-tight leading-none" style={{ color: '#202020' }}>
+                    SIGAP
+                  </span>
+                  <span
+                    className="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold"
+                    style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+                  >
+                    SISWA
+                  </span>
+                </div>
+                <span className="text-[11px] font-medium block mt-0.5" style={{ color: '#777777' }}>
+                  Ruang Perlindungan & Pengaduan Pelajar
+                </span>
+              </div>
+            </Link>
 
-      {/* Hero Section — Liquid Glass iOS 26 */}
-      <section className="relative overflow-hidden pt-10 pb-16 lg:pt-16 lg:pb-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left Content */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              {/* Official Badge — Glass Pill */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill-blue text-xs font-bold shadow-xs">
-                <ShieldCheck className="w-4 h-4 text-[#3B7DE8]" />
-                <span>SIGAP • LIQUID GLASS OS 26 • PERLINDUNGAN SISWA</span>
+            {/* Desktop Nav Links */}
+            <div className="hidden lg:flex items-center gap-7 text-xs font-bold uppercase tracking-wider" style={{ color: '#777777' }}>
+              {['about', 'mission', 'how-it-works', 'media', 'safety'].map((section) => (
+                <a
+                  key={section}
+                  href={`#${section}`}
+                  onClick={(e) => scrollToSection(e, section)}
+                  className="transition-colors py-1 hover:text-pink-500"
+                  style={{ color: '#555' }}
+                >
+                  {section === 'how-it-works' ? 'How It Works' : section === 'safety' ? 'Safety & Privacy' : section.charAt(0).toUpperCase() + section.slice(1)}
+                </a>
+              ))}
+            </div>
+
+            {/* Right Action / Auth Buttons */}
+            <div className="hidden sm:flex items-center gap-2.5">
+              <Link
+                to="/lacak"
+                className="text-xs font-bold px-3.5 py-2 rounded-xl border transition flex items-center gap-1.5 hover:border-pink-300"
+                style={{ background: '#FDF7F9', color: '#555', border: '1px solid #E8E3E5' }}
+              >
+                <Search className="w-3.5 h-3.5" style={{ color: '#D982A5' }} />
+                <span>Lacak Aduan</span>
+              </Link>
+
+              {currentUser ? (
+                <div className="flex items-center gap-2 pl-2 border-l" style={{ borderColor: '#E8E3E5' }}>
+                  <Link
+                    to={profilePath}
+                    className="flex items-center gap-2.5 text-xs font-bold px-3 py-1.5 rounded-xl border transition"
+                    style={{ color: '#202020', background: '#FDF7F9', border: '1px solid #E8E3E5' }}
+                  >
+                    <div
+                      className="w-6 h-6 rounded-lg text-white flex items-center justify-center font-black text-[10px]"
+                      style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
+                    >
+                      {currentUser.nama?.slice(0, 2).toUpperCase() || 'SW'}
+                    </div>
+                    <span className="truncate max-w-[120px]">{currentUser.nama || 'Siswa'}</span>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={logout}
+                    className="p-2 rounded-xl border transition hover:border-red-300 hover:text-red-500"
+                    style={{ border: '1px solid #E8E3E5', color: '#777' }}
+                    title="Keluar"
+                  >
+                    <LogIn className="w-3.5 h-3.5 rotate-180" />
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/login"
+                  className="text-xs font-bold px-4 py-2 rounded-xl border transition flex items-center gap-1.5"
+                  style={{ background: '#FDF7F9', color: '#202020', border: '1px solid #E8E3E5' }}
+                >
+                  <LogIn className="w-3.5 h-3.5" style={{ color: '#D982A5' }} />
+                  <span>Masuk</span>
+                </Link>
+              )}
+
+              <button
+                type="button"
+                onClick={(e) => handleReportAction(e, '/buat-laporan')}
+                className="text-xs font-bold px-4.5 py-2 rounded-xl text-white flex items-center gap-1.5 cursor-pointer transition active:scale-95 hover:opacity-90"
+                style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
+              >
+                <ShieldAlert className="w-4 h-4 text-white" />
+                <span>Buat Laporan</span>
+              </button>
+            </div>
+
+            {/* Mobile Hamburger */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="sm:hidden p-2 rounded-xl border"
+              style={{ border: '1px solid #E8E3E5', color: '#555' }}
+              aria-label="Toggle Menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+
+          {/* Mobile Navigation Drawer */}
+          {mobileMenuOpen && (
+            <div className="sm:hidden px-4 pt-3 pb-5 border-t space-y-3 animate-fade-in" style={{ borderColor: '#E8E3E5', background: '#fff' }}>
+              <div className="grid grid-cols-2 gap-2 text-xs font-bold">
+                {['about', 'mission', 'how-it-works', 'media'].map((section) => (
+                  <a
+                    key={section}
+                    href={`#${section}`}
+                    onClick={(e) => scrollToSection(e, section)}
+                    className="p-2.5 rounded-xl border text-center transition"
+                    style={{ border: '1px solid #E8E3E5', color: '#202020', background: '#FDF7F9' }}
+                  >
+                    {section === 'how-it-works' ? 'How It Works' : section.charAt(0).toUpperCase() + section.slice(1)}
+                  </a>
+                ))}
+              </div>
+              <div className="pt-2 flex flex-col gap-2">
+                <button
+                  type="button"
+                  onClick={(e) => { setMobileMenuOpen(false); handleReportAction(e, '/buat-laporan'); }}
+                  className="w-full py-3 rounded-xl text-white font-bold text-xs flex items-center justify-center gap-2"
+                  style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
+                >
+                  <ShieldAlert className="w-4 h-4 text-white" />
+                  <span>Buat Laporan Sekarang</span>
+                </button>
+                <Link
+                  to="/lacak"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full py-2.5 rounded-xl font-semibold text-xs text-center border"
+                  style={{ color: '#202020', border: '1px solid #E8E3E5', background: '#FDF7F9' }}
+                >
+                  Lacak Tiket Aduan
+                </Link>
+                {!currentUser && (
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full py-2.5 rounded-xl font-semibold text-xs text-center border"
+                    style={{ color: '#202020', border: '1px solid #E8E3E5', background: '#fff' }}
+                  >
+                    Masuk Portal Siswa
+                  </Link>
+                )}
+              </div>
+            </div>
+          )}
+        </nav>
+      </header>
+
+      {/* ─── PINNED SCROLL SECTION (500vh) — Cube Animation (TIDAK DIUBAH) ─── */}
+      <section
+        ref={scrollStageRef}
+        className="cube-scroll-section relative w-full h-[500vh]"
+        style={{ overflow: 'visible' }}
+      >
+        <div
+          className="cube-sticky-stage sticky top-0 w-full h-screen h-[100dvh] overflow-hidden flex flex-col justify-between"
+          style={{
+            position: 'sticky',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100dvh',
+            overflow: 'hidden',
+            zIndex: 20,
+            background: 'transparent'
+          }}
+        >
+          {/* Background Media Backdrop (Cube Video Background) */}
+          <BackgroundMediaBackdrop
+            src="/assets/background/cube-background.mp4"
+            type="video"
+            scrollProgress={scrollProgress}
+            opacity={0.65}
+          />
+
+          {/* Background Watermark */}
+          <div className="absolute top-28 left-6 text-[120px] sm:text-[180px] font-black font-mono select-none leading-none pointer-events-none -z-10" style={{ color: 'rgba(233,167,191,0.08)' }}>
+            SIGAP
+          </div>
+
+          {/* SCENE 01 & 02: HERO INITIAL CONTENT */}
+          <div
+            className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 relative z-10 transition-all duration-150"
+            style={{
+              opacity: Math.max(0, Math.min(1, 1 - (scrollProgress - 0.12) / 0.16)).toFixed(3),
+              transform: `translateY(-${(Math.max(0, scrollProgress - 0.10) * 100).toFixed(1)}px)`,
+              pointerEvents: scrollProgress > 0.18 ? 'none' : 'auto'
+            }}
+          >
+            <div className="max-w-xl lg:max-w-2xl space-y-5 text-center lg:text-left mx-auto lg:mx-0">
+              {/* Official Badge */}
+              <div
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold"
+                style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+              >
+                <ShieldCheck className="w-4 h-4" style={{ color: '#D982A5' }} />
+                <span>SIGAP • RUANG PERLINDUNGAN RESMI PELAJAR</span>
               </div>
 
               {/* Main Headline */}
-              <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-black text-slate-900 tracking-tight leading-[1.18]">
-                Suarakan Kebenaran. <br className="hidden sm:inline" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3B7DE8] via-blue-600 to-indigo-700">
-                  Ciptakan Sekolah Bebas Kekerasan
-                </span>{' '}
-                &amp; Perundungan.
-              </h1>
+              <div className="space-y-1">
+                <h1 className="text-3xl sm:text-5xl lg:text-[62px] font-black tracking-tight leading-[1.08]" style={{ color: '#202020' }}>
+                  SUARAKAN KEBENARAN. <br />
+                  <span style={{ color: '#D982A5' }}>
+                    CIPTAKAN SEKOLAH BEBAS KEKERASAN
+                  </span>{' '}
+                  &amp; PERUNDUNGAN.
+                </h1>
+              </div>
 
-              {/* Subtitle */}
-              <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Kanal aduan terpadu resmi bagi seluruh pelajar dan warga sekolah. Laporkan kejadian secara aman dengan proteksi identitas berlapis, verifikasi cerdas asisten AI NLP, dan pendampingan terpadu Tim Bimbingan Konseling (BK) &amp; Satgas PPKSP.
+              {/* Supporting Text */}
+              <p className="text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium" style={{ color: '#555' }}>
+                Setiap pelajar berhak mendapatkan lingkungan pendidikan yang aman, nyaman, dan bebas dari perundungan.
+              </p>
+              <p className="text-xs max-w-lg mx-auto lg:mx-0 leading-relaxed hidden sm:block" style={{ color: '#777' }}>
+                Laporkan insiden secara aman dengan proteksi identitas berlapis, verifikasi cerdas asisten AI IndoBERT NLP, dan pendampingan terpadu Tim Bimbingan Konseling (BK) &amp; Satgas PPKSP.
               </p>
 
-              {/* Primary Call-to-Actions */}
-              <div className="pt-1 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4">
+              {/* Call to Actions */}
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
                 <button
                   type="button"
                   onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-2xl glass-button-primary text-white font-bold text-sm flex items-center justify-center gap-2 group cursor-pointer"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-2xl text-white font-bold text-sm flex items-center justify-center gap-2 group cursor-pointer active:scale-95 transition hover:opacity-90"
+                  style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
                 >
                   <ShieldAlert className="w-4 h-4 text-white group-hover:scale-110 transition" />
                   <span>Buat Laporan Sekarang</span>
@@ -187,552 +460,361 @@ export const LandingPage = () => {
 
                 <Link
                   to="/login"
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-2xl glass-button-secondary text-slate-800 font-bold text-sm flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border transition hover:border-pink-300"
+                  style={{ color: '#202020', border: '1px solid #E8E3E5', background: '#fff' }}
                 >
-                  <LogIn className="w-4 h-4 text-[#3B7DE8]" />
+                  <LogIn className="w-4 h-4" style={{ color: '#D982A5' }} />
                   <span>Masuk Portal Siswa</span>
                 </Link>
               </div>
 
-              {/* Quick Ticket Tracking Form — Translucent Glass Bubble */}
+              {/* Quick Ticket Tracking */}
               <div className="pt-2 max-w-md mx-auto lg:mx-0">
                 <form
                   onSubmit={handleQuickTrack}
-                  className="p-2.5 glass-panel rounded-3xl border border-white/80 shadow-[0_8px_30px_rgba(59,125,232,0.08)] flex items-center gap-2"
+                  className="p-1.5 pl-3.5 rounded-2xl border flex items-center gap-2"
+                  style={{ background: '#FDF7F9', border: '1px solid #E8E3E5' }}
                 >
-                  <div className="pl-3 text-slate-400">
-                    <Search className="w-4 h-4 text-[#3B7DE8]" />
-                  </div>
+                  <Search className="w-4 h-4 flex-shrink-0" style={{ color: '#D982A5' }} />
                   <input
                     type="text"
                     placeholder="Punya Kode Tiket? (Contoh: SGP-2024-0142)"
                     value={quickTicketCode}
                     onChange={(e) => setQuickTicketCode(e.target.value)}
-                    className="w-full bg-transparent text-xs sm:text-sm text-slate-800 focus:outline-none placeholder:text-slate-400 font-medium"
+                    className="w-full bg-transparent text-xs focus:outline-none font-medium"
+                    style={{ color: '#202020' }}
                   />
                   <button
                     type="submit"
-                    className="px-5 py-2.5 rounded-2xl glass-button-primary text-white text-xs font-bold flex-shrink-0 cursor-pointer"
+                    className="px-4 py-2 rounded-xl text-white text-xs font-bold flex-shrink-0 cursor-pointer transition hover:opacity-90"
+                    style={{ background: '#D982A5' }}
                   >
                     Lacak
                   </button>
                 </form>
-                <p className="text-[11px] text-slate-500 mt-2 flex items-center justify-center lg:justify-start gap-1.5 font-medium">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Pantau status perkembangan laporan kapan saja dengan nomor tiket</span>
-                </p>
-              </div>
-
-              {/* Trust Indicators — Frosted Glass Mini Badges */}
-              <div className="pt-4 grid grid-cols-3 gap-3 border-t border-white/50 max-w-lg mx-auto lg:mx-0 text-left">
-                <div className="p-2.5 rounded-2xl glass-card flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl glass-pill-green flex items-center justify-center flex-shrink-0">
-                    <EyeOff className="w-4 h-4 text-emerald-600" />
-                  </div>
-                  <div>
-                    <h5 className="text-xs font-bold text-slate-900">100% Rahasia</h5>
-                    <p className="text-[10px] text-slate-500">Privasi Terjaga</p>
-                  </div>
-                </div>
-
-                <div className="p-2.5 rounded-2xl glass-card flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl glass-pill-blue flex items-center justify-center flex-shrink-0">
-                    <Sparkles className="w-4 h-4 text-[#3B7DE8]" />
-                  </div>
-                  <div>
-                    <h5 className="text-xs font-bold text-slate-900">Bantuan AI</h5>
-                    <p className="text-[10px] text-slate-500">7 Kategori Cerdas</p>
-                  </div>
-                </div>
-
-                <div className="p-2.5 rounded-2xl glass-card flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl glass-pill flex items-center justify-center flex-shrink-0 text-purple-600 border border-purple-200">
-                    <UserCheck className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h5 className="text-xs font-bold text-slate-900">Tim BK Resmi</h5>
-                    <p className="text-[10px] text-slate-500">Satgas Terpadu</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Interactive Showcase Card — iOS 26 Glass Tablet */}
-            <div className="lg:col-span-5 w-full flex justify-center lg:justify-end">
-              <div className="glass-panel-elevated rounded-3xl border border-white/90 shadow-[0_24px_64px_rgba(59,125,232,0.18)] overflow-hidden relative w-full max-w-md lg:max-w-[480px]">
-                {/* Header Mock Card — Frosted Dark Bar */}
-                <div className="glass-panel-dark p-5 text-white border-b border-white/10">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 flex items-center justify-center text-white font-black text-sm shadow-[0_4px_12px_rgba(59,125,232,0.4)] border border-white/30">
-                        <Shield className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <h4 className="font-extrabold text-sm text-white flex items-center gap-2">
-                          Tiket Aduan Terlindungi
-                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#34d399]" />
-                        </h4>
-                        <p className="text-[11px] text-slate-300 font-mono">ID: #SGP-2024-0142</p>
-                      </div>
-                    </div>
-                    <span className="px-3 py-1 rounded-full glass-pill-green text-[10px] font-extrabold">
-                      TLS 1.3 Terenkripsi
-                    </span>
-                  </div>
-                </div>
-
-                {/* Body of Mock Card */}
-                <div className="p-6 space-y-5">
-                  {/* Status Timeline Snippet — Frosted Bubble */}
-                  <div className="glass-card rounded-2xl p-4 border border-white/80 space-y-3">
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="font-bold text-slate-800">Status Penanganan:</span>
-                      <span className="px-3 py-1 rounded-full glass-pill-blue font-black text-[11px]">
-                        Sedang Ditindaklanjuti
-                      </span>
-                    </div>
-
-                    <div className="w-full bg-slate-200/80 rounded-full h-2 overflow-hidden p-0.5">
-                      <div className="bg-gradient-to-r from-[#3B7DE8] to-blue-600 h-1.5 rounded-full w-3/4 transition-all shadow-xs" />
-                    </div>
-
-                    <div className="flex justify-between text-[10px] text-slate-500 font-medium">
-                      <span>Laporan Masuk</span>
-                      <span className="font-bold text-[#3B7DE8]">Verifikasi BK</span>
-                      <span className="font-bold text-slate-800">Tindakan Satgas</span>
-                      <span>Selesai</span>
-                    </div>
-                  </div>
-
-                  {/* AI Detection Pill — Frosted Accent Bubble */}
-                  <div className="p-4 rounded-2xl glass-card border border-white/80 flex items-start gap-3">
-                    <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-600 border border-purple-200/50 shrink-0">
-                      <Sparkles className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-bold text-slate-900">Inferensi IndoBERT NLP:</span>
-                        <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-bold border border-purple-200">
-                          96% Akurasi
-                        </span>
-                      </div>
-                      <p className="text-xs font-bold text-slate-800 mt-1">Perundungan Siber (Cyberbullying)</p>
-                      <p className="text-[11px] text-slate-500 mt-0.5">
-                        Diverifikasi resmi oleh Konselor Utama Satgas PPKSP.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Quick Action Buttons */}
-                  <div className="pt-1 flex items-center justify-between gap-3 text-xs">
-                    <button
-                      type="button"
-                      onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                      className="flex-1 py-2.5 px-3 rounded-2xl glass-button-primary text-white font-bold text-center cursor-pointer"
-                    >
-                      Coba Buat Aduan
-                    </button>
-                    <Link
-                      to="/lacak"
-                      className="flex-1 py-2.5 px-3 rounded-2xl glass-button-secondary text-slate-700 font-bold text-center"
-                    >
-                      Lacak Tiket
-                    </Link>
-                  </div>
-
-                  <div className="pt-2 border-t border-white/50 flex items-center gap-2 text-[11px] text-slate-500 font-medium">
-                    <Lock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                    <span>Garansi tanpa intimidasi balasan (zero-retaliation guarantee).</span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Trust Metrics Bar — Floating Frosted Glass Banner */}
-      <section className="py-8 glass-panel border-y border-white/60 relative z-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div className="p-4 rounded-2xl glass-card">
-              <div className="text-2xl lg:text-3xl font-black text-slate-900">100%</div>
-              <div className="text-xs font-semibold text-slate-500 mt-1">Jaminan Anonimitas &amp; Kerahasiaan</div>
-            </div>
-            <div className="p-4 rounded-2xl glass-card">
-              <div className="text-2xl lg:text-3xl font-black text-[#3B7DE8]">7 Kategori</div>
-              <div className="text-xs font-semibold text-slate-500 mt-1">Resmi Permendikbudristek 46/2023</div>
-            </div>
-            <div className="p-4 rounded-2xl glass-card">
-              <div className="text-2xl lg:text-3xl font-black text-slate-900">&lt; 24 Jam</div>
-              <div className="text-xs font-semibold text-slate-500 mt-1">Standar Respons Awal Verifikasi</div>
-            </div>
-            <div className="p-4 rounded-2xl glass-card">
-              <div className="text-2xl lg:text-3xl font-black text-emerald-600">Audit Trail</div>
-              <div className="text-xs font-semibold text-slate-500 mt-1">Rekam Penanganan Akuntabel</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Dual Mode Section — Liquid Glass Cards */}
-      <section className="py-16 lg:py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
-            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full glass-pill-blue text-xs font-bold">
-              <Shield className="w-3.5 h-3.5 text-[#3B7DE8]" />
-              <span>DUAL-MODE REPORTING</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-              Dua Pilihan Mode Pelaporan yang Fleksibel &amp; Terlindungi
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Anda berhak memilih cara terbaik dan paling nyaman untuk bersuara. Kami memastikan rasa aman Anda adalah prioritas nomor satu.
-            </p>
+          {/* CUBE 3D — Tidak diubah */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 pt-16">
+            <InteractivePhotoCube
+              scrollProgress={scrollProgress}
+              onFaceClick={(face) => {
+                handleReportAction(null, `/buat-laporan?topic=${face.id}`);
+              }}
+            />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Mode 1: Anonim */}
-            <div className="glass-panel-elevated rounded-3xl p-7 lg:p-8 border border-white/80 shadow-lg space-y-6 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-2xl glass-panel-dark text-white flex items-center justify-center font-bold shadow-md">
-                    <EyeOff className="w-6 h-6 text-white" />
-                  </div>
-                  <span className="px-3 py-1 rounded-full glass-pill text-slate-700 text-xs font-bold">
-                    Mode Anonim Terproteksi
-                  </span>
-                </div>
-
-                <h3 className="text-xl font-black text-slate-900">Pelaporan Anonim</h3>
-                <p className="text-xs sm:text-sm text-slate-500 mt-2 leading-relaxed">
-                  Bagi siswa, saksi, atau korban yang merasa ragu atau khawatir diintimidasi. Identitas nama dan data pribadi Anda tidak dicantumkan ke publik.
-                </p>
-
-                <ul className="mt-5 space-y-3 text-xs sm:text-sm text-slate-700">
-                  <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                    <span><strong>100% Bebas Identitas Publik:</strong> Tanpa nama lengkap atau informasi kontak terekspos.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                    <span><strong>Kode Tiket Rahasia:</strong> Dapatkan nomor unik untuk melacak perkembangan kasus secara mandiri.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                    <span><strong>Bebas Intimidasi:</strong> Dijamin zero-retaliation policy dari pihak sekolah.</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="pt-4 border-t border-white/50">
-                <button
-                  type="button"
-                  onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                  className="w-full py-3 px-4 rounded-2xl glass-button-secondary text-slate-900 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <span>Mulai Lapor Anonim</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Mode 2: Terverifikasi */}
-            <div className="glass-panel-elevated rounded-3xl p-7 lg:p-8 border-2 border-[#3B7DE8]/40 shadow-xl space-y-6 flex flex-col justify-between relative">
-              <span className="absolute -top-3 right-6 px-3.5 py-1 rounded-full glass-button-primary text-white text-[10px] font-extrabold shadow-sm">
-                DIREKOMENDASIKAN
-              </span>
-
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-2xl glass-pill-blue flex items-center justify-center font-bold shadow-md">
-                    <UserCheck className="w-6 h-6 text-[#3B7DE8]" />
-                  </div>
-                  <span className="px-3 py-1 rounded-full glass-pill-blue text-xs font-bold">
-                    Konseling Terpadu
-                  </span>
-                </div>
-
-                <h3 className="text-xl font-black text-slate-900">Pelaporan Terverifikasi</h3>
-                <p className="text-xs sm:text-sm text-slate-500 mt-2 leading-relaxed">
-                  Direkomendasikan untuk pendampingan konseling intensif, perlindungan fisik menyeluruh, dan advokasi berkelanjutan oleh sekolah.
-                </p>
-
-                <ul className="mt-5 space-y-3 text-xs sm:text-sm text-slate-700">
-                  <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-[#3B7DE8] flex-shrink-0 mt-0.5" />
-                    <span><strong>Dashboard Terpadu:</strong> Pantau riwayat seluruh aduan, riwayat notifikasi, dan catatan konselor.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-[#3B7DE8] flex-shrink-0 mt-0.5" />
-                    <span><strong>Pendampingan Langsung BK:</strong> Memudahkan penjadwalan sesi konseling privat yang aman dan terarah.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-[#3B7DE8] flex-shrink-0 mt-0.5" />
-                    <span><strong>Perlindungan Menyeluruh:</strong> Intervensi langsung oleh Satgas PPKSP dengan pendampingan resmi.</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="pt-4 border-t border-white/50 flex flex-col sm:flex-row gap-2">
-                <button
-                  type="button"
-                  onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                  className="flex-1 py-3 px-4 rounded-2xl glass-button-primary text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <LogIn className="w-4 h-4" />
-                  <span>Buat Aduan Terverifikasi</span>
-                </button>
-                <Link
-                  to="/register?redirect=/buat-laporan"
-                  className="py-3 px-4 rounded-2xl glass-button-secondary text-slate-800 font-bold text-xs sm:text-sm text-center"
-                >
-                  Daftar Akun
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 7 Kategori Resmi Permendikbudristek Section — Liquid Glass Grid */}
-      <section className="py-16 lg:py-24 glass-panel border-y border-white/60 relative z-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
-            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full glass-pill-blue text-xs font-bold">
-              <School className="w-3.5 h-3.5 text-[#3B7DE8]" />
-              <span>PERMENDIKBUDRISTEK NO. 46 TAHUN 2023</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-              7 Kategori Kekerasan yang Dilindungi &amp; Ditindaklanjuti
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              SIGAP mencakup seluruh spektrum bentuk kekerasan di lingkungan pendidikan sesuai regulasi nasional. Kenali kategorinya dan jangan ragu untuk melapor.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {KATEGORI_DATA.map((kat) => (
-              <div
-                key={kat.id}
-                className="glass-card rounded-3xl p-5 border border-white/70 shadow-sm hover:border-[#3B7DE8]/50 transition-all flex flex-col justify-between group"
+          {/* SCENE 03: SPOTLIGHT CENTER */}
+          <div
+            className="absolute inset-x-0 top-1/2 -translate-y-1/2 max-w-4xl mx-auto px-4 text-center pointer-events-none z-10 transition-opacity duration-200"
+            style={{
+              opacity: centerSpotlightOpacity.toFixed(3),
+              transform: `translateY(${((scrollProgress - 0.48) * -40).toFixed(1)}px)`
+            }}
+          >
+            <div className="space-y-3">
+              <span
+                className="font-mono text-xs uppercase tracking-widest px-4 py-1.5 rounded-full"
+                style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
               >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <div
-                      className="w-10 h-10 rounded-2xl flex items-center justify-center text-white shadow-md border border-white/30"
-                      style={{ backgroundColor: kat.color }}
-                    >
-                      {getCategoryIcon(kat.icon)}
-                    </div>
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider glass-pill px-2 py-0.5 rounded-full">
-                      #{kat.id}
-                    </span>
-                  </div>
+                PENGALAMAN INTERAKTIF // SCROLL SPOTLIGHT
+              </span>
+              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight uppercase leading-tight" style={{ color: '#202020' }}>
+                SATU SUARA KEBENARAN DAPAT MENGHENTIKAN KEKERASAN.
+              </h2>
+              <p className="text-xs sm:text-base max-w-2xl mx-auto leading-relaxed font-medium" style={{ color: '#555' }}>
+                IDENTITAS DILINDUNGI • TRIASE CERDAS AI INDOBERT • 100% TERENKRIPSI
+              </p>
+            </div>
+          </div>
 
-                  <h4 className="text-base font-extrabold text-slate-900 group-hover:text-[#3B7DE8] transition">
-                    {kat.nama}
-                  </h4>
-                  <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-                    {kat.deskripsi}
-                  </p>
-                </div>
+          {/* SCENE 05: TRANSITION BRIDGE */}
+          <div
+            className="absolute inset-x-0 bottom-16 max-w-2xl mx-auto px-4 text-center pointer-events-none z-10 transition-opacity duration-300"
+            style={{
+              opacity: Math.max(0, Math.min(1, (scrollProgress - 0.84) * 6.5)).toFixed(3),
+              transform: `translateY(${Math.max(0, (1 - scrollProgress) * 45).toFixed(1)}px)`
+            }}
+          >
+            <div
+              className="p-5 sm:p-6 rounded-3xl space-y-2"
+              style={{ background: '#fff', border: '1px solid #E9A7BF', boxShadow: '0 12px 40px rgba(217,130,165,0.12)' }}
+            >
+              <div
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold"
+                style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+              >
+                <Shield className="w-3.5 h-3.5" />
+                <span>TRANSISI // SISTEM PERLINDUNGAN TERPADU</span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black tracking-tight" style={{ color: '#202020' }}>
+                Mengenal Ekosistem Pengaduan &amp; Pencegahan SIGAP
+              </h3>
+              <p className="text-xs max-w-lg mx-auto font-medium" style={{ color: '#555' }}>
+                Melindungi integritas pelajar melalui pelaporan rahasia, audit trail terverifikasi, dan pendampingan profesional Satgas PPKSP.
+              </p>
+            </div>
+          </div>
 
-                <div className="pt-4 mt-4 border-t border-white/40 flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={(e) => handleReportAction(e, `/buat-laporan?kategori=${kat.id}`)}
-                    className="text-xs font-bold text-[#3B7DE8] hover:text-[#2563c0] flex items-center gap-1 group-hover:translate-x-1 transition cursor-pointer"
-                  >
-                    <span>Laporkan Insiden Ini</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+          {/* SCROLL GUIDE FOOTER DOCK */}
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4 flex items-center justify-between text-xs font-mono z-30 pointer-events-auto" style={{ color: '#777' }}>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full" style={{ background: '#D982A5' }} />
+              <span className="font-bold" style={{ color: '#555' }}>
+                {scrollProgress < 0.15
+                  ? 'SCENE 01 // INITIAL STATE'
+                  : scrollProgress < 0.35
+                  ? 'SCENE 02 // SCALE UP'
+                  : scrollProgress < 0.60
+                  ? 'SCENE 03 // MOVE TO CENTER'
+                  : scrollProgress < 0.85
+                  ? 'SCENE 04 // MOVE UPWARD'
+                  : 'SCENE 05 // FINAL TRANSITION'}
+              </span>
+            </div>
+
+            <div className="hidden sm:flex items-center gap-2.5">
+              <span style={{ color: '#aaa' }}>0%</span>
+              <div className="w-28 h-1.5 rounded-full overflow-hidden" style={{ background: '#E8E3E5' }}>
+                <div
+                  className="h-full rounded-full transition-all duration-75"
+                  style={{ width: `${(scrollProgress * 100).toFixed(0)}%`, background: 'linear-gradient(90deg, #D982A5, #E9A7BF)' }}
+                />
+              </div>
+              <span style={{ color: '#aaa' }}>100%</span>
+            </div>
+
+            <div className="flex items-center gap-1.5 font-bold" style={{ color: '#D982A5' }}>
+              <span>GULIR KE BAWAH</span>
+              <ChevronDown className="w-4 h-4 animate-bounce" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── SECTION 1: ABOUT SIGAP (#about) EDITORIAL HORIZONTAL SHOWCASE ─── */}
+      <AboutEditorialShowcase handleReportAction={handleReportAction} />
+
+      {/* ─── SECTION 2: OUR MISSION (#mission) ─── */}
+      <section id="mission" className="py-20 lg:py-28 border-y relative z-30" style={{ background: '#FDF7F9', borderColor: '#E8E3E5' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center space-y-3 mb-16">
+            <div
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold"
+              style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+            >
+              <School className="w-3.5 h-3.5" />
+              <span>MISI &amp; FILOSOFI SIGAP</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight" style={{ color: '#202020' }}>
+              Membangun Ekosistem Sekolah yang Aman dan Berintegritas
+            </h2>
+            <p className="text-sm sm:text-base leading-relaxed" style={{ color: '#555' }}>
+              Kami percaya rasa aman adalah hak dasar setiap anak dalam menuntut ilmu. SIGAP mempertemukan komitmen hukum, teknologi cerdas, dan sentuhan empati manusia.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                icon: <Shield className="w-6 h-6 text-white" />,
+                bg: 'linear-gradient(135deg, #D982A5, #E9A7BF)',
+                title: 'Zero Retaliation Guarantee',
+                desc: 'Menjamin perlindungan tanpa intimidasi balasan bagi pelapor, saksi, maupun korban. Sanksi tegas diberlakukan terhadap setiap upaya perundungan lanjutan.'
+              },
+              {
+                icon: <Sparkles className="w-6 h-6 text-white" />,
+                bg: 'linear-gradient(135deg, #9B59B6, #8E44AD)',
+                title: 'Validasi & Triase Berbasis AI',
+                desc: 'Pemrosesan teks IndoBERT secara otomatis mengidentifikasi 7 kategori kekerasan resmi dan mengukur tingkat risiko untuk mempercepat respons tindakan awal.'
+              },
+              {
+                icon: <HeartHandshake className="w-6 h-6 text-white" />,
+                bg: 'linear-gradient(135deg, #2ECC71, #1ABC9C)',
+                title: 'Pendampingan Psikologis Terpadu',
+                desc: 'Guru BK dan Satgas PPKSP mendampingi siswa secara privat dan berkelanjutan hingga tercapai pemulihan trauma dan kedamaian lingkungan sekolah.'
+              }
+            ].map((item, i) => (
+              <div
+                key={i}
+                className="rounded-3xl p-8 space-y-4"
+                style={{ background: '#fff', border: '1px solid #E8E3E5' }}
+              >
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold" style={{ background: item.bg }}>
+                  {item.icon}
                 </div>
+                <h3 className="text-xl font-black" style={{ color: '#202020' }}>{item.title}</h3>
+                <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#555' }}>{item.desc}</p>
               </div>
             ))}
-
-            {/* Extra Card: Konseling Umum & Keluhan */}
-            <div className="glass-panel-dark text-white rounded-3xl p-5 shadow-xl flex flex-col justify-between border border-white/15">
-              <div>
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 text-white flex items-center justify-center font-bold mb-3 shadow-md border border-white/30">
-                  <HeartHandshake className="w-5 h-5 text-white" />
-                </div>
-                <h4 className="text-base font-black text-white">Konseling &amp; Keluhan Lainnya</h4>
-                <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                  Tidak yakin insiden Anda masuk kategori mana? Tim AI SIGAP dan Guru BK akan membantu mengidentifikasi dan mencarikan solusi terbaik untuk Anda.
-                </p>
-              </div>
-
-              <div className="pt-4 mt-4 border-t border-white/10">
-                <button
-                  type="button"
-                  onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                  className="text-xs font-bold text-sky-300 hover:text-white flex items-center gap-1 transition cursor-pointer"
-                >
-                  <span>Mulai Konsultasi Aduan</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Alur Pengaduan Section — Liquid Step Cards */}
-      <section className="py-16 lg:py-24 relative">
+      {/* ─── SECTION 3: HOW IT WORKS (#how-it-works) ─── */}
+      <section id="how-it-works" className="py-20 lg:py-28 relative z-30" style={{ background: '#FFFFFF' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-3 mb-14">
-            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full glass-pill-blue text-xs font-bold">
-              <Activity className="w-3.5 h-3.5 text-[#3B7DE8]" />
-              <span>LANGKAH PENANGANAN</span>
+          <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
+            <div
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold"
+              style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+            >
+              <Activity className="w-3.5 h-3.5" />
+              <span>ALUR PENANGANAN</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-              Alur Pengaduan 4 Langkah Mudah &amp; Terarah
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight" style={{ color: '#202020' }}>
+              Alur 4 Langkah: Report → Verification → Follow-up → Resolution
             </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Mulai dari pelaporan hingga tuntas, proses dirancang transparan, akuntabel, dan mengutamakan kesejahteraan psikologis korban.
+            <p className="text-sm sm:text-base leading-relaxed" style={{ color: '#555' }}>
+              Mulai dari pengiriman hingga penuntasan kasus, proses berjalan transparan, akuntabel, dan bebas hambatan birokrasi.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="glass-card rounded-3xl p-6 border border-white/80 shadow-md space-y-3">
-              <div className="w-10 h-10 rounded-2xl glass-panel-dark text-white font-black text-sm flex items-center justify-center shadow-xs">
-                01
-              </div>
-              <h4 className="font-extrabold text-slate-900 text-base">Kirim Aduan</h4>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Masuk ke akun siswa, tulis kronologi kejadian, dan lampirkan bukti foto bila ada. Anda tetap dapat memilih opsi pelaporan rahasia.
-              </p>
-            </div>
-
-            <div className="glass-card rounded-3xl p-6 border border-white/80 shadow-md space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 text-white font-black text-sm flex items-center justify-center shadow-[0_4px_12px_rgba(59,125,232,0.35)] border border-white/30">
-                02
-              </div>
-              <h4 className="font-extrabold text-slate-900 text-base">Dapatkan Kode Tiket</h4>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Sistem menghasilkan nomor tiket terenkripsi (misal: <code className="text-[#3B7DE8] font-mono font-bold">#SGP-2024-0142</code>). Simpan kode ini untuk melacak kasus Anda kapan saja.
-              </p>
-            </div>
-
-            <div className="glass-card rounded-3xl p-6 border border-white/80 shadow-md space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-indigo-600 text-white font-black text-sm flex items-center justify-center shadow-xs">
-                03
-              </div>
-              <h4 className="font-extrabold text-slate-900 text-base">Verifikasi &amp; AI NLP</h4>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Kecerdasan buatan membantu memetakan kategori kasus, sementara Guru BK &amp; Satgas PPKSP memverifikasi keabsahan laporan secara cermat.
-              </p>
-            </div>
-
-            <div className="glass-card rounded-3xl p-6 border border-white/80 shadow-md space-y-3">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white font-black text-sm flex items-center justify-center shadow-xs">
-                04
-              </div>
-              <h4 className="font-extrabold text-slate-900 text-base">Tindakan &amp; Solusi</h4>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Pelaksanaan mediasi damai, pendampingan psikologis, penegakan tata tertib sekolah, dan pencatatan audit trail hingga kasus selesai.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-10 text-center">
-            <button
-              type="button"
-              onClick={(e) => handleReportAction(e, '/buat-laporan')}
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl glass-button-primary text-white font-bold text-xs sm:text-sm cursor-pointer"
-            >
-              <span>Mulai Buat Aduan Anda</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Fitur & Teknologi Keamanan SIGAP — Liquid Glass Light */}
-      <section className="py-16 lg:py-24 glass-panel border-y border-white/60 relative z-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            <div className="lg:col-span-5 space-y-4">
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full glass-pill-blue text-xs font-bold">
-                <Sparkles className="w-3.5 h-3.5 text-[#3B7DE8]" />
-                <span className="text-[#1D4ED8]">KEUNGGULAN SISTEM</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-slate-900">
-                Teknologi Cerdas untuk Perlindungan Nyata
-              </h2>
-              <p className="text-slate-600 text-sm leading-relaxed">
-                SIGAP dirancang dengan standar teknologi institusi modern guna memastikan tidak ada suara aduan yang hilang, diabaikan, atau bocor.
-              </p>
-
-              <div className="pt-2">
-                <Link
-                  to="/admin/login"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl glass-button-secondary hover:border-[#3B7DE8]/40 text-slate-800 text-xs font-bold transition shadow-sm"
+            {[
+              { num: '01', bg: '#202020', title: 'Report (Kirim Aduan)', desc: 'Tulis kronologi kejadian, pilih lokasi di sekolah, lampirkan bukti foto bila ada, dan tentukan opsi privasi identitas Anda.' },
+              { num: '02', bg: 'linear-gradient(135deg, #D982A5, #E9A7BF)', title: 'Verification (Verifikasi)', desc: 'Kecerdasan buatan NLP IndoBERT memetakan kategori kasus, kemudian Tim BK Satgas memverifikasi keabsahan laporan.' },
+              { num: '03', bg: '#5B4CF5', title: 'Follow-up (Tindak Lanjut)', desc: 'Pelaksanaan sesi konseling privat, mediasi terarah, pemanggilan saksi aman, dan pemenuhan kebutuhan bantuan korban.' },
+              { num: '04', bg: '#16A34A', title: 'Resolution (Penyelesaian)', desc: 'Penegakan aturan sekolah, pemulihan situasi belajar, dan pencatatan riwayat penanganan secara permanen di Digital Audit Trail.' }
+            ].map((step, i) => (
+              <div
+                key={i}
+                className="rounded-3xl p-6 space-y-3"
+                style={{ background: '#FDF7F9', border: '1px solid #E8E3E5' }}
+              >
+                <div
+                  className="w-10 h-10 rounded-2xl text-white font-black text-sm flex items-center justify-center"
+                  style={{ background: step.bg }}
                 >
-                  <Lock className="w-3.5 h-3.5 text-[#3B7DE8]" />
-                  <span>Akses Khusus Guru BK &amp; Admin</span>
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-6 rounded-3xl glass-card space-y-3 border border-white/80 shadow-sm hover:shadow-md hover:border-[#3B7DE8]/40 transition group">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#3B7DE8] to-blue-600 text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                  <Sparkles className="w-5 h-5 text-white" />
+                  {step.num}
                 </div>
-                <h4 className="font-bold text-base text-slate-900 group-hover:text-[#3B7DE8] transition-colors">AI NLP Multi-Label</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Rekomendasi otomatis 7 kategori kekerasan resmi berdasarkan analisis teks kronologi aduan untuk mempercepat telaah awal tim konselor.
-                </p>
+                <h4 className="font-extrabold text-base" style={{ color: '#202020' }}>{step.title}</h4>
+                <p className="text-xs leading-relaxed" style={{ color: '#777' }}>{step.desc}</p>
               </div>
-
-              <div className="p-6 rounded-3xl glass-card space-y-3 border border-white/80 shadow-sm hover:shadow-md hover:border-[#3B7DE8]/40 transition group">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#3B7DE8] to-blue-600 text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                  <Lock className="w-5 h-5 text-white" />
-                </div>
-                <h4 className="font-bold text-base text-slate-900 group-hover:text-[#3B7DE8] transition-colors">Enkripsi &amp; Kerahasiaan</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Data aduan dilindungi mekanisme Role-Based Access Control (RBAC) dan JWT. Hanya konselor sekolah yang terverifikasi yang dapat mengakses.
-                </p>
-              </div>
-
-              <div className="p-6 rounded-3xl glass-card space-y-3 border border-white/80 shadow-sm hover:shadow-md hover:border-[#3B7DE8]/40 transition group">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#3B7DE8] to-blue-600 text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                  <FileText className="w-5 h-5 text-white" />
-                </div>
-                <h4 className="font-bold text-base text-slate-900 group-hover:text-[#3B7DE8] transition-colors">Digital Audit Trail</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Setiap perpindahan status laporan dicatat secara permanen dengan timestamp dan identitas konselor, mencegah kelalaian dan manipulasi.
-                </p>
-              </div>
-
-              <div className="p-6 rounded-3xl glass-card space-y-3 border border-white/80 shadow-sm hover:shadow-md hover:border-[#3B7DE8]/40 transition group">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#3B7DE8] to-blue-600 text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                  <Search className="w-5 h-5 text-white" />
-                </div>
-                <h4 className="font-bold text-base text-slate-900 group-hover:text-[#3B7DE8] transition-colors">Pelacakan Real-Time</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Transparansi progres aduan melalui kode tiket unik tanpa perlu login, menjaga kenyamanan dan ketenangan pikiran pelapor.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ Section — Glass Accordion */}
-      <section className="py-16 lg:py-24 relative">
+      {/* ─── SECTION 4: CINEMATIC CATEGORIES SHOWCASE (#media) & SHARED CONTINUOUS VIDEO ─── */}
+      <div className="shared-video-wrapper relative w-full">
+        {/* Single continuous shared video background for both #media and #safety */}
+        <video
+          className="shared-background-video absolute inset-0 w-full h-full object-cover object-center pointer-events-none -z-10"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            zIndex: 0
+          }}
+        >
+          <source src="/assets/background/sigap-background.mp4" type="video/mp4" />
+        </video>
+
+        {/* Subtle translucent light overlay to ensure legibility while showing video */}
+        <div
+          className="absolute inset-0 pointer-events-none z-1"
+          style={{
+            background: 'linear-gradient(180deg, rgba(253, 247, 249, 0.82) 0%, rgba(255, 255, 255, 0.72) 50%, rgba(253, 247, 249, 0.85) 100%)'
+          }}
+        />
+
+        {/* Section 4: 7 Bentuk Kekerasan (Pinned Horizontal Wavy Reel) */}
+        <div className="relative z-10">
+          <CinematicCategoriesShowcase
+            onSelectCategory={(catId) => {
+              handleReportAction(null, catId ? `/buat-laporan?kategori=${catId}` : '/buat-laporan');
+            }}
+          />
+        </div>
+
+        {/* Section 5: Safety & Privacy (#safety) */}
+        <section id="safety" className="py-20 lg:py-28 relative z-10" style={{ background: 'transparent' }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+              <div className="lg:col-span-5 space-y-4">
+                <div
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold"
+                  style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>KEAMANAN &amp; PRIVASI</span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight" style={{ color: '#202020' }}>
+                  Teknologi Cerdas untuk Perlindungan Hakiki
+                </h2>
+                <p className="text-sm leading-relaxed" style={{ color: '#555' }}>
+                  SIGAP dirancang dengan standar teknologi institusi modern guna memastikan tidak ada suara aduan yang hilang, diabaikan, atau bocor.
+                </p>
+
+                <div className="pt-2">
+                  <Link
+                    to="/admin/login"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold border transition hover:border-pink-300"
+                    style={{ color: '#202020', border: '1px solid #E8E3E5', background: '#FDF7F9' }}
+                  >
+                    <Lock className="w-3.5 h-3.5" style={{ color: '#D982A5' }} />
+                    <span>Akses Khusus Guru BK &amp; Admin</span>
+                  </Link>
+                </div>
+              </div>
+
+              <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[
+                  { icon: <Sparkles className="w-5 h-5 text-white" />, title: 'AI NLP Multi-Label', desc: 'Rekomendasi otomatis 7 kategori kekerasan resmi berdasarkan analisis teks kronologi aduan untuk mempercepat telaah awal tim konselor.' },
+                  { icon: <Lock className="w-5 h-5 text-white" />, title: 'Enkripsi & Kerahasiaan', desc: 'Data aduan dilindungi mekanisme Role-Based Access Control (RBAC) dan JWT. Hanya konselor sekolah yang terverifikasi yang dapat mengakses.' },
+                  { icon: <FileText className="w-5 h-5 text-white" />, title: 'Digital Audit Trail', desc: 'Setiap perpindahan status laporan dicatat secara permanen dengan timestamp dan identitas konselor, mencegah kelalaian dan manipulasi.' },
+                  { icon: <Search className="w-5 h-5 text-white" />, title: 'Pelacakan Real-Time', desc: 'Transparansi progres aduan melalui kode tiket unik tanpa perlu login, menjaga kenyamanan dan ketenangan pikiran pelapor.' }
+                ].map((feature, i) => (
+                  <div
+                    key={i}
+                    className="p-6 rounded-3xl space-y-3 border transition group hover:border-pink-300 shadow-sm"
+                    style={{ background: 'rgba(253, 247, 249, 0.92)', border: '1px solid #E8E3E5' }}
+                  >
+                    <div
+                      className="w-10 h-10 rounded-2xl flex items-center justify-center font-bold group-hover:scale-105 transition-transform"
+                      style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
+                    >
+                      {feature.icon}
+                    </div>
+                    <h4 className="font-bold text-base group-hover:text-pink-500 transition-colors" style={{ color: '#202020' }}>
+                      {feature.title}
+                    </h4>
+                    <p className="text-xs leading-relaxed" style={{ color: '#555' }}>{feature.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* ─── SECTION: FAQ ACCORDION ─── */}
+      <section className="py-16 lg:py-24 relative z-30" style={{ background: '#FDF7F9' }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-12">
-            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full glass-pill-blue text-xs font-bold">
-              <HelpCircle className="w-3.5 h-3.5 text-[#3B7DE8]" />
+            <div
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold"
+              style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+            >
+              <HelpCircle className="w-3.5 h-3.5" />
               <span>TANYA JAWAB</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight" style={{ color: '#202020' }}>
               Pertanyaan yang Sering Diajukan
             </h2>
-            <p className="text-slate-600 text-xs sm:text-sm">
+            <p className="text-xs sm:text-sm" style={{ color: '#777' }}>
               Temukan jawaban seputar akses login, keamanan privasi, alur aduan, dan penanganan perundungan di SIGAP.
             </p>
           </div>
@@ -741,22 +823,26 @@ export const LandingPage = () => {
             {faqs.map((faq, idx) => (
               <div
                 key={idx}
-                className="glass-card rounded-2xl overflow-hidden transition border border-white/80 shadow-xs"
+                className="rounded-2xl overflow-hidden transition"
+                style={{ background: '#fff', border: '1px solid #E8E3E5' }}
               >
                 <button
                   type="button"
                   onClick={() => toggleFaq(idx)}
-                  className="w-full p-4 sm:p-5 text-left font-bold text-slate-900 text-xs sm:text-sm flex justify-between items-center gap-4 hover:bg-white/60 transition"
+                  className="w-full p-4 sm:p-5 text-left font-bold text-xs sm:text-sm flex justify-between items-center gap-4 transition"
+                  style={{ color: '#202020' }}
                 >
                   <span>{faq.q}</span>
                   <ChevronDown
-                    className={`w-4 h-4 text-slate-400 transition-transform flex-shrink-0 ${
-                      activeFaq === idx ? 'rotate-180 text-[#3B7DE8]' : ''
-                    }`}
+                    className={`w-4 h-4 transition-transform flex-shrink-0 ${activeFaq === idx ? 'rotate-180' : ''}`}
+                    style={{ color: activeFaq === idx ? '#D982A5' : '#aaa' }}
                   />
                 </button>
                 {activeFaq === idx && (
-                  <div className="px-4 sm:px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-white/40 bg-white/40">
+                  <div
+                    className="px-4 sm:px-5 pb-5 pt-1 text-xs sm:text-sm leading-relaxed border-t"
+                    style={{ color: '#555', borderColor: '#E8E3E5', background: '#FDF7F9' }}
+                  >
                     {faq.a}
                   </div>
                 )}
@@ -766,19 +852,25 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Emergency Crisis Contact Box — Glass Elevated */}
-      <section className="py-10 relative">
+      {/* ─── SECTION: EMERGENCY CRISIS CONTACT BOX ─── */}
+      <section className="py-10 relative z-30" style={{ background: '#FFFFFF' }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="glass-panel-elevated rounded-3xl p-6 sm:p-8 border border-white/90 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div
+            className="rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6"
+            style={{ background: '#FFF5F7', border: '1px solid #F9DCE7' }}
+          >
             <div className="space-y-2 text-center md:text-left">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill-red text-xs font-bold">
+              <div
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
+                style={{ background: '#FEE2E2', color: '#DC2626', border: '1px solid #FECACA' }}
+              >
                 <AlertTriangle className="w-3.5 h-3.5" />
                 <span>HOTLINE BANTUAN DARURAT</span>
               </div>
-              <h3 className="text-lg sm:text-xl font-black text-slate-900">
+              <h3 className="text-lg sm:text-xl font-black" style={{ color: '#202020' }}>
                 Dalam Keadaan Bahaya Mendesak?
               </h3>
-              <p className="text-xs sm:text-sm text-slate-500 max-w-xl">
+              <p className="text-xs sm:text-sm max-w-xl" style={{ color: '#777' }}>
                 Bila Anda membutuhkan perlindungan fisik seketika atau pendampingan darurat kekerasan seksual dan fisik, hubungi kontak resmi berikut:
               </p>
             </div>
@@ -786,16 +878,17 @@ export const LandingPage = () => {
             <div className="flex flex-wrap items-center justify-center gap-3">
               <a
                 href="tel:129"
-                className="px-5 py-3 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center gap-2 shadow-md transition active:scale-95"
+                className="px-5 py-3 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center gap-2 transition active:scale-95"
               >
                 <PhoneCall className="w-4 h-4" />
                 <span>SAPA 129 (KemenPPPA)</span>
               </a>
               <a
                 href="tel:110"
-                className="px-5 py-3 rounded-2xl glass-panel-dark text-white font-bold text-xs flex items-center gap-2 shadow-md transition active:scale-95 border border-white/20"
+                className="px-5 py-3 rounded-2xl text-white font-bold text-xs flex items-center gap-2 transition active:scale-95"
+                style={{ background: '#1D294B' }}
               >
-                <ShieldAlert className="w-4 h-4" />
+                <ShieldAlert className="w-4 h-4 text-white" />
                 <span>Polisi 110</span>
               </a>
             </div>
@@ -803,13 +896,13 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Final Call to Action Banner */}
-      <section className="py-16 glass-panel border-t border-white/60 relative z-20">
+      {/* ─── SECTION 6: FINAL CALL TO ACTION ─── */}
+      <section className="py-16 border-t relative z-30" style={{ background: '#FDF7F9', borderColor: '#E8E3E5' }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight" style={{ color: '#202020' }}>
             Sekolah yang Sehat Dimulai dari Keberanian Bersuara
           </h2>
-          <p className="text-slate-600 text-xs sm:text-base max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-base max-w-2xl mx-auto leading-relaxed" style={{ color: '#555' }}>
             Tidak ada alasan untuk menoleransi perundungan di lingkungan sekolah. Masuk atau daftarkan akun Anda sekarang untuk membuat laporan aduan.
           </p>
 
@@ -817,7 +910,8 @@ export const LandingPage = () => {
             <button
               type="button"
               onClick={(e) => handleReportAction(e, '/buat-laporan')}
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl glass-button-primary text-white font-bold text-sm cursor-pointer"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl text-white font-bold text-sm cursor-pointer transition hover:opacity-90 flex items-center justify-center gap-2"
+              style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
             >
               <ShieldAlert className="w-4 h-4 text-white" />
               <span>Buat Laporan Sekarang</span>
@@ -825,45 +919,54 @@ export const LandingPage = () => {
 
             <Link
               to="/login"
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl glass-button-secondary text-slate-800 font-bold text-sm flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border transition hover:border-pink-300"
+              style={{ color: '#202020', border: '1px solid #E8E3E5', background: '#fff' }}
             >
-              <LogIn className="w-4 h-4 text-[#3B7DE8]" />
+              <LogIn className="w-4 h-4" style={{ color: '#D982A5' }} />
               <span>Masuk ke Akun Siswa</span>
             </Link>
 
             <Link
-              to="/lacak"
-              className="w-full sm:w-auto px-7 py-3.5 rounded-2xl glass-pill text-slate-700 hover:text-slate-900 font-bold text-sm flex items-center justify-center gap-2"
+              to="/admin/login"
+              className="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border transition hover:border-pink-300"
+              style={{ color: '#555', border: '1px solid #E8E3E5', background: '#FDF7F9' }}
             >
-              <Search className="w-4 h-4 text-[#3B7DE8]" />
-              <span>Lacak Tiket Aduan</span>
+              <Lock className="w-4 h-4" style={{ color: '#D982A5' }} />
+              <span>Akses Portal Guru BK</span>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Auth Gate Modal if User Not Logged In — iOS 26 Liquid Modal */}
+      {/* ─── AUTH GATE MODAL ─── */}
       {showAuthModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md animate-fade-in">
-          <div className="glass-panel-elevated rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-[0_24px_70px_rgba(0,0,0,0.25)] border border-white/90 relative space-y-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in" style={{ background: 'rgba(29,41,75,0.4)' }}>
+          <div
+            className="rounded-3xl max-w-md w-full p-6 sm:p-8 relative space-y-6"
+            style={{ background: '#fff', border: '1px solid #E9A7BF', boxShadow: '0 24px 70px rgba(217,130,165,0.2)' }}
+          >
             <button
               type="button"
               onClick={() => setShowAuthModal(false)}
-              className="absolute right-5 top-5 p-2 rounded-2xl glass-pill text-slate-400 hover:text-slate-700 hover:bg-white transition"
+              className="absolute right-5 top-5 p-2 rounded-2xl transition hover:bg-pink-50"
+              style={{ color: '#aaa' }}
               aria-label="Tutup"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="w-14 h-14 rounded-2xl glass-pill-blue text-[#3B7DE8] flex items-center justify-center mx-auto shadow-md">
-              <Lock className="w-7 h-7" />
+            <div
+              className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto"
+              style={{ background: '#F9DCE7' }}
+            >
+              <Lock className="w-7 h-7" style={{ color: '#D982A5' }} />
             </div>
 
             <div className="text-center space-y-2">
-              <h3 className="text-xl font-black text-slate-900 tracking-tight">
+              <h3 className="text-xl font-black tracking-tight" style={{ color: '#202020' }}>
                 Masuk atau Daftar Terlebih Dahulu
               </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#555' }}>
                 Untuk mengakses fungsi <strong>Buat Aduan</strong> dan memastikan validitas laporan serta perlindungan resmi oleh Guru BK &amp; Satgas PPKSP, Anda harus memiliki akun terdaftar.
               </p>
             </div>
@@ -875,7 +978,8 @@ export const LandingPage = () => {
                   setShowAuthModal(false);
                   navigate(`/login?redirect=${encodeURIComponent(targetRedirect)}`);
                 }}
-                className="w-full py-3.5 px-4 rounded-2xl glass-panel-dark text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition active:scale-95 border border-white/20"
+                className="w-full py-3.5 px-4 rounded-2xl text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition active:scale-95"
+                style={{ background: '#1D294B' }}
               >
                 <LogIn className="w-4 h-4 text-white" />
                 <span>Masuk dengan Akun Siswa</span>
@@ -887,7 +991,8 @@ export const LandingPage = () => {
                   setShowAuthModal(false);
                   navigate(`/register?redirect=${encodeURIComponent(targetRedirect)}`);
                 }}
-                className="w-full py-3.5 px-4 rounded-2xl glass-button-primary text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3.5 px-4 rounded-2xl text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition hover:opacity-90"
+                style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
               >
                 <UserPlus className="w-4 h-4" />
                 <span>Daftar Akun Baru</span>
@@ -896,14 +1001,15 @@ export const LandingPage = () => {
               <button
                 type="button"
                 onClick={() => setShowAuthModal(false)}
-                className="w-full py-2.5 px-4 text-xs font-semibold text-slate-500 hover:text-slate-800 transition cursor-pointer"
+                className="w-full py-2.5 px-4 text-xs font-semibold transition cursor-pointer hover:text-slate-800"
+                style={{ color: '#aaa' }}
               >
                 Batal
               </button>
             </div>
 
-            <div className="pt-3 border-t border-white/50 flex items-center gap-2 text-[11px] text-slate-500">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+            <div className="pt-3 border-t flex items-center gap-2 text-[11px]" style={{ borderColor: '#E8E3E5', color: '#aaa' }}>
+              <ShieldCheck className="w-4 h-4 flex-shrink-0" style={{ color: '#16A34A' }} />
               <span>Privasi data Anda dijamin 100% dan terenkripsi secara aman.</span>
             </div>
           </div>

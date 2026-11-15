@@ -711,8 +711,182 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 3 | `TAMBAH` | `docs/22-Google_Apps_Script_Form_Pengujian.md` | Kode Otomasi Google Apps Script Pembuat Form & Kalkulator Skor SUS/TAM |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 43 pembukaan agenda pengujian Minggu ke-12 |
 
+---
 
+## 📅 [Sesi 44] Minggu, 15 November 2026 — Jam 15 WIB
+**Fokus Utama**: Redesain Landing Page sinematik SIGAP terinspirasi SM Entertainment Audition dengan mempertahankan 100% identitas visual asli SIGAP (light blue liquid glass), komponen kubus foto 3D 6-sisi dengan 3-tier nested rig, backdrop media dinamis, dan koreografi scroll 5-scene halus tanpa scroll-hijacking.
 
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `TAMBAH` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Kubus foto 3D 6-sisi interaktif dengan isolasi 3-tier rig (Scroll Rig, Auto Pivot, Mouse Core) |
+| 2 | `TAMBAH` | `Frontend/src/components/3d/BackgroundMediaBackdrop.jsx` | Backdrop media video/gambar sinematik di belakang kubus 3D dengan overlay gradien SIGAP |
+| 3 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Redesain total Landing Page: editorial hero, stage sticky scroll 5-scene, dan seksi storytelling |
+| 4 | `EDIT` | `Frontend/src/index.css` | Variabel CSS responsif `--cube-half`, animasi spinSlow, dan utilitas visual glassmorphism |
+| 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan sesi 44 redesain sinematik landing page dan 3D scroll cube |
+
+---
+
+## 📅 [Sesi 45] Minggu, 15 November 2026 — Jam 15 WIB
+**Fokus Utama**: Koreksi kubus 3D menjadi animasi murni scroll-driven dengan penghapusan total seluruh interaksi kursor mouse/touch drag dan efek hover, penyesuaian ukuran awal kubus kecil di sisi kanan hero, pembesaran bertahap menuju tengah layar, elevasi ke atas viewport, serta jembatan transisi halus bebas layar kosong.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Eliminasi total handler mouse/touch, pemisahan 3 node pengontrol (posisi, skala, rotasi), dan kalibrasi 5 scene scroll |
+| 2 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Integrasi transisi jembatan Scene 05 dan penyesuaian indikator scene scroll |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 45 koreksi animasi kubus murni scroll-driven |
+
+---
+
+## 📅 [Sesi 46] Minggu, 15 November 2026 — Jam 16 WIB
+**Fokus Utama**: Perpanjangan timeline scroll stage menjadi 480vh untuk memastikan 5 tahapan animasi kubus 3D selesai 100%, serta optimasi performa 60–120 FPS tanpa lag melalui RAF throttling, caching dimensi viewport, optimasi blur liquid glass, dan eliminasi re-render React berulang.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Perpanjangan kontainer scroll ke 480vh, throttling RAF scroll listener, dan sinkronisasi 5 tahapan timeline |
+| 2 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Eliminasi re-render RAF via scrollProgressRef, caching dimensi viewport, kalibrasi transisi 5 scene, dan optimasi GPU blur |
+| 3 | `EDIT` | `Frontend/src/components/3d/BackgroundMediaBackdrop.jsx` | Penghapusan transition-transform lag dan eliminasi repainting animasi pulse pada backdrop |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 46 perpanjangan timeline scroll dan optimasi performa FPS |
+
+---
+
+## 📅 [Sesi 47] Minggu, 15 November 2026 — Jam 16 WIB
+**Fokus Utama**: Implementasi arsitektur Pinned Scroll Section sejati pada Landing Page SIGAP dengan eliminasi `overflow-x-hidden` yang merusak `position: sticky`, penguncian sticky stage 100dvh pada timeline 500vh, isolasi header fixed, serta jaminan release condition 100% sebelum seksi berikutnya masuk ke viewport.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penerapan `overflow-x: clip`, pembentukan arsitektur `cube-scroll-section` (500vh) dan `cube-sticky-stage` (100dvh sticky top-0), serta header fixed |
+| 2 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Kalibrasi 5-scene timeline (selesai 100% pada rentang 85%–100%) dan percepatan lerp settling di horizon akhir |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 47 perbaikan pinned scroll section dan release condition |
+
+---
+
+## 📅 [Sesi 48] Minggu, 15 November 2026 — Jam 17 WIB
+**Fokus Utama**: Implementasi animasi sinematik scroll 3D ala SM Entertainment Audition pada seksi 7 Bentuk Kekerasan Permendikbudristek No. 46/2023 dengan staggered entrance 3D multi-arah, perakitan layout grid rapi, fase interactive hold (75%–95%) kartu dapat diklik, dan pre-seleksi kategori laporan di wizard.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `TAMBAH` | `Frontend/src/components/3d/CinematicCategoriesShowcase.jsx` | Komponen sinematik 3D Pinned Scroll 7 Bentuk Kekerasan dengan staggered entrance 8 kartu |
+| 2 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Integrasi komponen CinematicCategoriesShowcase pada seksi `#media` dan penanganan routing kategori |
+| 3 | `EDIT` | `Frontend/src/pages/student/CreateReportWizard.jsx` | Dukungan inisialisasi query parameter preselected category (`?kategori=id`) pada formulir aduan |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 48 animasi sinematik 3D 7 Bentuk Kekerasan |
+
+---
+
+## 📅 [Sesi 49] Minggu, 15 November 2026 — Jam 17 WIB
+**Fokus Utama**: Revisi animasi seksi 7 Bentuk Kekerasan menjadi Horizontal Cinematic Card Animation kontinu dari kanan ke kiri sesuai referensi SM Entertainment Audition, dilengkapi efek transisi visual Grayscale 100% ke Full Color saat kursor hover, dinamika kedalaman 3D, serta fase interactive hold kartu dapat diklik untuk memilih kategori pelaporan.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/3d/CinematicCategoriesShowcase.jsx` | Rekonstruksi pergerakan horizontal kontinu kanan-ke-kiri via `translate3d`, efek hover grayscale-ke-warna, dynamic heights, dan interactive hold |
+| 2 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Kalibrasi integrasi pinned section horizontal reel `#media` dan navigasi aduan kategori |
+| 3 | `EDIT` | `Frontend/src/pages/student/CreateReportWizard.jsx` | Sinkronisasi auto-select kategori aduan berdasarkan query param URL |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 49 animasi kartu horizontal sinematik dan efek hover grayscale |
+
+---
+
+## 📅 [Sesi 50] Minggu, 15 November 2026 — Jam 17 WIB
+**Fokus Utama**: Implementasi Right-to-Left Wavy Cinematic Card Animation pada seksi 7 Bentuk Kekerasan dengan posisi awal kartu 100% di luar batas kanan layar, pergerakan horizontal kontinu kanan ke kiri secara bergantian, formasi gelombang vertikal sinusoidal naik-turun (`translateY`, `rotateZ`, `scale`), pemeliharaan pinned scroll (480vh), dan efek hover grayscale ke full color.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/3d/CinematicCategoriesShowcase.jsx` | Implementasi initial state offscreen kanan, wavy sinusoidal wave engine, orientasi gerakan naik-turun bergantian, rotasi slope dinamis, dan scaling fokus |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 50 Right-to-Left Wavy Cinematic Card Animation |
+
+---
+
+## 📅 [Sesi 51] Minggu, 15 November 2026 — Jam 18 WIB
+**Fokus Utama**: Redesign visual tema Pink & White Minimalist Elegant pada Landing Page SIGAP — mengganti seluruh glassmorphism/backdrop-filter dengan solid background putih dan aksen pink pastel (#D982A5, #E9A7BF, #F9DCE7), navbar putih dengan border tipis, section bergantian putih/merah muda, button gradient pink, footer navy #1D294B, card dengan solid border tanpa efek blur, tanpa mengubah logika, animasi kubus, atau animasi kategori.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Redesign visual tema Pink & White Minimalist — navbar, hero, about, mission, how-it-works, safety, FAQ, CTA, modal auth — hapus glassmorphism, ganti solid pink pastel |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 51 redesign visual Pink & White Minimalist Landing Page |
+
+---
+
+## 📅 [Sesi 52] Minggu, 15 November 2026 — Jam 19 WIB
+**Fokus Utama**: Implementasi One Continuous Shared Video Background tunggal (loop 43 detik) pada pembungkus bersama (`shared-video-wrapper`) yang menaungi seksi 7 Bentuk Kekerasan dan seksi Teknologi Cerdas untuk Perlindungan Hakiki tanpa unmount, flash, atau reload saat scrolling.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Pembentukan pembungkus `shared-video-wrapper` dengan elemen video continuous `/assets/background/sigap-background.mp4`, layer overlay ringan, dan integrasi seksi `#media` serta `#safety` |
+| 2 | `EDIT` | `Frontend/src/components/3d/CinematicCategoriesShowcase.jsx` | Penyesuaian background sticky stage menjadi transparan agar shared video background terlihat secara konsisten |
+| 3 | `TAMBAH` | `Frontend/public/assets/background/sigap-background.mp4` | Pembuatan direktori aset dan placeholder berkas video latar belakang 43 detik |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 52 One Continuous Shared Video Background |
+
+---
+
+## 📅 [Sesi 53] Minggu, 15 November 2026 — Jam 19 WIB
+**Fokus Utama**: Menghubungkan kedua berkas video latar belakang lokal (`cube-background.mp4` di belakang kubus 3D Hero Section dan `sigap-background.mp4` sebagai background bersama kontinu seksi 7 Bentuk Kekerasan dan Teknologi Cerdas).
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `TAMBAH` | `Frontend/public/assets/background/cube-background.mp4` | Penempatan berkas video MP4 latar belakang kubus 3D dari direktori aset proyek |
+| 2 | `EDIT` | `Frontend/public/assets/background/sigap-background.mp4` | Penempatan berkas video MP4 asli 56 MB untuk continuous shared video background |
+| 3 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Integrasi `cube-background.mp4` pada `BackgroundMediaBackdrop` di Hero Section |
+| 4 | `EDIT` | `Frontend/src/components/3d/BackgroundMediaBackdrop.jsx` | Optimasi playback video (`preload="metadata"`, tanpa blur berat) agar performa 3D kubus tetap mulus |
+| 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 53 implementasi video background pengguna |
+
+---
+
+## 📅 [Sesi 54] Minggu, 15 November 2026 — Jam 20 WIB
+**Fokus Utama**: Perbaikan arsitektur Pinned Scroll sejati pada seksi 7 Bentuk Kekerasan dengan mengeliminasi `overflow-hidden` pembungkus yang merusak `position: sticky`, penguncian heading dan subtitle di viewport selama animasi, kalibrasi alokasi timeline 8 kartu (0–10% overview, 10–80% wavy reel, 80–95% interactive hold, 95–100% natural release), dan eliminasi `backdropFilter` berat pada 6 sisi kubus 3D untuk performa 60 FPS tanpa lag.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penghapusan `overflow-hidden` pada `shared-video-wrapper` untuk memulihkan mekanisme `position: sticky` |
+| 2 | `EDIT` | `Frontend/src/components/3d/CinematicCategoriesShowcase.jsx` | Sinkronisasi timeline 8 kartu (10–80% transit, 80–95% interactive hold ke-8 kartu terbaca, 95–100% release) dan indikator status |
+| 3 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Optimasi GPU rendering kubus 3D (penghapusan `backdropFilter: blur`, peningkatan responsivitas lerp) |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 54 perbaikan pinned 8 cards animation dan performa 3D |
+
+---
+
+## 📅 [Sesi 55] Minggu, 15 November 2026 — Jam 20 WIB
+**Fokus Utama**: Optimasi performa zero-lag animasi gelombang kartu 7 Bentuk Kekerasan dengan eliminasi React state updates pada setiap frame scroll, caching dimensi fisik kartu, pembersihan listener/RAF, serta integrasi 8 gambar lokal `/assets/cards/*.jpg` dengan efek hover full color.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `TAMBAH` | `Frontend/public/assets/cards/` | Penempatan 8 gambar lokal kategori (`verbal.jpg`, `fisik.jpg`, `perundungan.jpg`, `seksual.jpg`, `kebijakan.jpg`, `psikis.jpg`, `diskriminasi.jpg`, `konseling.jpg`) |
+| 2 | `EDIT` | `Frontend/src/components/3d/CinematicCategoriesShowcase.jsx` | Eliminasi `setScrollProgress` dari loop RAF, caching dimensi/offset via resize listener, update DOM micro bar langsung via ref, dan rendering tag `<img>` lokal dengan fallback |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 55 optimasi animasi tanpa lag dan integrasi gambar lokal kartu |
+
+---
+
+## 📅 [Sesi 56] Minggu, 15 November 2026 — Jam 21 WIB
+**Fokus Utama**: Menghapus efek glassmorphism, blur dekoratif, dan teks dock berlebih pada kartu kategori 7 Bentuk Kekerasan untuk meningkatkan performa GPU, serta mengimplementasikan animasi horizontal editorial bertema modern brutalist pada bagian "Tentang Sistem SIGAP" (#about).
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/3d/CinematicCategoriesShowcase.jsx` | Penghapusan class glass/backdrop blur, transisi CSS ganda, ambient blur dekoratif, dan elemen teks footer dock |
+| 2 | `TAMBAH` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Komponen animasi horizontal editorial pinned scroll untuk bagian Tentang Sistem SIGAP (#about) dengan kartu solid |
+| 3 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Integrasi komponen AboutEditorialShowcase ke landing page menggantikan section about statis |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 56 penghapusan efek glass dan animasi horizontal editorial tentang SIGAP |
 
 
 

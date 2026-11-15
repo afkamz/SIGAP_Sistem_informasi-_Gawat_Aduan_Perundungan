@@ -1,5 +1,5 @@
-import React, { useState, useRef, useMemo } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import {
   Shield,
   ShieldCheck,
@@ -93,15 +93,20 @@ export const CreateReportWizard = () => {
     return null;
   }
 
+  const location = useLocation();
+  const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+  const initialCategoryParam = searchParams.get('kategori') || searchParams.get('kategori_id');
+  const initialKategoriId = initialCategoryParam ? Number(initialCategoryParam) : null;
+
   const [step, setStep] = useState(1);
   const [createdTicket, setCreatedTicket] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [copied, setCopied] = useState(false);
 
-  // Form State (dimulai dalam kondisi bersih / kosong)
+  // Form State (mendukung preselected category dari landing page jika ada)
   const [formData, setFormData] = useState({
-    kategori_id: null,
+    kategori_id: initialKategoriId && !isNaN(initialKategoriId) ? initialKategoriId : null,
     deskripsi: '',
     waktu_kejadian: '',
     lokasi: '',
