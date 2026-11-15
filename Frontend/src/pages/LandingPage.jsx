@@ -402,11 +402,6 @@ export const LandingPage = () => {
             opacity={0.65}
           />
 
-          {/* Background Watermark */}
-          <div className="absolute top-28 left-6 text-[120px] sm:text-[180px] font-black font-mono select-none leading-none pointer-events-none -z-10" style={{ color: 'rgba(233,167,191,0.08)' }}>
-            SIGAP
-          </div>
-
           {/* SCENE 01 & 02: HERO INITIAL CONTENT */}
           <div
             className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 relative z-10 transition-all duration-150"
@@ -496,13 +491,10 @@ export const LandingPage = () => {
             </div>
           </div>
 
-          {/* CUBE 3D — Tidak diubah */}
+          {/* CUBE 3D (Dekoratif Tanpa Interaksi Klik) */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 pt-16">
             <InteractivePhotoCube
               scrollProgress={scrollProgress}
-              onFaceClick={(face) => {
-                handleReportAction(null, `/buat-laporan?topic=${face.id}`);
-              }}
             />
           </div>
 

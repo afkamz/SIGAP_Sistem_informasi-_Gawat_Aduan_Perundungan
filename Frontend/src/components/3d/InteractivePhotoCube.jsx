@@ -28,68 +28,74 @@ import { Shield, Sparkles, EyeOff, Lock, CheckCircle2, HeartHandshake } from 'lu
 export const DEFAULT_CUBE_FACES = [
   {
     id: 'front',
+    type: 'video',
+    mediaSrc: '/assets/cube/video-1.mp4',
     label: 'SURFACE 01',
     title: 'SUARAKAN KEBENARAN',
     subtitle: 'Keberanian Melangkah Bersama',
     tag: 'VOICE // 01',
     icon: 'Shield',
     accent: '#3B7DE8',
-    image: null,
     quote: 'Speak with courage. Every student matters.'
   },
   {
-    id: 'right',
-    label: 'SURFACE 02',
-    title: 'ZERO RETALIATION',
-    subtitle: 'Proteksi Penuh Tanpa Takut',
-    tag: 'SAFE // 02',
-    icon: 'Lock',
-    accent: '#60A5FA',
-    image: null,
-    quote: 'Dijamin perlindungan mutlak anti-intimidasi.'
-  },
-  {
     id: 'back',
-    label: 'SURFACE 03',
+    type: 'video',
+    mediaSrc: '/assets/cube/video-2.mp4',
+    label: 'SURFACE 02',
     title: 'ANONYMOUS SHIELD',
     subtitle: 'Kerahasiaan Data Terenkripsi',
-    tag: 'SHIELD // 03',
+    tag: 'SHIELD // 02',
     icon: 'EyeOff',
     accent: '#93C5FD',
-    image: null,
     quote: '100% anonim sesuai kenyamanan Anda.'
   },
   {
+    id: 'right',
+    type: 'video',
+    mediaSrc: '/assets/cube/video-3.mp4',
+    label: 'SURFACE 03',
+    title: 'ZERO RETALIATION',
+    subtitle: 'Proteksi Penuh Tanpa Takut',
+    tag: 'SAFE // 03',
+    icon: 'Lock',
+    accent: '#60A5FA',
+    quote: 'Dijamin perlindungan mutlak anti-intimidasi.'
+  },
+  {
     id: 'left',
+    type: 'video',
+    mediaSrc: '/assets/cube/video-4.mp4',
     label: 'SURFACE 04',
     title: 'AI SMART TRIASE',
     subtitle: 'Pemetaan Cerdas IndoBERT',
     tag: 'TRIASE // 04',
     icon: 'Sparkles',
     accent: '#3B7DE8',
-    image: null,
     quote: '7 Kategori Permendikbudristek No. 46/2023.'
   },
   {
     id: 'top',
+    type: 'video',
+    mediaSrc: '/assets/cube/video-5.mp4',
     label: 'SURFACE 05',
     title: 'SAFE SANCTUARY',
     subtitle: 'Ruang Pendidikan Merdeka',
     tag: 'SANCTUARY // 05',
     icon: 'HeartHandshake',
     accent: '#BFDBFE',
-    image: null,
     quote: 'Menciptakan ekosistem sekolah yang sehat.'
   },
   {
     id: 'bottom',
+    type: 'image',
+    mediaSrc: '/assets/cube/photo-1.jpg',
     label: 'SURFACE 06',
     title: 'AUDIT & INTEGRITY',
     subtitle: 'Tindakan Terpercaya Satgas BK',
     tag: 'INTEGRITY // 06',
     icon: 'CheckCircle2',
     accent: '#3B7DE8',
-    image: null,
     quote: 'Audit trail digital transparan dan akuntabel.'
   }
 ];
@@ -105,7 +111,6 @@ const smoothStep = (min, max, value) => {
 export const InteractivePhotoCube = ({
   faces = DEFAULT_CUBE_FACES,
   scrollProgress = 0, // 0.0 s.d. 1.0 dari parent scroll stage
-  onFaceClick,
   className = ''
 }) => {
   // DOM element refs untuk manipulasi matriks langsung di RAF tanpa re-render React
@@ -344,100 +349,149 @@ export const InteractivePhotoCube = ({
                 return (
                   <div
                     key={face.id}
-                    onClick={() => onFaceClick && onFaceClick(face)}
-                    className="cube-surface absolute inset-0 w-full h-full rounded-3xl overflow-hidden p-5 sm:p-6 flex flex-col justify-between pointer-events-auto"
+                    className="cube-surface absolute inset-0 w-full h-full rounded-3xl overflow-hidden pointer-events-none"
                     style={{
                       transform: faceTransform,
                       transformStyle: 'preserve-3d',
                       backfaceVisibility: 'visible',
                       WebkitBackfaceVisibility: 'visible',
-                      // Liquid Glass Translucent Surface Asli SIGAP (GPU Optimized: Solid tint tanpa backdrop-filter)
-                      background: 'linear-gradient(135deg, rgba(255,255,255,0.96) 0%, rgba(245,249,255,0.92) 50%, rgba(235,243,255,0.90) 100%)',
-                      border: '1.5px solid rgba(255, 255, 255, 0.90)',
-                      boxShadow: 'inset 0 1px 2px rgba(255,255,255,1), 0 8px 24px rgba(59,125,232,0.08)'
+                      background: '#FFFFFF',
+                      border: '1.5px solid rgba(232, 227, 229, 0.85)',
+                      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.06)'
                     }}
                   >
-                    {/* Reflective Sheen Diagonal Sweep */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/50 to-transparent pointer-events-none opacity-80" />
-
-                    {/* Subtle Holographic Grid Pattern */}
-                    <div
-                      className="absolute inset-0 opacity-[0.03] pointer-events-none"
-                      style={{
-                        backgroundImage: 'radial-gradient(#3B7DE8 1px, transparent 1px)',
-                        backgroundSize: '14px 14px'
-                      }}
-                    />
-
-                    {face.image ? (
-                      /* ── Permukaan Foto Asli (Menjadi Kulit Kubus) ── */
-                      <div className="relative w-full h-full flex flex-col justify-between z-10">
-                        <img
-                          src={face.image}
-                          alt={face.title}
-                          className="absolute inset-0 w-full h-full object-cover rounded-2xl filter brightness-[1.02]"
+                    {face.type === 'video' && face.mediaSrc ? (
+                      /* ── Permukaan Video Lokal (5 Sisi) ── */
+                      <div className="relative w-full h-full overflow-hidden bg-slate-900 pointer-events-none">
+                        <video
+                          src={face.mediaSrc}
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          preload="auto"
+                          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                          onError={(e) => {
+                            // Fallback jika video gagal load
+                            e.currentTarget.style.display = 'none';
+                            const fallbackEl = e.currentTarget.nextElementSibling;
+                            if (fallbackEl) fallbackEl.style.display = 'flex';
+                          }}
                         />
-                        {/* Overlay Glass Badge di Atas Foto */}
-                        <div className="relative z-10 flex items-center justify-between">
-                          <span className="px-2.5 py-1 rounded-full bg-white/90 text-[10px] font-mono font-black text-slate-800 border border-white/70 shadow-xs">
-                            {face.tag}
-                          </span>
-                          <div className="w-7 h-7 rounded-xl bg-white/95 flex items-center justify-center text-slate-800 shadow-xs">
-                            {renderIcon(face.icon, face.accent)}
+
+                        {/* Fallback Display jika file video belum tersedia */}
+                        <div
+                          className="absolute inset-0 w-full h-full p-5 flex flex-col justify-between hidden"
+                          style={{
+                            background: 'linear-gradient(135deg, #1D294B 0%, #2A3C68 100%)'
+                          }}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="px-2.5 py-1 rounded-full bg-white/20 text-[10px] font-mono font-bold text-white">
+                              {face.tag}
+                            </span>
+                            <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-white">
+                              {renderIcon(face.icon, '#FFFFFF')}
+                            </div>
+                          </div>
+                          <div className="text-center my-auto">
+                            <h4 className="text-sm font-black text-white">{face.title}</h4>
+                            <p className="text-[10px] text-slate-300 mt-1 font-mono">FILE: {face.mediaSrc}</p>
+                          </div>
+                          <div className="text-[10px] font-mono text-slate-400 text-center">
+                            SIGAP CUBE MEDIA
                           </div>
                         </div>
 
-                        {/* Caption di Bawah Foto */}
-                        <div className="relative z-10 p-3 rounded-2xl bg-white/90 border border-white/80 shadow-xs">
-                          <h4 className="text-xs font-black text-slate-900 leading-tight">{face.title}</h4>
-                          <p className="text-[10px] text-slate-600 mt-0.5 font-medium">{face.subtitle}</p>
+                        {/* Minimalist Top Face Badge */}
+                        <div className="absolute top-3.5 left-3.5 right-3.5 z-10 flex items-center justify-between pointer-events-none">
+                          <span className="px-2.5 py-1 rounded-full bg-black/60 text-[10px] font-mono font-extrabold text-white border border-white/20">
+                            {face.tag}
+                          </span>
+                          <div className="w-7 h-7 rounded-xl bg-black/60 border border-white/20 flex items-center justify-center text-white">
+                            {renderIcon(face.icon, '#FFFFFF')}
+                          </div>
+                        </div>
+
+                        {/* Minimalist Bottom Caption */}
+                        <div className="absolute bottom-3 left-3.5 right-3.5 z-10 p-2.5 rounded-xl bg-black/65 border border-white/20 text-white pointer-events-none">
+                          <h4 className="text-xs font-black leading-tight text-white">{face.title}</h4>
+                          <p className="text-[10px] text-slate-200 mt-0.5 font-medium leading-tight">{face.subtitle}</p>
+                        </div>
+                      </div>
+                    ) : face.type === 'image' && face.mediaSrc ? (
+                      /* ── Permukaan Foto Statis Lokal (1 Sisi: Bottom) ── */
+                      <div className="relative w-full h-full overflow-hidden bg-slate-100 pointer-events-none">
+                        <img
+                          src={face.mediaSrc}
+                          alt={face.title}
+                          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            const fallbackEl = e.currentTarget.nextElementSibling;
+                            if (fallbackEl) fallbackEl.style.display = 'flex';
+                          }}
+                        />
+
+                        {/* Fallback Display jika file foto belum tersedia */}
+                        <div
+                          className="absolute inset-0 w-full h-full p-5 flex flex-col justify-between hidden"
+                          style={{ background: '#FDF7F9' }}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="px-2.5 py-1 rounded-full bg-pink-100 text-[10px] font-mono font-bold text-pink-700">
+                              {face.tag}
+                            </span>
+                            <div className="w-8 h-8 rounded-xl bg-pink-100 flex items-center justify-center text-pink-600">
+                              {renderIcon(face.icon, face.accent)}
+                            </div>
+                          </div>
+                          <div className="text-center my-auto">
+                            <h4 className="text-sm font-black text-slate-800">{face.title}</h4>
+                            <p className="text-[10px] text-slate-500 mt-1 font-mono">FILE: {face.mediaSrc}</p>
+                          </div>
+                          <div className="text-[10px] font-mono text-slate-400 text-center">
+                            SIGAP CUBE PHOTO
+                          </div>
+                        </div>
+
+                        {/* Minimalist Top Face Badge */}
+                        <div className="absolute top-3.5 left-3.5 right-3.5 z-10 flex items-center justify-between pointer-events-none">
+                          <span className="px-2.5 py-1 rounded-full bg-black/60 text-[10px] font-mono font-extrabold text-white border border-white/20">
+                            {face.tag}
+                          </span>
+                          <div className="w-7 h-7 rounded-xl bg-black/60 border border-white/20 flex items-center justify-center text-white">
+                            {renderIcon(face.icon, '#FFFFFF')}
+                          </div>
+                        </div>
+
+                        {/* Minimalist Bottom Caption */}
+                        <div className="absolute bottom-3 left-3.5 right-3.5 z-10 p-2.5 rounded-xl bg-black/65 border border-white/20 text-white pointer-events-none">
+                          <h4 className="text-xs font-black leading-tight text-white">{face.title}</h4>
+                          <p className="text-[10px] text-slate-200 mt-0.5 font-medium leading-tight">{face.subtitle}</p>
                         </div>
                       </div>
                     ) : (
-                      /* ── Permukaan Editorial Elegan SIGAP (Default Placeholder) ── */
-                      <div className="relative w-full h-full flex flex-col justify-between z-10">
-                        {/* Header Permukaan */}
+                      /* ── Permukaan Editorial Fallback ── */
+                      <div className="relative w-full h-full flex flex-col justify-between p-5 z-10 pointer-events-none">
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-1.5">
-                            <span className="w-2 h-2 rounded-full bg-[#3B7DE8] shadow-[0_0_6px_#3B7DE8]" />
-                            <span className="text-[10px] font-mono font-extrabold tracking-wider text-slate-500 uppercase">
-                              {face.tag}
-                            </span>
-                          </div>
-                          <div className="w-9 h-9 rounded-2xl bg-white/95 border border-[#BFDBFE]/60 shadow-xs flex items-center justify-center">
+                          <span className="text-[10px] font-mono font-extrabold tracking-wider text-slate-500 uppercase">
+                            {face.tag}
+                          </span>
+                          <div className="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center">
                             {renderIcon(face.icon, face.accent)}
                           </div>
                         </div>
-
-                        {/* Bagian Tengah: Typography Besar & Identitas SIGAP */}
-                        <div className="my-auto py-2 text-center space-y-1.5">
-                          <span className="text-[9px] font-mono tracking-widest text-[#3B7DE8] uppercase font-bold block">
-                            {face.label}
-                          </span>
-                          <h3 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 leading-none">
-                            {face.title}
-                          </h3>
-                          <p className="text-xs font-bold text-slate-500 max-w-[220px] mx-auto leading-tight mt-1">
-                            {face.subtitle}
-                          </p>
-
-                          <div className="w-20 h-0.5 mx-auto bg-gradient-to-r from-transparent via-[#3B7DE8]/40 to-transparent my-2.5" />
-
-                          <p className="text-[10px] font-sans text-slate-400 italic max-w-[210px] mx-auto">
-                            "{face.quote}"
-                          </p>
+                        <div className="my-auto text-center space-y-1">
+                          <h3 className="text-lg font-black text-slate-900 leading-tight">{face.title}</h3>
+                          <p className="text-xs font-medium text-slate-500">{face.subtitle}</p>
                         </div>
-
-                        {/* Footer Permukaan */}
-                        <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                        <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-[10px] font-mono text-slate-400">
                           <span>SIGAP // 2026</span>
-                          <span className="text-[#3B7DE8] font-bold">PHOTO SURFACE</span>
+                          <span className="text-[#3B7DE8] font-bold">CUBE SURFACE</span>
                         </div>
                       </div>
                     )}
-
-                    {/* Thin Silver Frame Gloss Highlight */}
-                    <div className="absolute inset-0 rounded-3xl border border-white/80 pointer-events-none" />
                   </div>
                 );
               })}

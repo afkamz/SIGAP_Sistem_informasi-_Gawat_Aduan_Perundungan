@@ -888,6 +888,21 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 3 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Integrasi komponen AboutEditorialShowcase ke landing page menggantikan section about statis |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 56 penghapusan efek glass dan animasi horizontal editorial tentang SIGAP |
 
+---
+
+## 📅 [Sesi 57] Minggu, 15 November 2026 — Jam 23 WIB
+**Fokus Utama**: Menghubungkan 5 video lokal (`video-1.mp4` s.d. `video-5.mp4`) dan 1 foto statis (`photo-1.jpg`) pada 6 sisi kubus 3D hero, menonaktifkan interaksi klik pointer pada kubus menjadi elemen visual murni, dan menghapus teks watermark samar SIGAP di belakang kubus.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `TAMBAH` | `Frontend/public/assets/cube/` | Folder dan berkas media lokal kubus (`video-1.mp4` s.d. `video-5.mp4` dan `photo-1.jpg`) |
+| 2 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Pemetaan media lokal 6 sisi kubus (5 video loop autoplay muted + 1 foto), fallback display, dan penonaktifan interaksi klik (`pointer-events: none`) |
+| 3 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penghapusan teks watermark samar SIGAP di belakang kubus 3D dan pembersihan handler klik kubus |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 57 integrasi media lokal kubus 3D hero, penghapusan watermark, dan penonaktifan interaksi klik |
+
+
 
 
 
