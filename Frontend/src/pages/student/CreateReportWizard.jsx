@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useEffect } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import {
   Shield,
@@ -39,42 +39,63 @@ export const CreateReportWizard = () => {
   // Gatekeeper: Pengguna harus login atau daftar terlebih dahulu
   if (!currentUser) {
     return (
-      <div className="min-h-screen flex flex-col justify-between bg-liquid-mesh text-slate-800">
-        {/* Ambient glow orbs */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-          <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-blue-400/25 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-violet-400/20 rounded-full blur-3xl" />
-        </div>
+      <div
+        className="min-h-screen flex flex-col justify-between font-sans relative"
+        style={{ background: '#FFFFFF', color: '#1C6F8E' }}
+      >
         <StudentHeader />
         <main className="max-w-md mx-auto w-full px-4 py-16 flex-1 flex flex-col justify-center">
-          <div className="glass-panel-elevated p-8 rounded-3xl text-center space-y-6">
-            <div className="w-16 h-16 rounded-2xl bg-blue-500/80 backdrop-blur-sm text-white mx-auto flex items-center justify-center font-bold shadow-lg border border-white/40">
-              <Lock className="w-8 h-8" />
+          <div
+            className="p-8 rounded-3xl text-center space-y-6 border"
+            style={{
+              background: '#FFFFFF',
+              borderColor: '#BFEFFF',
+              boxShadow: '0 24px 70px rgba(191, 239, 255, 0.45)'
+            }}
+          >
+            <div
+              className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center font-bold border shadow-xs"
+              style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+            >
+              <Lock className="w-8 h-8 text-[#1C6F8E]" />
             </div>
             <div className="space-y-2">
-              <h2 className="text-xl font-black text-slate-900 tracking-tight">Masuk atau Daftar Terlebih Dahulu</h2>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Untuk menjamin keaslian data, perlindungan identitas, serta tindak lanjut resmi oleh Guru BK & Satgas PPKSP, Anda harus memiliki akun terdaftar untuk membuat aduan.
+              <h2 className="text-xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
+                Masuk atau Daftar Terlebih Dahulu
+              </h2>
+              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#2E84A5' }}>
+                Untuk menjamin keaslian data, perlindungan identitas, serta tindak lanjut resmi oleh Guru BK &amp; Satgas PPKSP, Anda harus memiliki akun terdaftar untuk membuat aduan.
               </p>
             </div>
             <div className="space-y-2.5 pt-2">
               <Link
                 to="/login?redirect=/buat-laporan"
-                className="glass-button-secondary w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition active:scale-95"
+                className="w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition active:scale-95 border hover:opacity-90 shadow-xs"
+                style={{
+                  background: '#BFEFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               >
-                <LogIn className="w-4 h-4" />
+                <LogIn className="w-4 h-4 text-[#1C6F8E]" />
                 <span>Masuk ke Akun Siswa</span>
               </Link>
               <Link
                 to="/register?redirect=/buat-laporan"
-                className="glass-button-primary w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition active:scale-95"
+                className="w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition active:scale-95 border hover:opacity-90"
+                style={{
+                  background: '#FFFFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               >
-                <User className="w-4 h-4" />
+                <User className="w-4 h-4 text-[#1C6F8E]" />
                 <span>Daftar Akun Baru</span>
               </Link>
               <Link
                 to="/"
-                className="block text-xs text-slate-500 hover:text-slate-800 pt-2 transition font-medium"
+                className="block text-xs pt-2 transition font-medium hover:underline"
+                style={{ color: '#2E84A5' }}
               >
                 ← Kembali ke Beranda
               </Link>
@@ -87,7 +108,6 @@ export const CreateReportWizard = () => {
   }
 
   // Gatekeeper lapis 2: Admin tidak boleh mengakses halaman buat aduan
-  // (mencegah akses langsung via URL oleh admin yang sedang login)
   if (currentUser?.role === 'admin') {
     navigate('/admin/dashboard', { replace: true });
     return null;
@@ -104,7 +124,7 @@ export const CreateReportWizard = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [copied, setCopied] = useState(false);
 
-  // Form State (mendukung preselected category dari landing page jika ada)
+  // Form State
   const [formData, setFormData] = useState({
     kategori_id: initialKategoriId && !isNaN(initialKategoriId) ? initialKategoriId : null,
     deskripsi: '',
@@ -225,37 +245,45 @@ export const CreateReportWizard = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-liquid-mesh text-slate-800 relative">
-      {/* Ambient glow orbs */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-violet-400/15 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-cyan-400/15 rounded-full blur-3xl" />
-      </div>
+    <div
+      className="min-h-screen flex flex-col justify-between font-sans relative"
+      style={{ background: '#FFFFFF', color: '#1C6F8E' }}
+    >
       <StudentHeader isDashboard={false} />
 
       <main className="max-w-2xl mx-auto w-full px-4 py-8 sm:py-10 space-y-7">
         {/* Title Header */}
         <div className="text-center space-y-1.5">
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight" style={{ color: '#1C6F8E' }}>
             Formulir Pengaduan Insiden
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600">
+          <p className="text-xs sm:text-sm" style={{ color: '#2E84A5' }}>
             Sampaikan laporan Anda dengan aman, rahasia, dan terenkripsi.
           </p>
         </div>
 
         {/* Stepper Progress Bar (4 Tahapan) */}
         {step <= 4 && (
-          <div className="glass-panel rounded-2xl px-6 py-4">
+          <div
+            className="rounded-2xl px-6 py-4 border"
+            style={{
+              background: '#FFFFFF',
+              borderColor: '#BFEFFF',
+              boxShadow: '0 4px 16px rgba(191, 239, 255, 0.35)'
+            }}
+          >
             <div className="relative flex items-center justify-between">
               {/* Garis Horizontal Background */}
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-[2px] bg-white/40 z-0"></div>
-
-              {/* Garis Horizontal Progress Biru */}
               <div
-                className="absolute left-0 top-1/2 -translate-y-1/2 h-[2px] bg-sky-400 z-0 transition-all duration-300"
+                className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-[2px] z-0"
+                style={{ background: '#BFEFFF' }}
+              />
+
+              {/* Garis Horizontal Progress */}
+              <div
+                className="absolute left-0 top-1/2 -translate-y-1/2 h-[2px] z-0 transition-all duration-300"
                 style={{
+                  background: '#1C6F8E',
                   width:
                     step === 1
                       ? '12%'
@@ -265,25 +293,27 @@ export const CreateReportWizard = () => {
                       ? '65%'
                       : '100%'
                 }}
-              ></div>
+              />
 
               {/* Step 1 */}
               <div className="relative z-10 flex flex-col items-center">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition ${
-                    step > 1
-                      ? 'bg-sky-500 text-white shadow-md'
-                      : step === 1
-                      ? 'bg-sky-500 text-white ring-4 ring-sky-200/60 shadow-md'
-                      : 'bg-white/50 backdrop-blur-sm border-2 border-white/60 text-slate-400'
-                  }`}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition border"
+                  style={{
+                    background: step >= 1 ? '#BFEFFF' : '#FFFFFF',
+                    color: '#1C6F8E',
+                    borderColor: step === 1 ? '#1C6F8E' : '#BFEFFF',
+                    boxShadow: step === 1 ? '0 0 0 4px rgba(191, 239, 255, 0.6)' : 'none'
+                  }}
                 >
                   {step > 1 ? <Check className="w-4 h-4 stroke-[3]" /> : '1'}
                 </div>
                 <span
-                  className={`text-[11px] sm:text-xs mt-2 transition ${
-                    step >= 1 ? 'font-bold text-slate-800' : 'text-slate-400 font-medium'
-                  }`}
+                  className="text-[11px] sm:text-xs mt-2 transition"
+                  style={{
+                    color: step >= 1 ? '#1C6F8E' : '#2E84A5',
+                    fontWeight: step >= 1 ? '700' : '500'
+                  }}
                 >
                   Kategori
                 </span>
@@ -292,20 +322,22 @@ export const CreateReportWizard = () => {
               {/* Step 2 */}
               <div className="relative z-10 flex flex-col items-center">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition ${
-                    step > 2
-                      ? 'bg-sky-500 text-white shadow-md'
-                      : step === 2
-                      ? 'bg-sky-500 text-white ring-4 ring-sky-200/60 shadow-md'
-                      : 'bg-white/50 backdrop-blur-sm border-2 border-white/60 text-slate-400'
-                  }`}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition border"
+                  style={{
+                    background: step >= 2 ? '#BFEFFF' : '#FFFFFF',
+                    color: '#1C6F8E',
+                    borderColor: step === 2 ? '#1C6F8E' : '#BFEFFF',
+                    boxShadow: step === 2 ? '0 0 0 4px rgba(191, 239, 255, 0.6)' : 'none'
+                  }}
                 >
                   {step > 2 ? <Check className="w-4 h-4 stroke-[3]" /> : '2'}
                 </div>
                 <span
-                  className={`text-[11px] sm:text-xs mt-2 transition ${
-                    step >= 2 ? 'font-bold text-slate-800' : 'text-slate-400 font-medium'
-                  }`}
+                  className="text-[11px] sm:text-xs mt-2 transition"
+                  style={{
+                    color: step >= 2 ? '#1C6F8E' : '#2E84A5',
+                    fontWeight: step >= 2 ? '700' : '500'
+                  }}
                 >
                   Detail Kejadian
                 </span>
@@ -314,20 +346,22 @@ export const CreateReportWizard = () => {
               {/* Step 3 */}
               <div className="relative z-10 flex flex-col items-center">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition ${
-                    step > 3
-                      ? 'bg-sky-500 text-white shadow-md'
-                      : step === 3
-                      ? 'bg-sky-500 text-white ring-4 ring-sky-200/60 shadow-md'
-                      : 'bg-white/50 backdrop-blur-sm border-2 border-white/60 text-slate-400'
-                  }`}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition border"
+                  style={{
+                    background: step >= 3 ? '#BFEFFF' : '#FFFFFF',
+                    color: '#1C6F8E',
+                    borderColor: step === 3 ? '#1C6F8E' : '#BFEFFF',
+                    boxShadow: step === 3 ? '0 0 0 4px rgba(191, 239, 255, 0.6)' : 'none'
+                  }}
                 >
                   {step > 3 ? <Check className="w-4 h-4 stroke-[3]" /> : '3'}
                 </div>
                 <span
-                  className={`text-[11px] sm:text-xs mt-2 transition ${
-                    step >= 3 ? 'font-bold text-slate-800' : 'text-slate-400 font-medium'
-                  }`}
+                  className="text-[11px] sm:text-xs mt-2 transition"
+                  style={{
+                    color: step >= 3 ? '#1C6F8E' : '#2E84A5',
+                    fontWeight: step >= 3 ? '700' : '500'
+                  }}
                 >
                   Identitas Pelapor
                 </span>
@@ -336,20 +370,24 @@ export const CreateReportWizard = () => {
               {/* Step 4 */}
               <div className="relative z-10 flex flex-col items-center">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition ${
-                    step === 4
-                      ? 'bg-sky-500 text-white ring-4 ring-sky-200/60 shadow-md'
-                      : 'bg-white/50 backdrop-blur-sm border-2 border-white/60 text-slate-400'
-                  }`}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition border"
+                  style={{
+                    background: step === 4 ? '#BFEFFF' : '#FFFFFF',
+                    color: '#1C6F8E',
+                    borderColor: step === 4 ? '#1C6F8E' : '#BFEFFF',
+                    boxShadow: step === 4 ? '0 0 0 4px rgba(191, 239, 255, 0.6)' : 'none'
+                  }}
                 >
                   4
                 </div>
                 <span
-                  className={`text-[11px] sm:text-xs mt-2 transition ${
-                    step === 4 ? 'font-bold text-slate-800' : 'text-slate-400 font-medium'
-                  }`}
+                  className="text-[11px] sm:text-xs mt-2 transition"
+                  style={{
+                    color: step === 4 ? '#1C6F8E' : '#2E84A5',
+                    fontWeight: step === 4 ? '700' : '500'
+                  }}
                 >
-                  Bukti & Konfirmasi
+                  Bukti &amp; Konfirmasi
                 </span>
               </div>
             </div>
@@ -358,7 +396,14 @@ export const CreateReportWizard = () => {
 
         {/* Error Alert */}
         {errorMsg && (
-          <div className="p-3.5 rounded-xl bg-red-500/10 backdrop-blur-sm border border-red-300/60 text-xs text-red-700 font-semibold flex items-center gap-2">
+          <div
+            className="p-3.5 rounded-xl border text-xs font-semibold flex items-center gap-2"
+            style={{
+              background: '#FFF5F5',
+              borderColor: '#FEB2B2',
+              color: '#C53030'
+            }}
+          >
             <span>{errorMsg}</span>
           </div>
         )}
@@ -367,30 +412,52 @@ export const CreateReportWizard = () => {
         {/* TAHAP 1: Pilih Kategori Kejadian                           */}
         {/* ========================================================= */}
         {step === 1 && (
-          <div className="glass-panel-elevated rounded-3xl p-6 sm:p-8 space-y-5">
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-5 border"
+            style={{
+              background: '#FFFFFF',
+              borderColor: '#BFEFFF',
+              boxShadow: '0 4px 20px -2px rgba(191, 239, 255, 0.45)'
+            }}
+          >
             {/* Top Subheader */}
             <div className="flex items-center justify-between">
-              <span className="glass-pill-blue px-3 py-1 rounded-full text-xs font-semibold">
+              <span
+                className="px-3 py-1 rounded-full text-xs font-bold border"
+                style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+              >
                 Langkah 1 dari 4
               </span>
-              <span className="text-xs text-slate-500 font-medium">Tahap Awal</span>
+              <span className="text-xs font-medium" style={{ color: '#2E84A5' }}>
+                Tahap Awal
+              </span>
             </div>
 
             <div className="space-y-1">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight" style={{ color: '#1C6F8E' }}>
                 Pilih Kategori Kejadian
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#2E84A5' }}>
                 Pilih salah satu jenis insiden yang paling sesuai dengan peristiwa yang Anda alami atau saksikan di lingkungan sekolah.
               </p>
             </div>
 
             {/* Banner Kerahasiaan */}
-            <div className="glass-card rounded-2xl p-3.5 flex items-center gap-3 border border-sky-200/60">
-              <div className="w-8 h-8 rounded-xl bg-sky-200/60 text-sky-700 flex items-center justify-center shrink-0">
+            <div
+              className="rounded-2xl p-3.5 flex items-center gap-3 border"
+              style={{
+                background: '#FFFFFF',
+                borderColor: '#BFEFFF',
+                color: '#1C6F8E'
+              }}
+            >
+              <div
+                className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 border"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+              >
                 <ShieldCheck className="w-4 h-4" />
               </div>
-              <p className="text-xs text-slate-700 leading-relaxed">
+              <p className="text-xs leading-relaxed" style={{ color: '#2E84A5' }}>
                 Kerahasiaan data dan perlindungan saksi/korban dijamin sesuai peraturan perlindungan anak dan Permendikbudristek PPKSP.
               </p>
             </div>
@@ -403,19 +470,21 @@ export const CreateReportWizard = () => {
                   <div
                     key={k.id}
                     onClick={() => handleCategorySelect(k.id)}
-                    className={`p-4 rounded-2xl border cursor-pointer transition flex items-start gap-3.5 ${
-                      isSelected
-                        ? 'border-sky-300/80 bg-sky-50/70 backdrop-blur-sm ring-1 ring-sky-200/60 shadow-sm'
-                        : 'glass-card border-white/60 hover:border-sky-200/60'
-                    }`}
+                    className="p-4 rounded-2xl border cursor-pointer transition flex items-start gap-3.5 hover:opacity-95"
+                    style={{
+                      background: isSelected ? '#BFEFFF' : '#FFFFFF',
+                      borderColor: isSelected ? '#1C6F8E' : '#BFEFFF',
+                      boxShadow: isSelected ? '0 4px 14px rgba(191, 239, 255, 0.5)' : 'none'
+                    }}
                   >
                     {/* Radio Indicator */}
                     <div
-                      className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 transition ${
-                        isSelected
-                          ? 'bg-sky-500 text-white'
-                          : 'border border-white/70 bg-white/40 backdrop-blur-sm'
-                      }`}
+                      className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 transition border"
+                      style={{
+                        background: isSelected ? '#1C6F8E' : '#FFFFFF',
+                        borderColor: isSelected ? '#1C6F8E' : '#BFEFFF',
+                        color: '#FFFFFF'
+                      }}
                     >
                       {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                     </div>
@@ -423,16 +492,19 @@ export const CreateReportWizard = () => {
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <h4 className="font-bold text-sm text-slate-900 leading-snug">
+                        <h4 className="font-bold text-sm leading-snug" style={{ color: '#1C6F8E' }}>
                           {k.nama}
                         </h4>
                         {isSelected && (
-                          <span className="glass-pill-blue px-2 py-0.5 rounded-md text-[11px] font-bold">
+                          <span
+                            className="px-2 py-0.5 rounded-md text-[11px] font-bold border"
+                            style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#1C6F8E' }}
+                          >
                             Dipilih
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
+                      <p className="text-xs mt-0.5 leading-relaxed" style={{ color: '#2E84A5' }}>
                         {k.deskripsi}
                       </p>
                     </div>
@@ -442,21 +514,31 @@ export const CreateReportWizard = () => {
             </div>
 
             {/* Footer Navigation */}
-            <div className="flex items-center justify-between pt-4 border-t border-white/50">
+            <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: '#BFEFFF' }}>
               <button
                 type="button"
                 onClick={() => navigate('/dashboard')}
-                className="glass-button-secondary px-5 py-2.5 rounded-xl text-xs font-bold transition"
+                className="px-5 py-2.5 rounded-xl text-xs font-bold transition border hover:opacity-90"
+                style={{
+                  background: '#FFFFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               >
                 Batal
               </button>
               <button
                 type="button"
                 onClick={handleNext}
-                className="glass-button-primary px-6 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition active:scale-[0.98]"
+                className="px-6 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition active:scale-[0.98] border hover:opacity-90 shadow-xs"
+                style={{
+                  background: '#BFEFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               >
                 <span>Lanjut</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3.5 h-3.5 text-[#1C6F8E]" />
               </button>
             </div>
           </div>
@@ -466,30 +548,48 @@ export const CreateReportWizard = () => {
         {/* TAHAP 2: Detail Kejadian (Kronologi Insiden)               */}
         {/* ========================================================= */}
         {step === 2 && (
-          <div className="glass-panel-elevated rounded-3xl p-6 sm:p-8 space-y-5">
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-5 border"
+            style={{
+              background: '#FFFFFF',
+              borderColor: '#BFEFFF',
+              boxShadow: '0 4px 20px -2px rgba(191, 239, 255, 0.45)'
+            }}
+          >
             {/* Top Subheader */}
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-sky-800 tracking-wider">
+              <span className="text-xs font-bold tracking-wider" style={{ color: '#1C6F8E' }}>
                 LANGKAH 2 DARI 4
               </span>
-              <span className="glass-pill-blue inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-sky-600"></span>
+              <span
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border"
+                style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1C6F8E]" />
                 <span>Kronologi Insiden</span>
               </span>
             </div>
 
             {/* Kategori Terpilih Box */}
-            <div className="glass-card rounded-2xl p-3.5 flex items-center justify-between text-xs">
+            <div
+              className="rounded-2xl p-3.5 flex items-center justify-between text-xs border"
+              style={{
+                background: '#FFFFFF',
+                borderColor: '#BFEFFF',
+                color: '#1C6F8E'
+              }}
+            >
               <div className="flex items-center gap-2">
-                <Shield className="w-4 h-4 text-sky-700 shrink-0" />
-                <span className="font-bold text-slate-800">
+                <Shield className="w-4 h-4 text-[#1C6F8E] shrink-0" />
+                <span className="font-bold">
                   Kategori: {selectedCategory.nama}
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="text-sky-700 hover:text-sky-900 font-semibold flex items-center gap-1 transition"
+                className="font-bold flex items-center gap-1 transition hover:underline"
+                style={{ color: '#1C6F8E' }}
               >
                 <span>Ubah</span>
                 <Edit3 className="w-3 h-3" />
@@ -497,34 +597,46 @@ export const CreateReportWizard = () => {
             </div>
 
             <div className="space-y-1">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight" style={{ color: '#1C6F8E' }}>
                 Ceritakan Kejadiannya
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#2E84A5' }}>
                 Tuliskan kronologi peristiwa secara runtut agar tim penanganan dapat menindaklanjuti secara tepat.
               </p>
             </div>
 
             {/* Unsur Informasi Yang Disarankan */}
             <div className="space-y-2">
-              <span className="text-xs font-medium text-slate-500 block">
+              <span className="text-xs font-bold block" style={{ color: '#2E84A5' }}>
                 Unsur informasi yang disarankan:
               </span>
               <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl glass-pill text-xs font-semibold text-slate-700">
-                  <HelpCircle className="w-3.5 h-3.5 text-sky-600" />
+                <span
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold border"
+                  style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                >
+                  <HelpCircle className="w-3.5 h-3.5 text-[#1C6F8E]" />
                   <span>Apa yang Terjadi</span>
                 </span>
-                <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl glass-pill text-xs font-semibold text-slate-700">
-                  <Clock className="w-3.5 h-3.5 text-sky-600" />
+                <span
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold border"
+                  style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                >
+                  <Clock className="w-3.5 h-3.5 text-[#1C6F8E]" />
                   <span>Waktu Kejadian</span>
                 </span>
-                <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl glass-pill text-xs font-semibold text-slate-700">
-                  <Hash className="w-3.5 h-3.5 text-sky-600" />
+                <span
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold border"
+                  style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                >
+                  <Hash className="w-3.5 h-3.5 text-[#1C6F8E]" />
                   <span>Lokasi / Platform</span>
                 </span>
-                <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl glass-pill text-xs font-semibold text-slate-700">
-                  <Users className="w-3.5 h-3.5 text-sky-600" />
+                <span
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold border"
+                  style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                >
+                  <Users className="w-3.5 h-3.5 text-[#1C6F8E]" />
                   <span>Pihak Terlibat</span>
                 </span>
               </div>
@@ -533,10 +645,10 @@ export const CreateReportWizard = () => {
             {/* Textarea Uraian Peristiwa */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs">
-                <label className="font-bold text-slate-700">
+                <label className="font-bold" style={{ color: '#1C6F8E' }}>
                   Uraian Detail Peristiwa <span className="text-red-500">*</span>
                 </label>
-                <span className="text-slate-400 font-mono text-[11px]">
+                <span className="font-mono text-[11px]" style={{ color: '#2E84A5' }}>
                   {formData.deskripsi.length} / 2000 karakter
                 </span>
               </div>
@@ -547,10 +659,15 @@ export const CreateReportWizard = () => {
                 onChange={handleChange}
                 maxLength={2000}
                 placeholder="Tuliskan detail kronologi insiden yang Anda alami atau saksikan..."
-                className="glass-input w-full px-4 py-3 rounded-2xl text-xs sm:text-sm text-slate-800 leading-relaxed focus:outline-none transition resize-none"
-              ></textarea>
-              <div className="flex items-center gap-1.5 text-xs text-slate-500 pt-0.5">
-                <Lock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm leading-relaxed focus:outline-none transition resize-none border"
+                style={{
+                  background: '#FFFFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
+              />
+              <div className="flex items-center gap-1.5 text-xs pt-0.5" style={{ color: '#2E84A5' }}>
+                <Lock className="w-3.5 h-3.5 shrink-0" style={{ color: '#1C6F8E' }} />
                 <span>
                   Ceritamu akan dibaca dengan penuh kehati-hatian, empati, dan dijaga kerahasiaannya.
                 </span>
@@ -559,12 +676,12 @@ export const CreateReportWizard = () => {
 
             {/* Perkiraan Waktu & Tempat (Opsional) */}
             <div className="space-y-2 pt-1">
-              <span className="text-xs font-bold text-slate-800 block">
-                Perkiraan Waktu & Tempat (Opsional)
+              <span className="text-xs font-bold block" style={{ color: '#1C6F8E' }}>
+                Perkiraan Waktu &amp; Tempat (Opsional)
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
-                  <label className="text-[11px] font-semibold text-slate-600 block mb-1">
+                  <label className="text-[11px] font-semibold block mb-1" style={{ color: '#2E84A5' }}>
                     Tanggal Kejadian
                   </label>
                   <div className="relative">
@@ -579,9 +696,14 @@ export const CreateReportWizard = () => {
                           if (e.target.showPicker) e.target.showPicker();
                         } catch (_) {}
                       }}
-                      className="glass-input w-full pl-3.5 pr-10 py-2.5 rounded-xl text-xs font-medium text-slate-800 focus:outline-none cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                      className="w-full pl-3.5 pr-10 py-2.5 rounded-xl text-xs font-medium focus:outline-none cursor-pointer border [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:top-0 [&::-webkit-calendar-picker-indicator]:left-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                      style={{
+                        background: '#FFFFFF',
+                        color: '#1C6F8E',
+                        borderColor: '#BFEFFF'
+                      }}
                     />
-                    <Calendar className="w-4 h-4 text-slate-400 absolute right-3 top-3 pointer-events-none" />
+                    <Calendar className="w-4 h-4 absolute right-3 top-3 pointer-events-none text-[#1C6F8E]" />
                   </div>
                   <div className="flex items-center gap-1.5 mt-1.5">
                     <button
@@ -590,7 +712,12 @@ export const CreateReportWizard = () => {
                         const today = new Date().toISOString().split('T')[0];
                         setFormData((prev) => ({ ...prev, waktu_kejadian: today }));
                       }}
-                      className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-white/60 hover:bg-sky-50 hover:text-sky-700 text-slate-600 transition border border-white/60"
+                      className="text-[10px] font-semibold px-2 py-0.5 rounded-md transition border hover:opacity-90"
+                      style={{
+                        background: '#BFEFFF',
+                        color: '#1C6F8E',
+                        borderColor: '#BFEFFF'
+                      }}
                     >
                       Hari Ini
                     </button>
@@ -600,7 +727,12 @@ export const CreateReportWizard = () => {
                         const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
                         setFormData((prev) => ({ ...prev, waktu_kejadian: yesterday }));
                       }}
-                      className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-white/60 hover:bg-sky-50 hover:text-sky-700 text-slate-600 transition border border-white/60"
+                      className="text-[10px] font-semibold px-2 py-0.5 rounded-md transition border hover:opacity-90"
+                      style={{
+                        background: '#FFFFFF',
+                        color: '#1C6F8E',
+                        borderColor: '#BFEFFF'
+                      }}
                     >
                       Kemarin
                     </button>
@@ -610,7 +742,7 @@ export const CreateReportWizard = () => {
                         onClick={() => {
                           setFormData((prev) => ({ ...prev, waktu_kejadian: '' }));
                         }}
-                        className="text-[10px] text-slate-400 hover:text-red-500 ml-auto transition"
+                        className="text-[10px] ml-auto transition text-red-600 hover:underline"
                       >
                         Hapus
                       </button>
@@ -619,7 +751,7 @@ export const CreateReportWizard = () => {
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-semibold text-slate-600 block mb-1">
+                  <label className="text-[11px] font-semibold block mb-1" style={{ color: '#2E84A5' }}>
                     Lokasi Kejadian
                   </label>
                   <div className="relative">
@@ -628,32 +760,47 @@ export const CreateReportWizard = () => {
                       name="lokasi"
                       value={formData.lokasi}
                       onChange={handleChange}
-                      placeholder="Contoh: Area Kantin, Lapangan Olahraga, Lorong Kelas, atau WhatsApp Grup"
-                      className="glass-input w-full pl-3.5 pr-10 py-2.5 rounded-xl text-xs font-medium text-slate-800 focus:outline-none"
+                      placeholder="Contoh: Area Kantin, Lapangan Olahraga, Lorong Kelas, atau WhatsApp"
+                      className="w-full pl-3.5 pr-10 py-2.5 rounded-xl text-xs font-medium focus:outline-none border"
+                      style={{
+                        background: '#FFFFFF',
+                        color: '#1C6F8E',
+                        borderColor: '#BFEFFF'
+                      }}
                     />
-                    <MapPin className="w-4 h-4 text-slate-400 absolute right-3 top-3 pointer-events-none" />
+                    <MapPin className="w-4 h-4 absolute right-3 top-3 pointer-events-none text-[#1C6F8E]" />
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Footer Navigation */}
-            <div className="flex items-center justify-between pt-4 border-t border-white/50">
+            <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: '#BFEFFF' }}>
               <button
                 type="button"
                 onClick={handleBack}
-                className="glass-button-secondary px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5"
+                className="px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 border hover:opacity-90"
+                style={{
+                  background: '#FFFFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               >
-                <ArrowLeft className="w-3.5 h-3.5" />
+                <ArrowLeft className="w-3.5 h-3.5 text-[#1C6F8E]" />
                 <span>Kembali</span>
               </button>
               <button
                 type="button"
                 onClick={handleNext}
-                className="glass-button-primary px-6 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition active:scale-[0.98]"
+                className="px-6 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition active:scale-[0.98] border hover:opacity-90 shadow-xs"
+                style={{
+                  background: '#BFEFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               >
                 <span>Lanjut</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3.5 h-3.5 text-[#1C6F8E]" />
               </button>
             </div>
           </div>
@@ -663,23 +810,33 @@ export const CreateReportWizard = () => {
         {/* TAHAP 3: Identitas Pelapor (Bagaimana Kamu Ingin Melapor)  */}
         {/* ========================================================= */}
         {step === 3 && (
-          <div className="glass-panel-elevated rounded-3xl p-6 sm:p-8 space-y-5">
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-5 border"
+            style={{
+              background: '#FFFFFF',
+              borderColor: '#BFEFFF',
+              boxShadow: '0 4px 20px -2px rgba(191, 239, 255, 0.45)'
+            }}
+          >
             {/* Top Subheader */}
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-500">
-                LANGKAH 3 DARI 4 • Kategori: {selectedCategory.nama.split(' ')[0]} • Detail Tersimpan
+              <span className="text-xs font-bold" style={{ color: '#2E84A5' }}>
+                LANGKAH 3 DARI 4 • Kategori: {selectedCategory.nama.split(' ')[0]}
               </span>
-              <span className="glass-pill-blue inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold">
-                <Lock className="w-3 h-3" />
-                <span>Privasi & Identitas</span>
+              <span
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border"
+                style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+              >
+                <Lock className="w-3 h-3 text-[#1C6F8E]" />
+                <span>Privasi &amp; Identitas</span>
               </span>
             </div>
 
             <div className="space-y-1">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight" style={{ color: '#1C6F8E' }}>
                 Bagaimana Kamu Ingin Melapor?
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#2E84A5' }}>
                 Pilih tingkat kerahasiaan identitas sesuai kenyamananmu. Keduanya tetap mendapatkan penanganan serius dari pihak sekolah.
               </p>
             </div>
@@ -689,47 +846,57 @@ export const CreateReportWizard = () => {
               {/* Card 1: Laporkan Secara Anonim */}
               <div
                 onClick={() => setFormData((prev) => ({ ...prev, is_anonymous: true }))}
-                className={`p-5 rounded-3xl border-2 cursor-pointer transition flex flex-col justify-between ${
-                  formData.is_anonymous
-                    ? 'border-sky-300/80 bg-sky-50/60 backdrop-blur-sm ring-1 ring-sky-200/60 shadow-sm'
-                    : 'glass-card border-white/60 hover:border-sky-200/60'
-                }`}
+                className="p-5 rounded-3xl border-2 cursor-pointer transition flex flex-col justify-between hover:opacity-95"
+                style={{
+                  background: formData.is_anonymous ? '#BFEFFF' : '#FFFFFF',
+                  borderColor: formData.is_anonymous ? '#1C6F8E' : '#BFEFFF',
+                  boxShadow: formData.is_anonymous ? '0 4px 14px rgba(191, 239, 255, 0.5)' : 'none'
+                }}
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <div className="w-10 h-10 rounded-2xl bg-sky-100/80 text-sky-700 flex items-center justify-center shrink-0">
-                      <EyeOff className="w-5 h-5" />
+                    <div
+                      className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border"
+                      style={{ background: '#FFFFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+                    >
+                      <EyeOff className="w-5 h-5 text-[#1C6F8E]" />
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <span className="glass-pill-blue px-2 py-0.5 rounded-md text-[11px] font-bold">
+                      <span
+                        className="px-2 py-0.5 rounded-md text-[11px] font-bold border"
+                        style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#1C6F8E' }}
+                      >
                         Rekomendasi
                       </span>
                       {formData.is_anonymous && (
-                        <div className="w-5 h-5 rounded-full bg-sky-500 text-white flex items-center justify-center shrink-0">
+                        <div
+                          className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+                          style={{ background: '#1C6F8E', color: '#FFFFFF' }}
+                        >
                           <Check className="w-3.5 h-3.5 stroke-[3]" />
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <h3 className="font-bold text-slate-900 text-sm">
+                  <h3 className="font-bold text-sm" style={{ color: '#1C6F8E' }}>
                     Laporkan Secara Anonim
                   </h3>
-                  <p className="text-xs text-slate-500 mt-0.5 mb-3 leading-relaxed">
+                  <p className="text-xs mt-0.5 mb-3 leading-relaxed" style={{ color: '#2E84A5' }}>
                     Identitasmu tidak akan ditampilkan ke siapa pun.
                   </p>
 
-                  <div className="space-y-2 border-t border-sky-200/40 pt-3 text-xs text-slate-700">
+                  <div className="space-y-2 border-t pt-3 text-xs" style={{ borderColor: '#1C6F8E', color: '#1C6F8E' }}>
                     <div className="flex items-start gap-2">
-                      <Check className="w-3.5 h-3.5 text-sky-600 shrink-0 mt-0.5" />
+                      <Check className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[#1C6F8E]" />
                       <span>Nama dan NISN disembunyikan sepenuhnya</span>
                     </div>
                     <div className="flex items-start gap-2">
-                      <Check className="w-3.5 h-3.5 text-sky-600 shrink-0 mt-0.5" />
+                      <Check className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[#1C6F8E]" />
                       <span>Pantau status aduan via kode tiket rahasia</span>
                     </div>
                     <div className="flex items-start gap-2">
-                      <Check className="w-3.5 h-3.5 text-sky-600 shrink-0 mt-0.5" />
+                      <Check className="w-3.5 h-3.5 shrink-0 mt-0.5 text-[#1C6F8E]" />
                       <span>Komunikasi dua arah tetap terlindungi enkripsi</span>
                     </div>
                   </div>
@@ -739,44 +906,51 @@ export const CreateReportWizard = () => {
               {/* Card 2: Laporkan dengan Nama */}
               <div
                 onClick={() => setFormData((prev) => ({ ...prev, is_anonymous: false }))}
-                className={`p-5 rounded-3xl border-2 cursor-pointer transition flex flex-col justify-between ${
-                  !formData.is_anonymous
-                    ? 'border-sky-300/80 bg-sky-50/60 backdrop-blur-sm ring-1 ring-sky-200/60 shadow-sm'
-                    : 'glass-card border-white/60 hover:border-sky-200/60'
-                }`}
+                className="p-5 rounded-3xl border-2 cursor-pointer transition flex flex-col justify-between hover:opacity-95"
+                style={{
+                  background: !formData.is_anonymous ? '#BFEFFF' : '#FFFFFF',
+                  borderColor: !formData.is_anonymous ? '#1C6F8E' : '#BFEFFF',
+                  boxShadow: !formData.is_anonymous ? '0 4px 14px rgba(191, 239, 255, 0.5)' : 'none'
+                }}
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <div className="w-10 h-10 rounded-2xl bg-white/60 text-slate-600 flex items-center justify-center shrink-0 border border-white/70">
-                      <User className="w-5 h-5" />
+                    <div
+                      className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border"
+                      style={{ background: '#FFFFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+                    >
+                      <User className="w-5 h-5 text-[#1C6F8E]" />
                     </div>
                     {!formData.is_anonymous ? (
-                      <div className="w-5 h-5 rounded-full bg-sky-500 text-white flex items-center justify-center shrink-0">
+                      <div
+                        className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+                        style={{ background: '#1C6F8E', color: '#FFFFFF' }}
+                      >
                         <Check className="w-3.5 h-3.5 stroke-[3]" />
                       </div>
                     ) : (
-                      <div className="w-5 h-5 rounded-full border border-white/70 bg-white/40"></div>
+                      <div className="w-5 h-5 rounded-full border" style={{ borderColor: '#BFEFFF' }} />
                     )}
                   </div>
 
-                  <h3 className="font-bold text-slate-900 text-sm">
+                  <h3 className="font-bold text-sm" style={{ color: '#1C6F8E' }}>
                     Laporkan dengan Nama
                   </h3>
-                  <p className="text-xs text-slate-500 mt-0.5 mb-3 leading-relaxed">
+                  <p className="text-xs mt-0.5 mb-3 leading-relaxed" style={{ color: '#2E84A5' }}>
                     Namamu akan terlihat oleh admin sekolah untuk penanganan personal.
                   </p>
 
-                  <div className="space-y-2 border-t border-white/50 pt-3 text-xs text-slate-700">
+                  <div className="space-y-2 border-t pt-3 text-xs" style={{ borderColor: '#BFEFFF', color: '#2E84A5' }}>
                     <div className="flex items-start gap-2">
-                      <span className="w-3.5 h-3.5 rounded-full border border-slate-400 shrink-0 mt-0.5"></span>
+                      <span className="w-3.5 h-3.5 rounded-full border shrink-0 mt-0.5" style={{ borderColor: '#1C6F8E' }} />
                       <span>Guru BK dapat memberikan pendampingan langsung</span>
                     </div>
                     <div className="flex items-start gap-2">
-                      <span className="w-3.5 h-3.5 rounded-full border border-slate-400 shrink-0 mt-0.5"></span>
+                      <span className="w-3.5 h-3.5 rounded-full border shrink-0 mt-0.5" style={{ borderColor: '#1C6F8E' }} />
                       <span>Terhubung otomatis ke akun profil siswa SIGAP</span>
                     </div>
                     <div className="flex items-start gap-2">
-                      <span className="w-3.5 h-3.5 rounded-full border border-slate-400 shrink-0 mt-0.5"></span>
+                      <span className="w-3.5 h-3.5 rounded-full border shrink-0 mt-0.5" style={{ borderColor: '#1C6F8E' }} />
                       <span>Kerahasiaan tetap terjaga di hadapan pihak luar</span>
                     </div>
                   </div>
@@ -785,38 +959,60 @@ export const CreateReportWizard = () => {
             </div>
 
             {/* Callout Kerahasiaan Dijamin Sepenuhnya */}
-            <div className="glass-card rounded-2xl p-4 flex items-start gap-3 border border-sky-200/50">
-              <div className="w-8 h-8 rounded-xl bg-sky-200/60 text-sky-800 flex items-center justify-center shrink-0 mt-0.5">
-                <Lock className="w-4 h-4" />
+            <div
+              className="rounded-2xl p-4 flex items-start gap-3 border"
+              style={{
+                background: '#FFFFFF',
+                borderColor: '#BFEFFF',
+                color: '#1C6F8E'
+              }}
+            >
+              <div
+                className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5 border"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+              >
+                <Lock className="w-4 h-4 text-[#1C6F8E]" />
               </div>
               <div className="space-y-0.5">
-                <h4 className="font-bold text-xs text-slate-900">
+                <h4 className="font-bold text-xs" style={{ color: '#1C6F8E' }}>
                   Kerahasiaanmu Dijamin Sepenuhnya
                 </h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs leading-relaxed" style={{ color: '#2E84A5' }}>
                   Pilihan mode anonim maupun dengan nama keduanya dilindungi undang-undang perlindungan anak dan SOP penanganan kekerasan sekolah (PPKSP Kemendikbudristek).
                 </p>
               </div>
             </div>
 
             {/* Footer Navigation */}
-            <div className="flex items-center justify-between pt-4 border-t border-white/50">
-              <span className="text-xs text-slate-400 font-medium">Langkah 3 dari 4</span>
+            <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: '#BFEFFF' }}>
+              <span className="text-xs font-medium" style={{ color: '#2E84A5' }}>
+                Langkah 3 dari 4
+              </span>
               <div className="flex items-center gap-2.5">
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="glass-button-secondary px-5 py-2.5 rounded-xl text-xs font-bold transition"
+                  className="px-5 py-2.5 rounded-xl text-xs font-bold transition border hover:opacity-90"
+                  style={{
+                    background: '#FFFFFF',
+                    color: '#1C6F8E',
+                    borderColor: '#BFEFFF'
+                  }}
                 >
                   Kembali
                 </button>
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="glass-button-primary px-6 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition active:scale-[0.98]"
+                  className="px-6 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition active:scale-[0.98] border hover:opacity-90 shadow-xs"
+                  style={{
+                    background: '#BFEFFF',
+                    color: '#1C6F8E',
+                    borderColor: '#BFEFFF'
+                  }}
                 >
                   <span>Lanjut</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-3.5 h-3.5 text-[#1C6F8E]" />
                 </button>
               </div>
             </div>
@@ -827,23 +1023,33 @@ export const CreateReportWizard = () => {
         {/* TAHAP 4: Bukti & Konfirmasi (Unggah Bukti Pendukung)       */}
         {/* ========================================================= */}
         {step === 4 && (
-          <div className="glass-panel-elevated rounded-3xl p-6 sm:p-8 space-y-5">
+          <div
+            className="rounded-3xl p-6 sm:p-8 space-y-5 border"
+            style={{
+              background: '#FFFFFF',
+              borderColor: '#BFEFFF',
+              boxShadow: '0 4px 20px -2px rgba(191, 239, 255, 0.45)'
+            }}
+          >
             {/* Top Subheader */}
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500">
+              <span className="text-xs font-semibold" style={{ color: '#2E84A5' }}>
                 LANGKAH 4 DARI 4 • Kategori: {selectedCategory.nama.split(' ')[0]} • Mode:{' '}
                 {formData.is_anonymous ? 'Anonim' : 'Identitas Terbuka'}
               </span>
-              <span className="glass-pill-blue inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold">
-                Bukti & Konfirmasi
+              <span
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border"
+                style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+              >
+                Bukti &amp; Konfirmasi
               </span>
             </div>
 
             <div className="space-y-1">
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight" style={{ color: '#1C6F8E' }}>
                 Unggah Bukti Pendukung (Opsional)
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#2E84A5' }}>
                 Tambahkan tangkapan layar, dokumen, atau foto yang relevan untuk memperkuat laporanmu. Langkah ini bersifat opsional.
               </p>
             </div>
@@ -851,7 +1057,11 @@ export const CreateReportWizard = () => {
             {/* Dropzone Upload */}
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-sky-300/70 bg-sky-50/40 backdrop-blur-sm rounded-2xl p-7 text-center cursor-pointer hover:bg-sky-50/70 transition"
+              className="border-2 border-dashed rounded-2xl p-7 text-center cursor-pointer transition hover:opacity-90"
+              style={{
+                background: '#FFFFFF',
+                borderColor: '#BFEFFF'
+              }}
             >
               <input
                 type="file"
@@ -861,13 +1071,16 @@ export const CreateReportWizard = () => {
                 onChange={handleFileUpload}
                 className="hidden"
               />
-              <div className="w-12 h-12 rounded-full bg-sky-100/80 text-sky-600 flex items-center justify-center mx-auto mb-2.5">
-                <UploadCloud className="w-6 h-6" />
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-2.5 border"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+              >
+                <UploadCloud className="w-6 h-6 text-[#1C6F8E]" />
               </div>
-              <p className="text-xs sm:text-sm font-bold text-slate-800">
+              <p className="text-xs sm:text-sm font-bold" style={{ color: '#1C6F8E' }}>
                 Seret file ke sini atau klik untuk unggah foto/PDF
               </p>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs mt-1" style={{ color: '#2E84A5' }}>
                 Format: JPG, PNG, PDF. Maks 10MB per file.
               </p>
             </div>
@@ -876,10 +1089,10 @@ export const CreateReportWizard = () => {
             {uploadedFiles.length > 0 && (
               <div className="space-y-2 pt-1">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-slate-700">
+                  <span className="font-bold" style={{ color: '#1C6F8E' }}>
                     File Terunggah ({uploadedFiles.length} file)
                   </span>
-                  <span className="text-slate-400 font-mono text-[11px]">
+                  <span className="font-mono text-[11px]" style={{ color: '#2E84A5' }}>
                     Total: {totalFileSize}
                   </span>
                 </div>
@@ -888,31 +1101,36 @@ export const CreateReportWizard = () => {
                   {uploadedFiles.map((file) => (
                     <div
                       key={file.id}
-                      className="glass-card p-3 rounded-2xl flex items-center justify-between gap-3"
+                      className="p-3 rounded-2xl flex items-center justify-between gap-3 border"
+                      style={{
+                        background: '#FFFFFF',
+                        borderColor: '#BFEFFF'
+                      }}
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <div
-                          className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
-                            file.type === 'pdf'
-                              ? 'bg-red-100/70 text-red-600'
-                              : 'bg-sky-100/70 text-sky-600'
-                          }`}
+                          className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border"
+                          style={{
+                            background: '#BFEFFF',
+                            borderColor: '#BFEFFF',
+                            color: '#1C6F8E'
+                          }}
                         >
                           {file.type === 'pdf' ? (
-                            <FileText className="w-5 h-5" />
+                            <FileText className="w-5 h-5 text-[#1C6F8E]" />
                           ) : (
-                            <ImageIcon className="w-5 h-5" />
+                            <ImageIcon className="w-5 h-5 text-[#1C6F8E]" />
                           )}
                         </div>
                         <div className="truncate">
-                          <p className="text-xs font-bold text-slate-800 truncate">
+                          <p className="text-xs font-bold truncate" style={{ color: '#1C6F8E' }}>
                             {file.name}
                           </p>
-                          <p className="text-[11px] text-slate-400 flex items-center gap-1 mt-0.5">
+                          <p className="text-[11px] flex items-center gap-1 mt-0.5" style={{ color: '#2E84A5' }}>
                             <span>{file.size}</span>
                             <span>•</span>
                             <span>Baru saja diunggah</span>
-                            <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+                            <CheckCircle2 className="w-3 h-3 text-[#1C6F8E]" />
                           </p>
                         </div>
                       </div>
@@ -923,7 +1141,7 @@ export const CreateReportWizard = () => {
                           e.stopPropagation();
                           removeFile(file.id);
                         }}
-                        className="w-7 h-7 rounded-lg hover:bg-white/60 text-slate-400 hover:text-slate-600 flex items-center justify-center transition shrink-0"
+                        className="w-7 h-7 rounded-lg flex items-center justify-center transition shrink-0 hover:bg-red-50 text-red-600"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -933,12 +1151,22 @@ export const CreateReportWizard = () => {
               </div>
             )}
 
-            {/* Banner Enkripsi AES-256 */}
-            <div className="glass-card rounded-2xl p-4 flex items-start gap-3 border border-sky-200/50">
-              <div className="w-8 h-8 rounded-xl bg-sky-200/60 text-sky-800 flex items-center justify-center shrink-0 mt-0.5">
-                <Lock className="w-4 h-4" />
+            {/* Banner Enkripsi */}
+            <div
+              className="rounded-2xl p-4 flex items-start gap-3 border"
+              style={{
+                background: '#FFFFFF',
+                borderColor: '#BFEFFF',
+                color: '#1C6F8E'
+              }}
+            >
+              <div
+                className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5 border"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+              >
+                <Lock className="w-4 h-4 text-[#1C6F8E]" />
               </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <p className="text-xs leading-relaxed" style={{ color: '#2E84A5' }}>
                 Semua berkas dienkripsi dengan standar AES-256 dan metadata lokasi/perangkat dibersihkan secara otomatis demi privasi Anda.
               </p>
             </div>
@@ -949,16 +1177,22 @@ export const CreateReportWizard = () => {
                 type="button"
                 disabled={isSubmitting}
                 onClick={handleSubmit}
-                className="glass-button-primary w-full py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition active:scale-[0.99] disabled:opacity-50"
+                className="w-full py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition active:scale-[0.99] disabled:opacity-50 border hover:opacity-90 shadow-xs cursor-pointer"
+                style={{
+                  background: '#BFEFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               >
                 <span>{isSubmitting ? 'Mengirim Laporan...' : 'Kirim Laporan'}</span>
-                <Navigation className="w-4 h-4 rotate-90" />
+                <Navigation className="w-4 h-4 rotate-90 text-[#1C6F8E]" />
               </button>
 
               <button
                 type="button"
                 onClick={handleBack}
-                className="w-full text-xs font-semibold text-slate-500 hover:text-slate-800 text-center transition"
+                className="w-full text-xs font-semibold text-center transition hover:underline"
+                style={{ color: '#2E84A5' }}
               >
                 Kembali ke langkah sebelumnya
               </button>
@@ -970,39 +1204,60 @@ export const CreateReportWizard = () => {
         {/* TAHAP 5: Konfirmasi Sukses                                 */}
         {/* ========================================================= */}
         {step === 5 && (
-          <div className="glass-panel-elevated rounded-3xl p-8 text-center space-y-6 animate-fade-in">
-            <div className="w-16 h-16 rounded-full bg-emerald-400/20 backdrop-blur-sm border border-emerald-300/60 text-emerald-600 flex items-center justify-center mx-auto shadow-lg">
-              <CheckCircle2 className="w-9 h-9" />
+          <div
+            className="rounded-3xl p-8 text-center space-y-6 animate-fade-in border"
+            style={{
+              background: '#FFFFFF',
+              borderColor: '#BFEFFF',
+              boxShadow: '0 24px 70px rgba(191, 239, 255, 0.45)'
+            }}
+          >
+            <div
+              className="w-16 h-16 rounded-full flex items-center justify-center mx-auto border shadow-xs"
+              style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+            >
+              <CheckCircle2 className="w-9 h-9 text-[#1C6F8E]" />
             </div>
 
             <div className="space-y-1.5">
-              <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+              <h2 className="text-2xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
                 Laporan Berhasil Diajukan!
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
+              <p className="text-xs sm:text-sm max-w-md mx-auto leading-relaxed" style={{ color: '#2E84A5' }}>
                 Terima kasih atas keberanian Anda melapor. Pengaduan Anda telah terdaftar dan segera ditelaah oleh Tim Konselor Bimbingan Konseling.
               </p>
             </div>
 
             {/* Box Kode Tiket */}
-            <div className="glass-card rounded-2xl p-5 max-w-md mx-auto space-y-2 border border-sky-200/60">
-              <span className="text-xs text-slate-500 font-medium block">
+            <div
+              className="rounded-2xl p-5 max-w-md mx-auto space-y-2 border"
+              style={{
+                background: '#FFFFFF',
+                borderColor: '#BFEFFF'
+              }}
+            >
+              <span className="text-xs font-medium block" style={{ color: '#2E84A5' }}>
                 Kode Tiket Pelacakan Rahasia:
               </span>
               <div className="flex items-center justify-center gap-3">
-                <span className="font-mono text-2xl font-black text-sky-900 tracking-wider">
+                <span className="font-mono text-2xl font-black tracking-wider" style={{ color: '#1C6F8E' }}>
                   #{createdTicket}
                 </span>
                 <button
                   type="button"
                   onClick={handleCopyTicket}
-                  className="glass-button-secondary px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition"
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition border hover:opacity-90"
+                  style={{
+                    background: '#BFEFFF',
+                    color: '#1C6F8E',
+                    borderColor: '#BFEFFF'
+                  }}
                 >
-                  <Copy className="w-3.5 h-3.5" />
+                  <Copy className="w-3.5 h-3.5 text-[#1C6F8E]" />
                   <span>{copied ? 'Tersalin!' : 'Salin'}</span>
                 </button>
               </div>
-              <p className="text-[11px] text-slate-500 pt-1">
+              <p className="text-[11px] pt-1" style={{ color: '#2E84A5' }}>
                 Simpan kode ini dengan aman untuk memantau kronologi dan respon pihak sekolah tanpa perlu membuka identitas Anda.
               </p>
             </div>
@@ -1012,15 +1267,25 @@ export const CreateReportWizard = () => {
               <button
                 type="button"
                 onClick={() => navigate(`/lacak?code=${createdTicket}`)}
-                className="glass-button-primary w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition"
+                className="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition border hover:opacity-90 shadow-xs cursor-pointer"
+                style={{
+                  background: '#BFEFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               >
-                <Search className="w-4 h-4" />
+                <Search className="w-4 h-4 text-[#1C6F8E]" />
                 <span>Lacak Status Aduan Sekarang</span>
               </button>
               <button
                 type="button"
                 onClick={() => navigate('/dashboard')}
-                className="glass-button-secondary w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-xs transition"
+                className="w-full sm:w-auto px-6 py-3 rounded-xl font-bold text-xs transition border hover:opacity-90 cursor-pointer"
+                style={{
+                  background: '#FFFFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               >
                 Kembali ke Dashboard
               </button>
@@ -1033,3 +1298,5 @@ export const CreateReportWizard = () => {
     </div>
   );
 };
+
+export default CreateReportWizard;
