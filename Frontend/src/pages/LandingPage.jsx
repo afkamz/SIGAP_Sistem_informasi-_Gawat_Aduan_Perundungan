@@ -19,18 +19,16 @@ import {
   CheckCircle2,
   PhoneCall,
   ChevronDown,
-  HelpCircle,
   FileText,
   HeartHandshake,
   LogIn,
-  School,
-  Activity,
   X,
   UserPlus,
   Compass,
   ArrowUpRight,
   Menu,
-  ChevronRight
+  ChevronRight,
+  HelpCircle
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { LandingFooter } from '../components/layout/LandingFooter';
@@ -88,9 +86,106 @@ export const LandingPage = () => {
   const isAdmin = currentUser?.role === 'admin';
   const profilePath = isAdmin ? '/admin/dashboard' : '/dashboard';
 
-  const toggleFaq = (index) => {
-    setActiveFaq(activeFaq === index ? null : index);
-  };
+  // ─── FAQ Scroll-Driven Zoom-In Card Reveal Tracker ───
+  const faqTrackRef = useRef(null);
+  const faqCardsRef = useRef([]);
+  const faqAnswersRef = useRef([]);
+
+  useEffect(() => {
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+    const applyProgress = (progress) => {
+      for (let i = 0; i < 6; i++) {
+        const cardEl = faqCardsRef.current[i];
+        const ansEl = faqAnswersRef.current[i];
+        if (!cardEl || !ansEl) continue;
+
+        // Slot progres masing-masing kartu:
+        // Setiap card zoom-in selama window 0.12, disusul kemunculan jawaban
+        const cardStart = 0.02 + i * 0.13;
+        const cardEnd = cardStart + 0.12;
+        const ansStart = cardStart + 0.08;
+        const ansEnd = ansStart + 0.08;
+
+        // 1. Zoom-in dan Gerakan Naik Card
+        let cardT = 0;
+        if (progress >= cardEnd) {
+          cardT = 1;
+        } else if (progress > cardStart) {
+          cardT = (progress - cardStart) / (cardEnd - cardStart);
+        }
+        const cardEased = easeOutCubic(cardT);
+        const cardScale = 0.65 + 0.35 * cardEased;
+        const cardOpacity = cardEased;
+        const cardY = (1 - cardEased) * 45;
+
+        cardEl.style.opacity = cardOpacity.toFixed(3);
+        cardEl.style.transform = `scale(${cardScale.toFixed(3)}) translateY(${cardY.toFixed(1)}px)`;
+
+        // 2. Kemunculan Jawaban (Fade-in & Slide Up)
+        let ansT = 0;
+        if (progress >= ansEnd) {
+          ansT = 1;
+        } else if (progress > ansStart) {
+          ansT = (progress - ansStart) / (ansEnd - ansStart);
+        }
+        const ansEased = easeOutCubic(ansT);
+        const ansOpacity = ansEased;
+        const ansY = (1 - ansEased) * 10;
+
+        ansEl.style.opacity = ansOpacity.toFixed(3);
+        ansEl.style.transform = `translateY(${ansY.toFixed(1)}px)`;
+      }
+    };
+
+    const updateFaqScroll = () => {
+      const track = faqTrackRef.current;
+      if (!track) return;
+
+      const rect = track.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const scrollableDistance = rect.height - windowHeight;
+
+      if (scrollableDistance <= 0) return;
+
+      // Saat pengguna berada di atas FAQ (belum masuk)
+      if (rect.top >= windowHeight) {
+        applyProgress(0);
+        return;
+      }
+
+      // Saat pengguna sudah melewati FAQ ke bawah
+      if (rect.bottom <= windowHeight) {
+        applyProgress(1);
+        return;
+      }
+
+      // Progres murni scroll di dalam lintasan sticky FAQ (0.0 s.d. 1.0)
+      const scrolled = -rect.top;
+      const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
+      applyProgress(progress);
+    };
+
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateFaqScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    updateFaqScroll();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
 
   const handleQuickTrack = (e) => {
     e.preventDefault();
@@ -170,17 +265,17 @@ export const LandingPage = () => {
     }
   ];
 
-  // Opasitas headline spotlight di tengah saat progress 0.35 s.d. 0.45 (Surface 02 Back Face)
+  // Opasitas headline spotlight di tengah saat progress 0.35 s.d. 0.60
   const centerSpotlightOpacity =
-    scrollProgress >= 0.30 && scrollProgress <= 0.50
-      ? Math.max(0, Math.min(1, (scrollProgress - 0.30) * 10)) *
-        Math.max(0, Math.min(1, (0.50 - scrollProgress) * 10))
+    scrollProgress >= 0.35 && scrollProgress <= 0.60
+      ? Math.max(0, Math.min(1, (scrollProgress - 0.35) * 8)) *
+        Math.max(0, Math.min(1, (0.60 - scrollProgress) * 8))
       : 0;
 
   return (
     <div
       className="min-h-screen flex flex-col text-[#1C6F8E] font-sans relative"
-      style={{ background: '#FFFFFF', overflowX: 'clip' }}
+      style={{ background: '#FFFFFF', overflow: 'visible' }}
     >
 
       {/* ─── FIXED GLOBAL HEADER ─── */}
@@ -195,7 +290,7 @@ export const LandingPage = () => {
               </span>
             </div>
             <div className="flex items-center gap-3 text-[11px]">
-              <span className="flex items-center gap-1.5 font-semibold text-[#1C6F8E] px-2.5 py-0.5 rounded-full border border-[#BFEFFF] bg-white">
+              <span className="flex items-center gap-1.5 font-semibold text-[#1C6F8E]">
                 <PhoneCall className="w-3.5 h-3.5 text-[#1C6F8E]" />
                 Hotline Darurat: SAPA 129 | Polisi 110
               </span>
@@ -213,46 +308,25 @@ export const LandingPage = () => {
         {/* ─── NAVIGATION BAR — Baby Blue & White Theme ─── */}
         <nav className="border-b" style={{ background: '#FFFFFF', borderColor: '#BFEFFF' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            {/* Brand Logo */}
-            <Link to="/" className="flex items-center gap-3 group">
-              <div
-                className="w-10 h-10 rounded-2xl flex items-center justify-center text-[#1C6F8E] group-hover:scale-105 transition-all duration-200 shadow-xs border"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}
-              >
-                <ShieldCheck className="w-6 h-6 text-[#1C6F8E]" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-black text-xl tracking-tight leading-none" style={{ color: '#1C6F8E' }}>
-                    SIGAP
-                  </span>
-                  <span
-                    className="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold text-[#1C6F8E] shadow-xs"
-                    style={{ background: '#BFEFFF', border: '1px solid #BFEFFF' }}
-                  >
-                    SISWA
-                  </span>
-                </div>
-                <span className="text-[11px] font-medium block mt-0.5" style={{ color: '#2E84A5' }}>
-                  Ruang Perlindungan &amp; Pengaduan Pelajar
-                </span>
-              </div>
+            {/* Brand Logo & Emblem */}
+            <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group py-1" aria-label="Beranda SIGAP">
+              <img
+                src="/assets/branding/logo-sigap.png"
+                alt="Logo SIGAP"
+                className="h-9 sm:h-10 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+              <img
+                src="/assets/branding/branding-sigap.png"
+                alt="SIGAP"
+                className="h-8 sm:h-9 w-auto max-w-[150px] sm:max-w-[190px] object-contain transition-transform duration-200 group-hover:scale-105"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
             </Link>
-
-            {/* Desktop Nav Links */}
-            <div className="hidden lg:flex items-center gap-7 text-xs font-bold uppercase tracking-wider" style={{ color: '#1C6F8E' }}>
-              {['about', 'mission', 'how-it-works', 'media', 'safety'].map((section) => (
-                <a
-                  key={section}
-                  href={`#${section}`}
-                  onClick={(e) => scrollToSection(e, section)}
-                  className="transition-colors py-1 hover:text-[#2E84A5]"
-                  style={{ color: '#1C6F8E' }}
-                >
-                  {section === 'how-it-works' ? 'How It Works' : section === 'safety' ? 'Safety & Privacy' : section.charAt(0).toUpperCase() + section.slice(1)}
-                </a>
-              ))}
-            </div>
 
             {/* Right Action / Auth Buttons */}
             <div className="hidden sm:flex items-center gap-2.5">
@@ -326,21 +400,8 @@ export const LandingPage = () => {
 
           {/* Mobile Navigation Drawer */}
           {mobileMenuOpen && (
-            <div className="sm:hidden px-4 pt-3 pb-5 border-t space-y-3 animate-fade-in" style={{ borderColor: '#BFEFFF', background: '#FFFFFF' }}>
-              <div className="grid grid-cols-2 gap-2 text-xs font-bold">
-                {['about', 'mission', 'how-it-works', 'media'].map((section) => (
-                  <a
-                    key={section}
-                    href={`#${section}`}
-                    onClick={(e) => scrollToSection(e, section)}
-                    className="p-2.5 rounded-xl border text-center transition hover:opacity-90"
-                    style={{ border: '1.5px solid #BFEFFF', color: '#1C6F8E', background: '#FFFFFF' }}
-                  >
-                    {section === 'how-it-works' ? 'How It Works' : section.charAt(0).toUpperCase() + section.slice(1)}
-                  </a>
-                ))}
-              </div>
-              <div className="pt-2 flex flex-col gap-2">
+            <div className="sm:hidden px-4 pt-3 pb-5 border-t space-y-2 animate-fade-in" style={{ borderColor: '#BFEFFF', background: '#FFFFFF' }}>
+              <div className="flex flex-col gap-2">
                 <button
                   type="button"
                   onClick={(e) => { setMobileMenuOpen(false); handleReportAction(e, '/buat-laporan'); }}
@@ -348,24 +409,35 @@ export const LandingPage = () => {
                   style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}
                 >
                   <ShieldAlert className="w-4 h-4 text-[#1C6F8E]" />
-                  <span>Buat Laporan Sekarang</span>
+                  <span>Buat Laporan</span>
                 </button>
                 <Link
                   to="/lacak"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-2.5 rounded-xl font-semibold text-xs text-center border"
+                  className="w-full py-2.5 rounded-xl font-semibold text-xs text-center border flex items-center justify-center gap-1.5"
                   style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
                 >
-                  Lacak Tiket Aduan
+                  <Search className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                  <span>Lacak Aduan</span>
                 </Link>
-                {!currentUser && (
+                {!currentUser ? (
                   <Link
                     to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full py-2.5 rounded-xl font-semibold text-xs text-center border flex items-center justify-center gap-1.5"
+                    style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
+                  >
+                    <LogIn className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                    <span>Masuk</span>
+                  </Link>
+                ) : (
+                  <Link
+                    to={profilePath}
                     onClick={() => setMobileMenuOpen(false)}
                     className="w-full py-2.5 rounded-xl font-semibold text-xs text-center border"
                     style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
                   >
-                    Masuk Portal Siswa
+                    Dashboard Siswa
                   </Link>
                 )}
               </div>
@@ -374,220 +446,170 @@ export const LandingPage = () => {
         </nav>
       </header>
 
-      {/* ─── PINNED SCROLL SECTION (550vh) — 6 Surfaces Cube Animation ─── */}
-      <section
+      {/* ─── PINNED SCROLL SECTION (500vh) — Cinematic 3D Cube Animation ─── */}
+      <div
         ref={scrollStageRef}
-        className="cube-scroll-section relative w-full h-[550vh]"
-        style={{ overflow: 'visible' }}
+        className="cube-scroll-section relative w-full h-[500vh]"
+        style={{ position: 'relative', height: '500vh', overflow: 'visible' }}
       >
         <div
-          className="cube-sticky-stage sticky top-0 w-full h-screen h-[100dvh] overflow-hidden flex flex-col justify-between"
+          className="cube-sticky-stage sticky top-0 w-full h-screen h-[100svh] overflow-hidden flex flex-col justify-between"
           style={{
             position: 'sticky',
             top: 0,
             left: 0,
             width: '100%',
-            height: '100dvh',
+            height: '100vh',
             overflow: 'hidden',
             zIndex: 20,
             background: 'transparent'
           }}
         >
-          {/* Background Media Backdrop (Cube Video Background) */}
-          <BackgroundMediaBackdrop
-            src="/assets/background/cube-background.mp4"
-            type="video"
-            scrollProgress={scrollProgress}
-            opacity={0.65}
-          />
+          <div className="cube-animation-container relative w-full h-full overflow-hidden flex flex-col justify-between">
+            {/* Background Media Backdrop (Cube Video Background) */}
+            <BackgroundMediaBackdrop
+              src="/assets/background/cube-background.mp4"
+              type="video"
+              scrollProgress={scrollProgress}
+              opacity={0.65}
+            />
 
-          {/* SCENE 01 & 02: HERO INITIAL CONTENT */}
-          <div
-            className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 relative z-10 transition-all duration-150"
-            style={{
-              opacity: Math.max(0, Math.min(1, 1 - (scrollProgress - 0.12) / 0.16)).toFixed(3),
-              transform: `translateY(-${(Math.max(0, scrollProgress - 0.10) * 100).toFixed(1)}px)`,
-              pointerEvents: scrollProgress > 0.18 ? 'none' : 'auto'
-            }}
-          >
-            <div className="max-w-xl lg:max-w-2xl space-y-5 text-center lg:text-left mx-auto lg:mx-0">
-              {/* Official Badge */}
-              <div
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold shadow-xs border"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-              >
-                <ShieldCheck className="w-4 h-4 text-[#1C6F8E]" />
-                <span>SIGAP • RUANG PERLINDUNGAN RESMI PELAJAR</span>
-              </div>
+            {/* SCENE 01 & 02: HERO INITIAL CONTENT (0–15% Visible, 15–35% Fade Out) */}
+            <div
+              className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 relative z-10 transition-all duration-150"
+              style={{
+                opacity: Math.max(0, Math.min(1, 1 - (scrollProgress - 0.15) / 0.18)).toFixed(3),
+                transform: `translateY(-${(Math.max(0, scrollProgress - 0.12) * 80).toFixed(1)}px)`,
+                pointerEvents: scrollProgress > 0.28 ? 'none' : 'auto'
+              }}
+            >
+              <div className="max-w-xl lg:max-w-2xl space-y-5 text-center lg:text-left mx-auto lg:mx-0">
+                {/* Main Headline */}
+                <div className="space-y-1">
+                  <h1 className="text-3xl sm:text-5xl lg:text-[62px] font-black tracking-tight leading-[1.08]" style={{ color: '#1C6F8E' }}>
+                    SUARAKAN KEBENARAN. <br />
+                    <span style={{ color: '#2E84A5' }}>
+                      CIPTAKAN SEKOLAH BEBAS KEKERASAN
+                    </span>{' '}
+                    &amp; PERUNDUNGAN.
+                  </h1>
+                </div>
 
-              {/* Main Headline */}
-              <div className="space-y-1">
-                <h1 className="text-3xl sm:text-5xl lg:text-[62px] font-black tracking-tight leading-[1.08]" style={{ color: '#1C6F8E' }}>
-                  SUARAKAN KEBENARAN. <br />
-                  <span style={{ color: '#2E84A5' }}>
-                    CIPTAKAN SEKOLAH BEBAS KEKERASAN
-                  </span>{' '}
-                  &amp; PERUNDUNGAN.
-                </h1>
-              </div>
+                {/* Supporting Text */}
+                <p className="text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium" style={{ color: '#1C6F8E' }}>
+                  Setiap pelajar berhak mendapatkan lingkungan pendidikan yang aman, nyaman, dan bebas dari perundungan.
+                </p>
+                <p className="text-xs max-w-lg mx-auto lg:mx-0 leading-relaxed hidden sm:block" style={{ color: '#2E84A5' }}>
+                  Laporkan insiden secara aman dengan proteksi identitas berlapis, verifikasi cerdas asisten AI IndoBERT NLP, dan pendampingan terpadu Tim Bimbingan Konseling (BK) &amp; Satgas PPKSP.
+                </p>
 
-              {/* Supporting Text */}
-              <p className="text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium" style={{ color: '#1C6F8E' }}>
-                Setiap pelajar berhak mendapatkan lingkungan pendidikan yang aman, nyaman, dan bebas dari perundungan.
-              </p>
-              <p className="text-xs max-w-lg mx-auto lg:mx-0 leading-relaxed hidden sm:block" style={{ color: '#2E84A5' }}>
-                Laporkan insiden secara aman dengan proteksi identitas berlapis, verifikasi cerdas asisten AI IndoBERT NLP, dan pendampingan terpadu Tim Bimbingan Konseling (BK) &amp; Satgas PPKSP.
-              </p>
-
-              {/* Call to Actions */}
-              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
-                <button
-                  type="button"
-                  onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 group cursor-pointer active:scale-95 transition hover:opacity-90 shadow-xs border"
-                  style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-                >
-                  <ShieldAlert className="w-4 h-4 text-[#1C6F8E] group-hover:scale-110 transition" />
-                  <span>Buat Laporan Sekarang</span>
-                  <ArrowRight className="w-4 h-4 text-[#1C6F8E] group-hover:translate-x-1 transition" />
-                </button>
-
-                <Link
-                  to="/login"
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border transition hover:opacity-90"
-                  style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
-                >
-                  <LogIn className="w-4 h-4 text-[#1C6F8E]" />
-                  <span>Masuk Portal Siswa</span>
-                </Link>
-              </div>
-
-              {/* Quick Ticket Tracking */}
-              <div className="pt-2 max-w-md mx-auto lg:mx-0">
-                <form
-                  onSubmit={handleQuickTrack}
-                  className="p-1.5 pl-3.5 rounded-2xl border flex items-center gap-2"
-                  style={{ background: '#FFFFFF', border: '1.5px solid #BFEFFF' }}
-                >
-                  <Search className="w-4 h-4 flex-shrink-0 text-[#1C6F8E]" />
-                  <input
-                    type="text"
-                    placeholder="Punya Kode Tiket? (Contoh: SGP-2024-0142)"
-                    value={quickTicketCode}
-                    onChange={(e) => setQuickTicketCode(e.target.value)}
-                    className="w-full bg-transparent text-xs focus:outline-none font-medium"
-                    style={{ color: '#1C6F8E' }}
-                  />
+                {/* Call to Actions */}
+                <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
                   <button
-                    type="submit"
-                    className="px-4 py-2 rounded-xl text-xs font-bold flex-shrink-0 cursor-pointer transition hover:opacity-90 border"
+                    type="button"
+                    onClick={(e) => handleReportAction(e, '/buat-laporan')}
+                    className="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 group cursor-pointer active:scale-95 transition hover:opacity-90 shadow-xs border"
                     style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
                   >
-                    Lacak
+                    <ShieldAlert className="w-4 h-4 text-[#1C6F8E] group-hover:scale-110 transition" />
+                    <span>Buat Laporan Sekarang</span>
+                    <ArrowRight className="w-4 h-4 text-[#1C6F8E] group-hover:translate-x-1 transition" />
                   </button>
-                </form>
+
+                  <Link
+                    to="/login"
+                    className="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border transition hover:opacity-90"
+                    style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
+                  >
+                    <LogIn className="w-4 h-4 text-[#1C6F8E]" />
+                    <span>Masuk Portal Siswa</span>
+                  </Link>
+                </div>
+
+                {/* Quick Ticket Tracking */}
+                <div className="pt-2 max-w-md mx-auto lg:mx-0">
+                  <form
+                    onSubmit={handleQuickTrack}
+                    className="p-1.5 pl-3.5 rounded-2xl border flex items-center gap-2"
+                    style={{ background: '#FFFFFF', border: '1.5px solid #BFEFFF' }}
+                  >
+                    <Search className="w-4 h-4 flex-shrink-0 text-[#1C6F8E]" />
+                    <input
+                      type="text"
+                      placeholder="Punya Kode Tiket? (Contoh: SGP-2024-0142)"
+                      value={quickTicketCode}
+                      onChange={(e) => setQuickTicketCode(e.target.value)}
+                      className="w-full bg-transparent text-xs focus:outline-none font-medium"
+                      style={{ color: '#1C6F8E' }}
+                    />
+                    <button
+                      type="submit"
+                      className="px-4 py-2 rounded-xl text-xs font-bold flex-shrink-0 cursor-pointer transition hover:opacity-90 border"
+                      style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+                    >
+                      Lacak
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* CUBE 3D (Dekoratif Tanpa Interaksi Klik) */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 pt-16">
-            <InteractivePhotoCube
-              scrollProgress={scrollProgress}
-            />
-          </div>
-
-          {/* SCENE 03: SPOTLIGHT CENTER */}
-          <div
-            className="absolute inset-x-0 top-1/2 -translate-y-1/2 max-w-4xl mx-auto px-4 text-center pointer-events-none z-10 transition-opacity duration-200"
-            style={{
-              opacity: centerSpotlightOpacity.toFixed(3),
-              transform: `translateY(${((scrollProgress - 0.48) * -40).toFixed(1)}px)`
-            }}
-          >
-            <div className="space-y-3">
-              <span
-                className="font-mono text-xs uppercase tracking-widest px-4 py-1.5 rounded-full shadow-xs border"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-              >
-                PENGALAMAN INTERAKTIF // SCROLL SPOTLIGHT
-              </span>
-              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight uppercase leading-tight" style={{ color: '#1C6F8E' }}>
-                SATU SUARA KEBENARAN DAPAT MENGHENTIKAN KEKERASAN.
-              </h2>
-              <p className="text-xs sm:text-base max-w-2xl mx-auto leading-relaxed font-medium" style={{ color: '#2E84A5' }}>
-                IDENTITAS DILINDUNGI • TRIASE CERDAS AI INDOBERT • 100% TERENKRIPSI
-              </p>
+            {/* 3D CUBE CONTAINER */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 pt-16">
+              <InteractivePhotoCube
+                scrollProgress={scrollProgress}
+              />
             </div>
-          </div>
 
-          {/* SCENE 05: TRANSITION BRIDGE */}
-          <div
-            className="absolute inset-x-0 bottom-16 max-w-2xl mx-auto px-4 text-center pointer-events-none z-10 transition-opacity duration-300"
-            style={{
-              opacity: Math.max(0, Math.min(1, (scrollProgress - 0.94) * 16.0)).toFixed(3),
-              transform: `translateY(${Math.max(0, (1 - scrollProgress) * 45).toFixed(1)}px)`
-            }}
-          >
+            {/* SCENE 03: SPOTLIGHT CENTER (35–60%) */}
             <div
-              className="p-5 sm:p-6 rounded-3xl space-y-2"
-              style={{ background: '#FFFFFF', border: '1.5px solid #BFEFFF', boxShadow: '0 12px 40px rgba(191,239,255,0.3)' }}
+              className="absolute inset-x-0 top-1/2 -translate-y-1/2 max-w-4xl mx-auto px-4 text-center pointer-events-none z-10 transition-opacity duration-200"
+              style={{
+                opacity: centerSpotlightOpacity.toFixed(3),
+                transform: `translateY(${((scrollProgress - 0.48) * -30).toFixed(1)}px)`
+              }}
+            >
+              <div className="space-y-3">
+                <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight uppercase leading-tight" style={{ color: '#1C6F8E' }}>
+                  SATU SUARA KEBENARAN DAPAT MENGHENTIKAN KEKERASAN.
+                </h2>
+                <p className="text-xs sm:text-base max-w-2xl mx-auto leading-relaxed font-medium" style={{ color: '#2E84A5' }}>
+                  IDENTITAS DILINDUNGI • TRIASE CERDAS AI INDOBERT • 100% TERENKRIPSI
+                </p>
+              </div>
+            </div>
+
+            {/* SCENE 05: TRANSITION BRIDGE (85–100%) */}
+            <div
+              className="absolute inset-x-0 bottom-16 max-w-2xl mx-auto px-4 text-center pointer-events-none z-10 transition-opacity duration-300"
+              style={{
+                opacity: Math.max(0, Math.min(1, (scrollProgress - 0.85) * 8.0)).toFixed(3),
+                transform: `translateY(${Math.max(0, (1 - scrollProgress) * 45).toFixed(1)}px)`
+              }}
             >
               <div
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold shadow-xs border"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+                className="p-5 sm:p-6 rounded-3xl space-y-2"
+                style={{ background: '#FFFFFF', border: '1.5px solid #BFEFFF', boxShadow: '0 12px 40px rgba(191,239,255,0.3)' }}
               >
-                <Shield className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                <span>TRANSISI // SISTEM PERLINDUNGAN TERPADU</span>
+                <h3 className="text-base sm:text-lg font-black tracking-tight" style={{ color: '#1C6F8E' }}>
+                  Mengenal Ekosistem Pengaduan &amp; Pencegahan SIGAP
+                </h3>
+                <p className="text-xs max-w-lg mx-auto font-medium" style={{ color: '#2E84A5' }}>
+                  Melindungi integritas pelajar melalui pelaporan rahasia, audit trail terverifikasi, dan pendampingan profesional Satgas PPKSP.
+                </p>
               </div>
-              <h3 className="text-base sm:text-lg font-black tracking-tight" style={{ color: '#1C6F8E' }}>
-                Mengenal Ekosistem Pengaduan &amp; Pencegahan SIGAP
-              </h3>
-              <p className="text-xs max-w-lg mx-auto font-medium" style={{ color: '#2E84A5' }}>
-                Melindungi integritas pelajar melalui pelaporan rahasia, audit trail terverifikasi, dan pendampingan profesional Satgas PPKSP.
-              </p>
-            </div>
-          </div>
-
-          {/* SCROLL GUIDE FOOTER DOCK */}
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4 flex items-center justify-between text-xs font-mono z-30 pointer-events-auto" style={{ color: '#1C6F8E' }}>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full" style={{ background: '#BFEFFF' }} />
-              <span className="font-bold" style={{ color: '#1C6F8E' }}>
-                {scrollProgress < 0.16
-                  ? 'SURFACE 01 // FRONT (SUARAKAN KEBENARAN)'
-                  : scrollProgress < 0.32
-                  ? 'SURFACE 03 // RIGHT (ZERO RETALIATION)'
-                  : scrollProgress < 0.48
-                  ? 'SURFACE 02 // BACK (ANONYMOUS SHIELD)'
-                  : scrollProgress < 0.64
-                  ? 'SURFACE 04 // LEFT (AI SMART TRIASE)'
-                  : scrollProgress < 0.80
-                  ? 'SURFACE 05 // TOP (SAFE SANCTUARY)'
-                  : scrollProgress < 0.94
-                  ? 'SURFACE 06 // BOTTOM (AUDIT & INTEGRITY)'
-                  : 'SELESAI // KEMBALI KE FRONT'}
-              </span>
             </div>
 
-            <div className="hidden sm:flex items-center gap-2.5">
-              <span style={{ color: '#2E84A5' }}>0%</span>
-              <div className="w-28 h-1.5 rounded-full overflow-hidden" style={{ background: '#BFEFFF' }}>
-                <div
-                  className="h-full rounded-full transition-all duration-75"
-                  style={{ width: `${(scrollProgress * 100).toFixed(0)}%`, background: '#1C6F8E' }}
-                />
+            {/* SCROLL GUIDE FOOTER */}
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4 flex items-center justify-center text-xs font-mono z-30 pointer-events-auto" style={{ color: '#1C6F8E' }}>
+              <div className="flex items-center gap-1.5 font-bold" style={{ color: '#1C6F8E' }}>
+                <span>GULIR KE BAWAH</span>
+                <ChevronDown className="w-4 h-4 animate-bounce text-[#1C6F8E]" />
               </div>
-              <span style={{ color: '#2E84A5' }}>100%</span>
-            </div>
-
-            <div className="flex items-center gap-1.5 font-bold" style={{ color: '#1C6F8E' }}>
-              <span>GULIR KE BAWAH</span>
-              <ChevronDown className="w-4 h-4 animate-bounce text-[#1C6F8E]" />
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* ─── SECTION 1: ABOUT SIGAP (#about) EDITORIAL HORIZONTAL SHOWCASE ─── */}
       <AboutEditorialShowcase handleReportAction={handleReportAction} />
@@ -596,13 +618,6 @@ export const LandingPage = () => {
       <section id="mission" className="py-20 lg:py-28 border-y relative z-30" style={{ background: 'rgba(191, 239, 255, 0.25)', borderColor: '#BFEFFF' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center space-y-3 mb-16">
-            <div
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold shadow-xs border"
-              style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
-            >
-              <School className="w-3.5 h-3.5 text-[#1C6F8E]" />
-              <span>MISI &amp; FILOSOFI SIGAP</span>
-            </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
               Membangun Ekosistem Sekolah yang Aman dan Berintegritas
             </h2>
@@ -658,13 +673,6 @@ export const LandingPage = () => {
       <section id="how-it-works" className="py-20 lg:py-28 relative z-30" style={{ background: '#FFFFFF' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
-            <div
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold shadow-xs border"
-              style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-            >
-              <Activity className="w-3.5 h-3.5 text-[#1C6F8E]" />
-              <span>ALUR PENANGANAN</span>
-            </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
               Alur 4 Langkah: Report → Verification → Follow-up → Resolution
             </h2>
@@ -745,13 +753,6 @@ export const LandingPage = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
               <div className="lg:col-span-5 space-y-4">
-                <div
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold shadow-xs border"
-                  style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                  <span>KEAMANAN &amp; PRIVASI</span>
-                </div>
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
                   Teknologi Cerdas untuk Perlindungan Hakiki
                 </h2>
@@ -801,53 +802,113 @@ export const LandingPage = () => {
         </section>
       </div>
 
-      {/* ─── SECTION: FAQ ACCORDION (Baby Blue Tint Section with White Cards) ─── */}
-      <section className="py-16 lg:py-24 border-y relative z-30" style={{ background: 'rgba(191, 239, 255, 0.25)', borderColor: '#BFEFFF' }}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center space-y-3 mb-12">
-            <div
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold shadow-xs border"
-              style={{ background: '#FFFFFF', color: '#1C6F8E', border: '1px solid #BFEFFF' }}
-            >
-              <HelpCircle className="w-3.5 h-3.5 text-[#1C6F8E]" />
-              <span>TANYA JAWAB</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
-              Pertanyaan yang Sering Diajukan
-            </h2>
-            <p className="text-xs sm:text-sm" style={{ color: '#2E84A5' }}>
-              Temukan jawaban seputar akses login, keamanan privasi, alur aduan, dan penanganan perundungan di SIGAP.
-            </p>
-          </div>
+      {/* ─── SECTION: FAQ SCROLL-DRIVEN ZOOM-IN REVEAL BOARD ─── */}
+      <section
+        id="faq"
+        ref={faqTrackRef}
+        className="faq-scroll-track relative w-full border-y border-[#BFEFFF]"
+        style={{
+          position: 'relative',
+          height: '260vh',
+          background: 'rgba(191, 239, 255, 0.22)',
+          overflow: 'visible'
+        }}
+      >
+        <style>{`
+          .faq-zoom-card {
+            transition: box-shadow 200ms ease, border-color 200ms ease;
+          }
+          .faq-zoom-card:hover {
+            border-color: #8FE3FF;
+            box-shadow: 0 8px 24px -2px rgba(191, 239, 255, 0.65), 0 3px 8px rgba(46, 132, 165, 0.05);
+          }
+        `}</style>
 
-          <div className="space-y-3">
-            {faqs.map((faq, idx) => (
-              <div
-                key={idx}
-                className="rounded-2xl overflow-hidden transition shadow-xs"
-                style={{ background: '#FFFFFF', border: '1.5px solid #BFEFFF' }}
+        {/* Sticky Viewport Stage */}
+        <div
+          className="faq-sticky-stage sticky top-0 w-full h-screen overflow-hidden flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 pointer-events-auto"
+          style={{
+            position: 'sticky',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100vh',
+            overflow: 'hidden',
+            zIndex: 20
+          }}
+        >
+          <div className="max-w-6xl w-full mx-auto flex flex-col justify-center h-full pt-20 pb-6 sm:pt-24 sm:pb-8">
+            {/* Header: Title and subtitle */}
+            <div className="text-center space-y-2 mb-4 sm:mb-6 flex-shrink-0">
+              <h2
+                className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight"
+                style={{ color: '#1C6F8E' }}
               >
-                <button
-                  type="button"
-                  onClick={() => toggleFaq(idx)}
-                  className="w-full p-4 sm:p-5 text-left font-bold text-xs sm:text-sm flex justify-between items-center gap-4 transition hover:text-[#2E84A5]"
-                  style={{ color: '#1C6F8E' }}
+                Pertanyaan yang Sering Diajukan
+              </h2>
+              <p
+                className="text-xs sm:text-sm max-w-2xl mx-auto"
+                style={{ color: '#2E84A5' }}
+              >
+                Temukan jawaban seputar akses login, keamanan privasi, alur aduan, dan penanganan perundungan di SIGAP.
+              </p>
+            </div>
+
+            {/* Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5 w-full max-h-[72vh] sm:max-h-none overflow-y-auto sm:overflow-visible pr-1 sm:pr-0">
+              {faqs.map((faq, idx) => (
+                <div
+                  key={idx}
+                  ref={(el) => (faqCardsRef.current[idx] = el)}
+                  className="faq-zoom-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 flex flex-col justify-between"
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1.5px solid #BFEFFF',
+                    boxShadow: '0 4px 18px -2px rgba(191, 239, 255, 0.45), 0 2px 6px rgba(46, 132, 165, 0.04)',
+                    opacity: 0,
+                    transform: 'scale(0.65) translateY(45px)',
+                    willChange: 'transform, opacity'
+                  }}
                 >
-                  <span>{faq.q}</span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform flex-shrink-0 text-[#1C6F8E] ${activeFaq === idx ? 'rotate-180' : ''}`}
-                  />
-                </button>
-                {activeFaq === idx && (
-                  <div
-                    className="px-4 sm:px-5 pb-5 pt-1 text-xs sm:text-sm leading-relaxed border-t"
-                    style={{ color: '#2E84A5', borderColor: '#BFEFFF', background: '#FFFFFF' }}
-                  >
-                    {faq.a}
+                  <div>
+                    {/* Question Header */}
+                    <div className="flex items-start gap-2.5">
+                      <div
+                        className="w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
+                        style={{ background: '#BFEFFF', color: '#1C6F8E' }}
+                      >
+                        <HelpCircle className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                      </div>
+                      <h3
+                        className="font-bold text-xs sm:text-sm leading-snug"
+                        style={{ color: '#1C6F8E' }}
+                      >
+                        {faq.q}
+                      </h3>
+                    </div>
+
+                    {/* Answer Block */}
+                    <div
+                      ref={(el) => (faqAnswersRef.current[idx] = el)}
+                      className="faq-answer-block mt-3 pt-3 border-t"
+                      style={{
+                        borderColor: 'rgba(191, 239, 255, 0.7)',
+                        opacity: 0,
+                        transform: 'translateY(10px)',
+                        willChange: 'transform, opacity'
+                      }}
+                    >
+                      <p
+                        className="text-xs sm:text-[13px] leading-relaxed"
+                        style={{ color: '#2E84A5' }}
+                      >
+                        {faq.a}
+                      </p>
+                    </div>
                   </div>
-                )}
-              </div>
-            ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -860,13 +921,6 @@ export const LandingPage = () => {
             style={{ background: '#FFFFFF', border: '2px solid #BFEFFF', boxShadow: '0 8px 30px rgba(191, 239, 255, 0.25)' }}
           >
             <div className="space-y-2 text-center md:text-left">
-              <div
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shadow-xs border"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-              >
-                <AlertTriangle className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                <span>HOTLINE BANTUAN DARURAT</span>
-              </div>
               <h3 className="text-lg sm:text-xl font-black" style={{ color: '#1C6F8E' }}>
                 Dalam Keadaan Bahaya Mendesak?
               </h3>

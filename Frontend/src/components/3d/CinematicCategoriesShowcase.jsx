@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  School,
   ArrowRight,
   MessageSquareWarning,
   ShieldAlert,
@@ -9,8 +8,7 @@ import {
   UserX,
   Users,
   Ban,
-  HeartHandshake,
-  Sparkles
+  HeartHandshake
 } from 'lucide-react';
 import { KATEGORI_DATA } from '../../data/categories';
 
@@ -256,11 +254,6 @@ export const CinematicCategoriesShowcase = ({ onSelectCategory }) => {
       >
         {/* ─── SCENE 01: SECTION HEADER (Fokus Editorial Kategori Resmi) ─── */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-6 sm:pt-8 z-10 flex-shrink-0">
-          <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold mb-2.5 shadow-xs border" style={{ background: '#FFFFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}>
-            <School className="w-3.5 h-3.5 text-[#1C6F8E]" />
-            <span>MEDIA &amp; KATEGORI HUKUM RESMI</span>
-          </div>
-
           <h2 className="text-2xl sm:text-3xl lg:text-[40px] font-black tracking-tight leading-tight" style={{ color: '#1C6F8E' }}>
             7 Bentuk Kekerasan Sesuai Permendikbudristek 46/2023
           </h2>
@@ -343,30 +336,19 @@ export const CinematicCategoriesShowcase = ({ onSelectCategory }) => {
                     {/* Solid Dark Overlay Bawah untuk Keterbacaan Teks */}
                     <div className="absolute inset-x-0 bottom-0 h-14 bg-black/50 z-10" />
 
-                    {/* Icon & Category Number Badge */}
-                    <div className="absolute top-3.5 left-3.5 z-20 flex items-center gap-2">
+                    {/* Category Icon */}
+                    <div className="absolute top-3.5 left-3.5 z-20 flex items-center">
                       <div
                         className="w-10 h-10 rounded-2xl flex items-center justify-center text-[#1C6F8E] shadow-md border border-white/40 group-hover:scale-110 transition-transform duration-300"
                         style={{ backgroundColor: '#BFEFFF' }}
                       >
                         {renderCategoryIcon(card.icon, '#1C6F8E')}
                       </div>
-                      <span className="px-2.5 py-1 rounded-full bg-[#1C6F8E]/90 text-[10px] font-mono font-black text-white border border-white/20">
-                        {card.tag}
-                      </span>
                     </div>
 
                     {/* Large Background Watermark Number (#01-#08) */}
                     <div className="absolute -bottom-4 -right-2 text-[80px] font-black font-mono text-white/20 select-none leading-none pointer-events-none z-15">
                       {isCounseling ? '08' : `0${card.id}`}
-                    </div>
-
-                    {/* Quick Badge at Bottom Left of Media */}
-                    <div className="absolute bottom-3 left-3.5 z-20">
-                      <span className="text-[11px] font-mono font-bold text-white/95 drop-shadow-xs flex items-center gap-1">
-                        <Sparkles className="w-3 h-3 text-white" />
-                        <span>REGULASI RESMI</span>
-                      </span>
                     </div>
                   </div>
 
@@ -394,12 +376,6 @@ export const CinematicCategoriesShowcase = ({ onSelectCategory }) => {
                       >
                         <span>{isCounseling ? 'Mulai Konsultasi Aduan' : 'Laporkan Insiden Ini'}</span>
                         <ArrowRight className="w-3.5 h-3.5" />
-                      </span>
-
-                      <span
-                        className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#BFEFFF]/30 text-[#1C6F8E] border border-[#BFEFFF]"
-                      >
-                        {card.count}
                       </span>
                     </div>
                   </div>

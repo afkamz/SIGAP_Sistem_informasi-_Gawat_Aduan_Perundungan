@@ -27,7 +27,6 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
   const sectionRef = useRef(null);
   const trackRef = useRef(null);
   const headerRef = useRef(null);
-  const indicatorRef = useRef(null);
 
   useEffect(() => {
     let animFrameId = null;
@@ -64,11 +63,6 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
       if (headerRef.current) {
         const headerOpacity = progress < 0.85 ? 1 : Math.max(0, 1 - (progress - 0.85) / 0.12);
         headerRef.current.style.opacity = headerOpacity.toFixed(2);
-      }
-
-      // Micro line indicator
-      if (indicatorRef.current) {
-        indicatorRef.current.style.width = `${(panProgress * 100).toFixed(0)}%`;
       }
     };
 
@@ -113,29 +107,11 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
           ref={headerRef}
           className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex-shrink-0 flex items-center justify-between"
         >
-          <div className="flex items-center gap-3">
-            <div
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold shadow-xs border"
-              style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-            >
-              <Shield className="w-3.5 h-3.5 text-[#1C6F8E]" />
-              <span>TENTANG SISTEM SIGAP</span>
-            </div>
-            <span className="hidden sm:inline-block text-xs font-mono font-semibold" style={{ color: '#2E84A5' }}>
-              EDISI 2026 // PERMENDIKBUDRISTEK 46/2023
-            </span>
-          </div>
-
-          {/* Minimalist progress indicator track */}
-          <div className="hidden sm:flex items-center gap-2">
-            <span className="text-[10px] font-mono font-bold" style={{ color: '#1C6F8E' }}>PAN</span>
-            <div className="w-20 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(191, 239, 255, 0.3)' }}>
-              <div
-                ref={indicatorRef}
-                className="h-full rounded-full transition-all duration-75"
-                style={{ width: '0%', background: '#1C6F8E' }}
-              />
-            </div>
+          <div className="flex items-center gap-2">
+            <Shield className="w-5 h-5 text-[#1C6F8E]" />
+            <h2 className="text-base sm:text-lg font-black tracking-tight" style={{ color: '#1C6F8E' }}>
+              Tentang Sistem SIGAP
+            </h2>
           </div>
         </div>
 
@@ -178,6 +154,9 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
                 <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#2E84A5' }}>
                   SIGAP hadir sebagai sarana resmi perlindungan pelajar dari segala bentuk kekerasan, perundungan fisik, verbal, siber, maupun diskriminasi di satuan pendidikan.
                 </p>
+                <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#2E84A5' }}>
+                  Berakar pada amanat Permendikbudristek No. 46/2023, kami memadukan ketegasan regulasi, jaminan kerahasiaan identitas, dan pendekatan humanis demi memastikan setiap peserta didik dapat belajar, berkarya, dan bertumbuh dengan aman tanpa rasa takut.
+                </p>
               </div>
 
               {/* Editorial Pillars */}
@@ -214,19 +193,13 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
               }}
             >
               <div>
-                <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center mb-5">
                   <div
                     className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-[#1C6F8E] shadow-xs"
                     style={{ background: '#BFEFFF' }}
                   >
                     <EyeOff className="w-6 h-6 text-[#1C6F8E]" />
                   </div>
-                  <span
-                    className="px-3 py-1 rounded-full text-xs font-bold shadow-xs border"
-                    style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-                  >
-                    Mode Anonim Terproteksi
-                  </span>
                 </div>
 
                 <h3 className="text-xl sm:text-2xl font-black" style={{ color: '#1C6F8E' }}>
@@ -274,27 +247,14 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
                 boxShadow: '0 8px 30px rgba(191, 239, 255, 0.25)'
               }}
             >
-              <span
-                className="absolute -top-3 right-6 px-3.5 py-1 rounded-full text-[#1C6F8E] text-[10px] font-extrabold uppercase tracking-wider shadow-xs border"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}
-              >
-                DIREKOMENDASIKAN
-              </span>
-
               <div>
-                <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center mb-5">
                   <div
                     className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-[#1C6F8E] shadow-xs"
                     style={{ background: '#BFEFFF' }}
                   >
                     <UserCheck className="w-6 h-6 text-[#1C6F8E]" />
                   </div>
-                  <span
-                    className="px-3 py-1 rounded-full text-xs font-bold shadow-xs border"
-                    style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-                  >
-                    Konseling Terpadu
-                  </span>
                 </div>
 
                 <h3 className="text-xl sm:text-2xl font-black" style={{ color: '#1C6F8E' }}>
@@ -362,19 +322,16 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
               </div>
 
               <div className="pt-4 border-t" style={{ borderColor: 'rgba(191, 239, 255, 0.6)' }}>
-                <span className="text-[11px] font-mono font-bold" style={{ color: '#1C6F8E' }}>
-                  SIGAP // SELALU SIAP
-                </span>
+                <p className="text-[11px] font-medium" style={{ color: '#2E84A5' }}>
+                  Layanan Advokasi dan Penanganan Ramah Anak
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ─── BOTTOM EDITORIAL CAPTION ─── */}
-        <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex-shrink-0 flex items-center justify-between text-xs font-mono" style={{ color: '#2E84A5' }}>
-          <span className="hidden sm:inline">GULIR KE SAMPING UNTUK MENELUSURI MODALITAS PELAPORAN</span>
-          <span className="text-right ml-auto">SIGAP SYSTEM © 2026</span>
-        </div>
+        {/* Clean bottom padding */}
+        <div className="w-full h-4 sm:h-6 flex-shrink-0" />
       </div>
     </section>
   );

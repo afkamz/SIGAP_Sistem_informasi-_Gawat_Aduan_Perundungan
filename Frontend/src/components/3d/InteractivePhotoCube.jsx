@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { Shield, Sparkles, EyeOff, Lock, CheckCircle2, HeartHandshake } from 'lucide-react';
 
 /**
  * =========================================================================
@@ -124,30 +123,19 @@ export const InteractivePhotoCube = ({
   scrollProgressRef.current = scrollProgress;
 
   // Nilai fisik lerp (current vs target) murni scroll dengan posisi awal 3D miring showcase
+  // beserta state engine auto-rotation mandiri dan kinematic inertia
   const animState = useRef({
     curTx: 300,
     curTy: 0,
     curScale: 0.68,
-    curRotX: -18,
-    curRotY: 26,
-    autoRotY: 0
+    curRotX: -16,
+    curRotY: 22,
+    autoRotY: 0, // Inisialisasi sudut putaran mandiri (mencegah NaN)
+    lastP: 0,
+    lastScrollTime: 0
   });
 
   const animFrameId = useRef(null);
-
-  // Helper render ikon untuk tiap sisi
-  const renderIcon = (iconName, accent) => {
-    const props = { className: 'w-5 h-5', style: { color: accent || '#BFEFFF' } };
-    switch (iconName) {
-      case 'Shield': return <Shield {...props} />;
-      case 'Sparkles': return <Sparkles {...props} />;
-      case 'EyeOff': return <EyeOff {...props} />;
-      case 'Lock': return <Lock {...props} />;
-      case 'HeartHandshake': return <HeartHandshake {...props} />;
-      case 'CheckCircle2': return <CheckCircle2 {...props} />;
-      default: return <Shield {...props} />;
-    }
-  };
 
   // ─── 60–120 FPS KINEMATIC LOOP (SINGLE MOUNTED LIFECYCLE) ───
   useEffect(() => {
@@ -182,170 +170,161 @@ export const InteractivePhotoCube = ({
       lastTime = time;
 
       const st = animState.current;
-      const p = Math.max(0, Math.min(1, scrollProgressRef.current));
+
+      // Baca progress scroll secara real-time langsung dari DOM outer stage
+      // untuk respon seketika tanpa jeda re-render React
+      let p = scrollProgressRef.current;
+      if (typeof document !== 'undefined') {
+        const stageEl = document.querySelector('.cube-scroll-section');
+        if (stageEl) {
+          const rect = stageEl.getBoundingClientRect();
+          const scrollableDistance = rect.height - viewportHeight;
+          if (scrollableDistance > 0) {
+            p = Math.max(0, Math.min(1, -rect.top / scrollableDistance));
+          }
+        }
+      }
+
       const isMobile = viewportWidth < 1024;
 
       // ─────────────────────────────────────────────────────────────
-      // TIMELINE SCROLL-DRIVEN 3D SHOWCASE (0% - 100%):
-      // 0.00–0.08: Transisi dari sudut isometrik 3D miring awal (-18°, 26°) ke FRONT
-      // 0.08–0.16: FRONT (Surface 01 - video-1.mp4)
-      // 0.16–0.32: Transisi & RIGHT (Surface 03 - video-3.mp4)
-      // 0.32–0.48: Transisi & BACK (Surface 02 - video-2.mp4)
-      // 0.48–0.64: Transisi & LEFT (Surface 04 - video-4.mp4)
-      // 0.64–0.80: Transisi & TOP (Surface 05 - video-5.mp4)
-      // 0.80–0.94: Transisi & BOTTOM (Surface 06 - photo-1.jpg)
-      // 0.94–1.00: Transisi kembali ke FRONT & penahanan posisi akhir
+      // 1. ENGINE PUTARAN MANDIRI (AUTO-ROTATION) & AYUNAN MELAYANG
+      // ─────────────────────────────────────────────────────────────
+      // Kubus selalu berputar aktif secara mandiri (~32 deg/s) agar efek berputar terlihat jelas dan hidup
+      if (typeof st.autoRotY !== 'number' || isNaN(st.autoRotY)) {
+        st.autoRotY = 0;
+      }
+      st.autoRotY += dt * 32.0;
+
+      // Ayunan nafas melayang lembut di udara (Wave Motion)
+      const waveTime = time * 0.002;
+      const gentleFloatY = Math.sin(waveTime) * 7.0;
+      const gentleTiltX = Math.cos(waveTime * 0.9) * 3.0;
+      const gentleRollZ = Math.sin(waveTime * 0.7) * 2.0;
+
+      // ─────────────────────────────────────────────────────────────
+      // 2. TIMELINE KINEMATIK SCROLL SHOWCASE RESMI (0% - 100%)
+      // 0–15%: Kubus kecil di kanan
+      // 15–35%: Kubus membesar secara bertahap
+      // 35–60%: Kubus bergerak dari kanan menuju tengah
+      // 60–85%: Kubus bergerak menuju bagian atas viewport sambil berubah perspektif dan rotasi
+      // 85–100%: Kubus menyelesaikan gerakan akhir dan transisi media
       // ─────────────────────────────────────────────────────────────
 
-      // 1. POSISI X (Kanan ke Tengah Secara Sinematik)
-      const initialOffsetX = isMobile ? Math.min(100, viewportWidth * 0.15) : Math.min(320, viewportWidth * 0.24);
-      const pMoveCenter = smoothStep(0.00, 0.20, p);
-      const targetTx = (1 - pMoveCenter) * initialOffsetX;
-
-      // 2. SKALA (Showcase Scale Up di Tengah Panggung)
-      const baseSmallScale = isMobile ? 0.60 : 0.68;
-      const peakCenterScale = isMobile ? 1.02 : 1.10;
-      const pScaleUp = smoothStep(0.00, 0.22, p);
-      const pScaleSettle = smoothStep(0.94, 1.00, p);
-      const targetScale = (baseSmallScale + (peakCenterScale - baseSmallScale) * pScaleUp) * (1 - 0.05 * pScaleSettle);
-
-      // 3. POSISI Y (Elevasi Halus / Floating Pedestal Tanpa Terpotong Navbar)
-      const pElevate = smoothStep(0.12, 0.25, p) * (1 - smoothStep(0.92, 0.98, p));
-      const targetTy = -20 * pElevate;
-
-      // 4. ROTASI SCROLL MULTI-AXIS SINEMATIK:
-      let targetRotX = 0;
-      let targetRotY = 0;
-
-      if (p <= 0.08) {
-        // [Hero Initial Showcase Pose] Kubus tampil miring 3D artistik dengan perspektif jelas
-        const t = smoothStep(0.00, 0.08, p);
-        targetRotX = -18 * (1 - t);
-        targetRotY = 26 * (1 - t);
-      } else if (p <= 0.16) {
-        // ─────────────────────────────────────────────
-        // 1. FRONT FACE (Surface 01 - video-1.mp4)
-        // Dwell 8–16%: Sisi Front menghadap penuh ke arah pengguna
-        // ─────────────────────────────────────────────
-        targetRotX = 0;
-        targetRotY = 0;
-      } else if (p <= 0.24) {
-        // Transisi Horizontal 1: FRONT -> RIGHT
-        const t = smoothStep(0.16, 0.24, p);
-        targetRotX = 0;
-        targetRotY = -90 * t; // 0 -> -90 deg
-      } else if (p <= 0.32) {
-        // ─────────────────────────────────────────────
-        // 2. RIGHT FACE (Surface 03 - video-3.mp4)
-        // Dwell 24–32%: Sisi Right menghadap penuh ke arah pengguna
-        // ─────────────────────────────────────────────
-        targetRotX = 0;
-        targetRotY = -90;
-      } else if (p <= 0.40) {
-        // Transisi Horizontal 2: RIGHT -> BACK
-        const t = smoothStep(0.32, 0.40, p);
-        targetRotX = 0;
-        targetRotY = -90 - 90 * t; // -90 -> -180 deg
-      } else if (p <= 0.48) {
-        // ─────────────────────────────────────────────
-        // 3. BACK FACE (Surface 02 - video-2.mp4)
-        // Dwell 40–48%: Sisi Back menghadap penuh di pusat layar
-        // ─────────────────────────────────────────────
-        targetRotX = 0;
-        targetRotY = -180;
-      } else if (p <= 0.56) {
-        // Transisi Horizontal 3: BACK -> LEFT
-        const t = smoothStep(0.48, 0.56, p);
-        targetRotX = 0;
-        targetRotY = -180 - 90 * t; // -180 -> -270 deg
-      } else if (p <= 0.64) {
-        // ─────────────────────────────────────────────
-        // 4. LEFT FACE (Surface 04 - video-4.mp4)
-        // Dwell 56–64%: Sisi Left menghadap penuh ke arah pengguna
-        // ─────────────────────────────────────────────
-        targetRotX = 0;
-        targetRotY = -270;
-      } else if (p <= 0.72) {
-        // Transisi Horizontal & Pitch: Melengkapi rotasi ke -360 deg dan rotasi X ke -90 deg (TOP)
-        const t = smoothStep(0.64, 0.72, p);
-        targetRotX = -90 * t; // 0 -> -90 deg
-        targetRotY = -270 - 90 * t; // -270 -> -360 deg
-      } else if (p <= 0.80) {
-        // ─────────────────────────────────────────────
-        // 5. TOP FACE (Surface 05 - video-5.mp4)
-        // Dwell 72–80%: Sisi Top menghadap penuh dari atas
-        // ─────────────────────────────────────────────
-        targetRotX = -90;
-        targetRotY = -360;
-      } else if (p <= 0.88) {
-        // Transisi Vertikal: TOP -> BOTTOM FACE (Rotasi vertikal -90 deg -> +90 deg)
-        const t = smoothStep(0.80, 0.88, p);
-        targetRotX = -90 + 180 * t; // -90 -> +90 deg
-        targetRotY = -360;
-      } else if (p <= 0.94) {
-        // ─────────────────────────────────────────────
-        // 6. BOTTOM FACE (Surface 06 - photo-1.jpg)
-        // Dwell 88–94%: Sisi Bottom menghadap penuh dari bawah
-        // ─────────────────────────────────────────────
-        targetRotX = 90;
-        targetRotY = -360;
-      } else if (p <= 0.98) {
-        // Transisi Vertikal: BOTTOM -> Kembali ke FRONT
-        const t = smoothStep(0.94, 0.98, p);
-        targetRotX = 90 * (1 - t); // +90 -> 0 deg
-        targetRotY = -360;
+      // A. POSISI X (Kanan ke Tengah)
+      const initialOffsetX = isMobile ? Math.min(90, viewportWidth * 0.14) : Math.min(320, viewportWidth * 0.24);
+      let targetTx = initialOffsetX;
+      if (p <= 0.35) {
+        targetTx = initialOffsetX;
+      } else if (p <= 0.60) {
+        const pMoveCenter = smoothStep(0.35, 0.60, p);
+        targetTx = (1 - pMoveCenter) * initialOffsetX;
       } else {
-        // ─────────────────────────────────────────────
-        // 7. KEMBALI KE FRONT FACE & PENAHANAN POSISI AKHIR
-        // Dwell 98–100%: Kubus stabil 100% menghadap FRONT sebelum sticky dilepas alami
-        // ─────────────────────────────────────────────
-        targetRotX = 0;
-        targetRotY = -360;
+        targetTx = 0;
       }
 
-      // 5. RESPONSIVE ZERO-LAG KINEMATIC INTERPOLATION
-      // Adaptif terhadap kecepatan scroll: jika scroll cepat (delta besar), lerp otomatis naik hingga 1.0 (instan)
-      // sehingga animasi kubus tidak pernah tertinggal dari pergerakan scroll pengguna.
-      const diffRot = Math.max(Math.abs(targetRotX - st.curRotX), Math.abs(targetRotY - st.curRotY));
-      const lerpRot = Math.min(1.0, 0.45 + diffRot * 0.05);
+      // B. SKALA (0–15% Kecil, 15–35% Membesar, 35–60% Dominan, 60–85% Menyesuaikan, 85–100% Akhir)
+      const baseSmallScale = isMobile ? 0.58 : 0.65;
+      const peakCenterScale = isMobile ? 1.05 : 1.15;
+      const elevatedScale = isMobile ? 0.72 : 0.78;
 
-      st.curRotX += (targetRotX - st.curRotX) * lerpRot;
-      st.curRotY += (targetRotY - st.curRotY) * lerpRot;
+      let targetScale = baseSmallScale;
+      if (p <= 0.15) {
+        targetScale = baseSmallScale;
+      } else if (p <= 0.35) {
+        const pScaleUp = smoothStep(0.15, 0.35, p);
+        targetScale = baseSmallScale + (peakCenterScale - baseSmallScale) * pScaleUp;
+      } else if (p <= 0.60) {
+        targetScale = peakCenterScale;
+      } else if (p <= 0.85) {
+        const pScaleDown = smoothStep(0.60, 0.85, p);
+        targetScale = peakCenterScale - (peakCenterScale - elevatedScale) * pScaleDown;
+      } else {
+        targetScale = elevatedScale;
+      }
 
-      const diffPos = Math.max(Math.abs(targetTx - st.curTx), Math.abs(targetTy - st.curTy));
-      const lerpPos = Math.min(1.0, 0.45 + diffPos * 0.03);
+      // C. POSISI Y (0–60% Tengah, 60–85% Bergerak ke Atas, 85–100% Stabil di Atas)
+      const maxUpwardDistance = isMobile ? -viewportHeight * 0.30 : -viewportHeight * 0.38;
+      let targetTy = 0;
+      if (p <= 0.60) {
+        targetTy = 0;
+      } else if (p <= 0.85) {
+        const pMoveUp = smoothStep(0.60, 0.85, p);
+        targetTy = pMoveUp * maxUpwardDistance;
+      } else {
+        targetTy = maxUpwardDistance;
+      }
 
-      st.curTx += (targetTx - st.curTx) * lerpPos;
-      st.curTy += (targetTy - st.curTy) * lerpPos;
-      st.curScale += (targetScale - st.curScale) * 0.45;
+      // D. ROTASI SCROLL MULTI-AXIS SINEMATIK (X & Y)
+      // Rotasi langsung merespons scroll secara kontinu sejak p = 0 tanpa deadzone
+      const scrollRotY = p * 420;
+      const scrollRotX = -14 + Math.sin(p * Math.PI) * 16 - smoothStep(0.60, 0.85, p) * 22;
 
-      // Lock presisi tinggi di 99% - 100% untuk memastikan posisi FRONT terkunci sempurna sebelum unpinning
+      const targetRotY = st.autoRotY + scrollRotY;
+      const targetRotX = scrollRotX;
+
+      // ─────────────────────────────────────────────────────────────
+      // 3. LERP INTERPOLASI KINEMATIK (Responsif, Berbobot & Halus)
+      // ─────────────────────────────────────────────────────────────
+      const lerpSpeed = p >= 0.85 ? 0.35 : 0.22;
+
+      st.curTx += (targetTx - st.curTx) * lerpSpeed;
+      st.curTy += (targetTy - st.curTy) * lerpSpeed;
+      st.curScale += (targetScale - st.curScale) * lerpSpeed;
+      st.curRotX += (targetRotX - st.curRotX) * lerpSpeed;
+      st.curRotY += (targetRotY - st.curRotY) * lerpSpeed;
+
+      // Sanitasi angka untuk mencegah NaN di seluruh properti
+      if (!Number.isFinite(st.curRotY)) st.curRotY = targetRotY || 0;
+      if (!Number.isFinite(st.curRotX)) st.curRotX = targetRotX || 0;
+      if (!Number.isFinite(st.curTx)) st.curTx = targetTx || 0;
+      if (!Number.isFinite(st.curTy)) st.curTy = targetTy || 0;
+      if (!Number.isFinite(st.curScale)) st.curScale = targetScale || 0.65;
+
+      // RELEASE CONDITION: Mengunci 100% posisi dan rotasi akhir saat progress mencapai 99%-100%
       if (p >= 0.99) {
-        st.curRotX = targetRotX;
-        st.curRotY = targetRotY;
         st.curTx = targetTx;
         st.curTy = targetTy;
         st.curScale = targetScale;
+        st.curRotX = targetRotX;
+        st.curRotY = targetRotY;
       }
 
-      // 6. APLIKASI TRANSFORM LANGSUNG KE REFS (Bypass React Virtual DOM)
+      // ─────────────────────────────────────────────────────────────
+      // 4. APLIKASI TRANSFORM LANGSUNG KE REFS (Bypass React Virtual DOM)
+      // ─────────────────────────────────────────────────────────────
+      const finalTx = st.curTx;
+      const finalTy = st.curTy + gentleFloatY;
+      const finalScale = st.curScale;
+      const finalRotX = st.curRotX + gentleTiltX;
+      const finalRotY = st.curRotY;
+      const finalRotZ = gentleRollZ;
+
       if (positionRef.current) {
-        positionRef.current.style.transform = `translate3d(${st.curTx.toFixed(2)}px, ${st.curTy.toFixed(2)}px, 0px)`;
+        const x = Number.isFinite(finalTx) ? finalTx : 0;
+        const y = Number.isFinite(finalTy) ? finalTy : 0;
+        positionRef.current.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0px)`;
       }
 
       if (scaleRef.current) {
-        scaleRef.current.style.transform = `scale(${st.curScale.toFixed(3)})`;
+        const s = Number.isFinite(finalScale) ? finalScale : 0.65;
+        scaleRef.current.style.transform = `scale(${s.toFixed(3)})`;
       }
 
       if (rotationRef.current) {
-        // Murni dikendalikan oleh scroll — berhenti total saat user berhenti scroll
-        rotationRef.current.style.transform = `rotateX(${st.curRotX.toFixed(2)}deg) rotateY(${st.curRotY.toFixed(2)}deg)`;
+        const rX = Number.isFinite(finalRotX) ? finalRotX : 0;
+        const rY = Number.isFinite(finalRotY) ? finalRotY : 0;
+        const rZ = Number.isFinite(finalRotZ) ? finalRotZ : 0;
+        rotationRef.current.style.transform = `rotateX(${rX.toFixed(2)}deg) rotateY(${rY.toFixed(2)}deg) rotateZ(${rZ.toFixed(2)}deg)`;
       }
 
-      // Ground Shadow realistis yang mengikuti skala kubus
+      // Ground Shadow realistis yang mengikuti skala dan memudar saat kubus melayang naik
       if (shadowRef.current) {
-        shadowRef.current.style.opacity = '0.4';
-        shadowRef.current.style.transform = `scale(${st.curScale.toFixed(3)})`;
+        const pMoveUp = smoothStep(0.60, 0.85, p);
+        const shadowOpacity = Math.max(0, (1 - pMoveUp * 1.6) * 0.42).toFixed(2);
+        const shadowScale = (finalScale * (1 - pMoveUp * 0.4)).toFixed(3);
+        shadowRef.current.style.opacity = shadowOpacity;
+        shadowRef.current.style.transform = `scale(${shadowScale})`;
       }
 
       animFrameId.current = requestAnimationFrame(renderLoop);
@@ -480,7 +459,7 @@ export const InteractivePhotoCube = ({
                     }}
                   >
                     {face.type === 'video' && face.mediaSrc ? (
-                      /* ── Permukaan Video Lokal (5 Sisi) ── */
+                      /* ── Permukaan Video Lokal (5 Sisi) — Murni Video Tanpa Teks/Logo ── */
                       <div className="relative w-full h-full overflow-hidden bg-[#BFEFFF] pointer-events-none">
                         <video
                           src={face.mediaSrc}
@@ -490,126 +469,20 @@ export const InteractivePhotoCube = ({
                           playsInline
                           preload="auto"
                           className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-                          onError={(e) => {
-                            // Fallback jika video gagal load
-                            e.currentTarget.style.display = 'none';
-                            const fallbackEl = e.currentTarget.nextElementSibling;
-                            if (fallbackEl) fallbackEl.style.display = 'flex';
-                          }}
                         />
-
-                        {/* Fallback Display jika file video belum tersedia */}
-                        <div
-                          className="absolute inset-0 w-full h-full p-5 flex flex-col justify-between hidden"
-                          style={{
-                            background: '#BFEFFF'
-                          }}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="px-2.5 py-1 rounded-full bg-white/30 text-[10px] font-mono font-bold text-[#1C6F8E]">
-                              {face.tag}
-                            </span>
-                            <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center text-[#1C6F8E]">
-                              {renderIcon(face.icon, '#1C6F8E')}
-                            </div>
-                          </div>
-                          <div className="text-center my-auto">
-                            <h4 className="text-sm font-black text-[#1C6F8E]">{face.title}</h4>
-                            <p className="text-[10px] text-[#2E84A5] mt-1 font-mono">FILE: {face.mediaSrc}</p>
-                          </div>
-                          <div className="text-[10px] font-mono text-[#2E84A5] text-center">
-                            SIGAP CUBE MEDIA
-                          </div>
-                        </div>
-
-                        {/* Minimalist Top Face Badge */}
-                        <div className="absolute top-3.5 left-3.5 right-3.5 z-10 flex items-center justify-between pointer-events-none">
-                          <span className="px-2.5 py-1 rounded-full bg-[#1C6F8E]/90 text-[10px] font-mono font-extrabold text-white border border-white/20">
-                            {face.tag}
-                          </span>
-                          <div className="w-7 h-7 rounded-xl bg-[#1C6F8E]/90 border border-white/20 flex items-center justify-center text-white">
-                            {renderIcon(face.icon, '#FFFFFF')}
-                          </div>
-                        </div>
-
-                        {/* Minimalist Bottom Caption */}
-                        <div className="absolute bottom-3 left-3.5 right-3.5 z-10 p-2.5 rounded-xl bg-[#1C6F8E]/90 border border-white/20 text-white pointer-events-none">
-                          <h4 className="text-xs font-black leading-tight text-white">{face.title}</h4>
-                          <p className="text-[10px] text-white/90 mt-0.5 font-medium leading-tight">{face.subtitle}</p>
-                        </div>
                       </div>
                     ) : face.type === 'image' && face.mediaSrc ? (
-                      /* ── Permukaan Foto Statis Lokal (1 Sisi: Bottom) ── */
+                      /* ── Permukaan Foto Statis Lokal (1 Sisi: Bottom) — Murni Foto Tanpa Teks/Logo ── */
                       <div className="relative w-full h-full overflow-hidden bg-[#BFEFFF] pointer-events-none">
                         <img
                           src={face.mediaSrc}
-                          alt={face.title}
+                          alt="SIGAP 3D Cube"
                           className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                            const fallbackEl = e.currentTarget.nextElementSibling;
-                            if (fallbackEl) fallbackEl.style.display = 'flex';
-                          }}
                         />
-
-                        {/* Fallback Display jika file foto belum tersedia */}
-                        <div
-                          className="absolute inset-0 w-full h-full p-5 flex flex-col justify-between hidden"
-                          style={{ background: '#FFFFFF' }}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="px-2.5 py-1 rounded-full bg-[#BFEFFF]/30 text-[10px] font-mono font-bold text-[#1C6F8E]">
-                              {face.tag}
-                            </span>
-                            <div className="w-8 h-8 rounded-xl bg-[#BFEFFF]/30 flex items-center justify-center text-[#1C6F8E]">
-                              {renderIcon(face.icon, '#1C6F8E')}
-                            </div>
-                          </div>
-                          <div className="text-center my-auto">
-                            <h4 className="text-sm font-black text-[#1C6F8E]">{face.title}</h4>
-                            <p className="text-[10px] text-[#2E84A5] mt-1 font-mono">FILE: {face.mediaSrc}</p>
-                          </div>
-                          <div className="text-[10px] font-mono text-[#2E84A5] text-center">
-                            SIGAP CUBE PHOTO
-                          </div>
-                        </div>
-
-                        {/* Minimalist Top Face Badge */}
-                        <div className="absolute top-3.5 left-3.5 right-3.5 z-10 flex items-center justify-between pointer-events-none">
-                          <span className="px-2.5 py-1 rounded-full bg-[#1C6F8E]/90 text-[10px] font-mono font-extrabold text-white border border-white/20">
-                            {face.tag}
-                          </span>
-                          <div className="w-7 h-7 rounded-xl bg-[#1C6F8E]/90 border border-white/20 flex items-center justify-center text-white">
-                            {renderIcon(face.icon, '#FFFFFF')}
-                          </div>
-                        </div>
-
-                        {/* Minimalist Bottom Caption */}
-                        <div className="absolute bottom-3 left-3.5 right-3.5 z-10 p-2.5 rounded-xl bg-[#1C6F8E]/90 border border-white/20 text-white pointer-events-none">
-                          <h4 className="text-xs font-black leading-tight text-white">{face.title}</h4>
-                          <p className="text-[10px] text-white/90 mt-0.5 font-medium leading-tight">{face.subtitle}</p>
-                        </div>
                       </div>
                     ) : (
-                      /* ── Permukaan Editorial Fallback ── */
-                      <div className="relative w-full h-full flex flex-col justify-between p-5 z-10 pointer-events-none">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-mono font-extrabold tracking-wider text-[#1C6F8E] uppercase">
-                            {face.tag}
-                          </span>
-                          <div className="w-8 h-8 rounded-xl bg-[#BFEFFF]/30 flex items-center justify-center text-[#1C6F8E]">
-                            {renderIcon(face.icon, face.accent)}
-                          </div>
-                        </div>
-                        <div className="my-auto text-center space-y-1">
-                          <h3 className="text-lg font-black text-[#1C6F8E] leading-tight">{face.title}</h3>
-                          <p className="text-xs font-medium text-[#2E84A5]">{face.subtitle}</p>
-                        </div>
-                        <div className="pt-2 border-t border-[#BFEFFF]/30 flex items-center justify-between text-[10px] font-mono text-[#2E84A5]">
-                          <span>SIGAP // 2026</span>
-                          <span className="text-[#1C6F8E] font-bold">CUBE SURFACE</span>
-                        </div>
-                      </div>
+                      /* ── Permukaan Bersih Fallback ── */
+                      <div className="relative w-full h-full bg-[#BFEFFF] pointer-events-none" />
                     )}
                   </div>
                 );
