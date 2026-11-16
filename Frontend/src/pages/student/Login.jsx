@@ -56,10 +56,15 @@ export const Login = () => {
       navigate(redirectTarget);
     } catch (err) {
       console.warn('Login siswa failed:', err.message);
-      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+      if (
+        err.name === 'TypeError' ||
+        err.message?.includes('Failed to fetch') ||
+        err.message?.includes('NetworkError') ||
+        err.message?.toLowerCase().includes('fetch')
+      ) {
         loginUser({
           id: 1,
-          nama: 'Ahmad Falihul Hikam',
+          nama: 'Ananda Arvin Dzaky Nugraha',
           nisn: identifier.trim(),
           sekolah: 'SMAN 1 Teladan',
           role: 'siswa'

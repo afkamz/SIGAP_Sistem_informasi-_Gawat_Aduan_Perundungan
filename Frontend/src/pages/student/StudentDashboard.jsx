@@ -42,6 +42,14 @@ export const StudentDashboard = () => {
   const heroRef = useRef(null);
   const [isHeroInView, setIsHeroInView] = useState(false);
 
+  // Sequential Animated Stats with Scroll Lock
+  const statsSectionRef = useRef(null);
+  const [statsAnimStep, setStatsAnimStep] = useState(0); // 0 to 8 (9 = selesai)
+  const [isStatsAnimDone, setIsStatsAnimDone] = useState(false);
+  const isStatsAnimatingRef = useRef(false);
+  const animStartedRef = useRef(false);
+  const timersRef = useRef([]);
+
   const easeCurve = 'cubic-bezier(0.16, 1, 0.3, 1)';
 
   useEffect(() => {
@@ -81,6 +89,86 @@ export const StudentDashboard = () => {
     }
 
     return () => observer.disconnect();
+  }, []);
+
+  // Fungsi pemanggil animasi berurutan 4 kartu statistik + Scroll-Lock sementara
+  const startStatsAnimation = () => {
+    if (animStartedRef.current) return;
+    animStartedRef.current = true;
+    isStatsAnimatingRef.current = true;
+
+    // Kunci scroll pengguna sementara selama seluruh sequence animasi berlangsung
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    const preventScroll = (e) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener('wheel', preventScroll, { passive: false });
+    window.addEventListener('touchmove', preventScroll, { passive: false });
+
+    // 8 Urutan Langkah Animasi (Header Kartu lalu Angka & Badge)
+    const delays = [
+      120,   // Step 1: Card 1 Header ("Total Aduan Saya" + icon)
+      500,   // Step 2: Card 1 Value ("2" + "kasus tercatat")
+      880,   // Step 3: Card 2 Header ("Menunggu Tanggapan" + icon)
+      1260,  // Step 4: Card 2 Value ("2" + "Penelaahan")
+      1640,  // Step 5: Card 3 Header ("Sedang Ditindak" + icon)
+      2020,  // Step 6: Card 3 Value ("0" + "Konseling")
+      2400,  // Step 7: Card 4 Header ("Selesai Ditangani" + icon)
+      2780   // Step 8: Card 4 Value ("0" + "Terselesaikan")
+    ];
+
+    delays.forEach((delay, idx) => {
+      const t = setTimeout(() => {
+        setStatsAnimStep(idx + 1);
+      }, delay);
+      timersRef.current.push(t);
+    });
+
+    // Selesai seluruh sequence pada ~3100ms -> Buka kunci scroll kembali
+    const finishTimer = setTimeout(() => {
+      window.removeEventListener('wheel', preventScroll);
+      window.removeEventListener('touchmove', preventScroll);
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      setIsStatsAnimDone(true);
+      setStatsAnimStep(9);
+      isStatsAnimatingRef.current = false;
+    }, 3100);
+
+    timersRef.current.push(finishTimer);
+  };
+
+  // Observer untuk mendeteksi saat pengguna scroll ke area statistik
+  useEffect(() => {
+    const el = statsSectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !animStartedRef.current) {
+          startStatsAnimation();
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(el);
+
+    // Initial check jika pengguna membuka halaman langsung pada area statistik
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.85 && rect.bottom > 0 && !animStartedRef.current) {
+      startStatsAnimation();
+    }
+
+    return () => {
+      observer.disconnect();
+      timersRef.current.forEach(clearTimeout);
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
   }, []);
 
   const handleRefreshRiwayat = async () => {
@@ -129,6 +217,74 @@ export const StudentDashboard = () => {
     (r) => r.status === 'diverifikasi' || r.status === 'ditindaklanjuti'
   ).length;
   const completedCount = myReports.filter((r) => r.status === 'selesai').length;
+
+  // Data 4 Kartu Statistik dengan Konfigurasi Sequential Reveal & Styling Ultra-Modern
+  const statsItems = useMemo(() => [
+    {
+      id: 'total',
+      label: 'Total Aduan Saya',
+      value: totalCount,
+      suffix: 'kasus tercatat',
+      icon: <Inbox className="w-5 h-5 text-[#1C6F8E]" />,
+      accentColor: '#1C6F8E',
+      accentBg: '#EBF7FC',
+      accentBorder: '#BFEFFF',
+      cardShadow: '0 10px 25px -4px rgba(28, 111, 142, 0.16)',
+      badgeBg: '#F0F9FF',
+      badgeColor: '#0369A1',
+      badgeBorder: '#BAE6FD',
+      labelStep: 1,
+      valueStep: 2
+    },
+    {
+      id: 'pending',
+      label: 'Menunggu Tanggapan',
+      value: pendingCount,
+      suffix: 'Penelaahan',
+      icon: <Clock className="w-5 h-5 text-[#D97706]" />,
+      accentColor: '#F59E0B',
+      accentBg: '#FEF3C7',
+      accentBorder: '#FDE68A',
+      cardShadow: '0 10px 25px -4px rgba(217, 119, 6, 0.16)',
+      badgeBg: '#FEF3C7',
+      badgeColor: '#B45309',
+      badgeBorder: '#FDE68A',
+      labelStep: 3,
+      valueStep: 4
+    },
+    {
+      id: 'in_progress',
+      label: 'Sedang Ditindak',
+      value: inProgressCount,
+      suffix: 'Konseling',
+      icon: <RotateCw className="w-5 h-5 text-[#0284C7]" />,
+      accentColor: '#0284C7',
+      accentBg: '#E0F2FE',
+      accentBorder: '#BAE6FD',
+      cardShadow: '0 10px 25px -4px rgba(2, 132, 199, 0.16)',
+      badgeBg: '#E0F2FE',
+      badgeColor: '#0284C7',
+      badgeBorder: '#BAE6FD',
+      labelStep: 5,
+      valueStep: 6
+    },
+    {
+      id: 'completed',
+      label: 'Selesai Ditangani',
+      value: completedCount,
+      suffix: 'Terselesaikan',
+      icon: <CheckCircle2 className="w-5 h-5 text-[#16A34A]" />,
+      accentColor: '#10B981',
+      accentBg: '#DCFCE7',
+      accentBorder: '#A7F3D0',
+      cardShadow: '0 10px 25px -4px rgba(16, 185, 129, 0.16)',
+      badgeBg: '#DCFCE7',
+      badgeColor: '#15803D',
+      badgeBorder: '#A7F3D0',
+      labelStep: 7,
+      valueStep: 8
+    }
+  ], [totalCount, pendingCount, inProgressCount, completedCount]);
 
   const displayedReports = useMemo(() => {
     let result = [...myReports];
@@ -202,11 +358,10 @@ export const StudentDashboard = () => {
       {/* Header Siswa */}
       <StudentHeader isDashboard={true} />
 
-      {/* ─── Hero Section Siswa Full-Screen dengan Background Video ─── */}
+      {/* ─── Hero Section Siswa Full-Screen dengan Background Video & Degradasi Halus ─── */}
       <section
         ref={heroRef}
-        className="relative w-full min-h-[calc(100vh-4rem)] min-h-[calc(100dvh-4rem)] flex flex-col justify-between items-center overflow-hidden border-b z-0 text-center px-4 sm:px-6 lg:px-8 py-10 sm:py-16"
-        style={{ borderColor: '#BFEFFF' }}
+        className="relative w-full min-h-[calc(100vh-4rem)] min-h-[calc(100dvh-4rem)] flex flex-col justify-between items-center overflow-hidden z-0 text-center px-4 sm:px-6 lg:px-8 py-10 sm:py-16"
       >
         {/* Background Video (Memenuhi Seluruh Viewport Hero Layar Penuh) */}
         <video
@@ -236,8 +391,18 @@ export const StudentDashboard = () => {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.40)',
+            backgroundColor: 'rgba(255, 255, 255, 0.38)',
             zIndex: 1
+          }}
+          aria-hidden="true"
+        />
+
+        {/* Bottom Seamless Gradient Fade (Degradasi Halus Menyatu ke Web Bawahnya, Menghilangkan Garis Polosan) */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-36 sm:h-48 lg:h-64 pointer-events-none"
+          style={{
+            background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.40) 35%, rgba(255, 255, 255, 0.85) 75%, #FFFFFF 100%)',
+            zIndex: 2
           }}
           aria-hidden="true"
         />
@@ -383,248 +548,147 @@ export const StudentDashboard = () => {
           </span>
         </div>
 
-        {/* Petunjuk Gulir ke Bawah (Scroll Indicator) */}
-        <div
-          className="relative z-10 pb-2 flex flex-col items-center gap-1 pointer-events-none select-none"
+        {/* Petunjuk Gulir ke Bawah (Interaktif Klik untuk Scroll Turun) */}
+        <button
+          type="button"
+          onClick={() => {
+            const el = statsSectionRef.current;
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth' });
+              if (!animStartedRef.current) {
+                setTimeout(() => {
+                  startStatsAnimation();
+                }, 400);
+              }
+            }
+          }}
+          className="relative z-10 pb-3 flex flex-col items-center gap-1 cursor-pointer group hover:scale-105 transition-all duration-300 select-none"
           style={{
             opacity: isHeroInView ? 0.95 : 0,
             transition: `opacity 600ms ${easeCurve} 900ms`
           }}
+          aria-label="Gulir ke bawah untuk melihat riwayat aduan"
         >
           <span
-            className="text-[11px] font-bold tracking-wider uppercase drop-shadow"
-            style={{ color: '#FFFFFF' }}
+            className="text-[11px] font-bold tracking-wider uppercase transition-transform group-hover:translate-y-0.5"
+            style={{ color: '#1C6F8E' }}
           >
             Gulir ke bawah untuk melihat riwayat aduan
           </span>
-          <ChevronDown className="w-4 h-4 text-white animate-bounce drop-shadow" />
-        </div>
+          <ChevronDown className="w-4 h-4 text-[#1C6F8E] animate-bounce" />
+        </button>
       </section>
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 relative z-20">
 
-        {/* ── Ajakan Melapor / Report Banner (Dapat Diakses Saat Pengguna Scroll ke Bawah) ── */}
-        <div
-          className="rounded-3xl p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6 sm:gap-8 relative border"
-          style={{
-            background: '#FFFFFF',
-            borderColor: '#BFEFFF',
-            boxShadow: '0 4px 20px -2px rgba(191, 239, 255, 0.40)'
-          }}
-        >
-          <div className="flex items-start gap-4 sm:gap-5 flex-1">
-            <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-xs border"
-              style={{
-                background: '#BFEFFF',
-                borderColor: '#BFEFFF'
-              }}
-            >
-              <Shield className="w-7 h-7 text-[#1C6F8E]" strokeWidth={2.2} />
-            </div>
-            <div className="space-y-2 flex-1">
-              <h2
-                className="text-base sm:text-lg lg:text-xl font-black leading-snug"
-                style={{ color: '#1C6F8E' }}
-              >
-                Mengalami atau Menyaksikan Tindakan Tidak Menyenangkan?
+        {/* ── 4 Kartu Statistik Ringkasan dengan Animasi Sequential Reveal & Scroll-Lock ── */}
+        <div id="student-stats-section" ref={statsSectionRef} className="space-y-4">
+          {/* Header Ringkasan Statistik */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-2 border-b border-[#BFEFFF]/60">
+            <div>
+              <div className="flex items-center gap-2 text-xs font-bold" style={{ color: '#2E84A5' }}>
+                <span className="w-2 h-2 rounded-full bg-[#1C6F8E] animate-pulse" />
+                <span>Ringkasan Statistik Siswa</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-0.5" style={{ color: '#1C6F8E' }}>
+                Status Penanganan Aduan Anda
               </h2>
-              <p
-                className="text-xs sm:text-sm max-w-3xl leading-relaxed font-medium"
-                style={{ color: '#2E84A5' }}
-              >
-                Laporkan perundungan verbal, kontak fisik, cyberbullying, atau pemalakan di sekolah. Identitas Anda dijamin 100% aman, terlindungi, dan bersifat rahasia.
-              </p>
-              <div className="flex flex-wrap items-center gap-2 pt-1">
-                <span
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border"
-                  style={{
-                    background: '#BFEFFF',
-                    color: '#1C6F8E',
-                    borderColor: '#BFEFFF'
-                  }}
-                >
-                  <EyeOff className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                  <span>Mode Anonim Tersedia</span>
-                </span>
-                <span
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border"
+            </div>
+            
+            {/* Indikator Status Animasi & Scroll Lock */}
+            {!isStatsAnimDone && (
+              <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full border animate-pulse shadow-xs" style={{ background: '#FFFBEB', color: '#B45309', borderColor: '#FDE68A' }}>
+                <Lock className="w-3.5 h-3.5" />
+                <span>Menampilkan statistik... (Gulir ke bawah terkunci sementara)</span>
+              </span>
+            )}
+            {isStatsAnimDone && (
+              <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full border shadow-xs transition-opacity duration-500" style={{ background: '#ECFDF5', color: '#047857', borderColor: '#A7F3D0' }}>
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>Statistik lengkap. Anda dapat menggulir ke bawah.</span>
+              </span>
+            )}
+          </div>
+
+          {/* Grid 4 Kartu Statistik (Ultra Modern & Sequential Reveal) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+            {statsItems.map((item) => {
+              const showHeader = isStatsAnimDone || statsAnimStep >= item.labelStep;
+              const showValue = isStatsAnimDone || statsAnimStep >= item.valueStep;
+
+              return (
+                <div
+                  key={item.id}
+                  className="p-5 sm:p-6 rounded-3xl border flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:shadow-lg group"
                   style={{
                     background: '#FFFFFF',
-                    color: '#1C6F8E',
-                    borderColor: '#BFEFFF'
+                    borderColor: showHeader ? item.accentBorder : '#E2E8F0',
+                    boxShadow: showHeader ? item.cardShadow : '0 2px 8px rgba(0, 0, 0, 0.04)',
+                    opacity: showHeader ? 1 : 0,
+                    transform: showHeader ? 'translateY(0) scale(1)' : 'translateY(24px) scale(0.95)',
+                    transition: `opacity 400ms ${easeCurve}, transform 400ms ${easeCurve}, border-color 300ms ease, box-shadow 300ms ease`
                   }}
                 >
-                  <Clock className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                  <span>Respons Tim BK &lt; 24 Jam</span>
-                </span>
-              </div>
-            </div>
-          </div>
+                  {/* Top Accent Strip */}
+                  <div
+                    className="absolute top-0 left-0 right-0 h-1.5"
+                    style={{
+                      background: item.accentColor,
+                      opacity: showHeader ? 1 : 0,
+                      transition: `opacity 300ms ease`
+                    }}
+                  />
 
-          <div className="flex flex-col items-center lg:items-end shrink-0 w-full lg:w-auto">
-            <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto">
-              <Link
-                to="/lacak?from=dashboard"
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition hover:opacity-90 border"
-                style={{
-                  background: '#FFFFFF',
-                  color: '#1C6F8E',
-                  borderColor: '#BFEFFF'
-                }}
-              >
-                <Search className="w-4 h-4 text-[#1C6F8E]" />
-                <span>Lacak Tiket</span>
-              </Link>
-              <Link
-                to="/buat-laporan"
-                className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition hover:opacity-90 border shadow-xs"
-                style={{
-                  background: '#BFEFFF',
-                  color: '#1C6F8E',
-                  borderColor: '#BFEFFF'
-                }}
-              >
-                <PlusCircle className="w-4 h-4 text-[#1C6F8E]" />
-                <span>Buat Aduan Baru</span>
-              </Link>
-            </div>
-            <span className="text-[11px] mt-2 font-medium text-center" style={{ color: '#2E84A5' }}>
-              Layanan resmi bebas biaya &amp; terlindungi hukum
-            </span>
-          </div>
-        </div>
+                  {/* Bagian Atas Card: Label Judul & Icon (Muncul Tahap 1) */}
+                  <div
+                    className="flex items-center justify-between"
+                    style={{
+                      opacity: showHeader ? 1 : 0,
+                      transform: showHeader ? 'translateY(0)' : 'translateY(12px)',
+                      transition: `opacity 350ms ${easeCurve} 40ms, transform 350ms ${easeCurve} 40ms`
+                    }}
+                  >
+                    <span className="text-xs sm:text-sm font-extrabold tracking-tight" style={{ color: '#1C6F8E' }}>
+                      {item.label}
+                    </span>
+                    <div
+                      className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border shadow-xs transition-transform duration-300 group-hover:scale-105"
+                      style={{
+                        background: item.accentBg,
+                        borderColor: item.accentBorder
+                      }}
+                    >
+                      {item.icon}
+                    </div>
+                  </div>
 
-        {/* 4 Kartu Statistik Ringkasan */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Card 1: Total Laporan */}
-          <div
-            className="p-5 rounded-3xl border flex flex-col justify-between"
-            style={{
-              background: '#FFFFFF',
-              borderColor: '#BFEFFF',
-              boxShadow: '0 4px 16px rgba(191, 239, 255, 0.35)'
-            }}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold" style={{ color: '#2E84A5' }}>
-                Total Aduan Saya
-              </span>
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-              >
-                <Inbox className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="mt-4 flex items-baseline gap-2">
-              <span className="text-3xl font-black leading-none" style={{ color: '#1C6F8E' }}>
-                {totalCount}
-              </span>
-              <span className="text-xs font-medium" style={{ color: '#2E84A5' }}>
-                kasus tercatat
-              </span>
-            </div>
-          </div>
-
-          {/* Card 2: Menunggu Tanggapan */}
-          <div
-            className="p-5 rounded-3xl border flex flex-col justify-between"
-            style={{
-              background: '#FFFFFF',
-              borderColor: '#BFEFFF',
-              boxShadow: '0 4px 16px rgba(191, 239, 255, 0.35)'
-            }}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold" style={{ color: '#2E84A5' }}>
-                Menunggu Tanggapan
-              </span>
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-              >
-                <MoreHorizontal className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="mt-4 flex items-center gap-2">
-              <span className="text-3xl font-black leading-none" style={{ color: '#1C6F8E' }}>
-                {pendingCount}
-              </span>
-              <span
-                className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold border"
-                style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
-              >
-                Penelaahan
-              </span>
-            </div>
-          </div>
-
-          {/* Card 3: Sedang Ditindak */}
-          <div
-            className="p-5 rounded-3xl border flex flex-col justify-between"
-            style={{
-              background: '#FFFFFF',
-              borderColor: '#BFEFFF',
-              boxShadow: '0 4px 16px rgba(191, 239, 255, 0.35)'
-            }}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold" style={{ color: '#2E84A5' }}>
-                Sedang Ditindak
-              </span>
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-              >
-                <RotateCw className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="mt-4 flex items-center gap-2">
-              <span className="text-3xl font-black leading-none" style={{ color: '#1C6F8E' }}>
-                {inProgressCount}
-              </span>
-              <span
-                className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold border"
-                style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#1C6F8E' }}
-              >
-                Konseling
-              </span>
-            </div>
-          </div>
-
-          {/* Card 4: Selesai Ditangani */}
-          <div
-            className="p-5 rounded-3xl border flex flex-col justify-between"
-            style={{
-              background: '#FFFFFF',
-              borderColor: '#BFEFFF',
-              boxShadow: '0 4px 16px rgba(191, 239, 255, 0.35)'
-            }}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold" style={{ color: '#2E84A5' }}>
-                Selesai Ditangani
-              </span>
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-              >
-                <CheckCircle2 className="w-4 h-4" />
-              </div>
-            </div>
-            <div className="mt-4 flex items-center gap-2">
-              <span className="text-3xl font-black leading-none" style={{ color: '#1C6F8E' }}>
-                {completedCount}
-              </span>
-              <span
-                className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold border"
-                style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
-              >
-                Terselesaikan
-              </span>
-            </div>
+                  {/* Bagian Bawah Card: Angka & Badge Keterangan (Muncul Tahap 2 Setelah Label) */}
+                  <div
+                    className="mt-6 flex items-baseline justify-between gap-2"
+                    style={{
+                      opacity: showValue ? 1 : 0,
+                      transform: showValue ? 'translateY(0) scale(1)' : 'translateY(16px) scale(0.80)',
+                      transition: `opacity 450ms cubic-bezier(0.34, 1.56, 0.64, 1), transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1)`
+                    }}
+                  >
+                    <span className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-none" style={{ color: '#1C6F8E' }}>
+                      {item.value}
+                    </span>
+                    <span
+                      className="px-3 py-1 rounded-full text-xs font-bold border shadow-xs"
+                      style={{
+                        background: item.badgeBg,
+                        color: item.badgeColor,
+                        borderColor: item.badgeBorder
+                      }}
+                    >
+                      {item.suffix}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 

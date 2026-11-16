@@ -1400,4 +1400,51 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 | 1 | `EDIT` | `Frontend/src/pages/student/StudentDashboard.jsx` | Penyesuaian layout Hero Section menjadi full-screen (`100dvh`), pemusatan konten teks sambutan dan tombol utama Buat Aduan Baru di tengah layar, scroll indicator, serta penataan komponen dashboard lanjutan saat scroll |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 95 implementasi Hero Section Full-Screen Portal Siswa SIGAP |
 
+---
 
+## 📅 [Sesi 96] Senin, 16 November 2026 — Jam 23 WIB
+**Fokus Utama**: Penghapusan banner ajakan melapor di bawah Hero video Dashboard Siswa untuk menyajikan ringkasan statistik dan riwayat laporan secara langsung dan terstruktur.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/student/StudentDashboard.jsx` | Penghapusan container banner ajakan melapor di bawah section video sehingga konten utama langsung menyajikan ringkasan statistik dan riwayat aduan |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 96 penghapusan banner ajakan melapor di bawah background video |
+
+---
+
+## 📅 [Sesi 97] Senin, 16 November 2026 — Jam 23 WIB
+**Fokus Utama**: Penerapan efek degradasi (seamless gradient fade) pada batas bawah Hero Video ke area web di bawahnya serta eliminasi garis border polos.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/student/StudentDashboard.jsx` | Penghapusan border bawah polos pada section video, penambahan layer degradasi gradien halus memudar ke latar putih `#FFFFFF`, dan penyesuaian kontras indikator gulir |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 97 implementasi degradasi transisi Hero video ke web bawahnya |
+
+
+---
+
+## 📅 [Sesi 98] Selasa, 17 November 2026 — Jam 00 WIB
+**Fokus Utama**: Implementasi animasi berurutan (sequential reveal) pada 4 kartu statistik Dashboard Siswa dengan mekanisme kunci gulir sementara (scroll-lock) hingga seluruh animasi selesai, serta pembaruan layout kartu modern.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/student/StudentDashboard.jsx` | Penambahan sequence animasi reveal bertahap pada 4 kartu statistik (label disusul angka secara bergantian), penguncian scroll sementara saat animasi berjalan, pembebasan scroll otomatis setelah selesai, dan penyempurnaan desain kartu statistik modern |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 98 animasi bertahap kartu statistik dengan scroll lock dan pembaruan layout kartu Dashboard Siswa |
+---
+
+## 📅 [Sesi 99] Selasa, 17 November 2026 — Jam 00 WIB
+**Fokus Utama**: Perbaikan pemicu animasi bertahap 4 kartu statistik Dashboard Siswa dengan isolasi siklus hidup rendering React, interaksi klik indikator gulir, dan penyesuaian fallback autentikasi siswa.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/student/StudentDashboard.jsx` | Penyempurnaan pemicu animasi berurutan kartu statistik melalui pemisahan siklus render komponen, penambahan tombol gulir interaktif ke area statistik, status penguncian gulir, dan pemutakhiran visual kartu dengan strip aksen warna |
+| 2 | `EDIT` | `Frontend/src/pages/student/Login.jsx` | Penyesuaian penanganan fallback login siswa terhadap variasi galat jaringan agar transisi ke dashboard tetap mulus |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 99 perbaikan animasi bertahap kartu statistik dan stabilitas navigasi Dashboard Siswa |
