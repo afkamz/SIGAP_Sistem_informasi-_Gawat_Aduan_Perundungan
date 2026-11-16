@@ -33,7 +33,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
-import { StudentFooter } from '../components/layout/StudentFooter';
+import { LandingFooter } from '../components/layout/LandingFooter';
 import { KATEGORI_DATA } from '../data/categories';
 import { InteractivePhotoCube } from '../components/3d/InteractivePhotoCube';
 import { BackgroundMediaBackdrop } from '../components/3d/BackgroundMediaBackdrop';
@@ -170,40 +170,39 @@ export const LandingPage = () => {
     }
   ];
 
-  // Opasitas headline spotlight di tengah saat progress 0.35 s.d. 0.60 (Scene 03)
+  // Opasitas headline spotlight di tengah saat progress 0.35 s.d. 0.45 (Surface 02 Back Face)
   const centerSpotlightOpacity =
-    scrollProgress >= 0.32 && scrollProgress <= 0.64
-      ? Math.max(0, Math.min(1, (scrollProgress - 0.32) * 8)) *
-        Math.max(0, Math.min(1, (0.64 - scrollProgress) * 8))
+    scrollProgress >= 0.30 && scrollProgress <= 0.50
+      ? Math.max(0, Math.min(1, (scrollProgress - 0.30) * 10)) *
+        Math.max(0, Math.min(1, (0.50 - scrollProgress) * 10))
       : 0;
 
   return (
     <div
-      className="min-h-screen flex flex-col text-slate-800 font-sans relative"
+      className="min-h-screen flex flex-col text-[#1C6F8E] font-sans relative"
       style={{ background: '#FFFFFF', overflowX: 'clip' }}
     >
 
       {/* ─── FIXED GLOBAL HEADER ─── */}
       <header className="fixed top-0 inset-x-0 z-50 w-full pointer-events-auto">
         {/* Top Micro-Ticker Bar */}
-        <div style={{ background: '#1D294B' }} className="text-white text-[11px] py-1.5 px-4 border-b border-white/10">
+        <div style={{ background: '#BFEFFF', color: '#1C6F8E' }} className="text-[11px] py-1.5 px-4 border-b border-[#BFEFFF]/40">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
             <div className="flex items-center gap-2">
-              <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span style={{ color: '#C9D0DA' }}>
-                Layanan Siaga Aduan Kekerasan Sekolah Sesuai <strong className="text-white">Permendikbudristek No. 46/2023</strong>
+              <span className="flex h-2.5 w-2.5 rounded-full bg-[#1C6F8E] animate-pulse" />
+              <span className="text-[#1C6F8E]">
+                Layanan Siaga Aduan Kekerasan Sekolah Sesuai <strong className="text-[#1C6F8E]">Permendikbudristek No. 46/2023</strong>
               </span>
             </div>
             <div className="flex items-center gap-3 text-[11px]">
-              <span className="flex items-center gap-1.5 font-semibold text-white px-2.5 py-0.5 rounded-full border border-white/20">
-                <PhoneCall className="w-3.5 h-3.5" style={{ color: '#E9A7BF' }} />
+              <span className="flex items-center gap-1.5 font-semibold text-[#1C6F8E] px-2.5 py-0.5 rounded-full border border-[#BFEFFF] bg-white">
+                <PhoneCall className="w-3.5 h-3.5 text-[#1C6F8E]" />
                 Hotline Darurat: SAPA 129 | Polisi 110
               </span>
-              <span className="hidden md:inline" style={{ color: '#667085' }}>•</span>
+              <span className="hidden md:inline text-[#1C6F8E]/40">•</span>
               <Link
                 to="/lacak"
-                className="hover:text-white underline underline-offset-2 transition hidden md:inline font-medium"
-                style={{ color: '#C9D0DA' }}
+                className="text-[#1C6F8E] hover:text-[#2E84A5] underline underline-offset-2 transition hidden md:inline font-bold"
               >
                 Lacak Tiket Aduan
               </Link>
@@ -211,44 +210,44 @@ export const LandingPage = () => {
           </div>
         </div>
 
-        {/* ─── NAVIGATION BAR — Pink & White Minimalist ─── */}
-        <nav className="bg-white border-b" style={{ borderColor: '#E8E3E5' }}>
+        {/* ─── NAVIGATION BAR — Baby Blue & White Theme ─── */}
+        <nav className="border-b" style={{ background: '#FFFFFF', borderColor: '#BFEFFF' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             {/* Brand Logo */}
             <Link to="/" className="flex items-center gap-3 group">
               <div
-                className="w-10 h-10 rounded-2xl flex items-center justify-center text-white group-hover:scale-105 transition-all duration-200"
-                style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
+                className="w-10 h-10 rounded-2xl flex items-center justify-center text-[#1C6F8E] group-hover:scale-105 transition-all duration-200 shadow-xs border"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}
               >
-                <ShieldCheck className="w-6 h-6 text-white" />
+                <ShieldCheck className="w-6 h-6 text-[#1C6F8E]" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-black text-xl tracking-tight leading-none" style={{ color: '#202020' }}>
+                  <span className="font-black text-xl tracking-tight leading-none" style={{ color: '#1C6F8E' }}>
                     SIGAP
                   </span>
                   <span
-                    className="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold"
-                    style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+                    className="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold text-[#1C6F8E] shadow-xs"
+                    style={{ background: '#BFEFFF', border: '1px solid #BFEFFF' }}
                   >
                     SISWA
                   </span>
                 </div>
-                <span className="text-[11px] font-medium block mt-0.5" style={{ color: '#777777' }}>
-                  Ruang Perlindungan & Pengaduan Pelajar
+                <span className="text-[11px] font-medium block mt-0.5" style={{ color: '#2E84A5' }}>
+                  Ruang Perlindungan &amp; Pengaduan Pelajar
                 </span>
               </div>
             </Link>
 
             {/* Desktop Nav Links */}
-            <div className="hidden lg:flex items-center gap-7 text-xs font-bold uppercase tracking-wider" style={{ color: '#777777' }}>
+            <div className="hidden lg:flex items-center gap-7 text-xs font-bold uppercase tracking-wider" style={{ color: '#1C6F8E' }}>
               {['about', 'mission', 'how-it-works', 'media', 'safety'].map((section) => (
                 <a
                   key={section}
                   href={`#${section}`}
                   onClick={(e) => scrollToSection(e, section)}
-                  className="transition-colors py-1 hover:text-pink-500"
-                  style={{ color: '#555' }}
+                  className="transition-colors py-1 hover:text-[#2E84A5]"
+                  style={{ color: '#1C6F8E' }}
                 >
                   {section === 'how-it-works' ? 'How It Works' : section === 'safety' ? 'Safety & Privacy' : section.charAt(0).toUpperCase() + section.slice(1)}
                 </a>
@@ -259,23 +258,23 @@ export const LandingPage = () => {
             <div className="hidden sm:flex items-center gap-2.5">
               <Link
                 to="/lacak"
-                className="text-xs font-bold px-3.5 py-2 rounded-xl border transition flex items-center gap-1.5 hover:border-pink-300"
-                style={{ background: '#FDF7F9', color: '#555', border: '1px solid #E8E3E5' }}
+                className="text-xs font-bold px-3.5 py-2 rounded-xl border transition flex items-center gap-1.5 hover:opacity-90"
+                style={{ background: '#FFFFFF', color: '#1C6F8E', border: '1.5px solid #BFEFFF' }}
               >
-                <Search className="w-3.5 h-3.5" style={{ color: '#D982A5' }} />
+                <Search className="w-3.5 h-3.5 text-[#1C6F8E]" />
                 <span>Lacak Aduan</span>
               </Link>
 
               {currentUser ? (
-                <div className="flex items-center gap-2 pl-2 border-l" style={{ borderColor: '#E8E3E5' }}>
+                <div className="flex items-center gap-2 pl-2 border-l" style={{ borderColor: '#BFEFFF' }}>
                   <Link
                     to={profilePath}
                     className="flex items-center gap-2.5 text-xs font-bold px-3 py-1.5 rounded-xl border transition"
-                    style={{ color: '#202020', background: '#FDF7F9', border: '1px solid #E8E3E5' }}
+                    style={{ color: '#1C6F8E', background: '#FFFFFF', border: '1.5px solid #BFEFFF' }}
                   >
                     <div
-                      className="w-6 h-6 rounded-lg text-white flex items-center justify-center font-black text-[10px]"
-                      style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
+                      className="w-6 h-6 rounded-lg text-[#1C6F8E] flex items-center justify-center font-black text-[10px] shadow-xs border"
+                      style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}
                     >
                       {currentUser.nama?.slice(0, 2).toUpperCase() || 'SW'}
                     </div>
@@ -284,20 +283,20 @@ export const LandingPage = () => {
                   <button
                     type="button"
                     onClick={logout}
-                    className="p-2 rounded-xl border transition hover:border-red-300 hover:text-red-500"
-                    style={{ border: '1px solid #E8E3E5', color: '#777' }}
+                    className="p-2 rounded-xl border transition hover:opacity-80"
+                    style={{ border: '1.5px solid #BFEFFF', color: '#1C6F8E' }}
                     title="Keluar"
                   >
-                    <LogIn className="w-3.5 h-3.5 rotate-180" />
+                    <LogIn className="w-3.5 h-3.5 rotate-180 text-[#1C6F8E]" />
                   </button>
                 </div>
               ) : (
                 <Link
                   to="/login"
-                  className="text-xs font-bold px-4 py-2 rounded-xl border transition flex items-center gap-1.5"
-                  style={{ background: '#FDF7F9', color: '#202020', border: '1px solid #E8E3E5' }}
+                  className="text-xs font-bold px-4 py-2 rounded-xl border transition flex items-center gap-1.5 hover:opacity-90"
+                  style={{ background: '#FFFFFF', color: '#1C6F8E', border: '1.5px solid #BFEFFF' }}
                 >
-                  <LogIn className="w-3.5 h-3.5" style={{ color: '#D982A5' }} />
+                  <LogIn className="w-3.5 h-3.5 text-[#1C6F8E]" />
                   <span>Masuk</span>
                 </Link>
               )}
@@ -305,10 +304,10 @@ export const LandingPage = () => {
               <button
                 type="button"
                 onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                className="text-xs font-bold px-4.5 py-2 rounded-xl text-white flex items-center gap-1.5 cursor-pointer transition active:scale-95 hover:opacity-90"
-                style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
+                className="text-xs font-bold px-4.5 py-2 rounded-xl text-[#1C6F8E] flex items-center gap-1.5 cursor-pointer transition active:scale-95 hover:opacity-90 shadow-xs border"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}
               >
-                <ShieldAlert className="w-4 h-4 text-white" />
+                <ShieldAlert className="w-4 h-4 text-[#1C6F8E]" />
                 <span>Buat Laporan</span>
               </button>
             </div>
@@ -318,24 +317,24 @@ export const LandingPage = () => {
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="sm:hidden p-2 rounded-xl border"
-              style={{ border: '1px solid #E8E3E5', color: '#555' }}
+              style={{ border: '1.5px solid #BFEFFF', color: '#1C6F8E' }}
               aria-label="Toggle Menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-5 h-5 text-[#1C6F8E]" /> : <Menu className="w-5 h-5 text-[#1C6F8E]" />}
             </button>
           </div>
 
           {/* Mobile Navigation Drawer */}
           {mobileMenuOpen && (
-            <div className="sm:hidden px-4 pt-3 pb-5 border-t space-y-3 animate-fade-in" style={{ borderColor: '#E8E3E5', background: '#fff' }}>
+            <div className="sm:hidden px-4 pt-3 pb-5 border-t space-y-3 animate-fade-in" style={{ borderColor: '#BFEFFF', background: '#FFFFFF' }}>
               <div className="grid grid-cols-2 gap-2 text-xs font-bold">
                 {['about', 'mission', 'how-it-works', 'media'].map((section) => (
                   <a
                     key={section}
                     href={`#${section}`}
                     onClick={(e) => scrollToSection(e, section)}
-                    className="p-2.5 rounded-xl border text-center transition"
-                    style={{ border: '1px solid #E8E3E5', color: '#202020', background: '#FDF7F9' }}
+                    className="p-2.5 rounded-xl border text-center transition hover:opacity-90"
+                    style={{ border: '1.5px solid #BFEFFF', color: '#1C6F8E', background: '#FFFFFF' }}
                   >
                     {section === 'how-it-works' ? 'How It Works' : section.charAt(0).toUpperCase() + section.slice(1)}
                   </a>
@@ -345,17 +344,17 @@ export const LandingPage = () => {
                 <button
                   type="button"
                   onClick={(e) => { setMobileMenuOpen(false); handleReportAction(e, '/buat-laporan'); }}
-                  className="w-full py-3 rounded-xl text-white font-bold text-xs flex items-center justify-center gap-2"
-                  style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
+                  className="w-full py-3 rounded-xl text-[#1C6F8E] font-bold text-xs flex items-center justify-center gap-2 shadow-xs border"
+                  style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}
                 >
-                  <ShieldAlert className="w-4 h-4 text-white" />
+                  <ShieldAlert className="w-4 h-4 text-[#1C6F8E]" />
                   <span>Buat Laporan Sekarang</span>
                 </button>
                 <Link
                   to="/lacak"
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full py-2.5 rounded-xl font-semibold text-xs text-center border"
-                  style={{ color: '#202020', border: '1px solid #E8E3E5', background: '#FDF7F9' }}
+                  style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
                 >
                   Lacak Tiket Aduan
                 </Link>
@@ -364,7 +363,7 @@ export const LandingPage = () => {
                     to="/login"
                     onClick={() => setMobileMenuOpen(false)}
                     className="w-full py-2.5 rounded-xl font-semibold text-xs text-center border"
-                    style={{ color: '#202020', border: '1px solid #E8E3E5', background: '#fff' }}
+                    style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
                   >
                     Masuk Portal Siswa
                   </Link>
@@ -375,10 +374,10 @@ export const LandingPage = () => {
         </nav>
       </header>
 
-      {/* ─── PINNED SCROLL SECTION (500vh) — Cube Animation (TIDAK DIUBAH) ─── */}
+      {/* ─── PINNED SCROLL SECTION (550vh) — 6 Surfaces Cube Animation ─── */}
       <section
         ref={scrollStageRef}
-        className="cube-scroll-section relative w-full h-[500vh]"
+        className="cube-scroll-section relative w-full h-[550vh]"
         style={{ overflow: 'visible' }}
       >
         <div
@@ -414,18 +413,18 @@ export const LandingPage = () => {
             <div className="max-w-xl lg:max-w-2xl space-y-5 text-center lg:text-left mx-auto lg:mx-0">
               {/* Official Badge */}
               <div
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold"
-                style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold shadow-xs border"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
               >
-                <ShieldCheck className="w-4 h-4" style={{ color: '#D982A5' }} />
+                <ShieldCheck className="w-4 h-4 text-[#1C6F8E]" />
                 <span>SIGAP • RUANG PERLINDUNGAN RESMI PELAJAR</span>
               </div>
 
               {/* Main Headline */}
               <div className="space-y-1">
-                <h1 className="text-3xl sm:text-5xl lg:text-[62px] font-black tracking-tight leading-[1.08]" style={{ color: '#202020' }}>
+                <h1 className="text-3xl sm:text-5xl lg:text-[62px] font-black tracking-tight leading-[1.08]" style={{ color: '#1C6F8E' }}>
                   SUARAKAN KEBENARAN. <br />
-                  <span style={{ color: '#D982A5' }}>
+                  <span style={{ color: '#2E84A5' }}>
                     CIPTAKAN SEKOLAH BEBAS KEKERASAN
                   </span>{' '}
                   &amp; PERUNDUNGAN.
@@ -433,10 +432,10 @@ export const LandingPage = () => {
               </div>
 
               {/* Supporting Text */}
-              <p className="text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium" style={{ color: '#555' }}>
+              <p className="text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium" style={{ color: '#1C6F8E' }}>
                 Setiap pelajar berhak mendapatkan lingkungan pendidikan yang aman, nyaman, dan bebas dari perundungan.
               </p>
-              <p className="text-xs max-w-lg mx-auto lg:mx-0 leading-relaxed hidden sm:block" style={{ color: '#777' }}>
+              <p className="text-xs max-w-lg mx-auto lg:mx-0 leading-relaxed hidden sm:block" style={{ color: '#2E84A5' }}>
                 Laporkan insiden secara aman dengan proteksi identitas berlapis, verifikasi cerdas asisten AI IndoBERT NLP, dan pendampingan terpadu Tim Bimbingan Konseling (BK) &amp; Satgas PPKSP.
               </p>
 
@@ -445,20 +444,20 @@ export const LandingPage = () => {
                 <button
                   type="button"
                   onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-2xl text-white font-bold text-sm flex items-center justify-center gap-2 group cursor-pointer active:scale-95 transition hover:opacity-90"
-                  style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 group cursor-pointer active:scale-95 transition hover:opacity-90 shadow-xs border"
+                  style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
                 >
-                  <ShieldAlert className="w-4 h-4 text-white group-hover:scale-110 transition" />
+                  <ShieldAlert className="w-4 h-4 text-[#1C6F8E] group-hover:scale-110 transition" />
                   <span>Buat Laporan Sekarang</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
+                  <ArrowRight className="w-4 h-4 text-[#1C6F8E] group-hover:translate-x-1 transition" />
                 </button>
 
                 <Link
                   to="/login"
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border transition hover:border-pink-300"
-                  style={{ color: '#202020', border: '1px solid #E8E3E5', background: '#fff' }}
+                  className="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border transition hover:opacity-90"
+                  style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
                 >
-                  <LogIn className="w-4 h-4" style={{ color: '#D982A5' }} />
+                  <LogIn className="w-4 h-4 text-[#1C6F8E]" />
                   <span>Masuk Portal Siswa</span>
                 </Link>
               </div>
@@ -468,21 +467,21 @@ export const LandingPage = () => {
                 <form
                   onSubmit={handleQuickTrack}
                   className="p-1.5 pl-3.5 rounded-2xl border flex items-center gap-2"
-                  style={{ background: '#FDF7F9', border: '1px solid #E8E3E5' }}
+                  style={{ background: '#FFFFFF', border: '1.5px solid #BFEFFF' }}
                 >
-                  <Search className="w-4 h-4 flex-shrink-0" style={{ color: '#D982A5' }} />
+                  <Search className="w-4 h-4 flex-shrink-0 text-[#1C6F8E]" />
                   <input
                     type="text"
                     placeholder="Punya Kode Tiket? (Contoh: SGP-2024-0142)"
                     value={quickTicketCode}
                     onChange={(e) => setQuickTicketCode(e.target.value)}
                     className="w-full bg-transparent text-xs focus:outline-none font-medium"
-                    style={{ color: '#202020' }}
+                    style={{ color: '#1C6F8E' }}
                   />
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded-xl text-white text-xs font-bold flex-shrink-0 cursor-pointer transition hover:opacity-90"
-                    style={{ background: '#D982A5' }}
+                    className="px-4 py-2 rounded-xl text-xs font-bold flex-shrink-0 cursor-pointer transition hover:opacity-90 border"
+                    style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
                   >
                     Lacak
                   </button>
@@ -508,15 +507,15 @@ export const LandingPage = () => {
           >
             <div className="space-y-3">
               <span
-                className="font-mono text-xs uppercase tracking-widest px-4 py-1.5 rounded-full"
-                style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+                className="font-mono text-xs uppercase tracking-widest px-4 py-1.5 rounded-full shadow-xs border"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
               >
                 PENGALAMAN INTERAKTIF // SCROLL SPOTLIGHT
               </span>
-              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight uppercase leading-tight" style={{ color: '#202020' }}>
+              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight uppercase leading-tight" style={{ color: '#1C6F8E' }}>
                 SATU SUARA KEBENARAN DAPAT MENGHENTIKAN KEKERASAN.
               </h2>
-              <p className="text-xs sm:text-base max-w-2xl mx-auto leading-relaxed font-medium" style={{ color: '#555' }}>
+              <p className="text-xs sm:text-base max-w-2xl mx-auto leading-relaxed font-medium" style={{ color: '#2E84A5' }}>
                 IDENTITAS DILINDUNGI • TRIASE CERDAS AI INDOBERT • 100% TERENKRIPSI
               </p>
             </div>
@@ -526,61 +525,65 @@ export const LandingPage = () => {
           <div
             className="absolute inset-x-0 bottom-16 max-w-2xl mx-auto px-4 text-center pointer-events-none z-10 transition-opacity duration-300"
             style={{
-              opacity: Math.max(0, Math.min(1, (scrollProgress - 0.84) * 6.5)).toFixed(3),
+              opacity: Math.max(0, Math.min(1, (scrollProgress - 0.94) * 16.0)).toFixed(3),
               transform: `translateY(${Math.max(0, (1 - scrollProgress) * 45).toFixed(1)}px)`
             }}
           >
             <div
               className="p-5 sm:p-6 rounded-3xl space-y-2"
-              style={{ background: '#fff', border: '1px solid #E9A7BF', boxShadow: '0 12px 40px rgba(217,130,165,0.12)' }}
+              style={{ background: '#FFFFFF', border: '1.5px solid #BFEFFF', boxShadow: '0 12px 40px rgba(191,239,255,0.3)' }}
             >
               <div
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold"
-                style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold shadow-xs border"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
               >
-                <Shield className="w-3.5 h-3.5" />
+                <Shield className="w-3.5 h-3.5 text-[#1C6F8E]" />
                 <span>TRANSISI // SISTEM PERLINDUNGAN TERPADU</span>
               </div>
-              <h3 className="text-base sm:text-lg font-black tracking-tight" style={{ color: '#202020' }}>
+              <h3 className="text-base sm:text-lg font-black tracking-tight" style={{ color: '#1C6F8E' }}>
                 Mengenal Ekosistem Pengaduan &amp; Pencegahan SIGAP
               </h3>
-              <p className="text-xs max-w-lg mx-auto font-medium" style={{ color: '#555' }}>
+              <p className="text-xs max-w-lg mx-auto font-medium" style={{ color: '#2E84A5' }}>
                 Melindungi integritas pelajar melalui pelaporan rahasia, audit trail terverifikasi, dan pendampingan profesional Satgas PPKSP.
               </p>
             </div>
           </div>
 
           {/* SCROLL GUIDE FOOTER DOCK */}
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4 flex items-center justify-between text-xs font-mono z-30 pointer-events-auto" style={{ color: '#777' }}>
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4 flex items-center justify-between text-xs font-mono z-30 pointer-events-auto" style={{ color: '#1C6F8E' }}>
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full" style={{ background: '#D982A5' }} />
-              <span className="font-bold" style={{ color: '#555' }}>
-                {scrollProgress < 0.15
-                  ? 'SCENE 01 // INITIAL STATE'
-                  : scrollProgress < 0.35
-                  ? 'SCENE 02 // SCALE UP'
-                  : scrollProgress < 0.60
-                  ? 'SCENE 03 // MOVE TO CENTER'
-                  : scrollProgress < 0.85
-                  ? 'SCENE 04 // MOVE UPWARD'
-                  : 'SCENE 05 // FINAL TRANSITION'}
+              <span className="w-2 h-2 rounded-full" style={{ background: '#BFEFFF' }} />
+              <span className="font-bold" style={{ color: '#1C6F8E' }}>
+                {scrollProgress < 0.16
+                  ? 'SURFACE 01 // FRONT (SUARAKAN KEBENARAN)'
+                  : scrollProgress < 0.32
+                  ? 'SURFACE 03 // RIGHT (ZERO RETALIATION)'
+                  : scrollProgress < 0.48
+                  ? 'SURFACE 02 // BACK (ANONYMOUS SHIELD)'
+                  : scrollProgress < 0.64
+                  ? 'SURFACE 04 // LEFT (AI SMART TRIASE)'
+                  : scrollProgress < 0.80
+                  ? 'SURFACE 05 // TOP (SAFE SANCTUARY)'
+                  : scrollProgress < 0.94
+                  ? 'SURFACE 06 // BOTTOM (AUDIT & INTEGRITY)'
+                  : 'SELESAI // KEMBALI KE FRONT'}
               </span>
             </div>
 
             <div className="hidden sm:flex items-center gap-2.5">
-              <span style={{ color: '#aaa' }}>0%</span>
-              <div className="w-28 h-1.5 rounded-full overflow-hidden" style={{ background: '#E8E3E5' }}>
+              <span style={{ color: '#2E84A5' }}>0%</span>
+              <div className="w-28 h-1.5 rounded-full overflow-hidden" style={{ background: '#BFEFFF' }}>
                 <div
                   className="h-full rounded-full transition-all duration-75"
-                  style={{ width: `${(scrollProgress * 100).toFixed(0)}%`, background: 'linear-gradient(90deg, #D982A5, #E9A7BF)' }}
+                  style={{ width: `${(scrollProgress * 100).toFixed(0)}%`, background: '#1C6F8E' }}
                 />
               </div>
-              <span style={{ color: '#aaa' }}>100%</span>
+              <span style={{ color: '#2E84A5' }}>100%</span>
             </div>
 
-            <div className="flex items-center gap-1.5 font-bold" style={{ color: '#D982A5' }}>
+            <div className="flex items-center gap-1.5 font-bold" style={{ color: '#1C6F8E' }}>
               <span>GULIR KE BAWAH</span>
-              <ChevronDown className="w-4 h-4 animate-bounce" />
+              <ChevronDown className="w-4 h-4 animate-bounce text-[#1C6F8E]" />
             </div>
           </div>
         </div>
@@ -589,21 +592,21 @@ export const LandingPage = () => {
       {/* ─── SECTION 1: ABOUT SIGAP (#about) EDITORIAL HORIZONTAL SHOWCASE ─── */}
       <AboutEditorialShowcase handleReportAction={handleReportAction} />
 
-      {/* ─── SECTION 2: OUR MISSION (#mission) ─── */}
-      <section id="mission" className="py-20 lg:py-28 border-y relative z-30" style={{ background: '#FDF7F9', borderColor: '#E8E3E5' }}>
+      {/* ─── SECTION 2: OUR MISSION (#mission) (Baby Blue Tint Background with White Cards) ─── */}
+      <section id="mission" className="py-20 lg:py-28 border-y relative z-30" style={{ background: 'rgba(191, 239, 255, 0.25)', borderColor: '#BFEFFF' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center space-y-3 mb-16">
             <div
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold"
-              style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold shadow-xs border"
+              style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
             >
-              <School className="w-3.5 h-3.5" />
+              <School className="w-3.5 h-3.5 text-[#1C6F8E]" />
               <span>MISI &amp; FILOSOFI SIGAP</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight" style={{ color: '#202020' }}>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
               Membangun Ekosistem Sekolah yang Aman dan Berintegritas
             </h2>
-            <p className="text-sm sm:text-base leading-relaxed" style={{ color: '#555' }}>
+            <p className="text-sm sm:text-base leading-relaxed" style={{ color: '#2E84A5' }}>
               Kami percaya rasa aman adalah hak dasar setiap anak dalam menuntut ilmu. SIGAP mempertemukan komitmen hukum, teknologi cerdas, dan sentuhan empati manusia.
             </p>
           </div>
@@ -611,79 +614,85 @@ export const LandingPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
-                icon: <Shield className="w-6 h-6 text-white" />,
-                bg: 'linear-gradient(135deg, #D982A5, #E9A7BF)',
+                icon: <Shield className="w-6 h-6 text-[#1C6F8E]" />,
+                bg: '#BFEFFF',
+                cardBg: '#FFFFFF',
+                cardBorder: '#BFEFFF',
                 title: 'Zero Retaliation Guarantee',
                 desc: 'Menjamin perlindungan tanpa intimidasi balasan bagi pelapor, saksi, maupun korban. Sanksi tegas diberlakukan terhadap setiap upaya perundungan lanjutan.'
               },
               {
-                icon: <Sparkles className="w-6 h-6 text-white" />,
-                bg: 'linear-gradient(135deg, #9B59B6, #8E44AD)',
+                icon: <Sparkles className="w-6 h-6 text-[#1C6F8E]" />,
+                bg: '#BFEFFF',
+                cardBg: '#FFFFFF',
+                cardBorder: '#BFEFFF',
                 title: 'Validasi & Triase Berbasis AI',
                 desc: 'Pemrosesan teks IndoBERT secara otomatis mengidentifikasi 7 kategori kekerasan resmi dan mengukur tingkat risiko untuk mempercepat respons tindakan awal.'
               },
               {
-                icon: <HeartHandshake className="w-6 h-6 text-white" />,
-                bg: 'linear-gradient(135deg, #2ECC71, #1ABC9C)',
+                icon: <HeartHandshake className="w-6 h-6 text-[#1C6F8E]" />,
+                bg: '#BFEFFF',
+                cardBg: '#FFFFFF',
+                cardBorder: '#BFEFFF',
                 title: 'Pendampingan Psikologis Terpadu',
                 desc: 'Guru BK dan Satgas PPKSP mendampingi siswa secara privat dan berkelanjutan hingga tercapai pemulihan trauma dan kedamaian lingkungan sekolah.'
               }
             ].map((item, i) => (
               <div
                 key={i}
-                className="rounded-3xl p-8 space-y-4"
-                style={{ background: '#fff', border: '1px solid #E8E3E5' }}
+                className="rounded-3xl p-8 space-y-4 shadow-md"
+                style={{ background: item.cardBg, border: `2px solid ${item.cardBorder}` }}
               >
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold" style={{ background: item.bg }}>
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center font-bold shadow-xs border" style={{ background: item.bg, borderColor: '#BFEFFF' }}>
                   {item.icon}
                 </div>
-                <h3 className="text-xl font-black" style={{ color: '#202020' }}>{item.title}</h3>
-                <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#555' }}>{item.desc}</p>
+                <h3 className="text-xl font-black" style={{ color: '#1C6F8E' }}>{item.title}</h3>
+                <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#2E84A5' }}>{item.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── SECTION 3: HOW IT WORKS (#how-it-works) ─── */}
+      {/* ─── SECTION 3: HOW IT WORKS (#how-it-works) (White Background) ─── */}
       <section id="how-it-works" className="py-20 lg:py-28 relative z-30" style={{ background: '#FFFFFF' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
             <div
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold"
-              style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold shadow-xs border"
+              style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
             >
-              <Activity className="w-3.5 h-3.5" />
+              <Activity className="w-3.5 h-3.5 text-[#1C6F8E]" />
               <span>ALUR PENANGANAN</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight" style={{ color: '#202020' }}>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
               Alur 4 Langkah: Report → Verification → Follow-up → Resolution
             </h2>
-            <p className="text-sm sm:text-base leading-relaxed" style={{ color: '#555' }}>
+            <p className="text-sm sm:text-base leading-relaxed" style={{ color: '#2E84A5' }}>
               Mulai dari pengiriman hingga penuntasan kasus, proses berjalan transparan, akuntabel, dan bebas hambatan birokrasi.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { num: '01', bg: '#202020', title: 'Report (Kirim Aduan)', desc: 'Tulis kronologi kejadian, pilih lokasi di sekolah, lampirkan bukti foto bila ada, dan tentukan opsi privasi identitas Anda.' },
-              { num: '02', bg: 'linear-gradient(135deg, #D982A5, #E9A7BF)', title: 'Verification (Verifikasi)', desc: 'Kecerdasan buatan NLP IndoBERT memetakan kategori kasus, kemudian Tim BK Satgas memverifikasi keabsahan laporan.' },
-              { num: '03', bg: '#5B4CF5', title: 'Follow-up (Tindak Lanjut)', desc: 'Pelaksanaan sesi konseling privat, mediasi terarah, pemanggilan saksi aman, dan pemenuhan kebutuhan bantuan korban.' },
-              { num: '04', bg: '#16A34A', title: 'Resolution (Penyelesaian)', desc: 'Penegakan aturan sekolah, pemulihan situasi belajar, dan pencatatan riwayat penanganan secara permanen di Digital Audit Trail.' }
+              { num: '01', bg: '#BFEFFF', cardBg: '#FFFFFF', cardBorder: '#BFEFFF', title: 'Report (Kirim Aduan)', desc: 'Tulis kronologi kejadian, pilih lokasi di sekolah, lampirkan bukti foto bila ada, dan tentukan opsi privasi identitas Anda.' },
+              { num: '02', bg: '#BFEFFF', cardBg: '#FFFFFF', cardBorder: '#BFEFFF', title: 'Verification (Verifikasi)', desc: 'Kecerdasan buatan NLP IndoBERT memetakan kategori kasus, kemudian Tim BK Satgas memverifikasi keabsahan laporan.' },
+              { num: '03', bg: '#BFEFFF', cardBg: '#FFFFFF', cardBorder: '#BFEFFF', title: 'Follow-up (Tindak Lanjut)', desc: 'Pelaksanaan sesi konseling privat, mediasi terarah, pemanggilan saksi aman, dan pemenuhan kebutuhan bantuan korban.' },
+              { num: '04', bg: '#BFEFFF', cardBg: '#FFFFFF', cardBorder: '#BFEFFF', title: 'Resolution (Penyelesaian)', desc: 'Penegakan aturan sekolah, pemulihan situasi belajar, dan pencatatan riwayat penanganan secara permanen di Digital Audit Trail.' }
             ].map((step, i) => (
               <div
                 key={i}
-                className="rounded-3xl p-6 space-y-3"
-                style={{ background: '#FDF7F9', border: '1px solid #E8E3E5' }}
+                className="rounded-3xl p-6 space-y-3 shadow-md"
+                style={{ background: step.cardBg, border: `2px solid ${step.cardBorder}` }}
               >
                 <div
-                  className="w-10 h-10 rounded-2xl text-white font-black text-sm flex items-center justify-center"
-                  style={{ background: step.bg }}
+                  className="w-10 h-10 rounded-2xl text-[#1C6F8E] font-black text-sm flex items-center justify-center shadow-xs border"
+                  style={{ background: step.bg, borderColor: '#BFEFFF' }}
                 >
                   {step.num}
                 </div>
-                <h4 className="font-extrabold text-base" style={{ color: '#202020' }}>{step.title}</h4>
-                <p className="text-xs leading-relaxed" style={{ color: '#777' }}>{step.desc}</p>
+                <h4 className="font-extrabold text-base" style={{ color: '#1C6F8E' }}>{step.title}</h4>
+                <p className="text-xs leading-relaxed" style={{ color: '#2E84A5' }}>{step.desc}</p>
               </div>
             ))}
           </div>
@@ -714,11 +723,11 @@ export const LandingPage = () => {
           <source src="/assets/background/sigap-background.mp4" type="video/mp4" />
         </video>
 
-        {/* Subtle translucent light overlay to ensure legibility while showing video */}
+        {/* Subtle translucent light overlay with White & Baby Blue tone */}
         <div
           className="absolute inset-0 pointer-events-none z-1"
           style={{
-            background: 'linear-gradient(180deg, rgba(253, 247, 249, 0.82) 0%, rgba(255, 255, 255, 0.72) 50%, rgba(253, 247, 249, 0.85) 100%)'
+            background: 'rgba(255, 255, 255, 0.92)'
           }}
         />
 
@@ -737,26 +746,26 @@ export const LandingPage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
               <div className="lg:col-span-5 space-y-4">
                 <div
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold"
-                  style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold shadow-xs border"
+                  style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
                 >
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <Sparkles className="w-3.5 h-3.5 text-[#1C6F8E]" />
                   <span>KEAMANAN &amp; PRIVASI</span>
                 </div>
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight" style={{ color: '#202020' }}>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
                   Teknologi Cerdas untuk Perlindungan Hakiki
                 </h2>
-                <p className="text-sm leading-relaxed" style={{ color: '#555' }}>
+                <p className="text-sm leading-relaxed" style={{ color: '#2E84A5' }}>
                   SIGAP dirancang dengan standar teknologi institusi modern guna memastikan tidak ada suara aduan yang hilang, diabaikan, atau bocor.
                 </p>
 
                 <div className="pt-2">
                   <Link
                     to="/admin/login"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold border transition hover:border-pink-300"
-                    style={{ color: '#202020', border: '1px solid #E8E3E5', background: '#FDF7F9' }}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-bold border transition hover:opacity-90 shadow-xs"
+                    style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
                   >
-                    <Lock className="w-3.5 h-3.5" style={{ color: '#D982A5' }} />
+                    <Lock className="w-3.5 h-3.5 text-[#1C6F8E]" />
                     <span>Akses Khusus Guru BK &amp; Admin</span>
                   </Link>
                 </div>
@@ -764,26 +773,26 @@ export const LandingPage = () => {
 
               <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
-                  { icon: <Sparkles className="w-5 h-5 text-white" />, title: 'AI NLP Multi-Label', desc: 'Rekomendasi otomatis 7 kategori kekerasan resmi berdasarkan analisis teks kronologi aduan untuk mempercepat telaah awal tim konselor.' },
-                  { icon: <Lock className="w-5 h-5 text-white" />, title: 'Enkripsi & Kerahasiaan', desc: 'Data aduan dilindungi mekanisme Role-Based Access Control (RBAC) dan JWT. Hanya konselor sekolah yang terverifikasi yang dapat mengakses.' },
-                  { icon: <FileText className="w-5 h-5 text-white" />, title: 'Digital Audit Trail', desc: 'Setiap perpindahan status laporan dicatat secara permanen dengan timestamp dan identitas konselor, mencegah kelalaian dan manipulasi.' },
-                  { icon: <Search className="w-5 h-5 text-white" />, title: 'Pelacakan Real-Time', desc: 'Transparansi progres aduan melalui kode tiket unik tanpa perlu login, menjaga kenyamanan dan ketenangan pikiran pelapor.' }
+                  { cardBg: '#FFFFFF', cardBorder: '#BFEFFF', icon: <Sparkles className="w-5 h-5 text-[#1C6F8E]" />, title: 'AI NLP Multi-Label', desc: 'Rekomendasi otomatis 7 kategori kekerasan resmi berdasarkan analisis teks kronologi aduan untuk mempercepat telaah awal tim konselor.' },
+                  { cardBg: '#FFFFFF', cardBorder: '#BFEFFF', icon: <Lock className="w-5 h-5 text-[#1C6F8E]" />, title: 'Enkripsi & Kerahasiaan', desc: 'Data aduan dilindungi mekanisme Role-Based Access Control (RBAC) dan JWT. Hanya konselor sekolah yang terverifikasi yang dapat mengakses.' },
+                  { cardBg: '#FFFFFF', cardBorder: '#BFEFFF', icon: <FileText className="w-5 h-5 text-[#1C6F8E]" />, title: 'Digital Audit Trail', desc: 'Setiap perpindahan status laporan dicatat secara permanen dengan timestamp dan identitas konselor, mencegah kelalaian dan manipulasi.' },
+                  { cardBg: '#FFFFFF', cardBorder: '#BFEFFF', icon: <Search className="w-5 h-5 text-[#1C6F8E]" />, title: 'Pelacakan Real-Time', desc: 'Transparansi progres aduan melalui kode tiket unik tanpa perlu login, menjaga kenyamanan dan ketenangan pikiran pelapor.' }
                 ].map((feature, i) => (
                   <div
                     key={i}
-                    className="p-6 rounded-3xl space-y-3 border transition group hover:border-pink-300 shadow-sm"
-                    style={{ background: 'rgba(253, 247, 249, 0.92)', border: '1px solid #E8E3E5' }}
+                    className="p-6 rounded-3xl space-y-3 border-2 transition group hover:shadow-md shadow-xs"
+                    style={{ background: feature.cardBg, borderColor: feature.cardBorder }}
                   >
                     <div
-                      className="w-10 h-10 rounded-2xl flex items-center justify-center font-bold group-hover:scale-105 transition-transform"
-                      style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
+                      className="w-10 h-10 rounded-2xl flex items-center justify-center font-bold group-hover:scale-105 transition-transform shadow-xs border"
+                      style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
                     >
                       {feature.icon}
                     </div>
-                    <h4 className="font-bold text-base group-hover:text-pink-500 transition-colors" style={{ color: '#202020' }}>
+                    <h4 className="font-bold text-base transition-colors" style={{ color: '#1C6F8E' }}>
                       {feature.title}
                     </h4>
-                    <p className="text-xs leading-relaxed" style={{ color: '#555' }}>{feature.desc}</p>
+                    <p className="text-xs leading-relaxed" style={{ color: '#2E84A5' }}>{feature.desc}</p>
                   </div>
                 ))}
               </div>
@@ -792,21 +801,21 @@ export const LandingPage = () => {
         </section>
       </div>
 
-      {/* ─── SECTION: FAQ ACCORDION ─── */}
-      <section className="py-16 lg:py-24 relative z-30" style={{ background: '#FDF7F9' }}>
+      {/* ─── SECTION: FAQ ACCORDION (Baby Blue Tint Section with White Cards) ─── */}
+      <section className="py-16 lg:py-24 border-y relative z-30" style={{ background: 'rgba(191, 239, 255, 0.25)', borderColor: '#BFEFFF' }}>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-12">
             <div
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold"
-              style={{ background: '#F9DCE7', color: '#D982A5', border: '1px solid #E9A7BF' }}
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold shadow-xs border"
+              style={{ background: '#FFFFFF', color: '#1C6F8E', border: '1px solid #BFEFFF' }}
             >
-              <HelpCircle className="w-3.5 h-3.5" />
+              <HelpCircle className="w-3.5 h-3.5 text-[#1C6F8E]" />
               <span>TANYA JAWAB</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black tracking-tight" style={{ color: '#202020' }}>
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
               Pertanyaan yang Sering Diajukan
             </h2>
-            <p className="text-xs sm:text-sm" style={{ color: '#777' }}>
+            <p className="text-xs sm:text-sm" style={{ color: '#2E84A5' }}>
               Temukan jawaban seputar akses login, keamanan privasi, alur aduan, dan penanganan perundungan di SIGAP.
             </p>
           </div>
@@ -815,25 +824,24 @@ export const LandingPage = () => {
             {faqs.map((faq, idx) => (
               <div
                 key={idx}
-                className="rounded-2xl overflow-hidden transition"
-                style={{ background: '#fff', border: '1px solid #E8E3E5' }}
+                className="rounded-2xl overflow-hidden transition shadow-xs"
+                style={{ background: '#FFFFFF', border: '1.5px solid #BFEFFF' }}
               >
                 <button
                   type="button"
                   onClick={() => toggleFaq(idx)}
-                  className="w-full p-4 sm:p-5 text-left font-bold text-xs sm:text-sm flex justify-between items-center gap-4 transition"
-                  style={{ color: '#202020' }}
+                  className="w-full p-4 sm:p-5 text-left font-bold text-xs sm:text-sm flex justify-between items-center gap-4 transition hover:text-[#2E84A5]"
+                  style={{ color: '#1C6F8E' }}
                 >
                   <span>{faq.q}</span>
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform flex-shrink-0 ${activeFaq === idx ? 'rotate-180' : ''}`}
-                    style={{ color: activeFaq === idx ? '#D982A5' : '#aaa' }}
+                    className={`w-4 h-4 transition-transform flex-shrink-0 text-[#1C6F8E] ${activeFaq === idx ? 'rotate-180' : ''}`}
                   />
                 </button>
                 {activeFaq === idx && (
                   <div
                     className="px-4 sm:px-5 pb-5 pt-1 text-xs sm:text-sm leading-relaxed border-t"
-                    style={{ color: '#555', borderColor: '#E8E3E5', background: '#FDF7F9' }}
+                    style={{ color: '#2E84A5', borderColor: '#BFEFFF', background: '#FFFFFF' }}
                   >
                     {faq.a}
                   </div>
@@ -849,20 +857,20 @@ export const LandingPage = () => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className="rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6"
-            style={{ background: '#FFF5F7', border: '1px solid #F9DCE7' }}
+            style={{ background: '#FFFFFF', border: '2px solid #BFEFFF', boxShadow: '0 8px 30px rgba(191, 239, 255, 0.25)' }}
           >
             <div className="space-y-2 text-center md:text-left">
               <div
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold"
-                style={{ background: '#FEE2E2', color: '#DC2626', border: '1px solid #FECACA' }}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold shadow-xs border"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
               >
-                <AlertTriangle className="w-3.5 h-3.5" />
+                <AlertTriangle className="w-3.5 h-3.5 text-[#1C6F8E]" />
                 <span>HOTLINE BANTUAN DARURAT</span>
               </div>
-              <h3 className="text-lg sm:text-xl font-black" style={{ color: '#202020' }}>
+              <h3 className="text-lg sm:text-xl font-black" style={{ color: '#1C6F8E' }}>
                 Dalam Keadaan Bahaya Mendesak?
               </h3>
-              <p className="text-xs sm:text-sm max-w-xl" style={{ color: '#777' }}>
+              <p className="text-xs sm:text-sm max-w-xl" style={{ color: '#2E84A5' }}>
                 Bila Anda membutuhkan perlindungan fisik seketika atau pendampingan darurat kekerasan seksual dan fisik, hubungi kontak resmi berikut:
               </p>
             </div>
@@ -870,17 +878,18 @@ export const LandingPage = () => {
             <div className="flex flex-wrap items-center justify-center gap-3">
               <a
                 href="tel:129"
-                className="px-5 py-3 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center gap-2 transition active:scale-95"
+                className="px-5 py-3 rounded-2xl font-bold text-xs flex items-center gap-2 transition active:scale-95 shadow-xs hover:opacity-90 border"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
               >
-                <PhoneCall className="w-4 h-4" />
+                <PhoneCall className="w-4 h-4 text-[#1C6F8E]" />
                 <span>SAPA 129 (KemenPPPA)</span>
               </a>
               <a
                 href="tel:110"
-                className="px-5 py-3 rounded-2xl text-white font-bold text-xs flex items-center gap-2 transition active:scale-95"
-                style={{ background: '#1D294B' }}
+                className="px-5 py-3 rounded-2xl font-bold text-xs flex items-center gap-2 transition active:scale-95 shadow-xs hover:opacity-90 border"
+                style={{ background: '#FFFFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
               >
-                <ShieldAlert className="w-4 h-4 text-white" />
+                <ShieldAlert className="w-4 h-4 text-[#1C6F8E]" />
                 <span>Polisi 110</span>
               </a>
             </div>
@@ -888,13 +897,13 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* ─── SECTION 6: FINAL CALL TO ACTION ─── */}
-      <section className="py-16 border-t relative z-30" style={{ background: '#FDF7F9', borderColor: '#E8E3E5' }}>
+      {/* ─── SECTION 6: FINAL CALL TO ACTION (Baby Blue & White Theme) ─── */}
+      <section className="py-16 border-t relative z-30" style={{ background: '#FFFFFF', borderColor: '#BFEFFF' }}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight" style={{ color: '#202020' }}>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
             Sekolah yang Sehat Dimulai dari Keberanian Bersuara
           </h2>
-          <p className="text-xs sm:text-base max-w-2xl mx-auto leading-relaxed" style={{ color: '#555' }}>
+          <p className="text-xs sm:text-base max-w-2xl mx-auto leading-relaxed" style={{ color: '#2E84A5' }}>
             Tidak ada alasan untuk menoleransi perundungan di lingkungan sekolah. Masuk atau daftarkan akun Anda sekarang untuk membuat laporan aduan.
           </p>
 
@@ -902,28 +911,28 @@ export const LandingPage = () => {
             <button
               type="button"
               onClick={(e) => handleReportAction(e, '/buat-laporan')}
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl text-white font-bold text-sm cursor-pointer transition hover:opacity-90 flex items-center justify-center gap-2"
-              style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
+              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-bold text-sm cursor-pointer transition hover:opacity-90 flex items-center justify-center gap-2 shadow-xs border"
+              style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
             >
-              <ShieldAlert className="w-4 h-4 text-white" />
+              <ShieldAlert className="w-4 h-4 text-[#1C6F8E]" />
               <span>Buat Laporan Sekarang</span>
             </button>
 
             <Link
               to="/login"
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border transition hover:border-pink-300"
-              style={{ color: '#202020', border: '1px solid #E8E3E5', background: '#fff' }}
+              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border transition hover:opacity-90 shadow-xs"
+              style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
             >
-              <LogIn className="w-4 h-4" style={{ color: '#D982A5' }} />
+              <LogIn className="w-4 h-4 text-[#1C6F8E]" />
               <span>Masuk ke Akun Siswa</span>
             </Link>
 
             <Link
               to="/admin/login"
-              className="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border transition hover:border-pink-300"
-              style={{ color: '#555', border: '1px solid #E8E3E5', background: '#FDF7F9' }}
+              className="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border transition hover:opacity-90 shadow-xs"
+              style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
             >
-              <Lock className="w-4 h-4" style={{ color: '#D982A5' }} />
+              <Lock className="w-4 h-4 text-[#1C6F8E]" />
               <span>Akses Portal Guru BK</span>
             </Link>
           </div>
@@ -932,33 +941,33 @@ export const LandingPage = () => {
 
       {/* ─── AUTH GATE MODAL ─── */}
       {showAuthModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in" style={{ background: 'rgba(29,41,75,0.4)' }}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in" style={{ background: 'rgba(28, 111, 142, 0.45)' }}>
           <div
             className="rounded-3xl max-w-md w-full p-6 sm:p-8 relative space-y-6"
-            style={{ background: '#fff', border: '1px solid #E9A7BF', boxShadow: '0 24px 70px rgba(217,130,165,0.2)' }}
+            style={{ background: '#FFFFFF', border: '2px solid #BFEFFF', boxShadow: '0 24px 70px rgba(191, 239, 255, 0.35)' }}
           >
             <button
               type="button"
               onClick={() => setShowAuthModal(false)}
-              className="absolute right-5 top-5 p-2 rounded-2xl transition hover:bg-pink-50"
-              style={{ color: '#aaa' }}
+              className="absolute right-5 top-5 p-2 rounded-2xl transition hover:opacity-70"
+              style={{ color: '#1C6F8E' }}
               aria-label="Tutup"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto"
-              style={{ background: '#F9DCE7' }}
+              className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto shadow-xs border"
+              style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}
             >
-              <Lock className="w-7 h-7" style={{ color: '#D982A5' }} />
+              <Lock className="w-7 h-7 text-[#1C6F8E]" />
             </div>
 
             <div className="text-center space-y-2">
-              <h3 className="text-xl font-black tracking-tight" style={{ color: '#202020' }}>
+              <h3 className="text-xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
                 Masuk atau Daftar Terlebih Dahulu
               </h3>
-              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#555' }}>
+              <p className="text-xs sm:text-sm leading-relaxed" style={{ color: '#2E84A5' }}>
                 Untuk mengakses fungsi <strong>Buat Aduan</strong> dan memastikan validitas laporan serta perlindungan resmi oleh Guru BK &amp; Satgas PPKSP, Anda harus memiliki akun terdaftar.
               </p>
             </div>
@@ -970,10 +979,10 @@ export const LandingPage = () => {
                   setShowAuthModal(false);
                   navigate(`/login?redirect=${encodeURIComponent(targetRedirect)}`);
                 }}
-                className="w-full py-3.5 px-4 rounded-2xl text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition active:scale-95"
-                style={{ background: '#1D294B' }}
+                className="w-full py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition active:scale-95 shadow-xs hover:opacity-90 border"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
               >
-                <LogIn className="w-4 h-4 text-white" />
+                <LogIn className="w-4 h-4 text-[#1C6F8E]" />
                 <span>Masuk dengan Akun Siswa</span>
               </button>
 
@@ -983,25 +992,25 @@ export const LandingPage = () => {
                   setShowAuthModal(false);
                   navigate(`/register?redirect=${encodeURIComponent(targetRedirect)}`);
                 }}
-                className="w-full py-3.5 px-4 rounded-2xl text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition hover:opacity-90"
-                style={{ background: 'linear-gradient(135deg, #D982A5, #E9A7BF)' }}
+                className="w-full py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition hover:opacity-90 shadow-xs border"
+                style={{ background: '#FFFFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
               >
-                <UserPlus className="w-4 h-4" />
+                <UserPlus className="w-4 h-4 text-[#1C6F8E]" />
                 <span>Daftar Akun Baru</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setShowAuthModal(false)}
-                className="w-full py-2.5 px-4 text-xs font-semibold transition cursor-pointer hover:text-slate-800"
-                style={{ color: '#aaa' }}
+                className="w-full py-2.5 px-4 text-xs font-semibold transition cursor-pointer hover:underline"
+                style={{ color: '#2E84A5' }}
               >
                 Batal
               </button>
             </div>
 
-            <div className="pt-3 border-t flex items-center gap-2 text-[11px]" style={{ borderColor: '#E8E3E5', color: '#aaa' }}>
-              <ShieldCheck className="w-4 h-4 flex-shrink-0" style={{ color: '#16A34A' }} />
+            <div className="pt-3 border-t flex items-center gap-2 text-[11px]" style={{ borderColor: '#BFEFFF', color: '#2E84A5' }}>
+              <ShieldCheck className="w-4 h-4 flex-shrink-0 text-[#1C6F8E]" />
               <span>Privasi data Anda dijamin 100% dan terenkripsi secara aman.</span>
             </div>
           </div>
@@ -1009,7 +1018,7 @@ export const LandingPage = () => {
       )}
 
       {/* Footer */}
-      <StudentFooter />
+      <LandingFooter />
     </div>
   );
 };
