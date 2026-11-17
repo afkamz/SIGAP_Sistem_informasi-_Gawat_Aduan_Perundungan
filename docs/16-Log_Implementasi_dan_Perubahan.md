@@ -1856,3 +1856,12 @@ Penambahan dan pelacakan berkas video latar belakang `cube-background.mp4` dan `
 | 1 | `TAMBAH` | `public/assets/background/cube-background.mp4` | Video latar belakang kubus 3D hero pada direktori root publik |
 | 2 | `TAMBAH` | `public/assets/background/sigap-background.mp4` | Video latar belakang sinematik sistem SIGAP pada direktori root publik |
 | 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 128 sinkronisasi aset video latar belakang repositori GitHub |
+
+## 📅 [Sesi 129] Senin, 17 November 2026 — Jam 18 WIB
+
+**Fokus Utama:** Perbaikan tampilan video background Landing Page dan cube 3D yang tidak muncul akibat `Frontend/dist/` belum diperbarui. Rebuild frontend berhasil menyertakan semua aset video ke dalam dist.
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/dist/` (rebuild) | Build ulang seluruh frontend agar aset video `/assets/background/*.mp4` dan `/assets/cube/*.mp4` tersedia di dist untuk disajikan nginx |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 129 perbaikan video background |
