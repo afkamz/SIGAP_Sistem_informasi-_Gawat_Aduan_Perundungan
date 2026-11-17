@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
   Search,
@@ -25,7 +25,14 @@ import {
   HelpCircle,
   Tag,
   Mail,
-  RotateCw
+  RotateCw,
+  Monitor,
+  Users,
+  Building2,
+  ShieldAlert,
+  ArrowRight,
+  GraduationCap,
+  Info
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { api } from '../../services/api';
@@ -195,6 +202,160 @@ export const TrackReport = () => {
     [reports]
   );
 
+  // Pinned Horizontal Editorial Section: Riwayat Laporan Sebelumnya
+  const reportsStickyRef = useRef(null);
+  const editorialTitleRef = useRef(null);
+  const reportsTrackRef = useRef(null);
+  const reportCardsRef = useRef([]);
+
+  // Cubic Bezier solver for cubic-bezier(0.16, 1, 0.3, 1)
+  const solveCubicBezier = (p) => {
+    if (p <= 0) return 0;
+    if (p >= 1) return 1;
+    let t = p;
+    for (let i = 0; i < 5; i++) {
+      const currentX = 3 * (1 - t) * (1 - t) * t * 0.16 + 3 * (1 - t) * t * t * 0.3 + t * t * t;
+      const currentSlope = 3 * (1 - t) * (1 - t) * 0.16 + 6 * (1 - t) * t * (0.3 - 0.16) + 3 * t * t * (1 - 0.3);
+      if (Math.abs(currentSlope) < 1e-5) break;
+      t -= (currentX - p) / currentSlope;
+      t = Math.max(0, Math.min(1, t));
+    }
+    return 3 * (1 - t) * (1 - t) * t * 1.0 + 3 * (1 - t) * t * t * 1.0 + t * t * t;
+  };
+
+  const getSubProgress = (p, start, end) => {
+    if (p <= start) return 0;
+    if (p >= end) return 1;
+    return (p - start) / (end - start);
+  };
+
+  // Handler Sticky Scroll-Driven Horizontal Reveal: Riwayat Laporan Sebelumnya
+  useEffect(() => {
+    if (viewMode !== 'overview') return;
+
+    const container = reportsStickyRef.current;
+    if (!container) return;
+
+    let rafId = null;
+
+    const handleReportsScroll = () => {
+      const rect = container.getBoundingClientRect();
+      const topOffset = 64; // Header sticky offset
+      const totalScrollable = rect.height - window.innerHeight;
+
+      let p = 0;
+      if (totalScrollable > 0) {
+        p = Math.max(0, Math.min(1, (topOffset - rect.top) / totalScrollable));
+      }
+
+      // 1. Oversized Editorial Typography:
+      const pTitle = getSubProgress(p, 0.00, 0.28);
+      const titleOpacity = 1.0 - (0.88 * solveCubicBezier(pTitle));
+      const titleScale = 1.0 - (0.06 * solveCubicBezier(pTitle));
+      if (editorialTitleRef.current) {
+        editorialTitleRef.current.style.opacity = titleOpacity;
+        editorialTitleRef.current.style.transform = `scale(${titleScale}) translate3d(0, 0, 0)`;
+      }
+
+      // 2. Horizontal Cards Track Translation:
+      const track = reportsTrackRef.current;
+      if (track) {
+        const vw = window.innerWidth;
+        const trackWidth = track.scrollWidth;
+        const padding = vw < 640 ? 24 : 48;
+
+        let endX = padding;
+        if (trackWidth + padding * 2 <= vw) {
+          endX = Math.round((vw - trackWidth) / 2);
+        } else {
+          endX = vw - trackWidth - padding;
+        }
+
+        const startX = vw + 60; // Initial state: offscreen right
+        const pTrackNorm = getSubProgress(p, 0.05, 0.95);
+        const pTrack = solveCubicBezier(pTrackNorm);
+
+        const currentX = startX + (endX - startX) * pTrack;
+        const trackOpacity = solveCubicBezier(getSubProgress(p, 0.03, 0.15));
+
+        track.style.opacity = trackOpacity;
+        track.style.transform = `translate3d(${currentX}px, 0, 0)`;
+
+        // 3. Staggered Card Animation
+        const cards = reportCardsRef.current;
+        const numCards = cards.length;
+        if (numCards > 0) {
+          cards.forEach((cardEl, idx) => {
+            if (!cardEl) return;
+            const cardStart = (idx / (numCards + 1)) * 0.35;
+            const cardEnd = Math.min(1, cardStart + 0.45);
+            const pCard = solveCubicBezier(getSubProgress(pTrackNorm, cardStart, cardEnd));
+            cardEl.style.opacity = 0.35 + 0.65 * pCard;
+            cardEl.style.transform = `scale(${0.92 + 0.08 * pCard}) translate3d(0, 0, 0)`;
+          });
+        }
+      }
+    };
+
+    const onScroll = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(handleReportsScroll);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+
+    handleReportsScroll();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [viewMode, historyReports.length, historyTab]);
+
+  const renderCategoryIcon = (kategoriNama = '') => {
+    const lower = (kategoriNama || '').toLowerCase();
+    if (lower.includes('siber') || lower.includes('cyber') || lower.includes('online')) {
+      return (
+        <span
+          className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0 border"
+          style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+        >
+          <Monitor className="w-3.5 h-3.5 text-[#1C6F8E]" />
+        </span>
+      );
+    }
+    if (lower.includes('sosial') || lower.includes('pengucilan') || lower.includes('kelompok')) {
+      return (
+        <span
+          className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0 border"
+          style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+        >
+          <Users className="w-3.5 h-3.5 text-[#1C6F8E]" />
+        </span>
+      );
+    }
+    if (lower.includes('sekolah') || lower.includes('kantin') || lower.includes('lingkungan')) {
+      return (
+        <span
+          className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0 border"
+          style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+        >
+          <Building2 className="w-3.5 h-3.5 text-[#1C6F8E]" />
+        </span>
+      );
+    }
+    return (
+      <span
+        className="w-7 h-7 rounded-xl flex items-center justify-center shrink-0 border"
+        style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+      >
+        <ShieldAlert className="w-3.5 h-3.5 text-[#1C6F8E]" />
+      </span>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-white text-[#1C6F8E] flex flex-col font-sans antialiased relative overflow-hidden">
       {/* ─── BACKGROUND DEKORATIF: KOMBINASI TIGA LINGKARAN BABY BLUE & GARIS-GARIS DIAGONAL ─── */}
@@ -272,13 +433,14 @@ export const TrackReport = () => {
       {/* ─── NAVBAR TANPA GARIS PEMBATAS ─── */}
       <StudentHeader hideBorder={true} />
 
-      <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-10 space-y-7 flex-1 relative z-20">
+      <main className="w-full flex-1 relative z-20">
         
         {/* ========================================================================= */}
         {/* VIEW MODE 1: OVERVIEW / PENCARIAN & RIWAYAT                              */}
         {/* ========================================================================= */}
         {viewMode === 'overview' && (
-          <div className="space-y-8 animate-fade-in">
+          <div className="w-full space-y-10 animate-fade-in pb-12">
+            <div className="max-w-4xl mx-auto w-full px-4 sm:px-6 pt-8 sm:pt-10 space-y-7">
             {/* Title & Description */}
             <div className="text-center space-y-2 max-w-2xl mx-auto">
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
@@ -707,150 +869,323 @@ export const TrackReport = () => {
               </div>
             ) : null}
 
-            {/* Riwayat Laporan Sebelumnya Section */}
-            <div className="space-y-4 pt-4">
-              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-base sm:text-lg font-bold" style={{ color: '#1C6F8E' }}>
+            </div>
+
+            {/* ─── Pinned Horizontal Editorial Section: Riwayat Laporan Sebelumnya ─── */}
+            <section
+              id="student-history-section"
+              ref={reportsStickyRef}
+              className="relative w-full z-20"
+              style={{ height: '240vh' }}
+            >
+              <div
+                className="sticky top-16 w-full h-[calc(100vh-4rem)] h-[calc(100dvh-4rem)] flex flex-col justify-center overflow-hidden relative"
+                style={{ background: 'transparent' }}
+              >
+                {/* Top Bar Floating Controls: Header Badge, Filter, and Count */}
+                <div className="absolute top-4 sm:top-6 inset-x-0 z-30 px-4 sm:px-8 max-w-7xl w-full mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3 pointer-events-auto">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#1C6F8E] animate-pulse" />
+                    <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#1C6F8E]">
                       Riwayat Laporan Sebelumnya
-                    </h3>
+                    </span>
                     <span
-                      className="px-2.5 py-0.5 rounded-full text-[11px] font-bold border"
+                      className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold border"
                       style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
                     >
-                      Jika Sudah Masuk Akun
+                      <span>Total: {reports.length} Laporan</span>
                     </span>
                   </div>
-                  <p className="text-xs mt-1" style={{ color: '#2E84A5' }}>
-                    Daftar pengaduan yang terhubung dengan akun siswa Anda dapat ditinjau langsung secara terpusat di bawah ini.
-                  </p>
-                </div>
 
-                {/* Filter Tabs */}
-                <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
-                  <span className="text-xs font-medium hidden md:inline" style={{ color: '#2E84A5' }}>
-                    Total: {reports.length} Laporan
-                  </span>
-                  <div className="flex items-center p-1 rounded-xl border text-xs" style={{ background: '#FFFFFF', borderColor: '#BFEFFF' }}>
-                    <button
-                      type="button"
-                      onClick={() => setHistoryTab('all')}
-                      className="px-3 py-1 rounded-lg font-semibold transition cursor-pointer"
-                      style={{
-                        background: historyTab === 'all' ? '#BFEFFF' : 'transparent',
-                        color: '#1C6F8E'
-                      }}
-                    >
-                      Semua
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setHistoryTab('proses')}
-                      className="px-3 py-1 rounded-lg font-semibold transition cursor-pointer"
-                      style={{
-                        background: historyTab === 'proses' ? '#BFEFFF' : 'transparent',
-                        color: '#1C6F8E'
-                      }}
-                    >
-                      Diproses ({countProses})
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setHistoryTab('selesai')}
-                      className="px-3 py-1 rounded-lg font-semibold transition cursor-pointer"
-                      style={{
-                        background: historyTab === 'selesai' ? '#BFEFFF' : 'transparent',
-                        color: '#1C6F8E'
-                      }}
-                    >
-                      Selesai ({countSelesai})
-                    </button>
+                  {/* Filter Tabs */}
+                  <div className="flex items-center gap-2 self-end sm:self-auto">
+                    <div className="flex items-center p-1 rounded-xl border text-xs" style={{ background: '#FFFFFF', borderColor: '#BFEFFF' }}>
+                      <button
+                        type="button"
+                        onClick={() => setHistoryTab('all')}
+                        className="px-3 py-1 rounded-lg font-semibold transition cursor-pointer"
+                        style={{
+                          background: historyTab === 'all' ? '#BFEFFF' : 'transparent',
+                          color: '#1C6F8E'
+                        }}
+                      >
+                        Semua
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setHistoryTab('proses')}
+                        className="px-3 py-1 rounded-lg font-semibold transition cursor-pointer"
+                        style={{
+                          background: historyTab === 'proses' ? '#BFEFFF' : 'transparent',
+                          color: '#1C6F8E'
+                        }}
+                      >
+                        Diproses ({countProses})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setHistoryTab('selesai')}
+                        className="px-3 py-1 rounded-lg font-semibold transition cursor-pointer"
+                        style={{
+                          background: historyTab === 'selesai' ? '#BFEFFF' : 'transparent',
+                          color: '#1C6F8E'
+                        }}
+                      >
+                        Selesai ({countSelesai})
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Grid of previous reports */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {historyReports.slice(0, 6).map((report) => {
-                  const isDone = report.status === 'selesai';
-                  const isMediasi = report.status_badge === 'Mediasi Terjadwal' || report.status === 'ditindaklanjuti';
-                  
-                  let badgeText = report.status_badge || 'Penelaahan';
-                  if (isDone) {
-                    badgeText = 'Terselesaikan';
-                  } else if (isMediasi) {
-                    badgeText = report.status_badge || 'Mediasi Terjadwal';
-                  }
+                {/* 1. INITIAL STATE — OVERSIZED EDITORIAL TYPOGRAPHY */}
+                <div
+                  ref={editorialTitleRef}
+                  className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none px-4 sm:px-6 text-center z-0 will-change-transform"
+                  style={{ opacity: 1, willChange: 'opacity, transform' }}
+                >
+                  <div className="space-y-1 sm:space-y-2 max-w-5xl">
+                    <span className="text-[11px] sm:text-xs md:text-sm font-black tracking-[0.25em] uppercase text-[#2E84A5] block">
+                      Arsip &amp; Dokumentasi Perlindungan Siswa
+                    </span>
+                    <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-[6.5rem] font-black tracking-tighter leading-[0.88] text-[#1C6F8E]">
+                      <span className="block">
+                        RI<span className="font-serif italic font-normal text-[#2E84A5]">W</span>AYAT
+                      </span>
+                      <span className="block mt-1 sm:mt-2">
+                        LAPO<span className="font-serif italic font-normal text-[#2E84A5]">R</span>AN <span className="text-[#142B4A]">SEBELUMNYA</span>
+                      </span>
+                    </h2>
+                    <p className="text-xs sm:text-sm md:text-base font-semibold text-[#2E84A5] max-w-xl mx-auto pt-2 sm:pt-4 flex items-center justify-center gap-2">
+                      <span>Gulir ke bawah untuk menelusuri kartu laporan</span>
+                      <ArrowRight className="w-4 h-4 text-[#1C6F8E] animate-pulse" />
+                    </p>
+                  </div>
+                </div>
 
-                  return (
+                {/* 2. HORIZONTAL CARD REVEAL TRACK (Glide in from offscreen right) */}
+                <div className="relative z-10 w-full overflow-visible pointer-events-auto py-4">
+                  {historyReports.length === 0 ? (
                     <div
-                      key={report.id}
-                      className="p-5 rounded-2xl flex flex-col justify-between space-y-3.5 border transition hover:opacity-95"
+                      ref={reportsTrackRef}
+                      className="max-w-md mx-auto rounded-3xl border p-8 sm:p-10 text-center space-y-3 bg-white shadow-lg will-change-transform"
                       style={{
-                        background: '#FFFFFF',
                         borderColor: '#BFEFFF',
-                        boxShadow: '0 4px 14px rgba(191, 239, 255, 0.35)'
+                        transform: 'translate3d(100vw, 0, 0)',
+                        opacity: 0
                       }}
                     >
-                      <div className="space-y-2.5">
-                        <div className="flex items-center justify-between gap-2">
-                          <span
-                            className="font-mono text-xs font-bold px-2 py-0.5 rounded-md border"
-                            style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
-                          >
-                            {report.ticket_code}
-                          </span>
-                          <span
-                            className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold border"
-                            style={{
-                              background: isDone ? '#FFFFFF' : '#BFEFFF',
-                              color: '#1C6F8E',
-                              borderColor: isMediasi ? '#1C6F8E' : '#BFEFFF'
-                            }}
-                          >
-                            <span
-                              className="w-1.5 h-1.5 rounded-full"
-                              style={{ background: '#1C6F8E' }}
-                            />
-                            {badgeText}
-                          </span>
-                        </div>
-
-                        <h4 className="font-bold text-sm line-clamp-1" style={{ color: '#1C6F8E' }}>
-                          {report.judul}
-                        </h4>
-                        <p className="text-xs line-clamp-2 leading-relaxed" style={{ color: '#2E84A5' }}>
-                          {report.deskripsi}
-                        </p>
+                      <div
+                        className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto border"
+                        style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+                      >
+                        <FileText className="w-6 h-6 text-[#1C6F8E]" />
                       </div>
-
-                      <div className="pt-2 border-t flex items-center justify-between text-xs" style={{ borderColor: '#BFEFFF' }}>
-                        <span className="text-[11px]" style={{ color: '#2E84A5' }}>
-                          Tanggal Kirim<br />
-                          <strong className="font-semibold" style={{ color: '#1C6F8E' }}>
-                            {report.tanggal?.split('•')[0] || report.tanggal}
-                          </strong>
-                        </span>
+                      <h4 className="text-base font-bold" style={{ color: '#1C6F8E' }}>
+                        Tidak Ada Laporan Ditemukan
+                      </h4>
+                      <p className="text-xs text-[#2E84A5]">
+                        {historyTab !== 'all'
+                          ? 'Tidak ada laporan dengan status yang dipilih.'
+                          : 'Belum ada riwayat laporan pengaduan.'}
+                      </p>
+                      {historyTab !== 'all' && (
                         <button
                           type="button"
-                          onClick={() => {
-                            setActiveReport(report);
-                            setTicketInput(report.ticket_code);
-                            setViewMode('detail');
-                          }}
-                          className="font-bold flex items-center gap-1 group py-1 hover:underline cursor-pointer"
+                          onClick={() => setHistoryTab('all')}
+                          className="text-xs font-bold hover:underline cursor-pointer"
                           style={{ color: '#1C6F8E' }}
                         >
-                          <span>{isDone ? 'Arsip Laporan' : 'Detail Laporan'}</span>
-                          <ChevronRight className="w-3.5 h-3.5 transition group-hover:translate-x-0.5" />
+                          Tampilkan Semua Status
                         </button>
-                      </div>
+                      )}
                     </div>
-                  );
-                })}
+                  ) : (
+                    <div
+                      ref={reportsTrackRef}
+                      className="flex items-center gap-5 sm:gap-6 flex-nowrap will-change-transform w-fit select-none"
+                      style={{
+                        transform: 'translate3d(100vw, 0, 0)',
+                        opacity: 0
+                      }}
+                    >
+                      {historyReports.map((item, idx) => {
+                        const isWaiting = item.status === 'menunggu';
+                        const isProcessing = item.status === 'ditindaklanjuti' || item.status === 'diverifikasi';
+                        const isCompleted = item.status === 'selesai';
+
+                        const formattedTicket = item.ticket_code?.startsWith('#')
+                          ? item.ticket_code
+                          : `#${item.ticket_code}`;
+
+                        return (
+                          <div
+                            key={item.id}
+                            ref={(el) => (reportCardsRef.current[idx] = el)}
+                            className="w-[300px] sm:w-[360px] md:w-[400px] shrink-0 h-[440px] sm:h-[470px] rounded-3xl border p-5 sm:p-6 flex flex-col justify-between relative shadow-[0_8px_30px_rgba(191,239,255,0.45)] hover:shadow-xl transition-shadow duration-300 will-change-transform bg-white text-left"
+                            style={{
+                              borderColor: '#BFEFFF'
+                            }}
+                          >
+                            <div>
+                              {/* Baris Kode Tiket & Status Badge */}
+                              <div className="flex items-center justify-between gap-2">
+                                <span
+                                  className="font-mono text-xs font-bold px-3 py-1 rounded-xl border"
+                                  style={{
+                                    background: '#FFFFFF',
+                                    color: '#1C6F8E',
+                                    borderColor: '#BFEFFF'
+                                  }}
+                                >
+                                  {formattedTicket}
+                                </span>
+
+                                {isWaiting && (
+                                  <span
+                                    className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-extrabold border"
+                                    style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                                  >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#1C6F8E] animate-pulse" />
+                                    <span>Menunggu</span>
+                                  </span>
+                                )}
+
+                                {isProcessing && (
+                                  <span
+                                    className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-extrabold border"
+                                    style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#1C6F8E' }}
+                                  >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#1C6F8E] animate-pulse" />
+                                    <span>Ditindaklanjuti</span>
+                                  </span>
+                                )}
+
+                                {isCompleted && (
+                                  <span
+                                    className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-extrabold border"
+                                    style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                                  >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#1C6F8E]" />
+                                    <span>Selesai</span>
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Kategori Baris */}
+                              <div className="flex items-center gap-2 mt-3.5">
+                                {renderCategoryIcon(item.kategori_nama)}
+                                <span className="text-xs font-bold truncate" style={{ color: '#1C6F8E' }}>
+                                  {item.kategori_nama || 'Pengaduan Umum'}
+                                </span>
+                              </div>
+
+                              {/* Judul Insiden */}
+                              <h4
+                                className="font-bold text-sm leading-snug my-2.5 line-clamp-2"
+                                style={{ color: '#1C6F8E' }}
+                              >
+                                {item.judul || item.deskripsi}
+                              </h4>
+
+                              {/* Meta Info */}
+                              <div className="space-y-1 text-xs mb-3" style={{ color: '#2E84A5' }}>
+                                <div className="flex items-center gap-1.5">
+                                  <Clock className="w-3.5 h-3.5 shrink-0" style={{ color: '#2E84A5' }} />
+                                  <span>{item.tanggal?.split('•')[0] || item.tanggal}</span>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                  {item.is_anonymous ? (
+                                    <>
+                                      <Lock className="w-3.5 h-3.5 shrink-0" style={{ color: '#2E84A5' }} />
+                                      <span>Mode: Anonim (Rahasia)</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <UserCheck className="w-3.5 h-3.5 shrink-0" style={{ color: '#2E84A5' }} />
+                                      <span>Mode: Identitas Terbuka</span>
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Callout Box Status */}
+                              {isWaiting && (
+                                <div
+                                  className="p-3 rounded-2xl mt-3 flex items-start gap-2.5 text-xs border"
+                                  style={{
+                                    background: 'rgba(191, 239, 255, 0.3)',
+                                    borderColor: '#BFEFFF',
+                                    color: '#1C6F8E'
+                                  }}
+                                >
+                                  <Info className="w-4 h-4 shrink-0 mt-0.5 text-[#1C6F8E]" />
+                                  <span className="leading-relaxed">
+                                    {item.catatan_konselor || 'Sedang dalam antrean telaah oleh Koordinator Konseling Kesiswaan.'}
+                                  </span>
+                                </div>
+                              )}
+
+                              {isProcessing && (
+                                <div
+                                  className="p-3 rounded-2xl mt-3 flex items-start gap-2.5 text-xs border"
+                                  style={{
+                                    background: '#FFFFFF',
+                                    borderColor: '#BFEFFF',
+                                    color: '#1C6F8E'
+                                  }}
+                                >
+                                  <GraduationCap className="w-4 h-4 shrink-0 mt-0.5 text-[#1C6F8E]" />
+                                  <div className="leading-relaxed">
+                                    <span className="font-bold">Konselor Pendamping: </span>
+                                    <span>{item.konselor_nama || 'Tim BK & Satgas PPKSP'}</span>
+                                  </div>
+                                </div>
+                              )}
+
+                              {isCompleted && (
+                                <div
+                                  className="p-3 rounded-2xl mt-3 flex items-start gap-2.5 text-xs border"
+                                  style={{
+                                    background: '#FFFFFF',
+                                    borderColor: '#BFEFFF',
+                                    color: '#1C6F8E'
+                                  }}
+                                >
+                                  <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#1C6F8E]" />
+                                  <div className="leading-relaxed">
+                                    <span className="font-bold">Resolusi: </span>
+                                    <span>{item.solusi || item.catatan_konselor || 'Kasus telah tuntas diselesaikan oleh konselor BK.'}</span>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Action Button */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setActiveReport(item);
+                                setTicketInput(item.ticket_code);
+                                setViewMode('detail');
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                              }}
+                              className="w-full text-xs font-bold flex items-center justify-between gap-1.5 mt-4 pt-3 border-t transition group hover:opacity-80 cursor-pointer"
+                              style={{
+                                color: '#1C6F8E',
+                                borderColor: '#BFEFFF'
+                              }}
+                            >
+                              <span>{isCompleted ? 'Lihat Arsip Resolusi' : 'Lihat Detail & Lacak'}</span>
+                              <ChevronRight className="w-4 h-4 transition group-hover:translate-x-1" />
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            </section>
           </div>
         )}
 
@@ -858,7 +1193,7 @@ export const TrackReport = () => {
         {/* VIEW MODE 2: FULL DETAIL LAPORAN & STATUS                                */}
         {/* ========================================================================= */}
         {viewMode === 'detail' && activeReport && (
-          <div className="space-y-6 animate-fade-in">
+          <div className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-10 space-y-7 animate-fade-in">
             {/* Top Navigation */}
             <div className="flex items-center justify-between">
               <button
