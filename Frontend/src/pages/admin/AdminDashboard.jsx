@@ -152,46 +152,58 @@ export const AdminDashboard = () => {
 
   return (
     <AdminLayout>
-      <div className="space-y-6 max-w-7xl mx-auto">
+      {/* ─── Hero Section Admin Full-Width dengan Background Video & Degradasi Halus (Persis Dashboard Siswa) ─── */}
+      <section className="-mt-4 sm:-mt-6 lg:-mt-8 -mx-4 sm:-mx-6 lg:-mx-8 relative overflow-hidden z-0 px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 pb-14 sm:pb-20 mb-6 sm:mb-8">
+        {/* Background Video (Memenuhi Seluruh Viewport Hero) */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none select-none brightness-105"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            zIndex: 0
+          }}
+          aria-hidden="true"
+        >
+          <source src="/assets/background/admin-welcome.mp4" type="video/mp4" />
+          <source src="/assets/background/dashboard-welcome.mp4" type="video/mp4" />
+        </video>
 
-        {/* Top Header Hero Section with Background Video */}
-        <div className="relative rounded-3xl overflow-hidden border border-[#BFEFFF] shadow-md p-6 sm:p-7 flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-white/90">
-          {/* Background Video */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none select-none brightness-105"
-            aria-hidden="true"
-          >
-            <source src="/assets/background/admin-welcome.mp4" type="video/mp4" />
-            <source src="/assets/background/dashboard-welcome.mp4" type="video/mp4" />
-          </video>
+        {/* Clean Solid Translucent Shield Overlay (Melindungi Keterbacaan Teks Hero) */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.45)',
+            backdropFilter: 'blur(2px)',
+            zIndex: 1
+          }}
+          aria-hidden="true"
+        />
 
-          {/* Solid Translucent Shield Overlay (Melindungi Keterbacaan Teks Hero) */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.55)',
-              backdropFilter: 'blur(1.5px)'
-            }}
-            aria-hidden="true"
-          />
+        {/* Bottom Seamless Gradient Fade (Degradasi Halus Menyatu ke Web Bawahnya, Menghilangkan Garis Polosan/Buble) */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-28 sm:h-36 lg:h-44 pointer-events-none"
+          style={{
+            background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.40) 35%, rgba(255, 255, 255, 0.85) 75%, #FFFFFF 100%)',
+            zIndex: 2
+          }}
+          aria-hidden="true"
+        />
 
-          {/* Subtle Gradient Overlay for Depth */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: 'linear-gradient(to right, rgba(255, 255, 255, 0.90) 0%, rgba(255, 255, 255, 0.70) 50%, rgba(214, 245, 255, 0.45) 100%)'
-            }}
-            aria-hidden="true"
-          />
-
+        {/* Hero Content Area */}
+        <div className="max-w-7xl mx-auto relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           {/* Left: Branding & Welcome Greeting */}
-          <div className="relative z-10 flex items-start sm:items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 p-2.5 rounded-2xl bg-white/95 border border-[#BFEFFF] shadow-xs shrink-0 backdrop-blur-sm">
+          <div className="flex items-start sm:items-center gap-4">
+            <div className="hidden sm:flex items-center gap-2 p-2.5 rounded-2xl bg-white/95 border border-[#BFEFFF] shadow-md shrink-0 backdrop-blur-xs">
               <img
                 src="/assets/branding/logo-sigap.png"
                 alt="Logo SIGAP"
@@ -209,28 +221,34 @@ export const AdminDashboard = () => {
                 }}
               />
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
                 <span>Admin Panel</span>
                 <span>&gt;</span>
                 <span className="text-[#1C6F8E] font-bold">Dashboard Analitik</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+              <h1
+                className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight"
+                style={{ textShadow: '0 2px 14px rgba(255, 255, 255, 0.9)' }}
+              >
                 {greeting}, {adminName}
               </h1>
-              <p className="text-xs sm:text-sm text-slate-700 max-w-2xl leading-relaxed font-medium">
+              <p
+                className="text-xs sm:text-base text-slate-700 max-w-2xl leading-relaxed font-semibold"
+                style={{ textShadow: '0 1px 10px rgba(255, 255, 255, 0.9)' }}
+              >
                 Monitoring real-time penanganan insiden, perbandingan tren laporan sekolah terhadap data referensi nasional PPKSP.
               </p>
             </div>
           </div>
 
           {/* Right Controls */}
-          <div className="relative z-10 flex flex-wrap items-center gap-2.5">
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             {/* DB Status */}
-            <div className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition shadow-xs ${
+            <div className={`inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition shadow-md ${
               isBackendConnected
-                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                : 'bg-white/95 border border-[#BFEFFF] text-slate-600'
+                ? 'bg-emerald-50/95 text-emerald-800 border border-emerald-200'
+                : 'bg-white/95 border border-[#BFEFFF] text-slate-700'
             }`}>
               <span className={`w-2 h-2 rounded-full ${isBackendConnected ? 'bg-emerald-500 animate-pulse shadow-[0_0_6px_#10b981]' : 'bg-slate-400'}`} />
               <Database className="w-3.5 h-3.5 text-[#1C6F8E]" />
@@ -241,7 +259,7 @@ export const AdminDashboard = () => {
               type="button"
               onClick={handleSync}
               disabled={isSyncing}
-              className="px-3.5 py-2 rounded-2xl bg-white/95 border border-[#BFEFFF] text-slate-700 hover:bg-[#BFEFFF]/20 font-bold text-xs flex items-center gap-1.5 transition disabled:opacity-50 shadow-xs backdrop-blur-xs"
+              className="px-4 py-2.5 rounded-2xl bg-white/95 border border-[#BFEFFF] text-slate-800 hover:bg-[#BFEFFF]/30 font-bold text-xs flex items-center gap-2 transition disabled:opacity-50 shadow-md backdrop-blur-xs cursor-pointer active:scale-95"
             >
               <RotateCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-[#1C6F8E]' : 'text-[#1C6F8E]'}`} />
               <span>Sinkronkan</span>
@@ -249,13 +267,16 @@ export const AdminDashboard = () => {
 
             <button
               onClick={handleDownloadReport}
-              className="px-4 py-2 rounded-2xl bg-[#1C6F8E] hover:bg-[#165870] text-white font-bold text-xs flex items-center gap-2 transition shadow-xs"
+              className="px-5 py-2.5 rounded-2xl bg-[#1C6F8E] hover:bg-[#165870] text-white font-bold text-xs flex items-center gap-2 transition shadow-md cursor-pointer active:scale-95"
             >
               <Download className="w-4 h-4" />
               <span>Unduh Laporan</span>
             </button>
           </div>
         </div>
+      </section>
+
+      <div className="space-y-6 max-w-7xl mx-auto">
 
         {/* 4 Summary KPI Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

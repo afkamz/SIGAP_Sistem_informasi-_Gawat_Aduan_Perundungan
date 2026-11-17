@@ -2184,3 +2184,17 @@ Integrasi hero banner berlatar belakang video pada header sambutan Dashboard Adm
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Integrasi pemutar video background hero header dashboard admin dengan overlay pelindung keterbacaan teks dan fallback sumber video |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 150 implementasi background video pada header dashboard admin |
+
+---
+
+## 📅 [Sesi 151] Rabu, 18 November 2026 — Jam 00 WIB
+
+### Fokus Utama
+Transformasi background video header Dashboard Admin menjadi tampilan full-width terbuka persis seperti Dashboard Siswa dengan degradasi gradien halus tanpa bingkai bubble.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Penerapan hero section video full-width terbuka dengan gradien fade halus tanpa bingkai bubble pada dashboard admin |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 151 penyesuaian hero background video full-width dashboard admin |
