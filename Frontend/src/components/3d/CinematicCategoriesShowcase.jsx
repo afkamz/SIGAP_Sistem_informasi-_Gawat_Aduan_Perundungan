@@ -288,13 +288,6 @@ export const CinematicCategoriesShowcase = ({ onSelectCategory }) => {
             transformOrigin: '50% 0%'
           }}
         >
-          <div className="inline-flex items-center gap-2 mb-1.5 sm:mb-2">
-            <span className="w-2 h-2 rounded-full bg-[#1C6F8E] animate-pulse" />
-            <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider sm:tracking-[0.2em] text-[#2E84A5]">
-              Permendikbudristek No. 46 Tahun 2023
-            </span>
-          </div>
-
           <h2 className="font-black tracking-tight leading-tight text-[#1C6F8E]">
             <span className="text-2xl sm:text-4xl lg:text-5xl block">
               <span className="tracking-tighter">7 Bentuk</span>{' '}

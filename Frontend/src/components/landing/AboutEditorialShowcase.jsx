@@ -640,20 +640,6 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
             </div>
           </div>
         </div>
-
-        {/* ─── EDITORIAL BOTTOM STATUS BAR (PANDUAN & PROGRESS PILAR) ─── */}
-        <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center justify-between text-xs font-semibold text-[#093347]/70 z-30 flex-shrink-0 pt-2 border-t border-[#BFEFFF]/60">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#1C6F8E] animate-pulse" />
-            <span className="tracking-wide uppercase text-[11px] font-bold text-[#062331]">
-              4 Pilar Utama Ekosistem Perlindungan Siswa
-            </span>
-          </div>
-          <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-[#093347]/80">
-            <span>Geser horizontal untuk eksplorasi pilar</span>
-            <ArrowRight className="w-3.5 h-3.5 text-[#1C6F8E]" />
-          </div>
-        </div>
       </div>
     </section>
   );
