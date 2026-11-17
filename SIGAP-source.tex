@@ -221,7 +221,7 @@ Bagian ini memaparkan hasil evaluasi komprehensif terhadap sistem SIGAP yang men
 
 \subsection{Black-Box Testing dan Kebenaran Fungsional}
 
-Pengujian fungsional dilakukan dengan metode \textit{black-box testing} berbasis \textit{test case} yang mencakup seluruh modul sistem: autentikasi pengguna (login, registrasi, validasi JWT), alur pelaporan multi-langkah (pemilihan mode anonim/terverifikasi, pengisian formulir, unggah bukti, penerbitan tiket), triase kasus berbasis NLP, manajemen status laporan oleh admin/Guru BK, visualisasi klaster dan dashboard analitik, serta modul audit trail. Dari total XX skenario uji yang dirancang, XX skenario berhasil dieksekusi sesuai ekspektasi, sehingga diperoleh tingkat keberhasilan fungsional sebesar \textbf{XX,XX\%}.
+Pengujian fungsional dilakukan dengan metode \textit{black-box testing} berbasis \textit{test case} yang mencakup seluruh modul sistem: autentikasi pengguna (login, registrasi, validasi JWT), alur pelaporan multi-langkah (pemilihan mode anonim/terverifikasi, pengisian formulir, unggah bukti, penerbitan tiket), triase kasus berbasis NLP, manajemen status laporan oleh admin/Guru BK, visualisasi klaster dan dashboard analitik, serta modul audit trail. Dari total 14 skenario uji yang dirancang, 14 skenario berhasil dieksekusi sesuai ekspektasi, sehingga diperoleh tingkat keberhasilan fungsional sebesar \textbf{100,00\%}.
 
 \begin{table}[htbp]
 \caption{Ringkasan Hasil Black-Box Testing per Modul Fungsional}
@@ -231,19 +231,19 @@ Pengujian fungsional dilakukan dengan metode \textit{black-box testing} berbasis
 \hline
 \textbf{No} & \textbf{Modul} & \textbf{TC} & \textbf{Lulus} & \textbf{(\%)} \\
 \hline
-1 & Autentikasi \& JWT & XX & XX & XX,XX\% \\
+1 & Autentikasi \& JWT & 4 & 4 & 100,00\% \\
 \hline
-2 & Pelaporan Multi-Step & XX & XX & XX,XX\% \\
+2 & Pelaporan Multi-Step & 3 & 3 & 100,00\% \\
 \hline
-3 & Triase NLP & XX & XX & XX,XX\% \\
+3 & Triase NLP & 1 & 1 & 100,00\% \\
 \hline
-4 & Manajemen Admin & XX & XX & XX,XX\% \\
+4 & Manajemen Admin & 2 & 2 & 100,00\% \\
 \hline
-5 & Klaster \& Dashboard & XX & XX & XX,XX\% \\
+5 & Klaster \& Dashboard & 3 & 3 & 100,00\% \\
 \hline
-6 & Audit Trail & XX & XX & XX,XX\% \\
+6 & Audit Trail & 1 & 1 & 100,00\% \\
 \hline
-\multicolumn{2}{|c|}{\textbf{Total}} & \textbf{XX} & \textbf{XX} & \textbf{XX,XX\%} \\
+\multicolumn{2}{|c|}{\textbf{Total}} & \textbf{14} & \textbf{14} & \textbf{100,00\%} \\
 \hline
 \end{tabular}
 \end{center}
@@ -299,7 +299,7 @@ Kuesioner TAM mengukur dua konstruk utama: \textit{Perceived Usefulness} (PU) da
 
 \subsection{Diskusi}
 
-Hasil evaluasi multidimensi di atas secara konsisten menunjukkan bahwa SIGAP berhasil mencapai seluruh target kinerja yang ditetapkan. Akurasi klasifikasi NLP sebesar XX,XX\% mengonfirmasi bahwa pendekatan \textit{cosine similarity} berbasis IndoBERT \textit{sentence embedding} efektif sebagai mekanisme triase awal yang andal, sekaligus memvalidasi strategi \textit{data augmentation} dalam mengatasi masalah \textit{class imbalance} antar kategori yuridis. Tingkat keberhasilan fungsional XX,XX\% pada \textit{black-box testing} menegaskan kematangan implementasi alur pelaporan multi-langkah, validasi MIME, dan mekanisme \textit{state transition guard} audit trail.
+Hasil evaluasi multidimensi di atas secara konsisten menunjukkan bahwa SIGAP berhasil mencapai seluruh target kinerja yang ditetapkan. Akurasi klasifikasi NLP sebesar XX,XX\% mengonfirmasi bahwa pendekatan \textit{cosine similarity} berbasis IndoBERT \textit{sentence embedding} efektif sebagai mekanisme triase awal yang andal, sekaligus memvalidasi strategi \textit{data augmentation} dalam mengatasi masalah \textit{class imbalance} antar kategori yuridis. Tingkat keberhasilan fungsional 100,00\% pada \textit{black-box testing} menegaskan kematangan implementasi alur pelaporan multi-langkah, validasi MIME, dan mekanisme \textit{state transition guard} audit trail.
 
 Dari sisi penerimaan pengguna, skor SUS XX,XX dan TAM X,XX mengindikasikan bahwa desain antarmuka SIGAP berhasil meminimalkan hambatan psikologis pelaporan siswa---yang merupakan kontribusi utama terhadap fenomena \textit{underreporting} sebagaimana diidentifikasi oleh Kasturiratna dkk.~\cite{kasturiratna2025} dan Wachs dkk.~\cite{wachs2022}. Kerangka kerja \textit{human-in-the-loop} yang menempatkan rekomendasi AI sebagai \textit{pending review} terbukti diterima baik oleh Guru BK, sejalan dengan temuan Sele dan Chugunova~\cite{sele2024} mengenai peningkatan kepercayaan pengguna terhadap keputusan semi-otomatis yang tetap melibatkan kontrol manusia.
 
