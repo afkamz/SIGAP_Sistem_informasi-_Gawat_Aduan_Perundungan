@@ -68,37 +68,56 @@ export const AdminLayout = ({ children, showHeader = false, title = '', subtitle
 
   return (
     <div className="min-h-screen bg-white text-[#1C6F8E] flex relative overflow-x-hidden font-sans">
-      {/* ─── BACKGROUND DEKORATIF: KOMBINASI BULAT BABY BLUE & GARIS-GARIS DIAGONAL ─── */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden select-none z-0">
+      {/* ─── BACKGROUND DEKORATIF: KOMBINASI BULAT BABY BLUE & GARIS-GARIS DIAGONAL (IKUT SCROLL DENGAN KONTEN) ─── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
         {/* Lingkaran 1: Kanan Atas */}
         <div
-          className="absolute -right-28 sm:-right-40 md:-right-52 top-[10%] w-[380px] sm:w-[500px] md:w-[600px] h-[380px] sm:h-[500px] md:h-[600px] rounded-full"
+          className="absolute -right-28 sm:-right-40 md:-right-52 top-[60px] sm:top-[80px] w-[380px] sm:w-[500px] md:w-[600px] h-[380px] sm:h-[500px] md:h-[600px] rounded-full"
           style={{
             background: 'linear-gradient(135deg, #BFEFFF 0%, #D6F5FF 100%)',
-            opacity: 0.80
+            opacity: 0.82
           }}
         />
 
-        {/* Lingkaran 2: Kiri Bawah */}
+        {/* Lingkaran 2: Kiri Tengah */}
         <div
-          className="absolute -left-28 sm:-left-36 top-[55%] w-[320px] sm:w-[440px] md:w-[520px] h-[320px] sm:h-[440px] md:h-[520px] rounded-full"
+          className="absolute -left-28 sm:-left-36 top-[32%] w-[320px] sm:w-[440px] md:w-[520px] h-[320px] sm:h-[440px] md:h-[520px] rounded-full"
           style={{
             background: 'linear-gradient(135deg, #D2F4FF 0%, #BFEFFF 100%)',
+            opacity: 0.78
+          }}
+        />
+
+        {/* Lingkaran 3: Kanan Tengah-Bawah */}
+        <div
+          className="absolute -right-24 sm:-right-36 top-[62%] w-[340px] sm:w-[460px] md:w-[540px] h-[340px] sm:h-[460px] md:h-[540px] rounded-full"
+          style={{
+            background: 'linear-gradient(135deg, #BFEFFF 0%, #D6F5FF 100%)',
             opacity: 0.75
           }}
         />
 
-        {/* Garis-garis Diagonal Halus */}
+        {/* Lingkaran 4: Kiri Bawah */}
+        <div
+          className="absolute -left-20 sm:-left-32 top-[86%] w-[280px] sm:w-[380px] md:w-[460px] h-[280px] sm:h-[380px] md:h-[460px] rounded-full"
+          style={{
+            background: 'linear-gradient(135deg, #E6F8FF 0%, #BFEFFF 100%)',
+            opacity: 0.70
+          }}
+        />
+
+        {/* Garis-garis Diagonal Halus Memanjang Sepanjang Halaman */}
         <svg
-          className="absolute inset-0 w-full h-full"
+          className="absolute inset-0 w-full h-full pointer-events-none"
           xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="none"
-          viewBox="0 0 1440 1800"
+          viewBox="0 0 1440 3200"
           style={{ opacity: 0.75 }}
         >
           <line x1="-120" y1="400" x2="1620" y2="-200" stroke="#CBD5E1" strokeWidth="1.2" />
-          <line x1="-160" y1="1000" x2="1580" y2="400" stroke="#E2E8F0" strokeWidth="1.2" />
-          <line x1="-120" y1="1600" x2="1620" y2="1000" stroke="#CBD5E1" strokeWidth="1.2" />
+          <line x1="-160" y1="1100" x2="1580" y2="500" stroke="#E2E8F0" strokeWidth="1.2" />
+          <line x1="-120" y1="1900" x2="1620" y2="1300" stroke="#CBD5E1" strokeWidth="1.2" />
+          <line x1="-160" y1="2700" x2="1580" y2="2100" stroke="#E2E8F0" strokeWidth="1.2" />
         </svg>
       </div>
 
@@ -147,14 +166,13 @@ export const AdminLayout = ({ children, showHeader = false, title = '', subtitle
               <Menu className="w-5 h-5 text-[#1C6F8E]" />
             </button>
 
-            {/* Brand Logo & Title di Navbar */}
-            <div className="flex items-center gap-2 shrink-0">
-              <div
-                className="w-8 h-8 rounded-xl flex items-center justify-center border sm:hidden"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-              >
-                <ShieldCheck className="w-4 h-4 text-[#1C6F8E]" />
-              </div>
+            {/* Brand Logo SIGAP Resmi & Title di Navbar */}
+            <div className="flex items-center gap-2.5 shrink-0">
+              <img
+                src="/assets/branding/logo-sigap.png"
+                alt="Logo SIGAP"
+                className="h-8 sm:h-9 w-auto object-contain shrink-0"
+              />
               <div className="hidden sm:flex items-center gap-1.5">
                 <span className="font-black text-base tracking-tight text-[#1C6F8E]">SIGAP</span>
                 <span

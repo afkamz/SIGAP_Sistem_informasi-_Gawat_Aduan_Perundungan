@@ -89,24 +89,23 @@ export const AdminSidebar = ({
         {/* Top: Logo & Brand + Nav Items */}
         <div className="flex flex-col gap-5 w-full">
           {/* Header Brand */}
-          <div className={`flex items-center justify-between px-4 h-10 ${!isExpanded ? 'lg:justify-center lg:px-2' : ''}`}>
-            <div className="flex items-center gap-3 overflow-hidden">
-              <div
-                className="w-10 h-10 rounded-2xl flex items-center justify-center border flex-shrink-0"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-              >
-                <ShieldCheck className="w-5 h-5 text-[#1C6F8E]" />
-              </div>
+          <div className={`flex items-center justify-between px-3 h-10 ${!isExpanded ? 'lg:justify-center lg:px-2' : ''}`}>
+            <Link to="/admin" className="flex items-center gap-2.5 overflow-hidden group">
+              <img
+                src="/assets/branding/logo-sigap.png"
+                alt="Logo SIGAP"
+                className="h-8 w-auto object-contain flex-shrink-0 group-hover:scale-105 transition-transform"
+              />
               {/* Teks Brand (Hanya tampil saat Expanded di desktop atau saat drawer di mobile) */}
               <div className={`overflow-hidden transition-opacity duration-200 ${!isExpanded ? 'lg:hidden' : 'block'}`}>
-                <span className="font-black text-base tracking-tight block leading-tight" style={{ color: '#1C6F8E' }}>
+                <span className="font-black text-base tracking-tight block leading-tight text-[#1C6F8E]">
                   SIGAP
                 </span>
-                <span className="text-[10px] font-semibold block leading-tight" style={{ color: '#2E84A5' }}>
+                <span className="text-[10px] font-semibold block leading-tight text-[#2E84A5]">
                   Panel Admin &amp; BK
                 </span>
               </div>
-            </div>
+            </Link>
 
             {/* Tombol Close khusus tampilan Mobile Drawer */}
             <button

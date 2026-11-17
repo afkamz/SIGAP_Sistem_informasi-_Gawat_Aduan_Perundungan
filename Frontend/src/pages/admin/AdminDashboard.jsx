@@ -156,18 +156,25 @@ export const AdminDashboard = () => {
 
         {/* Top Header Section */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-              <span>Admin Panel</span>
-              <span>&gt;</span>
-              <span className="text-slate-800 font-bold">Dashboard Analitik</span>
+          <div className="flex items-start gap-4">
+            <img
+              src="/assets/branding/logo-sigap.png"
+              alt="Logo SIGAP"
+              className="h-12 w-auto object-contain mt-1 shrink-0 hidden sm:block"
+            />
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                <span>Admin Panel</span>
+                <span>&gt;</span>
+                <span className="text-[#1C6F8E] font-bold">Dashboard Analitik</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                {greeting}, {adminName}
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed">
+                Monitoring real-time penanganan insiden, perbandingan tren laporan sekolah terhadap data referensi nasional PPKSP.
+              </p>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              {greeting}, {adminName}
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed">
-              Monitoring real-time penanganan insiden, perbandingan tren laporan sekolah terhadap data referensi nasional PPKSP bergaya Liquid Glass.
-            </p>
           </div>
 
           {/* Right Controls */}
