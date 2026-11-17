@@ -156,12 +156,25 @@ export const AdminDashboard = () => {
 
         {/* Top Header Section */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="flex items-start gap-4">
-            <img
-              src="/assets/branding/logo-sigap.png"
-              alt="Logo SIGAP"
-              className="h-12 w-auto object-contain mt-1 shrink-0 hidden sm:block"
-            />
+          <div className="flex items-center gap-3.5">
+            <div className="hidden sm:flex items-center gap-2 p-2 rounded-2xl bg-white/95 border border-[#BFEFFF] shadow-xs shrink-0">
+              <img
+                src="/assets/branding/logo-sigap.png"
+                alt="Logo SIGAP"
+                className="h-9 w-auto object-contain"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+              <img
+                src="/assets/branding/branding-sigap.png"
+                alt="SIGAP"
+                className="h-6 w-auto max-w-[110px] object-contain"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+            </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
                 <span>Admin Panel</span>

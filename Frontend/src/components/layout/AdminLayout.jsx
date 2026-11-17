@@ -166,22 +166,30 @@ export const AdminLayout = ({ children, showHeader = false, title = '', subtitle
               <Menu className="w-5 h-5 text-[#1C6F8E]" />
             </button>
 
-            {/* Brand Logo SIGAP Resmi & Title di Navbar */}
-            <div className="flex items-center gap-2.5 shrink-0">
+            {/* Brand Logo & Typography Branding SIGAP Resmi di Navbar */}
+            <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
               <img
                 src="/assets/branding/logo-sigap.png"
                 alt="Logo SIGAP"
                 className="h-8 sm:h-9 w-auto object-contain shrink-0"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
               />
-              <div className="hidden sm:flex items-center gap-1.5">
-                <span className="font-black text-base tracking-tight text-[#1C6F8E]">SIGAP</span>
-                <span
-                  className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full border"
-                  style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
-                >
-                  Panel Admin
-                </span>
-              </div>
+              <img
+                src="/assets/branding/branding-sigap.png"
+                alt="SIGAP"
+                className="h-6 sm:h-7 w-auto max-w-[110px] sm:max-w-[140px] object-contain shrink-0"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+              />
+              <span
+                className="hidden sm:inline-block text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full border ml-0.5"
+                style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+              >
+                Panel Admin
+              </span>
             </div>
 
             {/* Search Bar */}

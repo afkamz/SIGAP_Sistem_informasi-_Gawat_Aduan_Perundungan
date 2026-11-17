@@ -90,18 +90,26 @@ export const AdminSidebar = ({
         <div className="flex flex-col gap-5 w-full">
           {/* Header Brand */}
           <div className={`flex items-center justify-between px-3 h-10 ${!isExpanded ? 'lg:justify-center lg:px-2' : ''}`}>
-            <Link to="/admin" className="flex items-center gap-2.5 overflow-hidden group">
+            <Link to="/admin" className="flex items-center gap-2 overflow-hidden group">
               <img
                 src="/assets/branding/logo-sigap.png"
                 alt="Logo SIGAP"
                 className="h-8 w-auto object-contain flex-shrink-0 group-hover:scale-105 transition-transform"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
               />
-              {/* Teks Brand (Hanya tampil saat Expanded di desktop atau saat drawer di mobile) */}
-              <div className={`overflow-hidden transition-opacity duration-200 ${!isExpanded ? 'lg:hidden' : 'block'}`}>
-                <span className="font-black text-base tracking-tight block leading-tight text-[#1C6F8E]">
-                  SIGAP
-                </span>
-                <span className="text-[10px] font-semibold block leading-tight text-[#2E84A5]">
+              {/* Branding SIGAP (Hanya tampil saat Expanded di desktop atau saat drawer di mobile) */}
+              <div className={`overflow-hidden transition-opacity duration-200 flex flex-col justify-center ${!isExpanded ? 'lg:hidden' : 'block'}`}>
+                <img
+                  src="/assets/branding/branding-sigap.png"
+                  alt="SIGAP"
+                  className="h-5 sm:h-5.5 w-auto max-w-[105px] object-contain"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+                <span className="text-[9px] font-semibold block leading-tight text-[#2E84A5] mt-0.5">
                   Panel Admin &amp; BK
                 </span>
               </div>
