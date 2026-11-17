@@ -309,11 +309,6 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
         >
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 lg:gap-8">
             <div ref={titleHeadingRef} className="will-change-transform origin-left">
-              {/* Pill badge kategori */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#BFEFFF]/60 border border-[#96E2FC] text-[#062331] text-[11px] font-bold tracking-wider uppercase mb-2.5 shadow-xs">
-                <Shield className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                <span>Pilar Perlindungan Digital</span>
-              </div>
               <h2 className="font-black tracking-tight leading-tight text-[#1C6F8E] text-left">
                 <span className="text-2xl sm:text-4xl lg:text-5xl block">
                   <span className="tracking-tighter">Tentang Sistem</span>{' '}
