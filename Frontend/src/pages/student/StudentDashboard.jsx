@@ -532,25 +532,6 @@ export const StudentDashboard = () => {
         {/* Hero Content Area: Konten Utama Berada Tepat di Tengah Halaman */}
         <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center text-center space-y-6 sm:space-y-8 my-auto">
           
-          {/* Breadcrumb Tag */}
-          <div
-            className="inline-flex items-center gap-2 text-xs font-bold px-3.5 py-1.5 rounded-full border shadow-xs"
-            style={{
-              background: 'rgba(255, 255, 255, 0.92)',
-              color: '#1C6F8E',
-              borderColor: '#BFEFFF',
-              opacity: isHeroInView ? 1 : 0,
-              transform: isHeroInView ? 'translateY(0)' : 'translateY(16px)',
-              transition: `opacity 500ms ${easeCurve} 50ms, transform 500ms ${easeCurve} 50ms`
-            }}
-          >
-            <span>Portal Siswa</span>
-            <span>&gt;</span>
-            <span className="font-extrabold" style={{ color: '#142B4A' }}>
-              Dashboard Pelapor
-            </span>
-          </div>
-
           {/* Main Welcome Headline (Cinematic Text Reveal - Full Screen Center) */}
           <h1
             className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.14]"
@@ -707,12 +688,6 @@ export const StudentDashboard = () => {
             {/* Header Ringkasan Statistik */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[#BFEFFF]">
               <div className="space-y-1.5">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#1C6F8E] animate-pulse" />
-                  <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[#2E84A5]">
-                    Ringkasan Statistik Siswa
-                  </span>
-                </div>
                 <h2
                   ref={titleRef}
                   className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight"
@@ -946,15 +921,6 @@ export const StudentDashboard = () => {
               <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#1C6F8E]">
                 Riwayat Laporan Saya
               </span>
-              {isBackendConnected && (
-                <span
-                  className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold border"
-                  style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#1C6F8E]" />
-                  <span>Tersinkron Database</span>
-                </span>
-              )}
             </div>
 
             <div className="flex items-center gap-2 self-end sm:self-auto">
