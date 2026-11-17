@@ -1841,3 +1841,18 @@ Audit menyeluruh dan optimasi performa rendering seluruh animasi Landing Page SI
 | 4 | `EDIT` | `Frontend/src/components/3d/CinematicCategoriesShowcase.jsx` | Integrasi IntersectionObserver untuk pause komputasi wavy cards saat seksi di luar viewport |
 | 5 | `EDIT` | `Frontend/src/components/3d/BackgroundMediaBackdrop.jsx` | Penambahan dukungan layerRef untuk manipulasi transform/opacity instan tanpa re-render VDOM |
 | 6 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 127 optimasi performa dan eliminasi lag animasi Landing Page |
+
+---
+
+## 📅 [Sesi 128] Selasa, 17 November 2026 — Jam 18 WIB
+
+### Fokus Utama
+Penambahan dan pelacakan berkas video latar belakang `cube-background.mp4` dan `sigap-background.mp4` pada direktori root repositori publik guna memastikan ketersediaan aset media secara lengkap di GitHub.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `TAMBAH` | `public/assets/background/cube-background.mp4` | Video latar belakang kubus 3D hero pada direktori root publik |
+| 2 | `TAMBAH` | `public/assets/background/sigap-background.mp4` | Video latar belakang sinematik sistem SIGAP pada direktori root publik |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 128 sinkronisasi aset video latar belakang repositori GitHub |
