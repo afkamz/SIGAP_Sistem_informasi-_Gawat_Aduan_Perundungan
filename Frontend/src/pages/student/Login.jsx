@@ -83,7 +83,74 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#111827] flex flex-col font-sans relative">
+    <div className="min-h-screen bg-white text-[#111827] flex flex-col font-sans relative overflow-hidden">
+      {/* ─── BACKGROUND DEKORATIF: KOMBINASI BULAT BABY BLUE & GARIS-GARIS PERSIS REFERENSI ─── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+        {/* Lingkaran Besar Baby Blue di sisi kiri (Persis Referensi SM Entertainment) */}
+        <div
+          className="absolute -left-28 sm:-left-40 md:-left-52 top-[12%] sm:top-[16%] w-[340px] sm:w-[480px] md:w-[580px] h-[340px] sm:h-[480px] md:h-[580px] rounded-full"
+          style={{
+            background: 'linear-gradient(135deg, #BFEFFF 0%, #D6F5FF 100%)',
+            opacity: 0.82
+          }}
+        />
+
+        {/* Lingkaran Aksen Halus di kanan bawah untuk keseimbangan estetika */}
+        <div
+          className="hidden md:block absolute -right-24 -bottom-24 w-[320px] h-[320px] rounded-full"
+          style={{
+            background: 'linear-gradient(135deg, #E6F8FF 0%, #BFEFFF 100%)',
+            opacity: 0.45
+          }}
+        />
+
+        {/* Garis-garis Diagonal Halus (Persis Garis Angled pada Referensi) */}
+        <svg
+          className="absolute inset-0 w-full h-full"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          viewBox="0 0 1440 900"
+          style={{ opacity: 0.75 }}
+        >
+          {/* Garis 1: Memotong tepi luar lingkaran kiri */}
+          <line
+            x1="-100"
+            y1="60"
+            x2="880"
+            y2="1040"
+            stroke="#CBD5E1"
+            strokeWidth="1.2"
+          />
+          {/* Garis 2: Melintas di area tengah */}
+          <line
+            x1="260"
+            y1="-100"
+            x2="1240"
+            y2="880"
+            stroke="#E2E8F0"
+            strokeWidth="1.2"
+          />
+          {/* Garis 3: Melintas di area kanan */}
+          <line
+            x1="640"
+            y1="-100"
+            x2="1620"
+            y2="880"
+            stroke="#E2E8F0"
+            strokeWidth="1.2"
+          />
+          {/* Garis 4: Di pojok kanan bawah */}
+          <line
+            x1="1020"
+            y1="-100"
+            x2="2000"
+            y2="880"
+            stroke="#E2E8F0"
+            strokeWidth="1.2"
+          />
+        </svg>
+      </div>
+
       {/* ─── NAVBAR TANPA GARIS PEMBATAS ─── */}
       <StudentHeader hideBorder={true} />
 
