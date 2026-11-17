@@ -1944,3 +1944,18 @@ Penyusunan ulang desain antarmuka laman login siswa agar persis sesuai referensi
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `Frontend/src/pages/student/Login.jsx` | Implementasi antarmuka login minimalis persis referensi dengan navbar tanpa border |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 134 perombakan desain antarmuka laman login siswa |
+
+---
+
+## 📅 [Sesi 135] Selasa, 17 November 2026 — Jam 20 WIB
+
+### Fokus Utama
+Penyempurnaan laman login siswa dengan meniadakan garis pembatas navbar serta menghapus footer guna menghadirkan tata letak antarmuka yang bersih dan seamless.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/layout/StudentHeader.jsx` | Penambahan dukungan properti hideBorder untuk meniadakan garis pembatas dan bayangan navbar |
+| 2 | `EDIT` | `Frontend/src/pages/student/Login.jsx` | Penerapan hideBorder pada navbar dan penghapusan komponen footer |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 135 penghapusan garis pembatas navbar dan footer login |

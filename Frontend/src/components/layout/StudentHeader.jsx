@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, Lock, LogOut, PlusCircle, LogIn, Menu, X, LayoutDashboard } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 
-export const StudentHeader = ({ isDashboard = false }) => {
+export const StudentHeader = ({ isDashboard = false, hideBorder = false }) => {
   const { currentUser, logout } = useStore();
   const navigate = useNavigate();
   const location = useLocation();
@@ -38,8 +38,8 @@ export const StudentHeader = ({ isDashboard = false }) => {
       className="sticky top-0 z-40 w-full transition-colors"
       style={{
         background: '#FFFFFF',
-        borderBottom: '1.5px solid #BFEFFF',
-        boxShadow: '0 4px 20px -2px rgba(191, 239, 255, 0.45)'
+        borderBottom: hideBorder ? 'none' : '1.5px solid #BFEFFF',
+        boxShadow: hideBorder ? 'none' : '0 4px 20px -2px rgba(191, 239, 255, 0.45)'
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
