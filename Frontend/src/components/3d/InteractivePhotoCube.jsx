@@ -2,25 +2,30 @@ import React, { useEffect, useRef } from 'react';
 
 /**
  * =========================================================================
- * SIGAP — HIGH-PERFORMANCE SCROLL-DRIVEN 3D PHOTO CUBE
+ * SIGAP — HIGH-PERFORMANCE 3D CUBE ANIMATION (MATCHING REFERENCE VIDEO)
  * =========================================================================
  * Objek visual 3D 6-sisi mandiri: Front, Back, Left, Right, Top, Bottom.
  *
- * OPTIMASI PERFORMA & TIMELINE PRESISI (60-120 FPS):
- *   1. TIMELINE 5 TAHAPAN (0% - 100%):
- *      - Scene 01 (0–15%)  : Initial State — Relatif kecil (scale ~0.65), sisi kanan (+340px).
- *      - Scene 02 (15–35%) : Scale Up — Membesar bertahap, perspektif mulai terlihat.
- *      - Scene 03 (35–60%) : Move to Center — Bergerak ke tengah, skala dominan (1.20x).
- *      - Scene 04 (60–85%) : Move Upward — Bergerak melayang naik ke atas (-36vh), skala ~0.80x.
- *      - Scene 05 (85–100%): Final Transition — Mencapai posisi akhir 100% sebelum seksi berikutnya.
+ * KARAKTERISTIK ANIMASI PERSIS VIDEO REFERENSI (audition.smtown.com):
+ *   1. STATE IDLE (Top of page, p ≈ 0):
+ *      - Posisi di sebelah kanan (Hero section).
+ *      - Perspektif isometric miring dari atas (rotX ≈ -20°).
+ *      - Berputar anggun secara mandiri (ambient continuous auto-rotation)
+ *        dengan ayunan melayang lembut (organic floating wave).
  *
- *   2. ZERO-LAG RENDERING ARCHITECTURE:
- *      - Menggunakan scrollProgressRef (bebas re-render loop RAF saat scroll).
- *      - 3 Node Transform terpisah: positionRef, scaleRef, rotationRef.
- *      - Caching dimensi viewport via passive resize listener (hindari layout thrashing).
- *      - Penghentian otomatis loop RAF saat tab tidak aktif (Page Visibility API).
- *      - Backdrop-filter dioptimalkan ke blur(8px) untuk mencegah GPU bottleneck.
- *      - Tanpa mousemove / pointer interaction / hover effect sama sekali.
+ *   2. SCROLL REVEAL TIMELINE (p: 0.0 -> 1.0):
+ *      - Phase 1 (p: 0.02 - 0.45): Kubus bergerak mulus dari kanan ke tengah (translateX -> 0).
+ *      - Phase 2 (p: 0.02 - 0.55): Skala membesar dari ukuran showcase (0.72x) ke ukuran dominan (1.22x).
+ *      - Phase 3 (p: 0.02 - 0.78): Rotasi 3D sinkron bergulir mulus dan kemiringan atas (rotX)
+ *        secara presisi menegak lurus (-20° -> 0°).
+ *      - Phase 4 (p: 0.78 - 0.88): KUBUS MENDATAR 100% (rotX: 0°, rotY: 0°, rotZ: 0°)
+ *        sehingga satu sisi (Front) menatap lurus langsung ke kamera seperti layar digital / flat card!
+ *      - Phase 5 (p: 0.88 - 1.00): Mengalir naik secara alami saat pengguna melanjutkan scroll ke seksi berikutnya.
+ *
+ *   3. ZERO-LAG ARCHITECTURE (60-120 FPS):
+ *      - Interpolasi kinematik berbobot (exponential damping lerp).
+ *      - Manipulasi style langsung pada refs tanpa re-render React.
+ *      - Bebas layout-thrashing & tanpa backdrop-filter berat.
  * =========================================================================
  */
 
@@ -109,7 +114,7 @@ const smoothStep = (min, max, value) => {
 
 export const InteractivePhotoCube = ({
   faces = DEFAULT_CUBE_FACES,
-  scrollProgress = 0, // 0.0 s.d. 1.0 dari parent scroll stage
+  scrollProgress = 0,
   className = ''
 }) => {
   // DOM element refs untuk manipulasi matriks langsung di RAF tanpa re-render React
@@ -122,24 +127,25 @@ export const InteractivePhotoCube = ({
   const scrollProgressRef = useRef(scrollProgress);
   scrollProgressRef.current = scrollProgress;
 
-  // Nilai fisik lerp (current vs target) murni scroll dengan posisi awal 3D miring showcase
-  // beserta state engine auto-rotation mandiri dan kinematic inertia
+  // Nilai fisik kinematik lerp (current vs target)
   const animState = useRef({
-    curTx: 300,
+    curTx: 320,
     curTy: 0,
-    curScale: 0.68,
-    curRotX: -16,
-    curRotY: 22,
-    autoRotY: 0, // Inisialisasi sudut putaran mandiri (mencegah NaN)
-    lastP: 0,
-    lastScrollTime: 0
+    curScale: 0.72,
+    curRotX: -20,
+    curRotY: 28,
+    curRotZ: 0,
+    curShadow: 0.35,
+    autoRotY: 28,
+    isScrolling: false,
+    scrollStartRotY: 28,
+    targetFlatRotY: 360
   });
 
   const animFrameId = useRef(null);
 
   // ─── 60–120 FPS KINEMATIC LOOP (SINGLE MOUNTED LIFECYCLE) ───
   useEffect(() => {
-    // Cache viewport dimensions via passive resize listener untuk hindari layout thrashing
     let viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1280;
     let viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
 
@@ -172,7 +178,6 @@ export const InteractivePhotoCube = ({
       const st = animState.current;
 
       // Baca progress scroll secara real-time langsung dari DOM outer stage
-      // untuk respon seketika tanpa jeda re-render React
       let p = scrollProgressRef.current;
       if (typeof document !== 'undefined') {
         const stageEl = document.querySelector('.cube-scroll-section');
@@ -185,145 +190,164 @@ export const InteractivePhotoCube = ({
         }
       }
 
-      const isMobile = viewportWidth < 1024;
+      const isMobile = viewportWidth < 640;
+      const isTablet = viewportWidth >= 640 && viewportWidth < 1024;
 
-      // ─────────────────────────────────────────────────────────────
-      // 1. ENGINE PUTARAN MANDIRI (AUTO-ROTATION) & AYUNAN MELAYANG
-      // ─────────────────────────────────────────────────────────────
-      // Kubus selalu berputar aktif secara mandiri (~32 deg/s) agar efek berputar terlihat jelas dan hidup
-      if (typeof st.autoRotY !== 'number' || isNaN(st.autoRotY)) {
-        st.autoRotY = 0;
-      }
-      st.autoRotY += dt * 32.0;
+      // Baseline offsets dan skala sesuai breakpoint
+      const initialOffsetX = isMobile
+        ? Math.min(80, viewportWidth * 0.12)
+        : isTablet
+        ? Math.min(180, viewportWidth * 0.20)
+        : Math.min(340, viewportWidth * 0.25);
 
-      // Ayunan nafas melayang lembut di udara (Wave Motion)
-      const waveTime = time * 0.002;
-      const gentleFloatY = Math.sin(waveTime) * 7.0;
-      const gentleTiltX = Math.cos(waveTime * 0.9) * 3.0;
-      const gentleRollZ = Math.sin(waveTime * 0.7) * 2.0;
+      const baseScale = isMobile ? 0.60 : isTablet ? 0.68 : 0.72;
+      const peakScale = isMobile ? 1.02 : isTablet ? 1.12 : 1.22;
 
-      // ─────────────────────────────────────────────────────────────
-      // 2. TIMELINE KINEMATIK SCROLL SHOWCASE RESMI (0% - 100%)
-      // 0–15%: Kubus kecil di kanan
-      // 15–35%: Kubus membesar secara bertahap
-      // 35–60%: Kubus bergerak dari kanan menuju tengah
-      // 60–85%: Kubus bergerak menuju bagian atas viewport sambil berubah perspektif dan rotasi
-      // 85–100%: Kubus menyelesaikan gerakan akhir dan transisi media
-      // ─────────────────────────────────────────────────────────────
-
-      // A. POSISI X (Kanan ke Tengah)
-      const initialOffsetX = isMobile ? Math.min(90, viewportWidth * 0.14) : Math.min(320, viewportWidth * 0.24);
-      let targetTx = initialOffsetX;
-      if (p <= 0.35) {
-        targetTx = initialOffsetX;
-      } else if (p <= 0.60) {
-        const pMoveCenter = smoothStep(0.35, 0.60, p);
-        targetTx = (1 - pMoveCenter) * initialOffsetX;
-      } else {
-        targetTx = 0;
-      }
-
-      // B. SKALA (0–15% Kecil, 15–35% Membesar, 35–60% Dominan, 60–85% Menyesuaikan, 85–100% Akhir)
-      const baseSmallScale = isMobile ? 0.58 : 0.65;
-      const peakCenterScale = isMobile ? 1.05 : 1.15;
-      const elevatedScale = isMobile ? 0.72 : 0.78;
-
-      let targetScale = baseSmallScale;
-      if (p <= 0.15) {
-        targetScale = baseSmallScale;
-      } else if (p <= 0.35) {
-        const pScaleUp = smoothStep(0.15, 0.35, p);
-        targetScale = baseSmallScale + (peakCenterScale - baseSmallScale) * pScaleUp;
-      } else if (p <= 0.60) {
-        targetScale = peakCenterScale;
-      } else if (p <= 0.85) {
-        const pScaleDown = smoothStep(0.60, 0.85, p);
-        targetScale = peakCenterScale - (peakCenterScale - elevatedScale) * pScaleDown;
-      } else {
-        targetScale = elevatedScale;
-      }
-
-      // C. POSISI Y (0–60% Tengah, 60–85% Bergerak ke Atas, 85–100% Stabil di Atas)
-      const maxUpwardDistance = isMobile ? -viewportHeight * 0.30 : -viewportHeight * 0.38;
+      let targetTx = 0;
       let targetTy = 0;
-      if (p <= 0.60) {
-        targetTy = 0;
-      } else if (p <= 0.85) {
-        const pMoveUp = smoothStep(0.60, 0.85, p);
-        targetTy = pMoveUp * maxUpwardDistance;
-      } else {
-        targetTy = maxUpwardDistance;
+      let targetScale = baseScale;
+      let targetRotX = 0;
+      let targetRotY = 0;
+      let targetRotZ = 0;
+      let targetShadow = 0;
+
+      // ─────────────────────────────────────────────────────────────
+      // 1. STATE IDLE (p <= 0.015) — PERSIS REFERENSI HERO
+      // ─────────────────────────────────────────────────────────────
+      if (p <= 0.015) {
+        if (st.isScrolling) {
+          st.isScrolling = false;
+          st.autoRotY = st.curRotY;
+        }
+
+        // Putaran mandiri halus di Hero (~20 deg/s)
+        st.autoRotY += dt * 20.0;
+
+        // Ayunan nafas melayang lembut di udara (Organic Floating Wave)
+        const floatWave = time * 0.002;
+        const ambientFloatY = Math.sin(floatWave) * 6.0;
+        const ambientTiltX = Math.cos(floatWave * 0.8) * 2.0;
+        const ambientRollZ = Math.sin(floatWave * 0.6) * 1.5;
+
+        targetTx = initialOffsetX;
+        targetTy = ambientFloatY;
+        targetScale = baseScale;
+        targetRotX = -20.0 + ambientTiltX; // Tampilan isometric dari atas
+        targetRotY = st.autoRotY;
+        targetRotZ = ambientRollZ;
+        targetShadow = 0.35;
+      }
+      // ─────────────────────────────────────────────────────────────
+      // 2. SCROLL DRIVEN TRANSITION (p > 0.015 s.d. 1.0)
+      // ─────────────────────────────────────────────────────────────
+      else {
+        if (!st.isScrolling) {
+          st.isScrolling = true;
+          st.scrollStartRotY = st.curRotY;
+          // Target sudut rotasi agar sisi 'front' menghadap datar sempurna ke kamera
+          st.targetFlatRotY = Math.ceil(st.scrollStartRotY / 360) * 360;
+          if (st.targetFlatRotY - st.scrollStartRotY < 140) {
+            st.targetFlatRotY += 360;
+          }
+        }
+
+        // A. Perjalanan Horizontal: Kanan -> Tengah (p: 0.015 -> 0.45)
+        const pTravel = smoothStep(0.015, 0.45, p);
+        targetTx = initialOffsetX * (1 - pTravel);
+
+        // B. Pembesaran Skala (p: 0.015 -> 0.55)
+        const pScale = smoothStep(0.015, 0.55, p);
+        targetScale = baseScale + (peakScale - baseScale) * pScale;
+
+        // C. Rotasi 3D Menuju Rata (p: 0.015 -> 0.78)
+        const pRot = smoothStep(0.015, 0.78, p);
+        // Tilt X: Dari -20° (isometric dari atas) mendatar sempurna ke 0°
+        targetRotX = -20.0 * (1 - pRot);
+        // Rotasi Y: Bergulir anggun dari snapshot idle menuju sisi depan datar
+        targetRotY = st.scrollStartRotY + (st.targetFlatRotY - st.scrollStartRotY) * pRot;
+        targetRotZ = 0;
+
+        // D. KUBUS MENDATAR 100% MENATAP KAMERA (p: 0.78 -> 0.88)
+        // (Sesuai persis dengan frame 08 video referensi audition.smtown.com)
+        if (p >= 0.78 && p <= 0.88) {
+          targetTx = 0;
+          targetTy = 0;
+          targetScale = peakScale;
+          targetRotX = 0;
+          targetRotY = st.targetFlatRotY;
+          targetRotZ = 0;
+          targetShadow = 0;
+        }
+
+        // E. EXIT TRANSITION (p: 0.88 -> 1.00)
+        // Mengalir naik bersama alur halaman saat seksi berikutnya masuk
+        if (p > 0.88) {
+          const pExit = smoothStep(0.88, 1.00, p);
+          targetTy = -pExit * (viewportHeight * 0.32);
+          targetScale = peakScale - pExit * 0.10;
+          targetRotX = 0;
+          targetRotY = st.targetFlatRotY;
+          targetRotZ = 0;
+          targetShadow = 0;
+        } else {
+          // Bayangan dasar perlahan memudar saat kubus berubah menjadi kartu datar
+          const pFlatShadow = smoothStep(0.35, 0.75, p);
+          targetShadow = 0.35 * (1 - pFlatShadow);
+        }
       }
 
-      // D. ROTASI SCROLL MULTI-AXIS SINEMATIK (X & Y)
-      // Rotasi langsung merespons scroll secara kontinu sejak p = 0 tanpa deadzone
-      const scrollRotY = p * 420;
-      const scrollRotX = -14 + Math.sin(p * Math.PI) * 16 - smoothStep(0.60, 0.85, p) * 22;
-
-      const targetRotY = st.autoRotY + scrollRotY;
-      const targetRotX = scrollRotX;
-
       // ─────────────────────────────────────────────────────────────
-      // 3. LERP INTERPOLASI KINEMATIK (Responsif, Berbobot & Halus)
+      // 3. KINEMATIC EXPONENTIAL LERP (Smooth, Responsive & No Jitter)
       // ─────────────────────────────────────────────────────────────
-      const lerpSpeed = p >= 0.85 ? 0.35 : 0.22;
+      const k = p >= 0.78 ? 16 : 12;
+      const lerpFactor = 1 - Math.exp(-k * dt);
 
-      st.curTx += (targetTx - st.curTx) * lerpSpeed;
-      st.curTy += (targetTy - st.curTy) * lerpSpeed;
-      st.curScale += (targetScale - st.curScale) * lerpSpeed;
-      st.curRotX += (targetRotX - st.curRotX) * lerpSpeed;
-      st.curRotY += (targetRotY - st.curRotY) * lerpSpeed;
+      st.curTx += (targetTx - st.curTx) * lerpFactor;
+      st.curTy += (targetTy - st.curTy) * lerpFactor;
+      st.curScale += (targetScale - st.curScale) * lerpFactor;
+      st.curRotX += (targetRotX - st.curRotX) * lerpFactor;
+      st.curRotY += (targetRotY - st.curRotY) * lerpFactor;
+      st.curRotZ += (targetRotZ - st.curRotZ) * lerpFactor;
+      st.curShadow += (targetShadow - st.curShadow) * lerpFactor;
 
-      // Sanitasi angka untuk mencegah NaN di seluruh properti
+      // Sanitasi angka untuk mencegah NaN
       if (!Number.isFinite(st.curRotY)) st.curRotY = targetRotY || 0;
       if (!Number.isFinite(st.curRotX)) st.curRotX = targetRotX || 0;
+      if (!Number.isFinite(st.curRotZ)) st.curRotZ = targetRotZ || 0;
       if (!Number.isFinite(st.curTx)) st.curTx = targetTx || 0;
       if (!Number.isFinite(st.curTy)) st.curTy = targetTy || 0;
-      if (!Number.isFinite(st.curScale)) st.curScale = targetScale || 0.65;
+      if (!Number.isFinite(st.curScale)) st.curScale = targetScale || 0.72;
+      if (!Number.isFinite(st.curShadow)) st.curShadow = targetShadow || 0;
 
-      // RELEASE CONDITION: Mengunci 100% posisi dan rotasi akhir saat progress mencapai 99%-100%
-      if (p >= 0.99) {
+      // Kunci presisi pada progress akhir (99.5%+)
+      if (p >= 0.995) {
         st.curTx = targetTx;
         st.curTy = targetTy;
         st.curScale = targetScale;
         st.curRotX = targetRotX;
         st.curRotY = targetRotY;
+        st.curRotZ = targetRotZ;
+        st.curShadow = targetShadow;
       }
 
       // ─────────────────────────────────────────────────────────────
-      // 4. APLIKASI TRANSFORM LANGSUNG KE REFS (Bypass React Virtual DOM)
+      // 4. APLIKASI TRANSFORM LANGSUNG KE DOM REFS (Bypass React VDOM)
       // ─────────────────────────────────────────────────────────────
-      const finalTx = st.curTx;
-      const finalTy = st.curTy + gentleFloatY;
-      const finalScale = st.curScale;
-      const finalRotX = st.curRotX + gentleTiltX;
-      const finalRotY = st.curRotY;
-      const finalRotZ = gentleRollZ;
-
       if (positionRef.current) {
-        const x = Number.isFinite(finalTx) ? finalTx : 0;
-        const y = Number.isFinite(finalTy) ? finalTy : 0;
-        positionRef.current.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0px)`;
+        positionRef.current.style.transform = `translate3d(${st.curTx.toFixed(2)}px, ${st.curTy.toFixed(2)}px, 0px)`;
       }
 
       if (scaleRef.current) {
-        const s = Number.isFinite(finalScale) ? finalScale : 0.65;
-        scaleRef.current.style.transform = `scale(${s.toFixed(3)})`;
+        scaleRef.current.style.transform = `scale(${st.curScale.toFixed(3)})`;
       }
 
       if (rotationRef.current) {
-        const rX = Number.isFinite(finalRotX) ? finalRotX : 0;
-        const rY = Number.isFinite(finalRotY) ? finalRotY : 0;
-        const rZ = Number.isFinite(finalRotZ) ? finalRotZ : 0;
-        rotationRef.current.style.transform = `rotateX(${rX.toFixed(2)}deg) rotateY(${rY.toFixed(2)}deg) rotateZ(${rZ.toFixed(2)}deg)`;
+        rotationRef.current.style.transform = `rotateX(${st.curRotX.toFixed(2)}deg) rotateY(${st.curRotY.toFixed(2)}deg) rotateZ(${st.curRotZ.toFixed(2)}deg)`;
       }
 
-      // Ground Shadow realistis yang mengikuti skala dan memudar saat kubus melayang naik
       if (shadowRef.current) {
-        const pMoveUp = smoothStep(0.60, 0.85, p);
-        const shadowOpacity = Math.max(0, (1 - pMoveUp * 1.6) * 0.42).toFixed(2);
-        const shadowScale = (finalScale * (1 - pMoveUp * 0.4)).toFixed(3);
-        shadowRef.current.style.opacity = shadowOpacity;
+        const shadowScale = (st.curScale * 0.95).toFixed(3);
+        shadowRef.current.style.opacity = Math.max(0, st.curShadow).toFixed(2);
         shadowRef.current.style.transform = `scale(${shadowScale})`;
       }
 
@@ -337,7 +361,7 @@ export const InteractivePhotoCube = ({
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, []); // Run ONCE on mount — eliminates all teardown overhead!
+  }, []);
 
   return (
     <div
@@ -377,6 +401,7 @@ export const InteractivePhotoCube = ({
             box-sizing: border-box !important;
             backface-visibility: visible !important;
             -webkit-backface-visibility: visible !important;
+            border-radius: 8px;
           }
         `}</style>
 
@@ -398,7 +423,7 @@ export const InteractivePhotoCube = ({
               willChange: 'transform'
             }}
           >
-            {/* ─── NODE 3: PENGENDALI ROTASI (RotateX & RotateY) ─── */}
+            {/* ─── NODE 3: PENGENDALI ROTASI (RotateX, RotateY, RotateZ) ─── */}
             <div
               ref={rotationRef}
               className="relative w-full h-full"
@@ -407,9 +432,9 @@ export const InteractivePhotoCube = ({
                 willChange: 'transform'
               }}
             >
-              {/* Solid Inner Core Box: Menghilangkan 100% rongga/lubang di dalam kubus */}
+              {/* Solid Inner Core Box: Menghilangkan 100% rongga tembus pandang di sambungan sisi */}
               <div
-                className="absolute inset-0 pointer-events-none"
+                className="absolute inset-0 pointer-events-none rounded-lg"
                 style={{
                   width: 'var(--cube-size)',
                   height: 'var(--cube-size)',
@@ -454,12 +479,12 @@ export const InteractivePhotoCube = ({
                       backfaceVisibility: 'visible',
                       WebkitBackfaceVisibility: 'visible',
                       background: '#FFFFFF',
-                      border: '1.5px solid #BFEFFF',
+                      border: '1px solid rgba(191, 239, 255, 0.75)',
                       boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.2)'
                     }}
                   >
                     {face.type === 'video' && face.mediaSrc ? (
-                      /* ── Permukaan Video Lokal (5 Sisi) — Murni Video Tanpa Teks/Logo ── */
+                      /* Permukaan Video Lokal (5 Sisi) */
                       <div className="relative w-full h-full overflow-hidden bg-[#BFEFFF] pointer-events-none">
                         <video
                           src={face.mediaSrc}
@@ -472,7 +497,7 @@ export const InteractivePhotoCube = ({
                         />
                       </div>
                     ) : face.type === 'image' && face.mediaSrc ? (
-                      /* ── Permukaan Foto Statis Lokal (1 Sisi: Bottom) — Murni Foto Tanpa Teks/Logo ── */
+                      /* Permukaan Foto Statis Lokal (1 Sisi: Bottom) */
                       <div className="relative w-full h-full overflow-hidden bg-[#BFEFFF] pointer-events-none">
                         <img
                           src={face.mediaSrc}
@@ -481,7 +506,6 @@ export const InteractivePhotoCube = ({
                         />
                       </div>
                     ) : (
-                      /* ── Permukaan Bersih Fallback ── */
                       <div className="relative w-full h-full bg-[#BFEFFF] pointer-events-none" />
                     )}
                   </div>
@@ -495,9 +519,10 @@ export const InteractivePhotoCube = ({
       {/* ─── Ground Realistic Soft Shadow ─── */}
       <div
         ref={shadowRef}
-        className="w-[220px] sm:w-[300px] h-[18px] rounded-full pointer-events-none mt-4"
+        className="w-[220px] sm:w-[300px] h-[18px] rounded-full pointer-events-none mt-4 transition-opacity duration-300"
         style={{
-          background: 'rgba(191, 239, 255, 0.45)'
+          background: 'rgba(191, 239, 255, 0.45)',
+          filter: 'blur(4px)'
         }}
       />
     </div>

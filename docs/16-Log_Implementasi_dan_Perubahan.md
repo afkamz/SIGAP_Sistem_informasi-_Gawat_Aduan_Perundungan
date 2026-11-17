@@ -1496,3 +1496,17 @@ Setiap sesi pengerjaan dicatat dengan format ringkas:
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `Frontend/src/components/3d/CinematicCategoriesShowcase.jsx` | Penerapan isolasi wrapper animasi judul editorial typography berskala masif (oversized) saat initial state yang mengecil secara bertahap menuju posisi header normal saat digulir, dengan proteksi penuh integritas animasi kartu bergelombang (wavy reel) |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 103 implementasi animasi editorial typography pada judul section 7 Bentuk Kekerasan Landing Page SIGAP |
+
+---
+
+## 📅 [Sesi 104] Selasa, 17 November 2026 — Jam 10 WIB
+
+### Fokus Utama
+Penyelarasan animasi 3D Cube pada Landing Page SIGAP agar gerakan rotasi, sudut pandang, pembesaran skala, dan transisi mendatar (flat front face) mengikuti karakteristik video referensi resmi (audition.smtown.com) secara presisi dan performa tinggi 60 FPS tanpa mengubah elemen halaman lainnya.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Redesain timeline kinematik animasi kubus: putaran mandiri halus (ambient rotation) dengan ayunan melayang saat idle, transisi pergeseran dari kanan ke tengah dengan ekspansi skala saat scroll, serta rotasi 3D bertahap yang menegak dan mendatar sempurna (rotX: 0°, rotY: 0°, rotZ: 0°) menghadap kamera sebagai flat video showcase |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan sesi 104 dokumentasi redesign animasi 3D Cube sesuai video referensi |
