@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { UserPlus, ArrowRight, ShieldCheck, ArrowLeft, Info } from 'lucide-react';
+import { UserPlus, ArrowRight, ArrowLeft, Info } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { StudentHeader } from '../../components/layout/StudentHeader';
 import { StudentFooter } from '../../components/layout/StudentFooter';
@@ -100,28 +100,48 @@ export const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-liquid-mesh text-slate-800 relative overflow-hidden selection:bg-[#3B7DE8]/20">
-      {/* ─── Ambient Glow Blobs ─── */}
-      <div className="fixed top-[-10%] right-[-5%] w-[45vw] h-[45vw] rounded-full bg-blue-400/20 blur-3xl pointer-events-none -z-10" />
-      <div className="fixed bottom-[-10%] left-[-5%] w-[45vw] h-[45vw] rounded-full bg-indigo-300/25 blur-3xl pointer-events-none -z-10" />
-
+    <div
+      className="min-h-screen flex flex-col justify-between font-sans relative"
+      style={{ background: '#FFFFFF', color: '#1C6F8E' }}
+    >
       <StudentHeader />
 
-      <main className="max-w-xl mx-auto w-full px-4 py-8 lg:py-12 relative z-20">
-        <div className="glass-panel-elevated p-7 lg:p-8 rounded-3xl border border-white/90 shadow-[0_24px_70px_rgba(59,125,232,0.18)] space-y-6">
-          <div className="flex items-center gap-3 pb-3 border-b border-white/50">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 flex items-center justify-center text-white shadow-md border border-white/30">
-              <UserPlus className="w-6 h-6 text-white" />
+      <main className="max-w-xl mx-auto w-full px-4 py-8 lg:py-12 relative z-20 flex-1">
+        <div
+          className="p-7 lg:p-8 rounded-3xl border space-y-6"
+          style={{
+            background: '#FFFFFF',
+            borderColor: '#BFEFFF',
+            boxShadow: '0 24px 70px rgba(191, 239, 255, 0.45)'
+          }}
+        >
+          <div className="flex items-center gap-3 pb-3 border-b" style={{ borderColor: '#BFEFFF' }}>
+            <div
+              className="w-11 h-11 rounded-2xl flex items-center justify-center border shadow-xs"
+              style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+            >
+              <UserPlus className="w-6 h-6 text-[#1C6F8E]" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-slate-900 tracking-tight">Pendaftaran Akun Siswa</h2>
-              <p className="text-xs text-slate-500">Daftarkan akun resmi untuk memudahkan tracking dan riwayat laporan terpadu.</p>
+              <h2 className="text-xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
+                Pendaftaran Akun Siswa
+              </h2>
+              <p className="text-xs" style={{ color: '#2E84A5' }}>
+                Daftarkan akun resmi untuk memudahkan tracking dan riwayat laporan terpadu.
+              </p>
             </div>
           </div>
 
           {isFromReport && (
-            <div className="p-3.5 rounded-2xl glass-pill-blue text-xs text-slate-700 flex items-start gap-2.5">
-              <Info className="w-4 h-4 text-[#3B7DE8] shrink-0 mt-0.5" />
+            <div
+              className="p-3.5 rounded-2xl text-xs flex items-start gap-2.5 border"
+              style={{
+                background: 'rgba(191, 239, 255, 0.35)',
+                borderColor: '#BFEFFF',
+                color: '#1C6F8E'
+              }}
+            >
+              <Info className="w-4 h-4 text-[#1C6F8E] shrink-0 mt-0.5" />
               <span>
                 <strong>Akses Buat Aduan:</strong> Silakan daftarkan akun Anda terlebih dahulu untuk melanjutkan proses pelaporan aduan di sistem SIGAP.
               </span>
@@ -129,20 +149,34 @@ export const Register = () => {
           )}
 
           {errorMsg && (
-            <div className="p-3.5 rounded-2xl glass-pill-red text-xs font-semibold animate-fade-in">
+            <div
+              className="p-3.5 rounded-2xl text-xs font-semibold animate-fade-in border"
+              style={{
+                background: '#FFF5F5',
+                borderColor: '#FEB2B2',
+                color: '#C53030'
+              }}
+            >
               {errorMsg}
             </div>
           )}
 
           {successMsg && (
-            <div className="p-3.5 rounded-2xl glass-pill-green text-xs font-semibold animate-fade-in">
+            <div
+              className="p-3.5 rounded-2xl text-xs font-semibold animate-fade-in border"
+              style={{
+                background: '#F0FFF4',
+                borderColor: '#9AE6B4',
+                color: '#22543D'
+              }}
+            >
               {successMsg}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+              <label className="text-xs font-bold block mb-1.5 uppercase tracking-wider" style={{ color: '#1C6F8E' }}>
                 NISN (Nomor Induk Siswa Nasional) *
               </label>
               <input
@@ -152,12 +186,17 @@ export const Register = () => {
                 value={formData.nisn}
                 onChange={handleChange}
                 placeholder="Contoh: 1234567890 (10 Digit)"
-                className="w-full px-4 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm focus:outline-none border"
+                style={{
+                  background: '#FFFFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               />
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+              <label className="text-xs font-bold block mb-1.5 uppercase tracking-wider" style={{ color: '#1C6F8E' }}>
                 Nama Lengkap Siswa *
               </label>
               <input
@@ -167,13 +206,18 @@ export const Register = () => {
                 value={formData.nama}
                 onChange={handleChange}
                 placeholder="Masukkan nama lengkap siswa"
-                className="w-full px-4 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm focus:outline-none border"
+                style={{
+                  background: '#FFFFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+                <label className="text-xs font-bold block mb-1.5 uppercase tracking-wider" style={{ color: '#1C6F8E' }}>
                   Asal Sekolah *
                 </label>
                 <input
@@ -182,12 +226,17 @@ export const Register = () => {
                   required
                   value={formData.sekolah}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                  className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm focus:outline-none border"
+                  style={{
+                    background: '#FFFFFF',
+                    color: '#1C6F8E',
+                    borderColor: '#BFEFFF'
+                  }}
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+                <label className="text-xs font-bold block mb-1.5 uppercase tracking-wider" style={{ color: '#1C6F8E' }}>
                   Kelas *
                 </label>
                 <input
@@ -196,13 +245,18 @@ export const Register = () => {
                   required
                   value={formData.kelas}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                  className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm focus:outline-none border"
+                  style={{
+                    background: '#FFFFFF',
+                    color: '#1C6F8E',
+                    borderColor: '#BFEFFF'
+                  }}
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+              <label className="text-xs font-bold block mb-1.5 uppercase tracking-wider" style={{ color: '#1C6F8E' }}>
                 Kata Sandi Akun *
               </label>
               <input
@@ -212,12 +266,17 @@ export const Register = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Minimal 6 karakter"
-                className="w-full px-4 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm focus:outline-none border"
+                style={{
+                  background: '#FFFFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               />
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1.5 uppercase tracking-wider">
+              <label className="text-xs font-bold block mb-1.5 uppercase tracking-wider" style={{ color: '#1C6F8E' }}>
                 Konfirmasi Kata Sandi *
               </label>
               <input
@@ -227,7 +286,12 @@ export const Register = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Ketik ulang kata sandi"
-                className="w-full px-4 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm focus:outline-none border"
+                style={{
+                  background: '#FFFFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               />
             </div>
 
@@ -238,9 +302,9 @@ export const Register = () => {
                 name="persetujuan"
                 checked={formData.persetujuan}
                 onChange={handleChange}
-                className="mt-1 rounded border-slate-300 text-[#3B7DE8] focus:ring-[#3B7DE8]"
+                className="mt-1 rounded border-[#BFEFFF] text-[#1C6F8E] focus:ring-[#BFEFFF]"
               />
-              <label htmlFor="persetujuan" className="text-xs text-slate-600 leading-relaxed cursor-pointer">
+              <label htmlFor="persetujuan" className="text-xs leading-relaxed cursor-pointer" style={{ color: '#2E84A5' }}>
                 Saya menyatakan data yang saya masukkan adalah benar dan saya menyetujui kebijakan privasi data perlindungan siswa SIGAP.
               </label>
             </div>
@@ -248,19 +312,25 @@ export const Register = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 px-4 rounded-2xl glass-button-primary text-white font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full py-3.5 px-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50 border hover:opacity-90 shadow-xs cursor-pointer transition active:scale-95"
+              style={{
+                background: '#BFEFFF',
+                color: '#1C6F8E',
+                borderColor: '#BFEFFF'
+              }}
             >
               <span>{isLoading ? 'Mendaftarkan Akun...' : 'Daftarkan Akun Siswa'}</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 text-[#1C6F8E]" />
             </button>
           </form>
 
-          <div className="text-center text-xs text-slate-500 pt-2 border-t border-white/50 flex items-center justify-center gap-2">
+          <div className="text-center text-xs pt-2 border-t flex items-center justify-center gap-2" style={{ borderColor: '#BFEFFF' }}>
             <Link
               to={redirectTarget ? `/login?redirect=${encodeURIComponent(redirectTarget)}` : '/login'}
-              className="text-[#3B7DE8] hover:underline flex items-center gap-1 font-bold"
+              className="hover:underline flex items-center gap-1 font-bold"
+              style={{ color: '#1C6F8E' }}
             >
-              <ArrowLeft className="w-3.5 h-3.5" /> Sudah punya akun? Masuk ke portal
+              <ArrowLeft className="w-3.5 h-3.5 text-[#1C6F8E]" /> Sudah punya akun? Masuk ke portal
             </Link>
           </div>
         </div>

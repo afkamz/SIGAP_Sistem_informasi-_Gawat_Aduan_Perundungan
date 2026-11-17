@@ -11,8 +11,7 @@ import {
   ArrowRight,
   ArrowLeft,
   SearchCheck,
-  Info,
-  Sparkles
+  Info
 } from 'lucide-react';
 import { api } from '../../services/api';
 import { useStore } from '../../context/StoreContext';
@@ -57,10 +56,15 @@ export const Login = () => {
       navigate(redirectTarget);
     } catch (err) {
       console.warn('Login siswa failed:', err.message);
-      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+      if (
+        err.name === 'TypeError' ||
+        err.message?.includes('Failed to fetch') ||
+        err.message?.includes('NetworkError') ||
+        err.message?.toLowerCase().includes('fetch')
+      ) {
         loginUser({
           id: 1,
-          nama: 'Ahmad Falihul Hikam',
+          nama: 'Ananda Arvin Dzaky Nugraha',
           nisn: identifier.trim(),
           sekolah: 'SMAN 1 Teladan',
           role: 'siswa'
@@ -75,47 +79,74 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-between bg-liquid-mesh text-slate-800 relative overflow-hidden selection:bg-[#3B7DE8]/20">
-      {/* ─── Ambient Glow Blobs ─── */}
-      <div className="fixed top-[-10%] left-[-5%] w-[45vw] h-[45vw] rounded-full bg-blue-400/20 blur-3xl pointer-events-none -z-10" />
-      <div className="fixed bottom-[-10%] right-[-5%] w-[45vw] h-[45vw] rounded-full bg-indigo-300/25 blur-3xl pointer-events-none -z-10" />
-
+    <div
+      className="min-h-screen flex flex-col justify-between font-sans relative"
+      style={{ background: '#FFFFFF', color: '#1C6F8E' }}
+    >
       <StudentHeader />
 
       {/* Main Login Content */}
-      <main className="max-w-6xl mx-auto w-full px-4 py-8 lg:py-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-20">
+      <main className="max-w-6xl mx-auto w-full px-4 py-8 lg:py-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-20 flex-1">
         {/* Kolom Kiri: Hero & Jaminan Kerahasiaan */}
         <div className="lg:col-span-6 space-y-5">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-[#3B7DE8] glass-pill px-3 py-1.5 rounded-full transition"
+            className="inline-flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-full transition border hover:opacity-90"
+            style={{
+              background: '#FFFFFF',
+              color: '#1C6F8E',
+              borderColor: '#BFEFFF'
+            }}
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <ArrowLeft className="w-3.5 h-3.5 text-[#1C6F8E]" />
             <span>Kembali ke Halaman Utama</span>
           </Link>
 
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-pill-blue text-xs font-extrabold shadow-xs">
-            <ShieldCheck className="w-4 h-4 text-[#3B7DE8]" />
-            <span>LAYANAN RESMI BIMBINGAN KONSELING & PPKSP</span>
+          <div
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold border shadow-xs"
+            style={{
+              background: '#BFEFFF',
+              color: '#1C6F8E',
+              borderColor: '#BFEFFF'
+            }}
+          >
+            <ShieldCheck className="w-4 h-4 text-[#1C6F8E]" />
+            <span>LAYANAN RESMI BIMBINGAN KONSELING &amp; PPKSP</span>
           </div>
 
-          <h1 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+          <h1 className="text-3xl lg:text-4xl font-black tracking-tight leading-tight" style={{ color: '#1C6F8E' }}>
             Ruang Suara Aman bagi Seluruh Warga Sekolah
           </h1>
 
-          <p className="text-slate-600 text-sm lg:text-base leading-relaxed">
-            Sampaikan laporan perundungan, kekerasan fisik maupun verbal, atau ketidaknyamanan belajar dengan garansi kerahasiaan identitas dan perlindungan penuh Liquid Glass OS 26.
+          <p className="text-sm lg:text-base leading-relaxed" style={{ color: '#2E84A5' }}>
+            Sampaikan laporan perundungan, kekerasan fisik maupun verbal, atau ketidaknyamanan belajar dengan garansi kerahasiaan identitas dan perlindungan penuh sistem SIGAP.
           </p>
 
           {/* Card Ilustrasi Perlindungan */}
-          <div className="glass-panel-elevated p-6 rounded-3xl border border-white/80 shadow-md relative overflow-hidden">
+          <div
+            className="p-6 rounded-3xl border relative overflow-hidden"
+            style={{
+              background: '#FFFFFF',
+              borderColor: '#BFEFFF',
+              boxShadow: '0 4px 20px -2px rgba(191, 239, 255, 0.45)'
+            }}
+          >
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 flex items-center justify-center text-white shrink-0 font-bold shadow-md border border-white/30">
-                <HeartHandshake className="w-7 h-7 text-white" />
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 font-bold border shadow-xs"
+                style={{
+                  background: '#BFEFFF',
+                  borderColor: '#BFEFFF',
+                  color: '#1C6F8E'
+                }}
+              >
+                <HeartHandshake className="w-7 h-7 text-[#1C6F8E]" />
               </div>
               <div>
-                <h4 className="font-extrabold text-slate-900 text-sm">100% Rahasia &amp; Terlindungi</h4>
-                <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
+                <h4 className="font-extrabold text-sm" style={{ color: '#1C6F8E' }}>
+                  100% Rahasia &amp; Terlindungi
+                </h4>
+                <p className="text-xs mt-0.5 leading-relaxed" style={{ color: '#2E84A5' }}>
                   Setiap laporan diverifikasi langsung oleh Tim BK &amp; Satgas Perlindungan Anak tanpa takut dihakimi atau bocor.
                 </p>
               </div>
@@ -124,23 +155,41 @@ export const Login = () => {
 
           {/* Fitur Utama */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-            <div className="p-4 rounded-2xl glass-card border border-white/80 shadow-xs flex items-start gap-3">
-              <div className="p-2 rounded-xl glass-pill-blue text-[#3B7DE8] shrink-0">
-                <Lock className="w-4 h-4" />
+            <div
+              className="p-4 rounded-2xl border flex items-start gap-3"
+              style={{
+                background: '#FFFFFF',
+                borderColor: '#BFEFFF'
+              }}
+            >
+              <div
+                className="p-2 rounded-xl shrink-0 border"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+              >
+                <Lock className="w-4 h-4 text-[#1C6F8E]" />
               </div>
               <div>
-                <h5 className="text-xs font-bold text-slate-900">Enkripsi Berlapis</h5>
-                <p className="text-[11px] text-slate-500 mt-0.5">Identitas pelapor terproteksi ketat secara sistemik.</p>
+                <h5 className="text-xs font-bold" style={{ color: '#1C6F8E' }}>Enkripsi Berlapis</h5>
+                <p className="text-[11px] mt-0.5" style={{ color: '#2E84A5' }}>Identitas pelapor terproteksi ketat secara sistemik.</p>
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl glass-card border border-white/80 shadow-xs flex items-start gap-3">
-              <div className="p-2 rounded-xl glass-pill-green text-emerald-600 shrink-0">
-                <Clock className="w-4 h-4" />
+            <div
+              className="p-4 rounded-2xl border flex items-start gap-3"
+              style={{
+                background: '#FFFFFF',
+                borderColor: '#BFEFFF'
+              }}
+            >
+              <div
+                className="p-2 rounded-xl shrink-0 border"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+              >
+                <Clock className="w-4 h-4 text-[#1C6F8E]" />
               </div>
               <div>
-                <h5 className="text-xs font-bold text-slate-900">Respons Cepat</h5>
-                <p className="text-[11px] text-slate-500 mt-0.5">Penanganan langsung oleh Guru BK &amp; Tim Satgas &lt; 24 Jam.</p>
+                <h5 className="text-xs font-bold" style={{ color: '#1C6F8E' }}>Respons Cepat</h5>
+                <p className="text-[11px] mt-0.5" style={{ color: '#2E84A5' }}>Penanganan langsung oleh Guru BK &amp; Tim Satgas &lt; 24 Jam.</p>
               </div>
             </div>
           </div>
@@ -148,20 +197,41 @@ export const Login = () => {
 
         {/* Kolom Kanan: Card Login / Akses Masuk */}
         <div className="lg:col-span-6 max-w-md mx-auto w-full">
-          <div className="glass-panel-elevated p-7 lg:p-8 rounded-3xl border border-white/90 shadow-[0_24px_70px_rgba(59,125,232,0.18)] space-y-5">
-            <div className="flex items-center gap-3 pb-3 border-b border-white/50">
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 flex items-center justify-center text-white shadow-md border border-white/30">
-                <Shield className="w-6 h-6 text-white" />
+          <div
+            className="p-7 lg:p-8 rounded-3xl border space-y-5"
+            style={{
+              background: '#FFFFFF',
+              borderColor: '#BFEFFF',
+              boxShadow: '0 24px 70px rgba(191, 239, 255, 0.45)'
+            }}
+          >
+            <div className="flex items-center gap-3 pb-3 border-b" style={{ borderColor: '#BFEFFF' }}>
+              <div
+                className="w-11 h-11 rounded-2xl flex items-center justify-center border shadow-xs"
+                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+              >
+                <Shield className="w-6 h-6 text-[#1C6F8E]" />
               </div>
               <div>
-                <h3 className="text-xl font-black text-slate-900 tracking-tight">Masuk Portal Siswa</h3>
-                <p className="text-xs text-slate-400">Silakan masuk dengan akun siswa terdaftar Anda.</p>
+                <h3 className="text-xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
+                  Masuk Portal Siswa
+                </h3>
+                <p className="text-xs" style={{ color: '#2E84A5' }}>
+                  Silakan masuk dengan akun siswa terdaftar Anda.
+                </p>
               </div>
             </div>
 
             {isFromReport && (
-              <div className="p-3.5 rounded-2xl glass-pill-blue text-xs text-slate-700 flex items-start gap-2.5">
-                <Info className="w-4 h-4 text-[#3B7DE8] shrink-0 mt-0.5" />
+              <div
+                className="p-3.5 rounded-2xl text-xs flex items-start gap-2.5 border"
+                style={{
+                  background: 'rgba(191, 239, 255, 0.35)',
+                  borderColor: '#BFEFFF',
+                  color: '#1C6F8E'
+                }}
+              >
+                <Info className="w-4 h-4 text-[#1C6F8E] shrink-0 mt-0.5" />
                 <span>
                   <strong>Akses Buat Aduan:</strong> Harap masuk atau daftar terlebih dahulu agar dapat membuat dan memantau laporan aduan Anda secara aman.
                 </span>
@@ -169,7 +239,14 @@ export const Login = () => {
             )}
 
             {errorMsg && (
-              <div className="p-3.5 rounded-2xl glass-pill-red text-xs font-semibold animate-fade-in">
+              <div
+                className="p-3.5 rounded-2xl text-xs font-semibold animate-fade-in border"
+                style={{
+                  background: '#FFF5F5',
+                  borderColor: '#FEB2B2',
+                  color: '#C53030'
+                }}
+              >
                 {errorMsg}
               </div>
             )}
@@ -177,10 +254,10 @@ export const Login = () => {
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <div className="flex justify-between items-center mb-1.5">
-                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#1C6F8E' }}>
                     NISN (Nomor Induk Siswa Nasional) *
                   </label>
-                  <span className="text-[11px] text-slate-400">10 Digit</span>
+                  <span className="text-[11px]" style={{ color: '#2E84A5' }}>10 Digit</span>
                 </div>
                 <input
                   type="text"
@@ -188,14 +265,21 @@ export const Login = () => {
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   placeholder="Contoh: 1234567890"
-                  className="w-full px-4 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                  className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm focus:outline-none border"
+                  style={{
+                    background: '#FFFFFF',
+                    color: '#1C6F8E',
+                    borderColor: '#BFEFFF'
+                  }}
                 />
               </div>
 
               <div>
                 <div className="flex justify-between items-center mb-1.5">
-                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Kata Sandi *</label>
-                  <a href="#/lupa-sandi" className="text-[11px] font-bold text-[#3B7DE8] hover:underline">
+                  <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#1C6F8E' }}>
+                    Kata Sandi *
+                  </label>
+                  <a href="#/lupa-sandi" className="text-[11px] font-bold hover:underline" style={{ color: '#1C6F8E' }}>
                     Lupa kata sandi?
                   </a>
                 </div>
@@ -206,7 +290,12 @@ export const Login = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Masukkan kata sandi"
-                    className="w-full pl-4 pr-10 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                    className="w-full pl-4 pr-10 py-3 rounded-2xl text-xs sm:text-sm focus:outline-none border"
+                    style={{
+                      background: '#FFFFFF',
+                      color: '#1C6F8E',
+                      borderColor: '#BFEFFF'
+                    }}
                   />
                   <button
                     type="button"
@@ -224,9 +313,9 @@ export const Login = () => {
                   id="rememberMe"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="rounded border-slate-300 text-[#3B7DE8] focus:ring-[#3B7DE8]"
+                  className="rounded border-[#BFEFFF] text-[#1C6F8E] focus:ring-[#BFEFFF]"
                 />
-                <label htmlFor="rememberMe" className="text-xs text-slate-600 cursor-pointer">
+                <label htmlFor="rememberMe" className="text-xs cursor-pointer" style={{ color: '#2E84A5' }}>
                   Ingat sesi saya di perangkat ini
                 </label>
               </div>
@@ -234,18 +323,24 @@ export const Login = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3.5 px-4 rounded-2xl glass-button-primary text-white font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full py-3.5 px-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50 border hover:opacity-90 shadow-xs cursor-pointer transition active:scale-95"
+                style={{
+                  background: '#BFEFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               >
                 <span>{isLoading ? 'Memverifikasi Sesi...' : 'Masuk ke Portal Siswa'}</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 text-[#1C6F8E]" />
               </button>
             </form>
 
-            <div className="text-center text-xs text-slate-600">
+            <div className="text-center text-xs" style={{ color: '#2E84A5' }}>
               Belum memiliki akun siswa?{' '}
               <Link
                 to={redirectTarget ? `/register?redirect=${encodeURIComponent(redirectTarget)}` : '/register'}
-                className="font-bold text-[#3B7DE8] hover:underline"
+                className="font-bold hover:underline"
+                style={{ color: '#1C6F8E' }}
               >
                 Daftar akun di sini →
               </Link>
@@ -253,27 +348,34 @@ export const Login = () => {
 
             {/* Pembatas Atau */}
             <div className="relative flex py-1 items-center">
-              <div className="flex-grow border-t border-white/50"></div>
-              <span className="flex-shrink mx-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Atau</span>
-              <div className="flex-grow border-t border-white/50"></div>
+              <div className="flex-grow border-t" style={{ borderColor: '#BFEFFF' }} />
+              <span className="flex-shrink mx-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: '#2E84A5' }}>
+                Atau
+              </span>
+              <div className="flex-grow border-t" style={{ borderColor: '#BFEFFF' }} />
             </div>
 
             {/* Lacak Tanpa Login Button */}
             <div className="space-y-1.5">
               <Link
                 to="/lacak"
-                className="w-full py-2.5 px-4 rounded-2xl glass-pill-blue font-bold text-xs flex items-center justify-center gap-2 transition"
+                className="w-full py-2.5 px-4 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 transition border hover:opacity-90"
+                style={{
+                  background: '#FFFFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               >
-                <SearchCheck className="w-4 h-4 text-[#3B7DE8]" />
+                <SearchCheck className="w-4 h-4 text-[#1C6F8E]" />
                 <span>Lacak Status Laporan Tanpa Login</span>
               </Link>
-              <p className="text-[11px] text-center text-slate-500">
+              <p className="text-[11px] text-center" style={{ color: '#2E84A5' }}>
                 Punya Kode Tiket Aduan? Periksa progres penanganan secara transparan di sini.
               </p>
             </div>
 
-            <div className="pt-3 border-t border-white/50 flex items-start gap-2 text-[11px] text-slate-500 leading-relaxed">
-              <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+            <div className="pt-3 border-t flex items-start gap-2 text-[11px] leading-relaxed" style={{ borderColor: '#BFEFFF', color: '#2E84A5' }}>
+              <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5 text-[#1C6F8E]" />
               <span>Data Anda dienkripsi dan diproteksi sesuai standar perlindungan kerahasiaan data anak.</span>
             </div>
           </div>
