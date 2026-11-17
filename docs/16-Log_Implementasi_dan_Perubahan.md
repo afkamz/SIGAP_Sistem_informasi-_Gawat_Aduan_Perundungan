@@ -2198,3 +2198,18 @@ Transformasi background video header Dashboard Admin menjadi tampilan full-width
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Penerapan hero section video full-width terbuka dengan gradien fade halus tanpa bingkai bubble pada dashboard admin |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 151 penyesuaian hero background video full-width dashboard admin |
+
+---
+
+## 📅 [Sesi 152] Rabu, 18 November 2026 — Jam 06 WIB
+
+### Fokus Utama
+Pemindahan 4 kartu ringkasan KPI ke dalam area Hero Section berlatar belakang video agar kanvas video dashboard admin tampil lebih luas dan menyatu secara sinematik.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Integrasi 4 kartu metrik KPI ke dalam Hero Section berlatar video dan penataan gradien fade di bagian bawah kartu |
+| 2 | `TAMBAH` | `Frontend/public/assets/background/admin-welcome.mp4` | Penambahan berkas video kustom latar belakang hero dashboard admin oleh pengguna |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 152 perluasan area hero video dashboard admin mencakup 4 kartu KPI |
