@@ -281,8 +281,8 @@ export const LandingPage = () => {
       {/* ─── FIXED GLOBAL HEADER ─── */}
       <header className="fixed top-0 inset-x-0 z-50 w-full pointer-events-auto">
         {/* Top Micro-Ticker Bar */}
-        <div style={{ background: '#BFEFFF', color: '#1C6F8E' }} className="text-[11px] py-1.5 px-4 border-b border-[#BFEFFF]/40">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+        <div style={{ background: '#BFEFFF', color: '#1C6F8E' }} className="text-[11px] py-1.5 px-4 sm:px-6 lg:px-8 border-b border-[#BFEFFF]/40">
+          <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
             <div className="flex items-center gap-2">
               <span className="flex h-2.5 w-2.5 rounded-full bg-[#1C6F8E] animate-pulse" />
               <span className="text-[#1C6F8E]">
@@ -307,13 +307,13 @@ export const LandingPage = () => {
 
         {/* ─── NAVIGATION BAR — Baby Blue & White Theme ─── */}
         <nav className="border-b" style={{ background: '#FFFFFF', borderColor: '#BFEFFF' }}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            {/* Brand Logo & Emblem */}
-            <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group py-1" aria-label="Beranda SIGAP">
+          <div className="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative">
+            {/* Brand Logo & Emblem — Mentok ke kiri */}
+            <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group py-1 flex-shrink-0 z-10" aria-label="Beranda SIGAP">
               <img
                 src="/assets/branding/logo-sigap.png"
                 alt="Logo SIGAP"
-                className="h-9 sm:h-10 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+                className="h-8 sm:h-9 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
@@ -321,29 +321,66 @@ export const LandingPage = () => {
               <img
                 src="/assets/branding/branding-sigap.png"
                 alt="SIGAP"
-                className="h-8 sm:h-9 w-auto max-w-[150px] sm:max-w-[190px] object-contain transition-transform duration-200 group-hover:scale-105"
+                className="h-7 sm:h-8 w-auto max-w-[110px] sm:max-w-[140px] object-contain transition-transform duration-200 group-hover:scale-105"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
               />
             </Link>
 
-            {/* Right Action / Auth Buttons */}
-            <div className="hidden sm:flex items-center gap-2.5">
-              <Link
-                to="/lacak"
-                className="text-xs font-bold px-3.5 py-2 rounded-xl border transition flex items-center gap-1.5 hover:opacity-90"
-                style={{ background: '#FFFFFF', color: '#1C6F8E', border: '1.5px solid #BFEFFF' }}
+            {/* ─── CENTER NAVIGATION BAR (DEAD CENTER, HOVER PILL BIRU SIGAP) ─── */}
+            <div className="hidden lg:flex items-center gap-2 xl:gap-5 text-[11px] xl:text-[13px] font-bold tracking-wider text-black select-none whitespace-nowrap absolute left-1/2 -translate-x-1/2 z-10">
+              <button
+                type="button"
+                onClick={(e) => scrollToSection(e, 'mission')}
+                className="px-3.5 xl:px-5 py-1.5 rounded-full transition-all duration-200 hover:bg-[#BFEFFF] hover:text-[#1C6F8E] cursor-pointer whitespace-nowrap"
               >
-                <Search className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                <span>Lacak Aduan</span>
-              </Link>
+                TENTANG
+              </button>
+              <button
+                type="button"
+                onClick={(e) => scrollToSection(e, 'categories')}
+                className="px-3.5 xl:px-5 py-1.5 rounded-full transition-all duration-200 hover:bg-[#BFEFFF] hover:text-[#1C6F8E] cursor-pointer whitespace-nowrap"
+              >
+                7 KATEGORI
+              </button>
+              <button
+                type="button"
+                onClick={(e) => scrollToSection(e, 'how-it-works')}
+                className="px-3.5 xl:px-5 py-1.5 rounded-full transition-all duration-200 hover:bg-[#BFEFFF] hover:text-[#1C6F8E] cursor-pointer whitespace-nowrap"
+              >
+                ALUR PENANGANAN
+              </button>
+              <button
+                type="button"
+                onClick={(e) => handleReportAction(e, '/buat-laporan')}
+                className="px-3.5 xl:px-5 py-1.5 rounded-full border border-black/30 hover:border-[#BFEFFF] hover:bg-[#BFEFFF] hover:text-[#1C6F8E] transition-all duration-200 cursor-pointer whitespace-nowrap"
+              >
+                BUAT LAPORAN
+              </button>
+              <button
+                type="button"
+                onClick={(e) => scrollToSection(e, 'safety')}
+                className="px-3.5 xl:px-5 py-1.5 rounded-full transition-all duration-200 hover:bg-[#BFEFFF] hover:text-[#1C6F8E] cursor-pointer whitespace-nowrap"
+              >
+                KEAMANAN
+              </button>
+              <button
+                type="button"
+                onClick={(e) => scrollToSection(e, 'faq')}
+                className="px-3.5 xl:px-5 py-1.5 rounded-full transition-all duration-200 hover:bg-[#BFEFFF] hover:text-[#1C6F8E] cursor-pointer whitespace-nowrap"
+              >
+                FAQ
+              </button>
+            </div>
 
+            {/* Right Action / Auth Buttons — Mentok ke kanan */}
+            <div className="hidden sm:flex items-center gap-2.5 flex-shrink-0 z-10">
               {currentUser ? (
                 <div className="flex items-center gap-2 pl-2 border-l" style={{ borderColor: '#BFEFFF' }}>
                   <Link
                     to={profilePath}
-                    className="flex items-center gap-2.5 text-xs font-bold px-3 py-1.5 rounded-xl border transition"
+                    className="flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-xl border transition"
                     style={{ color: '#1C6F8E', background: '#FFFFFF', border: '1.5px solid #BFEFFF' }}
                   >
                     <div
@@ -352,12 +389,12 @@ export const LandingPage = () => {
                     >
                       {currentUser.nama?.slice(0, 2).toUpperCase() || 'SW'}
                     </div>
-                    <span className="truncate max-w-[120px]">{currentUser.nama || 'Siswa'}</span>
+                    <span className="truncate max-w-[100px]">{currentUser.nama || 'Siswa'}</span>
                   </Link>
                   <button
                     type="button"
                     onClick={logout}
-                    className="p-2 rounded-xl border transition hover:opacity-80"
+                    className="p-2 rounded-xl border transition hover:opacity-80 cursor-pointer"
                     style={{ border: '1.5px solid #BFEFFF', color: '#1C6F8E' }}
                     title="Keluar"
                   >
@@ -367,30 +404,20 @@ export const LandingPage = () => {
               ) : (
                 <Link
                   to="/login"
-                  className="text-xs font-bold px-4 py-2 rounded-xl border transition flex items-center gap-1.5 hover:opacity-90"
+                  className="text-xs font-bold px-4 py-1.5 rounded-xl border transition flex items-center gap-1.5 hover:opacity-90"
                   style={{ background: '#FFFFFF', color: '#1C6F8E', border: '1.5px solid #BFEFFF' }}
                 >
                   <LogIn className="w-3.5 h-3.5 text-[#1C6F8E]" />
                   <span>Masuk</span>
                 </Link>
               )}
-
-              <button
-                type="button"
-                onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                className="text-xs font-bold px-4.5 py-2 rounded-xl text-[#1C6F8E] flex items-center gap-1.5 cursor-pointer transition active:scale-95 hover:opacity-90 shadow-xs border"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}
-              >
-                <ShieldAlert className="w-4 h-4 text-[#1C6F8E]" />
-                <span>Buat Laporan</span>
-              </button>
             </div>
 
             {/* Mobile Hamburger */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="sm:hidden p-2 rounded-xl border"
+              className="lg:hidden p-2 rounded-xl border cursor-pointer z-10"
               style={{ border: '1.5px solid #BFEFFF', color: '#1C6F8E' }}
               aria-label="Toggle Menu"
             >
@@ -400,46 +427,77 @@ export const LandingPage = () => {
 
           {/* Mobile Navigation Drawer */}
           {mobileMenuOpen && (
-            <div className="sm:hidden px-4 pt-3 pb-5 border-t space-y-2 animate-fade-in" style={{ borderColor: '#BFEFFF', background: '#FFFFFF' }}>
-              <div className="flex flex-col gap-2">
+            <div className="lg:hidden px-6 pt-4 pb-6 border-t space-y-3 animate-fade-in" style={{ borderColor: '#BFEFFF', background: '#FFFFFF' }}>
+              <div className="flex flex-col gap-2 text-[13px] font-bold tracking-wider text-black">
                 <button
                   type="button"
-                  onClick={(e) => { setMobileMenuOpen(false); handleReportAction(e, '/buat-laporan'); }}
-                  className="w-full py-3 rounded-xl text-[#1C6F8E] font-bold text-xs flex items-center justify-center gap-2 shadow-xs border"
-                  style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}
+                  onClick={(e) => scrollToSection(e, 'mission')}
+                  className="text-left px-3 py-1.5 rounded-full hover:bg-[#BFEFFF] hover:text-[#1C6F8E] transition cursor-pointer"
                 >
-                  <ShieldAlert className="w-4 h-4 text-[#1C6F8E]" />
-                  <span>Buat Laporan</span>
+                  TENTANG
                 </button>
-                <Link
-                  to="/lacak"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-2.5 rounded-xl font-semibold text-xs text-center border flex items-center justify-center gap-1.5"
-                  style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
+                <button
+                  type="button"
+                  onClick={(e) => scrollToSection(e, 'categories')}
+                  className="text-left px-3 py-1.5 rounded-full hover:bg-[#BFEFFF] hover:text-[#1C6F8E] transition cursor-pointer"
                 >
-                  <Search className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                  <span>Lacak Aduan</span>
-                </Link>
-                {!currentUser ? (
-                  <Link
-                    to="/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-full py-2.5 rounded-xl font-semibold text-xs text-center border flex items-center justify-center gap-1.5"
-                    style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
+                  7 KATEGORI
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => scrollToSection(e, 'how-it-works')}
+                  className="text-left px-3 py-1.5 rounded-full hover:bg-[#BFEFFF] hover:text-[#1C6F8E] transition cursor-pointer"
+                >
+                  ALUR PENANGANAN
+                </button>
+                <div>
+                  <button
+                    type="button"
+                    onClick={(e) => { setMobileMenuOpen(false); handleReportAction(e, '/buat-laporan'); }}
+                    className="inline-block px-4 py-1.5 rounded-full border border-black/30 hover:border-[#BFEFFF] hover:bg-[#BFEFFF] hover:text-[#1C6F8E] transition cursor-pointer"
                   >
-                    <LogIn className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                    <span>Masuk</span>
-                  </Link>
-                ) : (
-                  <Link
-                    to={profilePath}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-full py-2.5 rounded-xl font-semibold text-xs text-center border"
-                    style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
-                  >
-                    Dashboard Siswa
-                  </Link>
-                )}
+                    BUAT LAPORAN
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={(e) => scrollToSection(e, 'safety')}
+                  className="text-left px-3 py-1.5 rounded-full hover:bg-[#BFEFFF] hover:text-[#1C6F8E] transition cursor-pointer"
+                >
+                  KEAMANAN
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => scrollToSection(e, 'faq')}
+                  className="text-left px-3 py-1.5 rounded-full hover:bg-[#BFEFFF] hover:text-[#1C6F8E] transition cursor-pointer"
+                >
+                  FAQ
+                </button>
+
+                <div className="pt-3 border-t flex flex-col gap-2" style={{ borderColor: '#BFEFFF' }}>
+                  {!currentUser ? (
+                    <Link
+                      to="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="w-full py-2.5 rounded-xl font-bold text-xs text-center border flex items-center justify-center gap-1.5"
+                      style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
+                    >
+                      <LogIn className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                      <span>Masuk</span>
+                    </Link>
+                  ) : (
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-[#1C6F8E]">{currentUser.nama}</span>
+                      <button
+                        type="button"
+                        onClick={() => { setMobileMenuOpen(false); logout(); }}
+                        className="text-xs text-red-500 font-bold"
+                      >
+                        Keluar
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -499,9 +557,6 @@ export const LandingPage = () => {
                 <p className="text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium" style={{ color: '#1C6F8E' }}>
                   Setiap pelajar berhak mendapatkan lingkungan pendidikan yang aman, nyaman, dan bebas dari perundungan.
                 </p>
-                <p className="text-xs max-w-lg mx-auto lg:mx-0 leading-relaxed hidden sm:block" style={{ color: '#2E84A5' }}>
-                  Laporkan insiden secara aman dengan proteksi identitas berlapis, verifikasi cerdas asisten AI IndoBERT NLP, dan pendampingan terpadu Tim Bimbingan Konseling (BK) &amp; Satgas PPKSP.
-                </p>
 
                 {/* Call to Actions */}
                 <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
@@ -559,24 +614,6 @@ export const LandingPage = () => {
               <InteractivePhotoCube
                 scrollProgress={scrollProgress}
               />
-            </div>
-
-            {/* SCENE 03: SPOTLIGHT CENTER (35–60%) */}
-            <div
-              className="absolute inset-x-0 top-1/2 -translate-y-1/2 max-w-4xl mx-auto px-4 text-center pointer-events-none z-10 transition-opacity duration-200"
-              style={{
-                opacity: centerSpotlightOpacity.toFixed(3),
-                transform: `translateY(${((scrollProgress - 0.48) * -30).toFixed(1)}px)`
-              }}
-            >
-              <div className="space-y-3">
-                <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight uppercase leading-tight" style={{ color: '#1C6F8E' }}>
-                  SATU SUARA KEBENARAN DAPAT MENGHENTIKAN KEKERASAN.
-                </h2>
-                <p className="text-xs sm:text-base max-w-2xl mx-auto leading-relaxed font-medium" style={{ color: '#2E84A5' }}>
-                  IDENTITAS DILINDUNGI • TRIASE CERDAS AI INDOBERT • 100% TERENKRIPSI
-                </p>
-              </div>
             </div>
 
             {/* SCENE 05: TRANSITION BRIDGE (85–100%) */}
@@ -740,7 +777,7 @@ export const LandingPage = () => {
         />
 
         {/* Section 4: 7 Bentuk Kekerasan (Pinned Horizontal Wavy Reel) */}
-        <div className="relative z-10">
+        <div id="categories" className="relative z-10 scroll-mt-20">
           <CinematicCategoriesShowcase
             onSelectCategory={(catId) => {
               handleReportAction(null, catId ? `/buat-laporan?kategori=${catId}` : '/buat-laporan');

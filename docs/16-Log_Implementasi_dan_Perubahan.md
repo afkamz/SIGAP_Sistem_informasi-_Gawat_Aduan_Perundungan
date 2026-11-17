@@ -1510,3 +1510,87 @@ Penyelarasan animasi 3D Cube pada Landing Page SIGAP agar gerakan rotasi, sudut 
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Redesain timeline kinematik animasi kubus: putaran mandiri halus (ambient rotation) dengan ayunan melayang saat idle, transisi pergeseran dari kanan ke tengah dengan ekspansi skala saat scroll, serta rotasi 3D bertahap yang menegak dan mendatar sempurna (rotX: 0°, rotY: 0°, rotZ: 0°) menghadap kamera sebagai flat video showcase |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan sesi 104 dokumentasi redesign animasi 3D Cube sesuai video referensi |
+
+---
+
+## 📅 [Sesi 105] Selasa, 17 November 2026 — Jam 10 WIB
+
+### Fokus Utama
+Penerapan desain Navbar editorial modern pada Landing Page SIGAP dengan tipografi huruf kapital, jarak renggang, outline kapsul pill pada salah satu item, serta indikator panah eksternal sesuai lampiran visual referensi.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Implementasi bilah navigasi (Navbar) editorial sesuai lampiran referensi dengan menu COMPANY, ARTIST, IR, SUSTAINABILITY (pill outline), NEWSROOM, CAREERS ↗, AUDITION ↗, dan SERVICE yang terintegrasi secara fungsional ke seksi dan alur SIGAP, serta penyesuaian drawer navigasi responsif mobile |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 105 implementasi navbar Landing Page SIGAP sesuai lampiran referensi visual |
+
+---
+
+## 📅 [Sesi 106] Selasa, 17 November 2026 — Jam 10 WIB
+
+### Fokus Utama
+Penyelarasan isi konten menu Navbar Landing Page SIGAP dengan seksi dan fitur nyata aplikasi (Tentang, 7 Kategori, Alur Penanganan, Buat Laporan, Keamanan, FAQ, Lacak Aduan, Portal Siswa) menggunakan bentuk dan gaya visual referensi lampiran (single-line whitespace-nowrap, pill badge outline, dan panah diagonal ↗).
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Pembaruan teks menu navbar ke konten aktual SIGAP (TENTANG, 7 KATEGORI, ALUR PENANGANAN, BUAT LAPORAN dalam pill outline, KEAMANAN, FAQ, LACAK ADUAN ↗, dan PORTAL SISWA ↗) dengan proteksi single-line non-wrapping, penyesuaian jarak logo, dan sinkronisasi drawer menu mobile |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 106 penyesuaian konten navbar Landing Page SIGAP sesuai konten nyata web |
+
+---
+
+## 📅 [Sesi 107] Selasa, 17 November 2026 — Jam 11 WIB
+
+### Fokus Utama
+Penghapusan menu Portal Siswa dari Navbar Landing Page SIGAP serta penerapan efek hover interaktif berlatar belakang kapsul pill berwarna Baby Blue (#BFEFFF) sesuai rekaman video referensi.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penghapusan tautan Portal Siswa pada navbar desktop dan drawer mobile, serta implementasi efek hover pill melingkar penuh (rounded-full) dengan warna Baby Blue (#BFEFFF) dan teks biru tua (#1C6F8E) pada seluruh item navigasi |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 107 penghapusan portal siswa dan implementasi hover pill biru pada navbar |
+
+---
+
+## 📅 [Sesi 108] Selasa, 17 November 2026 — Jam 11 WIB
+
+### Fokus Utama
+Penyesuaian tata letak Navbar Landing Page SIGAP dengan memindahkan Logo SIGAP mentok ke ujung kiri layar, memposisikan menu navigasi tepat di tengah (dead-center) secara simetris, dan menghapus tautan Lacak Aduan untuk menghasilkan tampilan dashboard yang rapi dan profesional.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penyesuaian kontainer navbar ke lebar penuh (w-full), penempatan logo SIGAP mentok ke kiri (flush left), penataan menu utama (Tentang, 7 Kategori, Alur Penanganan, Buat Laporan, Keamanan, FAQ) presisi di tengah layar (absolute dead-center), dan penghapusan menu Lacak Aduan |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 108 penataan posisi logo mentok kiri, menu dead-center, dan penghapusan lacak aduan |
+
+---
+
+## 📅 [Sesi 109] Selasa, 17 November 2026 — Jam 11 WIB
+
+### Fokus Utama
+Pembersihan teks deskripsi sekunder pada Hero Section Landing Page SIGAP agar tampilan tipografi lebih padat, fokus, dan nyaman dibaca.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penghapusan paragraf deskripsi sekunder proteksi identitas dan verifikasi AI IndoBERT pada hero section sesuai instruksi pengguna |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 109 penghapusan teks deskripsi sekunder hero section |
+
+---
+
+## 📅 [Sesi 110] Selasa, 17 November 2026 — Jam 11 WIB
+
+### Fokus Utama
+Penghapusan elemen teks spotlight teks tengah ("SATU SUARA KEBENARAN DAPAT MENGHENTIKAN KEKERASAN") pada timeline scroll 3D Cube Landing Page SIGAP agar tampilan animasi kubus lebih bersih dan tidak tertutup teks.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penghapusan elemen overlay judul dan deskripsi spotlight tengah (Scene 03) pada seksi animasi scroll 3D Cube |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 110 penghapusan teks spotlight tengah landing page |
