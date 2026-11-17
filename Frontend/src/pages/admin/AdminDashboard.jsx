@@ -175,11 +175,11 @@ export const AdminDashboard = () => {
             {/* DB Status */}
             <div className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition shadow-xs ${
               isBackendConnected
-                ? 'glass-pill-green'
-                : 'glass-card text-slate-600'
+                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                : 'bg-white border border-[#BFEFFF] text-slate-600'
             }`}>
               <span className={`w-2 h-2 rounded-full ${isBackendConnected ? 'bg-emerald-500 animate-pulse shadow-[0_0_6px_#10b981]' : 'bg-slate-400'}`} />
-              <Database className="w-3.5 h-3.5" />
+              <Database className="w-3.5 h-3.5 text-[#1C6F8E]" />
               <span>{isBackendConnected ? 'MySQL Terhubung' : 'Offline'}</span>
             </div>
 
@@ -187,15 +187,15 @@ export const AdminDashboard = () => {
               type="button"
               onClick={handleSync}
               disabled={isSyncing}
-              className="px-3.5 py-2 rounded-2xl glass-card text-slate-700 font-bold text-xs flex items-center gap-1.5 transition disabled:opacity-50"
+              className="px-3.5 py-2 rounded-2xl bg-white border border-[#BFEFFF] text-slate-700 hover:bg-[#BFEFFF]/20 font-bold text-xs flex items-center gap-1.5 transition disabled:opacity-50 shadow-xs"
             >
-              <RotateCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-[#3B7DE8]' : 'text-slate-500'}`} />
+              <RotateCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-[#1C6F8E]' : 'text-[#1C6F8E]'}`} />
               <span>Sinkronkan</span>
             </button>
 
             <button
               onClick={handleDownloadReport}
-              className="px-4 py-2 rounded-2xl glass-button-primary text-white font-bold text-xs flex items-center gap-2"
+              className="px-4 py-2 rounded-2xl bg-[#1C6F8E] hover:bg-[#165870] text-white font-bold text-xs flex items-center gap-2 transition shadow-xs"
             >
               <Download className="w-4 h-4" />
               <span>Unduh Laporan</span>
@@ -203,23 +203,23 @@ export const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* 4 Summary KPI Cards — Frosted Glass with Color Tints */}
+        {/* 4 Summary KPI Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
           {/* Card 1: Total Laporan */}
-          <div className="glass-card p-5 rounded-3xl border border-white/80 shadow-md space-y-3">
+          <div className="bg-white/95 border border-[#BFEFFF] p-5 rounded-3xl shadow-xs space-y-3">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-2xl glass-pill-blue flex items-center justify-center">
-                <FileText className="w-5 h-5 text-[#3B7DE8]" />
+              <div className="w-10 h-10 rounded-2xl bg-[#D6F5FF] text-[#1C6F8E] flex items-center justify-center">
+                <FileText className="w-5 h-5 text-[#1C6F8E]" />
               </div>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold glass-pill-blue">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-[#D6F5FF] text-[#1C6F8E] border border-[#BFEFFF]">
                 Data Aktif
               </span>
             </div>
             <div>
               <span className="text-xs font-semibold text-slate-500 block">Total Laporan</span>
               <div className="flex items-baseline gap-2 mt-0.5">
-                <span className="text-3xl font-black text-slate-900 leading-none">
+                <span className="text-3xl font-black text-[#1C6F8E] leading-none">
                   {metrics.total ?? 0}
                 </span>
                 <span className="text-xs font-bold text-emerald-600 flex items-center gap-0.5">
@@ -231,12 +231,12 @@ export const AdminDashboard = () => {
           </div>
 
           {/* Card 2: Menunggu Verifikasi */}
-          <div className="glass-card p-5 rounded-3xl border border-amber-200/50 shadow-md space-y-3">
+          <div className="bg-white/95 border border-amber-200 p-5 rounded-3xl shadow-xs space-y-3">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-2xl glass-pill-yellow flex items-center justify-center">
+              <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100">
                 <ClipboardList className="w-5 h-5 text-amber-600" />
               </div>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold glass-pill-yellow">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-50 text-amber-700 border border-amber-200">
                 Prioritas
               </span>
             </div>
@@ -256,12 +256,12 @@ export const AdminDashboard = () => {
           </div>
 
           {/* Card 3: Ditindaklanjuti */}
-          <div className="glass-card p-5 rounded-3xl border border-purple-200/50 shadow-md space-y-3">
+          <div className="bg-white/95 border border-purple-200 p-5 rounded-3xl shadow-xs space-y-3">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-2xl glass-pill flex items-center justify-center text-purple-600 border border-purple-200">
+              <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center border border-purple-100">
                 <RotateCw className="w-5 h-5 text-purple-600" />
               </div>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold glass-pill text-purple-700 border border-purple-200">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-50 text-purple-700 border border-purple-200">
                 Proses
               </span>
             </div>
@@ -280,12 +280,12 @@ export const AdminDashboard = () => {
           </div>
 
           {/* Card 4: Selesai & Ditutup */}
-          <div className="glass-card p-5 rounded-3xl border border-emerald-200/50 shadow-md space-y-3">
+          <div className="bg-white/95 border border-emerald-200 p-5 rounded-3xl shadow-xs space-y-3">
             <div className="flex items-center justify-between">
-              <div className="w-10 h-10 rounded-2xl glass-pill-green flex items-center justify-center">
+              <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
                 <CheckCircle2 className="w-5 h-5 text-emerald-600" />
               </div>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold glass-pill-green">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">
                 Efektif
               </span>
             </div>
@@ -307,8 +307,8 @@ export const AdminDashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
 
           {/* Left: Tren Kasus per Bulan */}
-          <div className="lg:col-span-7 glass-panel-elevated p-6 rounded-3xl border border-white/80 shadow-md space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/50 pb-3">
+          <div className="lg:col-span-7 bg-white/95 p-6 rounded-3xl border border-[#BFEFFF] shadow-xs space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#BFEFFF]/60 pb-3">
               <div>
                 <h3 className="text-sm font-bold text-slate-900">Tren Kasus per Bulan</h3>
                 <p className="text-xs text-slate-500 mt-0.5">
@@ -316,11 +316,11 @@ export const AdminDashboard = () => {
                 </p>
               </div>
               <div className="flex items-center gap-3 text-xs shrink-0">
-                <span className="flex items-center gap-1.5 text-[#3B7DE8] font-semibold glass-pill px-2.5 py-1 rounded-full">
-                  <span className="w-3.5 h-1 bg-[#3B7DE8] inline-block rounded-full" />
+                <span className="flex items-center gap-1.5 text-[#1C6F8E] font-semibold bg-[#D6F5FF]/60 border border-[#BFEFFF] px-2.5 py-1 rounded-full">
+                  <span className="w-3.5 h-1 bg-[#1C6F8E] inline-block rounded-full" />
                   Internal
                 </span>
-                <span className="flex items-center gap-1.5 text-slate-500 font-semibold glass-pill px-2.5 py-1 rounded-full">
+                <span className="flex items-center gap-1.5 text-slate-500 font-semibold bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-full">
                   <span className="w-3.5 h-0.5 border-t-2 border-dashed border-slate-400 inline-block" />
                   Nasional
                 </span>
@@ -331,8 +331,8 @@ export const AdminDashboard = () => {
               <TrendLineChart />
             </div>
 
-            <div className="glass-card border border-white/80 rounded-2xl p-4 flex items-start gap-3 text-xs text-slate-700">
-              <Info className="w-4 h-4 text-[#3B7DE8] shrink-0 mt-0.5" />
+            <div className="bg-[#F8FDFF] border border-[#BFEFFF] rounded-2xl p-4 flex items-start gap-3 text-xs text-slate-700">
+              <Info className="w-4 h-4 text-[#1C6F8E] shrink-0 mt-0.5" />
               <p className="leading-relaxed text-[11px] sm:text-xs">
                 <strong>Catatan Analisis:</strong> Terjadi penurunan aduan sebesar 15% pada bulan April pasca-sosialisasi anti-perundungan di pekan MPLS, namun kembali meningkat di bulan Mei akibat laporan siber luar jam sekolah.
               </p>
@@ -340,13 +340,13 @@ export const AdminDashboard = () => {
           </div>
 
           {/* Right: Distribusi per Kategori */}
-          <div className="lg:col-span-5 glass-panel-elevated p-6 rounded-3xl border border-white/80 shadow-md space-y-4">
-            <div className="flex items-center justify-between border-b border-white/50 pb-3">
+          <div className="lg:col-span-5 bg-white/95 p-6 rounded-3xl border border-[#BFEFFF] shadow-xs space-y-4">
+            <div className="flex items-center justify-between border-b border-[#BFEFFF]/60 pb-3">
               <div>
                 <h3 className="text-sm font-bold text-slate-900">Distribusi per Kategori</h3>
                 <p className="text-xs text-slate-500 mt-0.5">Klasifikasi 7 jenis kekerasan (Permendikbudristek 46/2023).</p>
               </div>
-              <span className="px-3 py-1 rounded-full text-[11px] font-extrabold glass-pill-blue">
+              <span className="px-3 py-1 rounded-full text-[11px] font-extrabold bg-[#D6F5FF] text-[#1C6F8E] border border-[#BFEFFF]">
                 7 Kategori
               </span>
             </div>
@@ -363,7 +363,7 @@ export const AdminDashboard = () => {
                         {cat.name}
                       </span>
                       <div className="flex items-center gap-1.5">
-                        <strong className={cat.isAlert ? 'text-rose-700 font-bold' : 'text-[#3B7DE8] font-bold'}>
+                        <strong className={cat.isAlert ? 'text-rose-700 font-bold' : 'text-[#1C6F8E] font-bold'}>
                           {cat.activeCount} kasus
                         </strong>
                         <span className="text-slate-400 text-[11px]">(Ref: {cat.refCount})</span>
@@ -376,7 +376,7 @@ export const AdminDashboard = () => {
                       />
                       <div
                         className={`absolute left-0 top-0 bottom-0 rounded-full transition-all duration-500 shadow-xs ${
-                          cat.isAlert ? 'bg-rose-500' : 'bg-gradient-to-r from-[#3B7DE8] to-blue-600'
+                          cat.isAlert ? 'bg-rose-500' : 'bg-[#1C6F8E]'
                         }`}
                         style={{ width: `${activePercent}%` }}
                       />
@@ -386,9 +386,9 @@ export const AdminDashboard = () => {
               })}
             </div>
 
-            <div className="pt-2 border-t border-white/50 flex items-center justify-between text-[11px] text-slate-500">
+            <div className="pt-2 border-t border-[#BFEFFF]/60 flex items-center justify-between text-[11px] text-slate-500">
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#3B7DE8] inline-block" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#1C6F8E] inline-block" />
                 Data Sekolah (Aktif)
               </span>
               <span className="flex items-center gap-1.5">
@@ -401,11 +401,11 @@ export const AdminDashboard = () => {
         </div>
 
         {/* Bottom Section: Priority Queue Table */}
-        <div className="glass-panel-elevated rounded-3xl border border-white/80 shadow-md p-6 space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/50 pb-4">
+        <div className="bg-white/95 rounded-3xl border border-[#BFEFFF] shadow-xs p-6 space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#BFEFFF]/60 pb-4">
             <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-2xl glass-pill-blue flex items-center justify-center shrink-0">
-                <ShieldCheck className="w-5 h-5 text-[#3B7DE8]" />
+              <div className="w-10 h-10 rounded-2xl bg-[#D6F5FF] text-[#1C6F8E] flex items-center justify-center shrink-0 border border-[#BFEFFF]">
+                <ShieldCheck className="w-5 h-5 text-[#1C6F8E]" />
               </div>
               <div>
                 <h3 className="text-sm font-bold text-slate-900">Antrean Verifikasi &amp; Pemantauan Kasus Terkini</h3>
@@ -417,7 +417,7 @@ export const AdminDashboard = () => {
 
             <Link
               to="/admin/laporan"
-              className="text-xs font-bold text-[#3B7DE8] glass-pill-blue hover:bg-[#3B7DE8]/20 px-4 py-2 rounded-2xl transition flex items-center gap-1.5 self-start sm:self-auto shrink-0"
+              className="text-xs font-bold text-[#1C6F8E] bg-[#D6F5FF]/60 hover:bg-[#BFEFFF] px-4 py-2 rounded-2xl transition flex items-center gap-1.5 self-start sm:self-auto shrink-0 border border-[#BFEFFF]"
             >
               <span>Lihat Semua Arsip</span>
               <span>→</span>
@@ -428,7 +428,7 @@ export const AdminDashboard = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-white/50 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
+                <tr className="border-b border-[#BFEFFF] text-slate-500 font-bold uppercase tracking-wider text-[10px]">
                   <th className="py-3 px-3">TIPE DATA</th>
                   <th className="py-3 px-3">KODE TIKET</th>
                   <th className="py-3 px-3">KATEGORI INSIDEN</th>
@@ -438,7 +438,7 @@ export const AdminDashboard = () => {
                   <th className="py-3 px-3 text-right">TINDAKAN</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/40 font-medium">
+              <tbody className="divide-y divide-[#BFEFFF]/40 font-medium">
                 {displayCases.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="py-10 text-center text-slate-400 text-xs">
@@ -447,30 +447,30 @@ export const AdminDashboard = () => {
                   </tr>
                 ) : (
                   displayCases.map((item) => {
-                    let badgeUrgensi = 'glass-pill text-slate-600';
-                    if (item.urgency === 'Tinggi') badgeUrgensi = 'glass-pill-red';
-                    else if (item.urgency === 'Sedang') badgeUrgensi = 'glass-pill-yellow';
+                    let badgeUrgensi = 'bg-slate-100 text-slate-600 border border-slate-200';
+                    if (item.urgency === 'Tinggi') badgeUrgensi = 'bg-rose-50 text-rose-700 border border-rose-200';
+                    else if (item.urgency === 'Sedang') badgeUrgensi = 'bg-amber-50 text-amber-700 border border-amber-200';
 
-                    let badgeStatus = 'glass-pill text-slate-700';
-                    if (item.status_badge === 'amber') badgeStatus = 'glass-pill-yellow';
-                    else if (item.status_badge === 'sky') badgeStatus = 'glass-pill-blue';
-                    else if (item.status_badge === 'purple') badgeStatus = 'glass-pill text-purple-700 border-purple-200';
-                    else if (item.status_badge === 'emerald') badgeStatus = 'glass-pill-green';
+                    let badgeStatus = 'bg-slate-100 text-slate-700 border border-slate-200';
+                    if (item.status_badge === 'amber') badgeStatus = 'bg-amber-50 text-amber-700 border border-amber-200';
+                    else if (item.status_badge === 'sky') badgeStatus = 'bg-[#D6F5FF] text-[#1C6F8E] border border-[#BFEFFF]';
+                    else if (item.status_badge === 'purple') badgeStatus = 'bg-purple-50 text-purple-700 border border-purple-200';
+                    else if (item.status_badge === 'emerald') badgeStatus = 'bg-emerald-50 text-emerald-700 border border-emerald-200';
 
                     return (
-                      <tr key={item.id} className="hover:bg-white/60 transition">
+                      <tr key={item.id} className="hover:bg-[#F0F9FF]/50 transition">
                         <td className="py-3 px-3 whitespace-nowrap">
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                             item.type === 'active'
-                              ? 'glass-pill-blue'
-                              : 'glass-pill text-slate-500'
+                              ? 'bg-[#D6F5FF] text-[#1C6F8E] border border-[#BFEFFF]'
+                              : 'bg-slate-100 text-slate-600 border border-slate-200'
                           }`}>
                             {item.type === 'active' ? 'Data Aktif' : 'Data Referensi'}
                           </span>
                         </td>
 
                         <td className="py-3 px-3 whitespace-nowrap">
-                          <span className={`font-mono font-bold ${item.type === 'active' ? 'text-[#3B7DE8]' : 'text-slate-500'}`}>
+                          <span className={`font-mono font-bold ${item.type === 'active' ? 'text-[#1C6F8E]' : 'text-slate-500'}`}>
                             {item.ticket_code}
                           </span>
                         </td>
@@ -502,7 +502,7 @@ export const AdminDashboard = () => {
                                 navigate('/admin/laporan');
                               }
                             }}
-                            className="px-3.5 py-1.5 rounded-xl glass-button-secondary text-[#3B7DE8] hover:text-[#2563c0] font-bold text-xs inline-flex items-center gap-1 transition"
+                            className="px-3.5 py-1.5 rounded-xl bg-white border border-[#BFEFFF] text-[#1C6F8E] hover:bg-[#BFEFFF]/30 font-bold text-xs inline-flex items-center gap-1 transition shadow-2xs"
                           >
                             <span>{item.action_label}</span>
                             <ExternalLink className="w-3 h-3" />
@@ -517,24 +517,24 @@ export const AdminDashboard = () => {
           </div>
 
           {/* Table Footer */}
-          <div className="pt-3 border-t border-white/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500">
+          <div className="pt-3 border-t border-[#BFEFFF]/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500">
             <span>
               Menampilkan {displayCases.length} dari {metrics.total || 142} rekaman data insiden yang terverifikasi
             </span>
             <div className="flex items-center gap-1">
-              <button type="button" disabled className="px-3 py-1 rounded-xl glass-card text-slate-400 text-xs disabled:opacity-50">
+              <button type="button" disabled className="px-3 py-1 rounded-xl bg-white border border-[#BFEFFF] text-slate-400 text-xs disabled:opacity-50">
                 Sebelumnya
               </button>
-              <span className="px-3 py-1 rounded-xl glass-button-primary text-white font-bold text-xs">1</span>
-              <button type="button" disabled className="px-3 py-1 rounded-xl glass-card text-slate-400 text-xs disabled:opacity-50">
+              <span className="px-3 py-1 rounded-xl bg-[#1C6F8E] text-white font-bold text-xs">1</span>
+              <button type="button" disabled className="px-3 py-1 rounded-xl bg-white border border-[#BFEFFF] text-slate-400 text-xs disabled:opacity-50">
                 Selanjutnya
               </button>
             </div>
           </div>
         </div>
 
-        {/* AI Summary Bar — Frosted Accent Pill */}
-        <div className="rounded-3xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 glass-button-primary shadow-lg border border-white/30">
+        {/* AI Summary Bar */}
+        <div className="rounded-3xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-gradient-to-r from-[#1C6F8E] to-[#2E84A5] text-white shadow-sm border border-[#BFEFFF]/40">
           <div className="flex items-center gap-3">
             <Sparkles className="w-6 h-6 text-[#F5C518] flex-shrink-0" />
             <div>
@@ -546,7 +546,7 @@ export const AdminDashboard = () => {
           </div>
           <Link
             to="/admin/validasi-ai"
-            className="flex-shrink-0 px-4 py-2 rounded-2xl glass-card text-slate-800 hover:text-[#3B7DE8] font-bold text-xs flex items-center gap-1.5 transition"
+            className="flex-shrink-0 px-4 py-2 rounded-2xl bg-white/95 hover:bg-white text-[#1C6F8E] font-bold text-xs flex items-center gap-1.5 transition shadow-xs"
           >
             Tinjau Analisis AI
             <ExternalLink className="w-3.5 h-3.5" />

@@ -3,12 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   ShieldAlert,
   ShieldCheck,
-  Lock,
   Eye,
   EyeOff,
-  ArrowRight,
-  Briefcase,
-  IdCard
+  ArrowLeft
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { api } from '../../services/api';
@@ -65,142 +62,227 @@ export const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-liquid-mesh flex flex-col relative overflow-hidden text-slate-800">
-      {/* ─── Ambient Glow Blobs (iOS 26 Liquid Mesh Depth) ─── */}
-      <div className="fixed top-[-10%] left-[-5%] w-[45vw] h-[45vw] rounded-full bg-blue-400/25 blur-3xl pointer-events-none -z-10" />
-      <div className="fixed bottom-[-10%] right-[-5%] w-[45vw] h-[45vw] rounded-full bg-indigo-300/30 blur-3xl pointer-events-none -z-10" />
+    <div className="min-h-screen bg-white text-[#111827] flex flex-col font-sans relative overflow-hidden">
+      {/* ─── BACKGROUND DEKORATIF: KOMBINASI BULAT BABY BLUE & GARIS-GARIS DIAGONAL ─── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+        {/* Lingkaran Besar Baby Blue di sisi kiri */}
+        <div
+          className="absolute -left-28 sm:-left-40 md:-left-52 top-[12%] sm:top-[16%] w-[340px] sm:w-[480px] md:w-[580px] h-[340px] sm:h-[480px] md:h-[580px] rounded-full"
+          style={{
+            background: 'linear-gradient(135deg, #BFEFFF 0%, #D6F5FF 100%)',
+            opacity: 0.82
+          }}
+        />
 
-      {/* Top Navbar */}
-      <header className="glass-panel border-b border-white/60 py-4 px-6 lg:px-12 flex justify-between items-center relative z-20">
+        {/* Lingkaran Aksen Halus di kanan bawah untuk keseimbangan estetika */}
+        <div
+          className="hidden md:block absolute -right-24 -bottom-24 w-[320px] h-[320px] rounded-full"
+          style={{
+            background: 'linear-gradient(135deg, #E6F8FF 0%, #BFEFFF 100%)',
+            opacity: 0.45
+          }}
+        />
+
+        {/* Garis-garis Diagonal Halus */}
+        <svg
+          className="absolute inset-0 w-full h-full"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          viewBox="0 0 1440 900"
+          style={{ opacity: 0.75 }}
+        >
+          <line x1="-100" y1="60" x2="880" y2="1040" stroke="#CBD5E1" strokeWidth="1.2" />
+          <line x1="260" y1="-100" x2="1240" y2="880" stroke="#E2E8F0" strokeWidth="1.2" />
+          <line x1="640" y1="-100" x2="1620" y2="880" stroke="#E2E8F0" strokeWidth="1.2" />
+          <line x1="1020" y1="-100" x2="2000" y2="880" stroke="#E2E8F0" strokeWidth="1.2" />
+        </svg>
+      </div>
+
+      {/* ─── NAVBAR TANPA GARIS PEMBATAS DENGAN LOGO DI SISI KIRI ─── */}
+      <header className="py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center relative z-20 w-full">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 flex items-center justify-center text-white shadow-sm border border-white/30">
-            <ShieldCheck className="w-5 h-5 text-white" />
-          </div>
-          <span className="font-black text-lg text-slate-900 tracking-tight">SIGAP</span>
-          <span className="text-xs text-slate-500 font-medium hidden sm:block">| Portal Konselor & Dinas Pendidikan</span>
+          <img
+            src="/assets/branding/logo-sigap.png"
+            alt="Logo SIGAP"
+            className="h-9 sm:h-10 w-auto object-contain"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+          <img
+            src="/assets/branding/branding-sigap.png"
+            alt="SIGAP"
+            className="h-7 sm:h-8 w-auto max-w-[130px] sm:max-w-[160px] object-contain"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+          <span className="text-xs font-semibold hidden md:inline ml-1" style={{ color: '#2E84A5' }}>
+            | Portal Admin &amp; Konselor BK
+          </span>
         </Link>
-        <div className="flex items-center gap-2 text-xs font-semibold glass-pill-green px-3 py-1.5 rounded-full">
-          <ShieldCheck className="w-4 h-4 text-emerald-600" />
-          <span>Autentikasi Terenkripsi JWT</span>
+        <div
+          className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full border shadow-xs"
+          style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+        >
+          <ShieldCheck className="w-3.5 h-3.5 text-[#1C6F8E]" />
+          <span>Terenkripsi JWT</span>
         </div>
       </header>
 
-      {/* Center Login Card */}
-      <main className="flex-1 flex items-center justify-center px-4 py-10 relative z-20">
-        <div className="w-full max-w-md">
-          <div className="glass-panel-elevated rounded-3xl shadow-[0_24px_70px_rgba(59,125,232,0.18)] border border-white/90 p-7 lg:p-8 space-y-5">
-            {/* Logo & Header */}
-            <div className="text-center space-y-2.5">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#3B7DE8] to-blue-500 text-white flex items-center justify-center mx-auto shadow-md border border-white/30">
-                <ShieldAlert className="w-7 h-7" />
+      {/* ─── MAIN CONTENT: TAMPILAN LOGIN ADMIN MINIMALIS FLAT SESUAI REFERENSI ─── */}
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-8 sm:py-12 relative z-20">
+        <div className="w-full max-w-[420px] space-y-5">
+          {/* Tombol Kembali ke Halaman Utama */}
+          <div className="w-full flex justify-start">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-full transition border hover:opacity-90"
+              style={{
+                background: '#FFFFFF',
+                color: '#1C6F8E',
+                borderColor: '#BFEFFF'
+              }}
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-[#1C6F8E]" />
+              <span>Kembali ke Halaman Utama</span>
+            </Link>
+          </div>
+
+          {/* Judul: Login Admin */}
+          <div className="text-left w-full pt-1">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111827]">
+              Masuk sebagai Admin
+            </h1>
+            <p className="text-xs mt-1 leading-relaxed" style={{ color: '#2E84A5' }}>
+              Akses khusus Guru Bimbingan Konseling (BK), Satgas PPKSP, dan Tim Pengawas Satuan Pendidikan.
+            </p>
+          </div>
+
+          {errorMsg && (
+            <div
+              className="p-3.5 rounded-xl text-xs font-semibold animate-fade-in border"
+              style={{
+                background: '#FFF5F5',
+                borderColor: '#FEB2B2',
+                color: '#C53030'
+              }}
+            >
+              {errorMsg}
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} className="space-y-4">
+            {/* Input: NIP */}
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <label className="text-xs font-semibold text-[#111827]">
+                  NIP (Nomor Induk Pegawai)
+                </label>
+                <span className="text-[11px]" style={{ color: '#2E84A5' }}>Format 18 Digit</span>
               </div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full glass-pill-blue text-xs font-extrabold">
-                <Briefcase className="w-3.5 h-3.5" /> Portal Tenaga Pendidik & Pengawas
-              </span>
-              <h2 className="text-2xl font-black text-slate-900 tracking-tight">Masuk sebagai Admin</h2>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Akses khusus Guru Bimbingan Konseling (BK), Satgas PPKSP, dan Staf Dinas Pendidikan.
-              </p>
+              <input
+                type="text"
+                required
+                value={nip}
+                onChange={(e) => setNip(e.target.value)}
+                placeholder="Contoh: 198001012026"
+                className="w-full px-3.5 py-2.5 rounded-md text-sm border focus:outline-none transition"
+                style={{
+                  background: '#FFFFFF',
+                  color: '#111827',
+                  borderColor: '#D1D5DB'
+                }}
+                onFocus={(e) => (e.target.style.borderColor = '#1C6F8E')}
+                onBlur={(e) => (e.target.style.borderColor = '#D1D5DB')}
+              />
             </div>
 
-            {errorMsg && (
-              <div className="p-3.5 rounded-2xl glass-pill-red text-xs font-semibold animate-fade-in">
-                {errorMsg}
+            {/* Input: Kata Sandi */}
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <label className="text-xs font-semibold text-[#111827]">Kata sandi</label>
               </div>
-            )}
-
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                    NIP (Nomor Induk Pegawai) *
-                  </label>
-                  <span className="text-[11px] text-slate-400">Format 18 Digit</span>
-                </div>
-                <div className="relative">
-                  <IdCard className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                  <input
-                    type="text"
-                    required
-                    value={nip}
-                    onChange={(e) => setNip(e.target.value)}
-                    placeholder="Contoh: 198001012026"
-                    className="w-full pl-10 pr-3.5 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
-                  />
-                </div>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Masukkan kata sandi"
+                  className="w-full px-3.5 py-2.5 pr-10 rounded-md text-sm border focus:outline-none transition"
+                  style={{
+                    background: '#FFFFFF',
+                    color: '#111827',
+                    borderColor: '#D1D5DB'
+                  }}
+                  onFocus={(e) => (e.target.style.borderColor = '#1C6F8E')}
+                  onBlur={(e) => (e.target.style.borderColor = '#D1D5DB')}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
               </div>
+            </div>
 
-              <div>
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">Kata Sandi *</label>
-                </div>
-                <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Masukkan kata sandi"
-                    className="w-full pl-10 pr-10 py-3 rounded-2xl glass-input text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
+            {/* Remember Me & Lupa Sandi */}
+            <div className="flex items-center justify-between text-xs pt-0.5">
+              <label className="flex items-center gap-2 cursor-pointer" style={{ color: '#2E84A5' }}>
+                <input type="checkbox" defaultChecked className="rounded border-slate-300 text-[#1C6F8E] focus:ring-[#1C6F8E]" />
+                <span>Ingat perangkat ini</span>
+              </label>
+              <a href="#/lupa-sandi-admin" className="font-semibold hover:underline" style={{ color: '#1C6F8E' }}>
+                Lupa kata sandi?
+              </a>
+            </div>
 
-              <div className="flex items-center justify-between text-xs">
-                <label className="flex items-center gap-2 text-slate-600 cursor-pointer">
-                  <input type="checkbox" defaultChecked className="rounded border-slate-300 text-[#3B7DE8] focus:ring-[#3B7DE8]" />
-                  <span>Ingat perangkat ini</span>
-                </label>
-                <a href="#/lupa-sandi-admin" className="text-[#3B7DE8] hover:underline font-bold">Lupa kata sandi?</a>
-              </div>
-
+            {/* Tombol: Masuk ke Panel Admin */}
+            <div className="pt-2">
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3.5 rounded-2xl glass-button-primary text-white font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full py-2.5 px-4 rounded-md font-bold text-sm transition active:scale-[0.99] disabled:opacity-50 cursor-pointer shadow-xs border"
+                style={{
+                  background: '#BFEFFF',
+                  color: '#1C6F8E',
+                  borderColor: '#BFEFFF'
+                }}
               >
                 <span>{isLoading ? 'Memvalidasi Sesi...' : 'Masuk ke Panel Admin'}</span>
-                <ArrowRight className="w-4 h-4" />
               </button>
-            </form>
-
-            {/* SOP Legal Alert Notice */}
-            <div className="p-4 rounded-2xl glass-card border border-white/80 flex items-start gap-3 text-xs text-slate-700">
-              <ShieldAlert className="w-4 h-4 text-[#3B7DE8] flex-shrink-0 mt-0.5" />
-              <div>
-                <span className="font-bold text-slate-900 block mb-0.5">Area Akses Terbatas</span>
-                <p className="text-[11px] text-slate-500 leading-relaxed">
-                  Sistem ini hanya diperuntukkan bagi personel sekolah dan dinas pendidikan resmi yang berwenang. Segala bentuk akses tanpa hak akan dicatat ke dalam audit trail.
-                </p>
-              </div>
             </div>
+          </form>
 
-            <div className="text-center text-xs text-slate-600 pt-1 space-x-2">
-              <Link to="/" className="text-slate-500 hover:text-slate-900 font-medium">
-                ← Beranda
-              </Link>
-              <span>•</span>
-              <span>Bukan staf atau guru?</span>
-              <Link to="/login" className="font-bold text-[#3B7DE8] hover:underline">
-                Masuk ke Portal Siswa →
-              </Link>
+          {/* SOP Legal Alert Notice */}
+          <div
+            className="p-3.5 rounded-xl border flex items-start gap-2.5 text-xs text-left"
+            style={{
+              background: 'rgba(191, 239, 255, 0.25)',
+              borderColor: '#BFEFFF',
+              color: '#1C6F8E'
+            }}
+          >
+            <ShieldAlert className="w-4 h-4 text-[#1C6F8E] shrink-0 mt-0.5" />
+            <div>
+              <strong className="block mb-0.5">Area Akses Terbatas Personel Resmi</strong>
+              <p className="text-[11px] leading-relaxed" style={{ color: '#2E84A5' }}>
+                Sistem ini hanya diperuntukkan bagi personel sekolah dan dinas pendidikan resmi yang berwenang. Segala bentuk akses tanpa hak akan dicatat ke dalam audit trail.
+              </p>
             </div>
+          </div>
+
+          <div className="text-center text-xs pt-1 space-x-2" style={{ color: '#2E84A5' }}>
+            <span>Bukan staf atau guru?</span>
+            <Link to="/login" className="font-bold hover:underline" style={{ color: '#1C6F8E' }}>
+              Masuk ke Portal Siswa →
+            </Link>
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="py-4 text-center text-xs text-slate-500 glass-panel border-t border-white/50 relative z-20">
-        Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi • Satgas PPKSP Satuan Pendidikan
-      </footer>
     </div>
   );
 };
