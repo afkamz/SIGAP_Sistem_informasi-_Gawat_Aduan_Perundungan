@@ -27,7 +27,6 @@ import {
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { StudentHeader } from '../../components/layout/StudentHeader';
-import { StudentFooter } from '../../components/layout/StudentFooter';
 
 export const StudentDashboard = () => {
   const { currentUser, reports, fetchRiwayatSiswa, isBackendConnected, token } = useStore();
@@ -474,8 +473,52 @@ export const StudentDashboard = () => {
       className="min-h-screen flex flex-col font-sans relative"
       style={{ background: '#FFFFFF', color: '#1C6F8E' }}
     >
+      {/* ─── BACKGROUND DEKORATIF: KOMBINASI BULAT BABY BLUE & GARIS-GARIS DIAGONAL ─── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+        {/* Lingkaran 1: Area Statistik (Kanan Atas di bawah Hero) */}
+        <div
+          className="absolute -right-28 sm:-right-40 md:-right-52 top-[22%] sm:top-[25%] w-[380px] sm:w-[520px] md:w-[620px] h-[380px] sm:h-[520px] md:h-[620px] rounded-full"
+          style={{
+            background: 'linear-gradient(135deg, #BFEFFF 0%, #D6F5FF 100%)',
+            opacity: 0.82
+          }}
+        />
+
+        {/* Lingkaran 2: Area Riwayat Laporan (Kiri Tengah) */}
+        <div
+          className="absolute -left-28 sm:-left-40 md:-left-52 top-[52%] sm:top-[56%] w-[340px] sm:w-[480px] md:w-[560px] h-[340px] sm:h-[480px] md:h-[560px] rounded-full"
+          style={{
+            background: 'linear-gradient(135deg, #D2F4FF 0%, #BFEFFF 100%)',
+            opacity: 0.78
+          }}
+        />
+
+        {/* Lingkaran 3: Area Bawah / Aksen (Kanan Bawah) */}
+        <div
+          className="hidden md:block absolute -right-24 bottom-[4%] w-[320px] h-[320px] rounded-full"
+          style={{
+            background: 'linear-gradient(135deg, #E6F8FF 0%, #BFEFFF 100%)',
+            opacity: 0.5
+          }}
+        />
+
+        {/* Garis-garis Diagonal Halus Berarah Elegan */}
+        <svg
+          className="absolute inset-0 w-full h-full"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          viewBox="0 0 1440 2800"
+          style={{ opacity: 0.75 }}
+        >
+          <line x1="-120" y1="880" x2="1620" y2="280" stroke="#CBD5E1" strokeWidth="1.2" />
+          <line x1="-160" y1="1520" x2="1580" y2="920" stroke="#E2E8F0" strokeWidth="1.2" />
+          <line x1="-120" y1="2160" x2="1620" y2="1560" stroke="#CBD5E1" strokeWidth="1.2" />
+          <line x1="200" y1="2800" x2="1800" y2="2200" stroke="#E2E8F0" strokeWidth="1.2" />
+        </svg>
+      </div>
+
       {/* Header Siswa */}
-      <StudentHeader isDashboard={true} />
+      <StudentHeader isDashboard={true} hideBorder={true} />
 
       {/* ─── Hero Section Siswa Full-Screen dengan Background Video & Degradasi Halus ─── */}
       <section
@@ -912,7 +955,7 @@ export const StudentDashboard = () => {
       >
         <div
           className="sticky top-16 w-full h-[calc(100vh-4rem)] h-[calc(100dvh-4rem)] flex flex-col justify-center overflow-hidden relative"
-          style={{ background: '#FFFFFF' }}
+          style={{ background: 'transparent' }}
         >
           {/* Top Bar Floating Controls: Header Badge, Filter, and Sort */}
           <div className="absolute top-4 sm:top-6 inset-x-0 z-30 px-4 sm:px-8 max-w-7xl w-full mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3 pointer-events-auto">
@@ -1267,8 +1310,6 @@ export const StudentDashboard = () => {
           </div>
         </div>
       </main>
-
-      <StudentFooter />
     </div>
   );
 };
