@@ -3,9 +3,6 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   ShieldCheck,
   Shield,
-  HeartHandshake,
-  Lock,
-  Clock,
   Eye,
   EyeOff,
   ArrowRight,
@@ -86,9 +83,9 @@ export const Login = () => {
       <StudentHeader />
 
       {/* Main Login Content */}
-      <main className="max-w-6xl mx-auto w-full px-4 py-8 lg:py-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-20 flex-1">
-        {/* Kolom Kiri: Hero & Jaminan Kerahasiaan */}
-        <div className="lg:col-span-6 space-y-5">
+      <main className="max-w-md mx-auto w-full px-4 py-8 lg:py-12 flex flex-col justify-center items-center relative z-20 flex-1">
+        {/* Tombol Kembali ke Halaman Utama */}
+        <div className="w-full flex justify-start mb-4">
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-full transition border hover:opacity-90"
@@ -101,102 +98,10 @@ export const Login = () => {
             <ArrowLeft className="w-3.5 h-3.5 text-[#1C6F8E]" />
             <span>Kembali ke Halaman Utama</span>
           </Link>
-
-          <div
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold border shadow-xs"
-            style={{
-              background: '#BFEFFF',
-              color: '#1C6F8E',
-              borderColor: '#BFEFFF'
-            }}
-          >
-            <ShieldCheck className="w-4 h-4 text-[#1C6F8E]" />
-            <span>LAYANAN RESMI BIMBINGAN KONSELING &amp; PPKSP</span>
-          </div>
-
-          <h1 className="text-3xl lg:text-4xl font-black tracking-tight leading-tight" style={{ color: '#1C6F8E' }}>
-            Ruang Suara Aman bagi Seluruh Warga Sekolah
-          </h1>
-
-          <p className="text-sm lg:text-base leading-relaxed" style={{ color: '#2E84A5' }}>
-            Sampaikan laporan perundungan, kekerasan fisik maupun verbal, atau ketidaknyamanan belajar dengan garansi kerahasiaan identitas dan perlindungan penuh sistem SIGAP.
-          </p>
-
-          {/* Card Ilustrasi Perlindungan */}
-          <div
-            className="p-6 rounded-3xl border relative overflow-hidden"
-            style={{
-              background: '#FFFFFF',
-              borderColor: '#BFEFFF',
-              boxShadow: '0 4px 20px -2px rgba(191, 239, 255, 0.45)'
-            }}
-          >
-            <div className="flex items-center gap-4">
-              <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 font-bold border shadow-xs"
-                style={{
-                  background: '#BFEFFF',
-                  borderColor: '#BFEFFF',
-                  color: '#1C6F8E'
-                }}
-              >
-                <HeartHandshake className="w-7 h-7 text-[#1C6F8E]" />
-              </div>
-              <div>
-                <h4 className="font-extrabold text-sm" style={{ color: '#1C6F8E' }}>
-                  100% Rahasia &amp; Terlindungi
-                </h4>
-                <p className="text-xs mt-0.5 leading-relaxed" style={{ color: '#2E84A5' }}>
-                  Setiap laporan diverifikasi langsung oleh Tim BK &amp; Satgas Perlindungan Anak tanpa takut dihakimi atau bocor.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Fitur Utama */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-            <div
-              className="p-4 rounded-2xl border flex items-start gap-3"
-              style={{
-                background: '#FFFFFF',
-                borderColor: '#BFEFFF'
-              }}
-            >
-              <div
-                className="p-2 rounded-xl shrink-0 border"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-              >
-                <Lock className="w-4 h-4 text-[#1C6F8E]" />
-              </div>
-              <div>
-                <h5 className="text-xs font-bold" style={{ color: '#1C6F8E' }}>Enkripsi Berlapis</h5>
-                <p className="text-[11px] mt-0.5" style={{ color: '#2E84A5' }}>Identitas pelapor terproteksi ketat secara sistemik.</p>
-              </div>
-            </div>
-
-            <div
-              className="p-4 rounded-2xl border flex items-start gap-3"
-              style={{
-                background: '#FFFFFF',
-                borderColor: '#BFEFFF'
-              }}
-            >
-              <div
-                className="p-2 rounded-xl shrink-0 border"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-              >
-                <Clock className="w-4 h-4 text-[#1C6F8E]" />
-              </div>
-              <div>
-                <h5 className="text-xs font-bold" style={{ color: '#1C6F8E' }}>Respons Cepat</h5>
-                <p className="text-[11px] mt-0.5" style={{ color: '#2E84A5' }}>Penanganan langsung oleh Guru BK &amp; Tim Satgas &lt; 24 Jam.</p>
-              </div>
-            </div>
-          </div>
         </div>
 
-        {/* Kolom Kanan: Card Login / Akses Masuk */}
-        <div className="lg:col-span-6 max-w-md mx-auto w-full">
+        {/* Card Login / Akses Masuk */}
+        <div className="w-full">
           <div
             className="p-7 lg:p-8 rounded-3xl border space-y-5"
             style={{
