@@ -448,7 +448,7 @@ export const LandingPage = () => {
       <header className="fixed top-0 inset-x-0 z-50 w-full pointer-events-auto">
         {/* ─── NAVIGATION BAR — Baby Blue & White Theme ─── */}
         <nav className="border-b" style={{ background: '#FFFFFF', borderColor: '#BFEFFF' }}>
-          <div className="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative">
+          <div className="w-full px-3 sm:px-5 lg:px-8 h-16 flex items-center justify-between relative">
             {/* Brand Logo & Emblem — Mentok ke kiri */}
             <Link to="/" className="flex items-center gap-2 sm:gap-2.5 group py-1 flex-shrink-0 z-10" aria-label="Beranda SIGAP">
               <img

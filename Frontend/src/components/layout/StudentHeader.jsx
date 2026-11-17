@@ -42,7 +42,7 @@ export const StudentHeader = ({ isDashboard = false, hideBorder = false }) => {
         boxShadow: hideBorder ? 'none' : '0 4px 20px -2px rgba(191, 239, 255, 0.45)'
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
+      <div className="w-full px-3 sm:px-5 lg:px-8 h-16 flex justify-between items-center">
         {/* Brand Logo & Emblem */}
         <Link to={homePath} className="flex items-center gap-2 sm:gap-2.5 group py-1" aria-label="Beranda SIGAP">
           <img

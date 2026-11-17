@@ -1987,3 +1987,18 @@ Penambahan latar belakang dekoratif geometris kombinasi lingkaran baby blue dan 
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `Frontend/src/pages/student/Login.jsx` | Integrasi elemen latar belakang lingkaran geometris baby blue dan garis diagonal SVG persis referensi |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 137 penambahan latar belakang geometris bulat baby blue dan garis diagonal |
+
+---
+
+## 📅 [Sesi 138] Selasa, 17 November 2026 — Jam 21 WIB
+
+### Fokus Utama
+Pergeseran posisi logo SIGAP pada bilah navigasi ke tepi kiri layar dengan menghapus pembatasan lebar maksimal container.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/layout/StudentHeader.jsx` | Penghapusan batasan max-w-7xl mx-auto agar logo SIGAP bergeser mentok ke tepi kiri |
+| 2 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penyesuaian padding container navigasi agar logo konsisten di tepi kiri |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 138 pergeseran posisi logo navigasi ke sisi kiri |
