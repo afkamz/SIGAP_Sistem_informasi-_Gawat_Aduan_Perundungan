@@ -1873,3 +1873,17 @@ Perbaikan animasi section "Tentang Sistem SIGAP" agar tidak ada ruang kosong ber
 | 3 | `TAMBAH` | `Frontend/.dockerignore` | Pengecualian node_modules, dist, dan file log agar build Docker frontend bersih dan cepat |
 | 4 | `TAMBAH` | `.dockerignore` | Pengecualian root konteks build Docker |
 | 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 129 perbaikan animasi ruang kosong section About dan konfigurasi streaming video Docker |
+
+## 📅 [Sesi 130] Senin, 17 November 2026 — Jam 19 WIB
+
+**Fokus Utama:** Perbaikan video background tidak muncul di Linux — akar masalah adalah 5 file video berformat Apple QuickTime (.MOV/QT) yang tidak dapat diputar browser Chrome/Firefox di Linux. Semua file dikonversi ke ISO MP4 H.264 standar menggunakan ffmpeg, lalu frontend di-rebuild ulang.
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/public/assets/background/sigap-background.mp4` | Konversi QuickTime → ISO MP4 H.264 (web-compatible) |
+| 2 | `EDIT` | `Frontend/public/assets/background/cube-background.mp4` | Konversi QuickTime → ISO MP4 H.264 (web-compatible) |
+| 3 | `EDIT` | `Frontend/public/assets/cube/video-1.mp4` | Konversi QuickTime → ISO MP4 H.264 (web-compatible) |
+| 4 | `EDIT` | `Frontend/public/assets/cube/video-3.mp4` | Konversi QuickTime → ISO MP4 H.264 (web-compatible) |
+| 5 | `EDIT` | `Frontend/public/assets/cube/video-5.mp4` | Konversi QuickTime → ISO MP4 H.264 (web-compatible) |
+| 6 | `EDIT` | `Frontend/dist/` (rebuild) | Build ulang agar video H.264 tersedia di dist nginx |
+| 7 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 130 fix video format cross-platform |
