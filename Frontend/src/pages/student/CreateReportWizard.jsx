@@ -29,7 +29,6 @@ import {
 import { useStore } from '../../context/StoreContext';
 import { KATEGORI_DATA } from '../../data/categories';
 import { StudentHeader } from '../../components/layout/StudentHeader';
-import { StudentFooter } from '../../components/layout/StudentFooter';
 
 export const CreateReportWizard = () => {
   const { createReport, currentUser } = useStore();
@@ -39,12 +38,39 @@ export const CreateReportWizard = () => {
   // Gatekeeper: Pengguna harus login atau daftar terlebih dahulu
   if (!currentUser) {
     return (
-      <div
-        className="min-h-screen flex flex-col justify-between font-sans relative"
-        style={{ background: '#FFFFFF', color: '#1C6F8E' }}
-      >
-        <StudentHeader />
-        <main className="max-w-md mx-auto w-full px-4 py-16 flex-1 flex flex-col justify-center">
+      <div className="min-h-screen bg-white text-[#111827] flex flex-col font-sans relative overflow-hidden">
+        {/* ─── BACKGROUND DEKORATIF: KOMBINASI BULAT BABY BLUE (KANAN) & GARIS-GARIS DIAGONAL ─── */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+          <div
+            className="absolute -right-28 sm:-right-40 md:-right-52 top-[8%] sm:top-[12%] w-[340px] sm:w-[480px] md:w-[580px] h-[340px] sm:h-[480px] md:h-[580px] rounded-full"
+            style={{
+              background: 'linear-gradient(135deg, #BFEFFF 0%, #D6F5FF 100%)',
+              opacity: 0.82
+            }}
+          />
+          <div
+            className="hidden md:block absolute -left-24 -bottom-24 w-[320px] h-[320px] rounded-full"
+            style={{
+              background: 'linear-gradient(135deg, #E6F8FF 0%, #BFEFFF 100%)',
+              opacity: 0.45
+            }}
+          />
+          <svg
+            className="absolute inset-0 w-full h-full"
+            xmlns="http://www.w3.org/2000/svg"
+            preserveAspectRatio="none"
+            viewBox="0 0 1440 900"
+            style={{ opacity: 0.75 }}
+          >
+            <line x1="1540" y1="60" x2="560" y2="1040" stroke="#CBD5E1" strokeWidth="1.2" />
+            <line x1="1180" y1="-100" x2="200" y2="880" stroke="#E2E8F0" strokeWidth="1.2" />
+            <line x1="800" y1="-100" x2="-180" y2="880" stroke="#E2E8F0" strokeWidth="1.2" />
+            <line x1="420" y1="-100" x2="-560" y2="880" stroke="#E2E8F0" strokeWidth="1.2" />
+          </svg>
+        </div>
+
+        <StudentHeader hideBorder={true} />
+        <main className="max-w-md mx-auto w-full px-4 py-16 flex-1 flex flex-col justify-center relative z-20">
           <div
             className="p-8 rounded-3xl text-center space-y-6 border"
             style={{
@@ -102,7 +128,6 @@ export const CreateReportWizard = () => {
             </div>
           </div>
         </main>
-        <StudentFooter />
       </div>
     );
   }
@@ -245,13 +270,78 @@ export const CreateReportWizard = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex flex-col justify-between font-sans relative"
-      style={{ background: '#FFFFFF', color: '#1C6F8E' }}
-    >
-      <StudentHeader isDashboard={false} />
+    <div className="min-h-screen bg-white text-[#1C6F8E] flex flex-col font-sans relative overflow-hidden">
+      {/* ─── BACKGROUND DEKORATIF: KOMBINASI BULAT BABY BLUE (KANAN) & GARIS-GARIS DIAGONAL ─── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+        {/* Lingkaran Besar Baby Blue di sisi KANAN ATAS (Posisi Berbeda dari Login/Register) */}
+        <div
+          className="absolute -right-28 sm:-right-40 md:-right-52 top-[6%] sm:top-[10%] w-[340px] sm:w-[480px] md:w-[580px] h-[340px] sm:h-[480px] md:h-[580px] rounded-full"
+          style={{
+            background: 'linear-gradient(135deg, #BFEFFF 0%, #D6F5FF 100%)',
+            opacity: 0.82
+          }}
+        />
 
-      <main className="max-w-2xl mx-auto w-full px-4 py-8 sm:py-10 space-y-7">
+        {/* Lingkaran Aksen Halus di KIRI BAWAH */}
+        <div
+          className="hidden md:block absolute -left-24 -bottom-24 w-[320px] h-[320px] rounded-full"
+          style={{
+            background: 'linear-gradient(135deg, #E6F8FF 0%, #BFEFFF 100%)',
+            opacity: 0.45
+          }}
+        />
+
+        {/* Garis-garis Diagonal Halus Berarah Komplementer (Kanan-Atas ke Kiri-Bawah) */}
+        <svg
+          className="absolute inset-0 w-full h-full"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          viewBox="0 0 1440 900"
+          style={{ opacity: 0.75 }}
+        >
+          {/* Garis 1: Memotong tepi luar lingkaran kanan */}
+          <line
+            x1="1540"
+            y1="60"
+            x2="560"
+            y2="1040"
+            stroke="#CBD5E1"
+            strokeWidth="1.2"
+          />
+          {/* Garis 2: Melintas di area tengah */}
+          <line
+            x1="1180"
+            y1="-100"
+            x2="200"
+            y2="880"
+            stroke="#E2E8F0"
+            strokeWidth="1.2"
+          />
+          {/* Garis 3: Melintas di area kiri */}
+          <line
+            x1="800"
+            y1="-100"
+            x2="-180"
+            y2="880"
+            stroke="#E2E8F0"
+            strokeWidth="1.2"
+          />
+          {/* Garis 4: Di pojok kiri bawah */}
+          <line
+            x1="420"
+            y1="-100"
+            x2="-560"
+            y2="880"
+            stroke="#E2E8F0"
+            strokeWidth="1.2"
+          />
+        </svg>
+      </div>
+
+      {/* ─── NAVBAR TANPA GARIS PEMBATAS ─── */}
+      <StudentHeader isDashboard={false} hideBorder={true} />
+
+      <main className="max-w-2xl mx-auto w-full px-4 py-8 sm:py-10 space-y-7 relative z-20">
         {/* Title Header */}
         <div className="text-center space-y-1.5">
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight" style={{ color: '#1C6F8E' }}>
@@ -1293,8 +1383,6 @@ export const CreateReportWizard = () => {
           </div>
         )}
       </main>
-
-      <StudentFooter />
     </div>
   );
 };

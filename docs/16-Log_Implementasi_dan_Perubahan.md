@@ -2016,3 +2016,18 @@ Penerapan desain antarmuka flat minimalis, penghapusan garis navbar dan footer, 
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `Frontend/src/pages/student/Register.jsx` | Implementasi antarmuka daftar akun flat minimalis, penghapusan footer & garis navbar, serta integrasi background geometris baby blue |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 139 penyelarasan desain laman registrasi sesuai laman login |
+
+
+---
+
+## 📅 [Sesi 140] Selasa, 17 November 2026 — Jam 22 WIB
+
+### Fokus Utama
+Penerapan desain antarmuka bersih tanpa border navbar dan footer, serta penambahan latar belakang geometris kombinasi lingkaran baby blue dan garis diagonal pada posisi berbeda (kanan atas) pada laman formulir pengaduan insiden tanpa mengubah tombol apa pun.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/student/CreateReportWizard.jsx` | Penerapan navbar hideBorder, penghapusan footer, dan background dekoratif lingkaran baby blue (kanan) & garis diagonal tanpa mengubah tombol dan alur |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 140 penyesuaian tampilan formulir pengaduan insiden |
