@@ -42,15 +42,47 @@ export const StudentDashboard = () => {
   const heroRef = useRef(null);
   const [isHeroInView, setIsHeroInView] = useState(false);
 
-  // Sequential Animated Stats with Scroll Lock
-  const statsSectionRef = useRef(null);
-  const [statsAnimStep, setStatsAnimStep] = useState(0); // 0 to 8 (9 = selesai)
-  const [isStatsAnimDone, setIsStatsAnimDone] = useState(false);
-  const isStatsAnimatingRef = useRef(false);
-  const animStartedRef = useRef(false);
-  const timersRef = useRef([]);
+  // Sticky Scroll-Driven Animation Section Ref & Direct Element Refs
+  const stickyContainerRef = useRef(null);
+  const titleRef = useRef(null);
+  const descRef = useRef(null);
+  const cardsRef = useRef([]);
+  const labelsRef = useRef([]);
+  const valuesRef = useRef([]);
+  const badgesRef = useRef([]);
+  const progressCardRef = useRef(null);
+  const progressPendingRef = useRef(null);
+  const progressInProgressRef = useRef(null);
+  const progressCompletedRef = useRef(null);
+
+  // Pinned Horizontal Editorial Section: Riwayat Laporan Saya
+  const reportsStickyRef = useRef(null);
+  const editorialTitleRef = useRef(null);
+  const reportsTrackRef = useRef(null);
+  const reportCardsRef = useRef([]);
 
   const easeCurve = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+  // Cubic Bezier solver for cubic-bezier(0.16, 1, 0.3, 1)
+  const solveCubicBezier = (p) => {
+    if (p <= 0) return 0;
+    if (p >= 1) return 1;
+    let t = p;
+    for (let i = 0; i < 5; i++) {
+      const currentX = 3 * (1 - t) * (1 - t) * t * 0.16 + 3 * (1 - t) * t * t * 0.3 + t * t * t;
+      const currentSlope = 3 * (1 - t) * (1 - t) * 0.16 + 6 * (1 - t) * t * (0.3 - 0.16) + 3 * t * t * (1 - 0.3);
+      if (Math.abs(currentSlope) < 1e-5) break;
+      t -= (currentX - p) / currentSlope;
+      t = Math.max(0, Math.min(1, t));
+    }
+    return 3 * (1 - t) * (1 - t) * t * 1.0 + 3 * (1 - t) * t * t * 1.0 + t * t * t;
+  };
+
+  const getSubProgress = (p, start, end) => {
+    if (p <= start) return 0;
+    if (p >= end) return 1;
+    return (p - start) / (end - start);
+  };
 
   useEffect(() => {
     const video = videoRef.current;
@@ -91,102 +123,6 @@ export const StudentDashboard = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Fungsi pemanggil animasi berurutan 4 kartu statistik + Scroll-Lock sementara
-  const startStatsAnimation = () => {
-    if (animStartedRef.current) return;
-    animStartedRef.current = true;
-    isStatsAnimatingRef.current = true;
-
-    // Kunci scroll pengguna sementara selama seluruh sequence animasi berlangsung
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-
-    const preventScroll = (e) => {
-      e.preventDefault();
-    };
-
-    window.addEventListener('wheel', preventScroll, { passive: false });
-    window.addEventListener('touchmove', preventScroll, { passive: false });
-
-    // 8 Urutan Langkah Animasi (Header Kartu lalu Angka & Badge)
-    const delays = [
-      120,   // Step 1: Card 1 Header ("Total Aduan Saya" + icon)
-      500,   // Step 2: Card 1 Value ("2" + "kasus tercatat")
-      880,   // Step 3: Card 2 Header ("Menunggu Tanggapan" + icon)
-      1260,  // Step 4: Card 2 Value ("2" + "Penelaahan")
-      1640,  // Step 5: Card 3 Header ("Sedang Ditindak" + icon)
-      2020,  // Step 6: Card 3 Value ("0" + "Konseling")
-      2400,  // Step 7: Card 4 Header ("Selesai Ditangani" + icon)
-      2780   // Step 8: Card 4 Value ("0" + "Terselesaikan")
-    ];
-
-    delays.forEach((delay, idx) => {
-      const t = setTimeout(() => {
-        setStatsAnimStep(idx + 1);
-      }, delay);
-      timersRef.current.push(t);
-    });
-
-    // Selesai seluruh sequence pada ~3100ms -> Buka kunci scroll kembali
-    const finishTimer = setTimeout(() => {
-      window.removeEventListener('wheel', preventScroll);
-      window.removeEventListener('touchmove', preventScroll);
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-      setIsStatsAnimDone(true);
-      setStatsAnimStep(9);
-      isStatsAnimatingRef.current = false;
-    }, 3100);
-
-    timersRef.current.push(finishTimer);
-  };
-
-  // Observer untuk mendeteksi saat pengguna scroll ke area statistik
-  useEffect(() => {
-    const el = statsSectionRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !animStartedRef.current) {
-          startStatsAnimation();
-        }
-      },
-      { threshold: 0.15 }
-    );
-
-    observer.observe(el);
-
-    // Initial check jika pengguna membuka halaman langsung pada area statistik
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.85 && rect.bottom > 0 && !animStartedRef.current) {
-      startStatsAnimation();
-    }
-
-    return () => {
-      observer.disconnect();
-      timersRef.current.forEach(clearTimeout);
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-    };
-  }, []);
-
-  const handleRefreshRiwayat = async () => {
-    if (!currentUser?.id) return;
-    setIsLoadingRiwayat(true);
-    try {
-      await fetchRiwayatSiswa(currentUser.id, token);
-    } finally {
-      setIsLoadingRiwayat(false);
-    }
-  };
-
-  useEffect(() => {
-    if (currentUser?.id) {
-      handleRefreshRiwayat();
-    }
-  }, [currentUser?.id, token]);
-
   const studentName = currentUser?.nama || 'Dimas Prasetya';
   const displayName = studentName.toLowerCase().includes('ananda')
     ? studentName
@@ -218,73 +154,168 @@ export const StudentDashboard = () => {
   ).length;
   const completedCount = myReports.filter((r) => r.status === 'selesai').length;
 
-  // Data 4 Kartu Statistik dengan Konfigurasi Sequential Reveal & Styling Ultra-Modern
+  const pendingPercent = totalCount > 0 ? (pendingCount / totalCount) * 100 : 0;
+  const inProgressPercent = totalCount > 0 ? (inProgressCount / totalCount) * 100 : 0;
+  const completedPercent = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
+
+  // Data 4 Kartu Statistik Ringkasan
   const statsItems = useMemo(() => [
     {
       id: 'total',
       label: 'Total Aduan Saya',
       value: totalCount,
       suffix: 'kasus tercatat',
-      icon: <Inbox className="w-5 h-5 text-[#1C6F8E]" />,
-      accentColor: '#1C6F8E',
-      accentBg: '#EBF7FC',
-      accentBorder: '#BFEFFF',
-      cardShadow: '0 10px 25px -4px rgba(28, 111, 142, 0.16)',
-      badgeBg: '#F0F9FF',
-      badgeColor: '#0369A1',
-      badgeBorder: '#BAE6FD',
-      labelStep: 1,
-      valueStep: 2
+      icon: <Inbox className="w-5 h-5 text-[#1C6F8E]" />
     },
     {
       id: 'pending',
       label: 'Menunggu Tanggapan',
       value: pendingCount,
       suffix: 'Penelaahan',
-      icon: <Clock className="w-5 h-5 text-[#D97706]" />,
-      accentColor: '#F59E0B',
-      accentBg: '#FEF3C7',
-      accentBorder: '#FDE68A',
-      cardShadow: '0 10px 25px -4px rgba(217, 119, 6, 0.16)',
-      badgeBg: '#FEF3C7',
-      badgeColor: '#B45309',
-      badgeBorder: '#FDE68A',
-      labelStep: 3,
-      valueStep: 4
+      icon: <Clock className="w-5 h-5 text-[#1C6F8E]" />
     },
     {
       id: 'in_progress',
       label: 'Sedang Ditindak',
       value: inProgressCount,
       suffix: 'Konseling',
-      icon: <RotateCw className="w-5 h-5 text-[#0284C7]" />,
-      accentColor: '#0284C7',
-      accentBg: '#E0F2FE',
-      accentBorder: '#BAE6FD',
-      cardShadow: '0 10px 25px -4px rgba(2, 132, 199, 0.16)',
-      badgeBg: '#E0F2FE',
-      badgeColor: '#0284C7',
-      badgeBorder: '#BAE6FD',
-      labelStep: 5,
-      valueStep: 6
+      icon: <RotateCw className="w-5 h-5 text-[#1C6F8E]" />
     },
     {
       id: 'completed',
       label: 'Selesai Ditangani',
       value: completedCount,
       suffix: 'Terselesaikan',
-      icon: <CheckCircle2 className="w-5 h-5 text-[#16A34A]" />,
-      accentColor: '#10B981',
-      accentBg: '#DCFCE7',
-      accentBorder: '#A7F3D0',
-      cardShadow: '0 10px 25px -4px rgba(16, 185, 129, 0.16)',
-      badgeBg: '#DCFCE7',
-      badgeColor: '#15803D',
-      badgeBorder: '#A7F3D0',
-      labelStep: 7,
-      valueStep: 8
+      icon: <CheckCircle2 className="w-5 h-5 text-[#1C6F8E]" />
     }
   ], [totalCount, pendingCount, inProgressCount, completedCount]);
+
+  // Handler Sticky Scroll-Driven Animation
+  useEffect(() => {
+    const container = stickyContainerRef.current;
+    if (!container) return;
+
+    let rafId = null;
+
+    const updateCard = (index, p, cStart, cEnd, vStart, vEnd, bStart, bEnd, targetValue) => {
+      // 1. Container & Nama Kategori + Icon
+      const pCard = solveCubicBezier(getSubProgress(p, cStart, cEnd));
+      const cardEl = cardsRef.current[index];
+      const labelEl = labelsRef.current[index];
+      if (cardEl) {
+        cardEl.style.opacity = pCard;
+        cardEl.style.transform = `translateY(${(1 - pCard) * 24}px)`;
+      }
+      if (labelEl) {
+        labelEl.style.opacity = pCard;
+      }
+
+      // 2. Angka Count-Up
+      const pValRaw = getSubProgress(p, vStart, vEnd);
+      const pVal = solveCubicBezier(pValRaw);
+      const valEl = valuesRef.current[index];
+      if (valEl) {
+        valEl.style.opacity = pVal;
+        valEl.style.transform = `scale(${0.85 + 0.15 * pVal})`;
+        const currentCount = Math.round(targetValue * pVal);
+        valEl.textContent = currentCount;
+      }
+
+      // 3. Keterangan Badge
+      const pBadge = solveCubicBezier(getSubProgress(p, bStart, bEnd));
+      const badgeEl = badgesRef.current[index];
+      if (badgeEl) {
+        badgeEl.style.opacity = pBadge;
+        badgeEl.style.transform = `translateY(${(1 - pBadge) * 10}px)`;
+      }
+    };
+
+    const handleScroll = () => {
+      const rect = container.getBoundingClientRect();
+      const topOffset = 64; // Tinggi header sticky (64px)
+      const totalScrollable = rect.height - window.innerHeight;
+
+      let p = 0;
+      if (totalScrollable > 0) {
+        p = Math.max(0, Math.min(1, (topOffset - rect.top) / totalScrollable));
+      }
+
+      // 1. Judul Section: [0.00, 0.08]
+      const pTitle = solveCubicBezier(getSubProgress(p, 0.00, 0.08));
+      if (titleRef.current) {
+        titleRef.current.style.opacity = pTitle;
+        titleRef.current.style.transform = `translateY(${(1 - pTitle) * 24}px)`;
+      }
+
+      // 2. Deskripsi Section: [0.05, 0.12]
+      const pDesc = solveCubicBezier(getSubProgress(p, 0.05, 0.12));
+      if (descRef.current) {
+        descRef.current.style.opacity = pDesc;
+        descRef.current.style.transform = `translateY(${(1 - pDesc) * 12}px)`;
+      }
+
+      // 3. Card 1: Total Aduan Saya (target = totalCount)
+      updateCard(0, p, 0.12, 0.19, 0.17, 0.25, 0.23, 0.28, totalCount);
+
+      // 4. Card 2: Menunggu Tanggapan (target = pendingCount)
+      updateCard(1, p, 0.29, 0.36, 0.34, 0.42, 0.40, 0.45, pendingCount);
+
+      // 5. Card 3: Sedang Ditindak (target = inProgressCount)
+      updateCard(2, p, 0.46, 0.53, 0.51, 0.59, 0.57, 0.62, inProgressCount);
+
+      // 6. Card 4: Selesai Ditangani (target = completedCount)
+      updateCard(3, p, 0.63, 0.70, 0.68, 0.76, 0.74, 0.79, completedCount);
+
+      // 7. Elemen Visual Progres (muncul setelah seluruh 4 card selesai): [0.81, 0.94]
+      const pProgress = solveCubicBezier(getSubProgress(p, 0.81, 0.94));
+      if (progressCardRef.current) {
+        progressCardRef.current.style.opacity = pProgress;
+        progressCardRef.current.style.transform = `translateY(${(1 - pProgress) * 20}px)`;
+      }
+      if (progressPendingRef.current) {
+        progressPendingRef.current.style.width = `${pendingPercent * pProgress}%`;
+      }
+      if (progressInProgressRef.current) {
+        progressInProgressRef.current.style.width = `${inProgressPercent * pProgress}%`;
+      }
+      if (progressCompletedRef.current) {
+        progressCompletedRef.current.style.width = `${completedPercent * pProgress}%`;
+      }
+    };
+
+    const onScroll = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(handleScroll);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+
+    // Inisialisasi posisi frame saat pertama kali render
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [totalCount, pendingCount, inProgressCount, completedCount, pendingPercent, inProgressPercent, completedPercent]);
+
+  const handleRefreshRiwayat = async () => {
+    if (!currentUser?.id) return;
+    setIsLoadingRiwayat(true);
+    try {
+      await fetchRiwayatSiswa(currentUser.id, token);
+    } finally {
+      setIsLoadingRiwayat(false);
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser?.id) {
+      handleRefreshRiwayat();
+    }
+  }, [currentUser?.id, token]);
 
   const displayedReports = useMemo(() => {
     let result = [...myReports];
@@ -307,6 +338,94 @@ export const StudentDashboard = () => {
 
     return result;
   }, [myReports, statusFilter, sortOrder]);
+
+  // Handler Sticky Scroll-Driven Horizontal Reveal: Riwayat Laporan Saya
+  useEffect(() => {
+    const container = reportsStickyRef.current;
+    if (!container) return;
+
+    let rafId = null;
+
+    const handleReportsScroll = () => {
+      const rect = container.getBoundingClientRect();
+      const topOffset = 64; // Header sticky offset
+      const totalScrollable = rect.height - window.innerHeight;
+
+      let p = 0;
+      if (totalScrollable > 0) {
+        p = Math.max(0, Math.min(1, (topOffset - rect.top) / totalScrollable));
+      }
+
+      // 1. Oversized Editorial Typography:
+      // At p = 0: opacity 1.0, scale 1.0
+      // Fades to soft watermark background (opacity 0.12, scale 0.94)
+      const pTitle = getSubProgress(p, 0.00, 0.28);
+      const titleOpacity = 1.0 - (0.88 * solveCubicBezier(pTitle));
+      const titleScale = 1.0 - (0.06 * solveCubicBezier(pTitle));
+      if (editorialTitleRef.current) {
+        editorialTitleRef.current.style.opacity = titleOpacity;
+        editorialTitleRef.current.style.transform = `scale(${titleScale}) translate3d(0, 0, 0)`;
+      }
+
+      // 2. Horizontal Cards Track Translation:
+      const track = reportsTrackRef.current;
+      if (track) {
+        const vw = window.innerWidth;
+        const trackWidth = track.scrollWidth;
+        const padding = vw < 640 ? 24 : 48;
+
+        // End position:
+        let endX = padding;
+        if (trackWidth + padding * 2 <= vw) {
+          endX = Math.round((vw - trackWidth) / 2);
+        } else {
+          endX = vw - trackWidth - padding;
+        }
+
+        const startX = vw + 60; // Initial state: entirely hidden offscreen right
+
+        const pTrackNorm = getSubProgress(p, 0.05, 0.95);
+        const pTrack = solveCubicBezier(pTrackNorm);
+
+        const currentX = startX + (endX - startX) * pTrack;
+        const trackOpacity = solveCubicBezier(getSubProgress(p, 0.03, 0.15));
+
+        track.style.opacity = trackOpacity;
+        track.style.transform = `translate3d(${currentX}px, 0, 0)`;
+
+        // 3. Staggered Card Animation
+        const cards = reportCardsRef.current;
+        const numCards = cards.length;
+        if (numCards > 0) {
+          cards.forEach((cardEl, idx) => {
+            if (!cardEl) return;
+            const cardStart = (idx / (numCards + 1)) * 0.35;
+            const cardEnd = Math.min(1, cardStart + 0.45);
+            const pCard = solveCubicBezier(getSubProgress(pTrackNorm, cardStart, cardEnd));
+            cardEl.style.opacity = 0.35 + 0.65 * pCard;
+            cardEl.style.transform = `scale(${0.92 + 0.08 * pCard}) translate3d(0, 0, 0)`;
+          });
+        }
+      }
+    };
+
+    const onScroll = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(handleReportsScroll);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+
+    // Initial frame
+    handleReportsScroll();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [displayedReports.length]);
 
   const renderCategoryIcon = (kategoriNama = '') => {
     const lower = kategoriNama.toLowerCase();
@@ -552,14 +671,10 @@ export const StudentDashboard = () => {
         <button
           type="button"
           onClick={() => {
-            const el = statsSectionRef.current;
+            const el = stickyContainerRef.current;
             if (el) {
-              el.scrollIntoView({ behavior: 'smooth' });
-              if (!animStartedRef.current) {
-                setTimeout(() => {
-                  startStatsAnimation();
-                }, 400);
-              }
+              const top = el.getBoundingClientRect().top + window.scrollY - 64;
+              window.scrollTo({ top, behavior: 'smooth' });
             }
           }}
           className="relative z-10 pb-3 flex flex-col items-center gap-1 cursor-pointer group hover:scale-105 transition-all duration-300 select-none"
@@ -579,149 +694,276 @@ export const StudentDashboard = () => {
         </button>
       </section>
 
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 relative z-20">
-
-        {/* ── 4 Kartu Statistik Ringkasan dengan Animasi Sequential Reveal & Scroll-Lock ── */}
-        <div id="student-stats-section" ref={statsSectionRef} className="space-y-4">
-          {/* Header Ringkasan Statistik */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-2 border-b border-[#BFEFFF]/60">
-            <div>
-              <div className="flex items-center gap-2 text-xs font-bold" style={{ color: '#2E84A5' }}>
-                <span className="w-2 h-2 rounded-full bg-[#1C6F8E] animate-pulse" />
-                <span>Ringkasan Statistik Siswa</span>
-              </div>
-              <h2 className="text-xl sm:text-2xl font-black tracking-tight mt-0.5" style={{ color: '#1C6F8E' }}>
-                Status Penanganan Aduan Anda
-              </h2>
-            </div>
+      {/* ─── Sticky Scroll Section: Status Penanganan Aduan Anda ─── */}
+      <section
+        id="student-stats-section"
+        ref={stickyContainerRef}
+        className="relative w-full z-10"
+        style={{ height: '240vh' }}
+      >
+        <div className="sticky top-16 w-full min-h-[calc(100vh-4rem)] min-h-[calc(100dvh-4rem)] flex flex-col justify-start pt-4 sm:pt-8 md:pt-10 pb-6 sm:pb-12">
+          <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-4 sm:space-y-7">
             
-            {/* Indikator Status Animasi & Scroll Lock */}
-            {!isStatsAnimDone && (
-              <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full border animate-pulse shadow-xs" style={{ background: '#FFFBEB', color: '#B45309', borderColor: '#FDE68A' }}>
-                <Lock className="w-3.5 h-3.5" />
-                <span>Menampilkan statistik... (Gulir ke bawah terkunci sementara)</span>
-              </span>
-            )}
-            {isStatsAnimDone && (
-              <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full border shadow-xs transition-opacity duration-500" style={{ background: '#ECFDF5', color: '#047857', borderColor: '#A7F3D0' }}>
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Statistik lengkap. Anda dapat menggulir ke bawah.</span>
-              </span>
-            )}
-          </div>
-
-          {/* Grid 4 Kartu Statistik (Ultra Modern & Sequential Reveal) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-            {statsItems.map((item) => {
-              const showHeader = isStatsAnimDone || statsAnimStep >= item.labelStep;
-              const showValue = isStatsAnimDone || statsAnimStep >= item.valueStep;
-
-              return (
-                <div
-                  key={item.id}
-                  className="p-5 sm:p-6 rounded-3xl border flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:shadow-lg group"
+            {/* Header Ringkasan Statistik */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-[#BFEFFF]">
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#1C6F8E] animate-pulse" />
+                  <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-[#2E84A5]">
+                    Ringkasan Statistik Siswa
+                  </span>
+                </div>
+                <h2
+                  ref={titleRef}
+                  className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight"
                   style={{
-                    background: '#FFFFFF',
-                    borderColor: showHeader ? item.accentBorder : '#E2E8F0',
-                    boxShadow: showHeader ? item.cardShadow : '0 2px 8px rgba(0, 0, 0, 0.04)',
-                    opacity: showHeader ? 1 : 0,
-                    transform: showHeader ? 'translateY(0) scale(1)' : 'translateY(24px) scale(0.95)',
-                    transition: `opacity 400ms ${easeCurve}, transform 400ms ${easeCurve}, border-color 300ms ease, box-shadow 300ms ease`
+                    color: '#1C6F8E',
+                    opacity: 0,
+                    transform: 'translateY(24px)',
+                    willChange: 'opacity, transform'
                   }}
                 >
-                  {/* Top Accent Strip */}
-                  <div
-                    className="absolute top-0 left-0 right-0 h-1.5"
-                    style={{
-                      background: item.accentColor,
-                      opacity: showHeader ? 1 : 0,
-                      transition: `opacity 300ms ease`
-                    }}
-                  />
+                  Status Penanganan Aduan Anda
+                </h2>
+                <p
+                  className="text-xs sm:text-sm font-semibold"
+                  style={{ color: '#2E84A5' }}
+                >
+                  Pantau perkembangan seluruh aduan yang telah Anda sampaikan melalui SIGAP.
+                </p>
+              </div>
 
-                  {/* Bagian Atas Card: Label Judul & Icon (Muncul Tahap 1) */}
+              <div
+                ref={descRef}
+                className="flex items-center gap-2 text-xs font-semibold text-[#2E84A5] self-start md:self-end pb-1"
+                style={{
+                  opacity: 0,
+                  transform: 'translateY(12px)',
+                  willChange: 'opacity, transform'
+                }}
+              >
+                <CheckCircle2 className="w-4 h-4 text-[#1C6F8E] shrink-0" />
+                <span>Statistik lengkap. Anda dapat menggulir ke bawah.</span>
+              </div>
+            </div>
+
+            {/* Grid 4 Kartu Statistik (2 Kolom di Mobile, 4 Kolom di Desktop) */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+              {statsItems.map((item, idx) => (
+                <div
+                  key={item.id}
+                  ref={(el) => (cardsRef.current[idx] = el)}
+                  className="p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl border flex flex-col justify-between relative overflow-hidden transition-shadow duration-300 hover:shadow-md min-h-[140px] sm:min-h-[175px]"
+                  style={{
+                    background: '#FFFFFF',
+                    borderColor: '#BFEFFF',
+                    boxShadow: '0 4px 18px rgba(191, 239, 255, 0.40)',
+                    opacity: 0,
+                    transform: 'translateY(24px)',
+                    willChange: 'opacity, transform'
+                  }}
+                >
+                  {/* Bagian Atas Card: Icon & Nama Kategori Sejajar */}
                   <div
-                    className="flex items-center justify-between"
-                    style={{
-                      opacity: showHeader ? 1 : 0,
-                      transform: showHeader ? 'translateY(0)' : 'translateY(12px)',
-                      transition: `opacity 350ms ${easeCurve} 40ms, transform 350ms ${easeCurve} 40ms`
-                    }}
+                    ref={(el) => (labelsRef.current[idx] = el)}
+                    className="flex items-center gap-2.5 sm:gap-3.5"
+                    style={{ opacity: 0, willChange: 'opacity' }}
                   >
-                    <span className="text-xs sm:text-sm font-extrabold tracking-tight" style={{ color: '#1C6F8E' }}>
-                      {item.label}
-                    </span>
                     <div
-                      className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border shadow-xs transition-transform duration-300 group-hover:scale-105"
+                      className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border"
                       style={{
-                        background: item.accentBg,
-                        borderColor: item.accentBorder
+                        background: '#BFEFFF',
+                        borderColor: '#BFEFFF',
+                        color: '#1C6F8E'
                       }}
                     >
                       {item.icon}
                     </div>
+                    <span className="text-xs sm:text-base font-extrabold tracking-tight leading-tight" style={{ color: '#1C6F8E' }}>
+                      {item.label}
+                    </span>
                   </div>
 
-                  {/* Bagian Bawah Card: Angka & Badge Keterangan (Muncul Tahap 2 Setelah Label) */}
-                  <div
-                    className="mt-6 flex items-baseline justify-between gap-2"
-                    style={{
-                      opacity: showValue ? 1 : 0,
-                      transform: showValue ? 'translateY(0) scale(1)' : 'translateY(16px) scale(0.80)',
-                      transition: `opacity 450ms cubic-bezier(0.34, 1.56, 0.64, 1), transform 450ms cubic-bezier(0.34, 1.56, 0.64, 1)`
-                    }}
-                  >
-                    <span className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-none" style={{ color: '#1C6F8E' }}>
-                      {item.value}
+                  {/* Bagian Bawah Card: Angka & Keterangan Status */}
+                  <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row sm:items-baseline justify-between gap-1.5 sm:gap-3">
+                    <span
+                      ref={(el) => (valuesRef.current[idx] = el)}
+                      className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-none tabular-nums"
+                      style={{ color: '#1C6F8E', opacity: 0, transform: 'scale(0.85)', willChange: 'opacity, transform' }}
+                    >
+                      0
                     </span>
                     <span
-                      className="px-3 py-1 rounded-full text-xs font-bold border shadow-xs"
+                      ref={(el) => (badgesRef.current[idx] = el)}
+                      className="px-2.5 sm:px-3.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold border shrink-0 w-fit"
                       style={{
-                        background: item.badgeBg,
-                        color: item.badgeColor,
-                        borderColor: item.badgeBorder
+                        background: '#FFFFFF',
+                        color: '#1C6F8E',
+                        borderColor: '#BFEFFF',
+                        opacity: 0,
+                        transform: 'translateY(10px)',
+                        willChange: 'opacity, transform'
                       }}
                     >
                       {item.suffix}
                     </span>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Section Riwayat Laporan Saya */}
-        <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <div className="flex items-center gap-2.5">
-                <h3 className="text-lg sm:text-xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
-                  Riwayat Laporan Saya
-                </h3>
-                {isBackendConnected && (
-                  <span
-                    className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[11px] font-bold border"
-                    style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#1C6F8E] animate-pulse" />
-                    <span>Tersinkron Database</span>
-                  </span>
-                )}
-              </div>
-              <p className="text-xs mt-0.5" style={{ color: '#2E84A5' }}>
-                Pantau perkembangan dan tindak lanjut aduan yang telah Anda kirimkan secara transparan.
-              </p>
+              ))}
             </div>
 
-            <div className="flex items-center gap-2 self-start sm:self-auto">
+            {/* Elemen Visual Pendukung: Garis Progres Distribusi Status Aduan */}
+            <div
+              ref={progressCardRef}
+              className="p-5 sm:p-6 rounded-3xl border shadow-xs"
+              style={{
+                background: '#FFFFFF',
+                borderColor: '#BFEFFF',
+                boxShadow: '0 4px 18px rgba(191, 239, 255, 0.35)',
+                opacity: 0,
+                transform: 'translateY(20px)',
+                willChange: 'opacity, transform'
+              }}
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#1C6F8E]" />
+                  <span className="text-xs sm:text-sm font-extrabold tracking-tight" style={{ color: '#1C6F8E' }}>
+                    Ringkasan perkembangan aduan Anda
+                  </span>
+                </div>
+                <span className="text-xs font-bold" style={{ color: '#2E84A5' }}>
+                  {totalCount > 0 ? `${totalCount} Kasus Tercatat` : '0 Kasus Tercatat'}
+                </span>
+              </div>
+
+              {/* Garis Progres Horizontal Solid */}
+              <div
+                className="w-full h-3.5 rounded-full overflow-hidden flex border"
+                style={{
+                  background: '#F0FAFD',
+                  borderColor: '#BFEFFF'
+                }}
+              >
+                {totalCount > 0 ? (
+                  <>
+                    <div
+                      ref={progressPendingRef}
+                      className="h-full transition-all duration-300"
+                      style={{
+                        width: '0%',
+                        background: '#7AD4F8',
+                        borderRight: (inProgressCount > 0 || completedCount > 0) ? '1.5px solid #FFFFFF' : 'none'
+                      }}
+                      title={`Menunggu Tanggapan: ${pendingCount} (${Math.round(pendingPercent)}%)`}
+                    />
+                    <div
+                      ref={progressInProgressRef}
+                      className="h-full transition-all duration-300"
+                      style={{
+                        width: '0%',
+                        background: '#2E84A5',
+                        borderRight: completedCount > 0 ? '1.5px solid #FFFFFF' : 'none'
+                      }}
+                      title={`Sedang Ditindak: ${inProgressCount} (${Math.round(inProgressPercent)}%)`}
+                    />
+                    <div
+                      ref={progressCompletedRef}
+                      className="h-full transition-all duration-300"
+                      style={{
+                        width: '0%',
+                        background: '#1C6F8E'
+                      }}
+                      title={`Selesai Ditangani: ${completedCount} (${Math.round(completedPercent)}%)`}
+                    />
+                  </>
+                ) : (
+                  <div
+                    className="w-full h-full flex items-center justify-center text-[11px] font-bold"
+                    style={{ color: '#2E84A5', background: '#F0FAFD' }}
+                  >
+                    Belum ada riwayat aduan yang tercatat
+                  </div>
+                )}
+              </div>
+
+              {/* Legend 4 Kategori Status */}
+              <div className="mt-4 pt-3 border-t border-[#BFEFFF]/60 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full border shrink-0" style={{ borderColor: '#1C6F8E', background: '#FFFFFF' }} />
+                  <span className="font-semibold text-[#2E84A5] truncate">Total Aduan:</span>
+                  <span className="font-extrabold text-[#1C6F8E]">{totalCount}</span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: '#7AD4F8' }} />
+                  <span className="font-semibold text-[#2E84A5] truncate">Menunggu:</span>
+                  <span className="font-extrabold text-[#1C6F8E]">
+                    {pendingCount}
+                    {totalCount > 0 && <span className="font-normal text-[11px] ml-1">({Math.round(pendingPercent)}%)</span>}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: '#2E84A5' }} />
+                  <span className="font-semibold text-[#2E84A5] truncate">Ditindak:</span>
+                  <span className="font-extrabold text-[#1C6F8E]">
+                    {inProgressCount}
+                    {totalCount > 0 && <span className="font-normal text-[11px] ml-1">({Math.round(inProgressPercent)}%)</span>}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ background: '#1C6F8E' }} />
+                  <span className="font-semibold text-[#2E84A5] truncate">Selesai:</span>
+                  <span className="font-extrabold text-[#1C6F8E]">
+                    {completedCount}
+                    {totalCount > 0 && <span className="font-normal text-[11px] ml-1">({Math.round(completedPercent)}%)</span>}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Pinned Horizontal Editorial Section: Riwayat Laporan Saya ─── */}
+      <section
+        id="student-reports-section"
+        ref={reportsStickyRef}
+        className="relative w-full z-20"
+        style={{ height: '260vh' }}
+      >
+        <div
+          className="sticky top-16 w-full h-[calc(100vh-4rem)] h-[calc(100dvh-4rem)] flex flex-col justify-center overflow-hidden relative"
+          style={{ background: '#FFFFFF' }}
+        >
+          {/* Top Bar Floating Controls: Header Badge, Filter, and Sort */}
+          <div className="absolute top-4 sm:top-6 inset-x-0 z-30 px-4 sm:px-8 max-w-7xl w-full mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3 pointer-events-auto">
+            <div className="flex items-center gap-2.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#1C6F8E] animate-pulse" />
+              <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#1C6F8E]">
+                Riwayat Laporan Saya
+              </span>
+              {isBackendConnected && (
+                <span
+                  className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold border"
+                  style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#1C6F8E]" />
+                  <span>Tersinkron Database</span>
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2 self-end sm:self-auto">
               {/* Dropdown Filter Status */}
               <div className="relative">
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="appearance-none rounded-xl px-3.5 py-2 pr-8 text-xs font-semibold focus:outline-none cursor-pointer border"
+                  className="appearance-none rounded-xl px-3.5 py-1.5 sm:py-2 pr-8 text-xs font-semibold focus:outline-none cursor-pointer border shadow-xs"
                   style={{
                     background: '#FFFFFF',
                     color: '#1C6F8E',
@@ -740,7 +982,7 @@ export const StudentDashboard = () => {
               <button
                 type="button"
                 onClick={() => setSortOrder((prev) => (prev === 'newest' ? 'oldest' : 'newest'))}
-                className="rounded-xl px-3.5 py-2 text-xs font-semibold flex items-center gap-2 cursor-pointer transition border hover:opacity-90"
+                className="rounded-xl px-3.5 py-1.5 sm:py-2 text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition border hover:opacity-90 shadow-xs"
                 style={{
                   background: '#FFFFFF',
                   color: '#1C6F8E',
@@ -754,214 +996,252 @@ export const StudentDashboard = () => {
             </div>
           </div>
 
-          {/* Cards Grid */}
-          {displayedReports.length === 0 ? (
-            <div
-              className="rounded-3xl border p-12 text-center space-y-3"
-              style={{
-                background: '#FFFFFF',
-                borderColor: '#BFEFFF',
-                boxShadow: '0 4px 16px rgba(191, 239, 255, 0.35)'
-              }}
-            >
-              <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto border"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-              >
-                <FileText className="w-6 h-6 text-[#1C6F8E]" />
-              </div>
-              <h4 className="text-sm font-bold" style={{ color: '#1C6F8E' }}>
-                Tidak Ada Laporan Ditemukan
-              </h4>
-              <p className="text-xs max-w-sm mx-auto" style={{ color: '#2E84A5' }}>
-                {statusFilter !== 'all'
-                  ? 'Tidak ada laporan dengan status yang dipilih.'
-                  : 'Anda belum memiliki riwayat laporan pengaduan.'}
+          {/* 1. INITIAL STATE — OVERSIZED EDITORIAL TYPOGRAPHY */}
+          <div
+            ref={editorialTitleRef}
+            className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none px-4 sm:px-6 text-center z-0 will-change-transform"
+            style={{ opacity: 1, willChange: 'opacity, transform' }}
+          >
+            <div className="space-y-1 sm:space-y-2 max-w-5xl">
+              <span className="text-[11px] sm:text-xs md:text-sm font-black tracking-[0.25em] uppercase text-[#2E84A5] block">
+                Arsip &amp; Dokumentasi Perlindungan Siswa
+              </span>
+              <h2 className="text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] font-black tracking-tighter leading-[0.88] text-[#1C6F8E]">
+                <span className="block">
+                  RI<span className="font-serif italic font-normal text-[#2E84A5]">W</span>AYAT
+                </span>
+                <span className="block mt-1 sm:mt-2">
+                  LAPO<span className="font-serif italic font-normal text-[#2E84A5]">R</span>AN <span className="text-[#142B4A]">SAYA</span>
+                </span>
+              </h2>
+              <p className="text-xs sm:text-sm md:text-base font-semibold text-[#2E84A5] max-w-xl mx-auto pt-2 sm:pt-4 flex items-center justify-center gap-2">
+                <span>Gulir ke bawah untuk menelusuri kartu laporan</span>
+                <ArrowRight className="w-4 h-4 text-[#1C6F8E] animate-pulse" />
               </p>
-              {statusFilter !== 'all' && (
-                <button
-                  type="button"
-                  onClick={() => setStatusFilter('all')}
-                  className="text-xs font-bold hover:underline cursor-pointer"
-                  style={{ color: '#1C6F8E' }}
-                >
-                  Tampilkan Semua Status
-                </button>
-              )}
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {displayedReports.map((item) => {
-                const isWaiting = item.status === 'menunggu';
-                const isProcessing = item.status === 'ditindaklanjuti' || item.status === 'diverifikasi';
-                const isCompleted = item.status === 'selesai';
+          </div>
 
-                const formattedTicket = item.ticket_code.startsWith('#')
-                  ? item.ticket_code
-                  : `#${item.ticket_code}`;
-
-                return (
-                  <div
-                    key={item.id}
-                    className="rounded-3xl border p-5 transition flex flex-col justify-between"
-                    style={{
-                      background: '#FFFFFF',
-                      borderColor: '#BFEFFF',
-                      boxShadow: '0 4px 16px rgba(191, 239, 255, 0.35)'
-                    }}
+          {/* 2. HORIZONTAL CARD REVEAL TRACK (Glide in from offscreen right) */}
+          <div className="relative z-10 w-full overflow-visible pointer-events-auto py-4">
+            {displayedReports.length === 0 ? (
+              <div
+                ref={reportsTrackRef}
+                className="max-w-md mx-auto rounded-3xl border p-8 sm:p-10 text-center space-y-3 bg-white shadow-lg will-change-transform"
+                style={{
+                  borderColor: '#BFEFFF',
+                  transform: 'translate3d(100vw, 0, 0)',
+                  opacity: 0
+                }}
+              >
+                <div
+                  className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto border"
+                  style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+                >
+                  <FileText className="w-6 h-6 text-[#1C6F8E]" />
+                </div>
+                <h4 className="text-base font-bold" style={{ color: '#1C6F8E' }}>
+                  Tidak Ada Laporan Ditemukan
+                </h4>
+                <p className="text-xs text-[#2E84A5]">
+                  {statusFilter !== 'all'
+                    ? 'Tidak ada laporan dengan status yang dipilih.'
+                    : 'Anda belum memiliki riwayat laporan pengaduan.'}
+                </p>
+                {statusFilter !== 'all' && (
+                  <button
+                    type="button"
+                    onClick={() => setStatusFilter('all')}
+                    className="text-xs font-bold hover:underline cursor-pointer"
+                    style={{ color: '#1C6F8E' }}
                   >
-                    <div>
-                      {/* Baris Kode Tiket & Status Badge */}
-                      <div className="flex items-center justify-between gap-2">
-                        <span
-                          className="font-mono text-xs font-bold px-3 py-1 rounded-xl border"
-                          style={{
-                            background: '#FFFFFF',
-                            color: '#1C6F8E',
-                            borderColor: '#BFEFFF'
-                          }}
-                        >
-                          {formattedTicket}
-                        </span>
+                    Tampilkan Semua Status
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div
+                ref={reportsTrackRef}
+                className="flex items-center gap-5 sm:gap-6 flex-nowrap will-change-transform w-fit select-none"
+                style={{
+                  transform: 'translate3d(100vw, 0, 0)',
+                  opacity: 0
+                }}
+              >
+                {displayedReports.map((item, idx) => {
+                  const isWaiting = item.status === 'menunggu';
+                  const isProcessing = item.status === 'ditindaklanjuti' || item.status === 'diverifikasi';
+                  const isCompleted = item.status === 'selesai';
 
-                        {isWaiting && (
-                          <span
-                            className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-extrabold border"
-                            style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#1C6F8E] animate-pulse" />
-                            <span>Menunggu</span>
-                          </span>
-                        )}
+                  const formattedTicket = item.ticket_code.startsWith('#')
+                    ? item.ticket_code
+                    : `#${item.ticket_code}`;
 
-                        {isProcessing && (
-                          <span
-                            className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-extrabold border"
-                            style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#1C6F8E' }}
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#1C6F8E] animate-pulse" />
-                            <span>Ditindaklanjuti</span>
-                          </span>
-                        )}
-
-                        {isCompleted && (
-                          <span
-                            className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-extrabold border"
-                            style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
-                          >
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#1C6F8E]" />
-                            <span>Selesai</span>
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Kategori Baris */}
-                      <div className="flex items-center gap-2 mt-3.5">
-                        {renderCategoryIcon(item.kategori_nama)}
-                        <span className="text-xs font-bold truncate" style={{ color: '#1C6F8E' }}>
-                          {item.kategori_nama}
-                        </span>
-                      </div>
-
-                      {/* Judul Insiden */}
-                      <h4
-                        className="font-bold text-sm leading-snug my-2.5 line-clamp-2"
-                        style={{ color: '#1C6F8E' }}
-                      >
-                        {item.judul || item.deskripsi}
-                      </h4>
-
-                      {/* Meta Info */}
-                      <div className="space-y-1 text-xs mb-3" style={{ color: '#2E84A5' }}>
-                        <div className="flex items-center gap-1.5">
-                          <Clock className="w-3.5 h-3.5 shrink-0" style={{ color: '#2E84A5' }} />
-                          <span>{item.tanggal}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          {item.is_anonymous ? (
-                            <>
-                              <Lock className="w-3.5 h-3.5 shrink-0" style={{ color: '#2E84A5' }} />
-                              <span>Mode: Anonim (Identitas Dirahasiakan)</span>
-                            </>
-                          ) : (
-                            <>
-                              <UserCheck className="w-3.5 h-3.5 shrink-0" style={{ color: '#2E84A5' }} />
-                              <span>Mode: Identitas Terbuka</span>
-                            </>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Callout Box Status */}
-                      {isWaiting && (
-                        <div
-                          className="p-3 rounded-2xl mt-3 flex items-start gap-2.5 text-xs border"
-                          style={{
-                            background: 'rgba(191, 239, 255, 0.3)',
-                            borderColor: '#BFEFFF',
-                            color: '#1C6F8E'
-                          }}
-                        >
-                          <Info className="w-4 h-4 shrink-0 mt-0.5 text-[#1C6F8E]" />
-                          <span className="leading-relaxed">
-                            {item.catatan_konselor || 'Sedang dalam antrean telaah oleh Koordinator Konseling Kesiswaan.'}
-                          </span>
-                        </div>
-                      )}
-
-                      {isProcessing && (
-                        <div
-                          className="p-3 rounded-2xl mt-3 flex items-start gap-2.5 text-xs border"
-                          style={{
-                            background: '#FFFFFF',
-                            borderColor: '#BFEFFF',
-                            color: '#1C6F8E'
-                          }}
-                        >
-                          <GraduationCap className="w-4 h-4 shrink-0 mt-0.5 text-[#1C6F8E]" />
-                          <div className="leading-relaxed">
-                            <span className="font-bold">Konselor Pendamping: </span>
-                            <span>{item.konselor_nama || 'Dra. Hj. Ratna Sari (Guru BK)'}</span>
-                          </div>
-                        </div>
-                      )}
-
-                      {isCompleted && (
-                        <div
-                          className="p-3 rounded-2xl mt-3 flex items-start gap-2.5 text-xs border"
-                          style={{
-                            background: '#FFFFFF',
-                            borderColor: '#BFEFFF',
-                            color: '#1C6F8E'
-                          }}
-                        >
-                          <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#1C6F8E]" />
-                          <div className="leading-relaxed">
-                            <span className="font-bold">Resolusi: </span>
-                            <span>{item.solusi || item.catatan_konselor || 'Penanganan dan mediasi kasus telah tuntas diselesaikan.'}</span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Action Footer */}
-                    <Link
-                      to={`/lacak?code=${item.ticket_code.replace('#', '')}&from=dashboard`}
-                      className="text-xs font-bold flex items-center gap-1.5 mt-4 pt-3 border-t transition group hover:opacity-80"
+                  return (
+                    <div
+                      key={item.id}
+                      ref={(el) => (reportCardsRef.current[idx] = el)}
+                      className="w-[300px] sm:w-[360px] md:w-[400px] shrink-0 h-[440px] sm:h-[470px] rounded-3xl border p-5 sm:p-6 flex flex-col justify-between relative shadow-[0_8px_30px_rgba(191,239,255,0.45)] hover:shadow-xl transition-shadow duration-300 will-change-transform bg-white text-left"
                       style={{
-                        color: '#1C6F8E',
                         borderColor: '#BFEFFF'
                       }}
                     >
-                      <span>{isCompleted ? 'Lihat Arsip Resolusi' : 'Lihat Rincian & Percakapan'}</span>
-                      <ArrowRight className="w-3.5 h-3.5 transition group-hover:translate-x-0.5" />
-                    </Link>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+                      <div>
+                        {/* Baris Kode Tiket & Status Badge */}
+                        <div className="flex items-center justify-between gap-2">
+                          <span
+                            className="font-mono text-xs font-bold px-3 py-1 rounded-xl border"
+                            style={{
+                              background: '#FFFFFF',
+                              color: '#1C6F8E',
+                              borderColor: '#BFEFFF'
+                            }}
+                          >
+                            {formattedTicket}
+                          </span>
+
+                          {isWaiting && (
+                            <span
+                              className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-extrabold border"
+                              style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#1C6F8E] animate-pulse" />
+                              <span>Menunggu</span>
+                            </span>
+                          )}
+
+                          {isProcessing && (
+                            <span
+                              className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-extrabold border"
+                              style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#1C6F8E' }}
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#1C6F8E] animate-pulse" />
+                              <span>Ditindaklanjuti</span>
+                            </span>
+                          )}
+
+                          {isCompleted && (
+                            <span
+                              className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-extrabold border"
+                              style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#1C6F8E]" />
+                              <span>Selesai</span>
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Kategori Baris */}
+                        <div className="flex items-center gap-2 mt-3.5">
+                          {renderCategoryIcon(item.kategori_nama)}
+                          <span className="text-xs font-bold truncate" style={{ color: '#1C6F8E' }}>
+                            {item.kategori_nama}
+                          </span>
+                        </div>
+
+                        {/* Judul Insiden */}
+                        <h4
+                          className="font-bold text-sm leading-snug my-2.5 line-clamp-2"
+                          style={{ color: '#1C6F8E' }}
+                        >
+                          {item.judul || item.deskripsi}
+                        </h4>
+
+                        {/* Meta Info */}
+                        <div className="space-y-1 text-xs mb-3" style={{ color: '#2E84A5' }}>
+                          <div className="flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5 shrink-0" style={{ color: '#2E84A5' }} />
+                            <span>{item.tanggal}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            {item.is_anonymous ? (
+                              <>
+                                <Lock className="w-3.5 h-3.5 shrink-0" style={{ color: '#2E84A5' }} />
+                                <span>Mode: Anonim (Identitas Dirahasiakan)</span>
+                              </>
+                            ) : (
+                              <>
+                                <UserCheck className="w-3.5 h-3.5 shrink-0" style={{ color: '#2E84A5' }} />
+                                <span>Mode: Identitas Terbuka</span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Callout Box Status */}
+                        {isWaiting && (
+                          <div
+                            className="p-3 rounded-2xl mt-3 flex items-start gap-2.5 text-xs border"
+                            style={{
+                              background: 'rgba(191, 239, 255, 0.3)',
+                              borderColor: '#BFEFFF',
+                              color: '#1C6F8E'
+                            }}
+                          >
+                            <Info className="w-4 h-4 shrink-0 mt-0.5 text-[#1C6F8E]" />
+                            <span className="leading-relaxed">
+                              {item.catatan_konselor || 'Sedang dalam antrean telaah oleh Koordinator Konseling Kesiswaan.'}
+                            </span>
+                          </div>
+                        )}
+
+                        {isProcessing && (
+                          <div
+                            className="p-3 rounded-2xl mt-3 flex items-start gap-2.5 text-xs border"
+                            style={{
+                              background: '#FFFFFF',
+                              borderColor: '#BFEFFF',
+                              color: '#1C6F8E'
+                            }}
+                          >
+                            <GraduationCap className="w-4 h-4 shrink-0 mt-0.5 text-[#1C6F8E]" />
+                            <div className="leading-relaxed">
+                              <span className="font-bold">Konselor Pendamping: </span>
+                              <span>{item.konselor_nama || 'Dra. Hj. Ratna Sari (Guru BK)'}</span>
+                            </div>
+                          </div>
+                        )}
+
+                        {isCompleted && (
+                          <div
+                            className="p-3 rounded-2xl mt-3 flex items-start gap-2.5 text-xs border"
+                            style={{
+                              background: '#FFFFFF',
+                              borderColor: '#BFEFFF',
+                              color: '#1C6F8E'
+                            }}
+                          >
+                            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-[#1C6F8E]" />
+                            <div className="leading-relaxed">
+                              <span className="font-bold">Resolusi: </span>
+                              <span>{item.solusi || item.catatan_konselor || 'Penanganan dan mediasi kasus telah tuntas diselesaikan.'}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Action Footer */}
+                      <Link
+                        to={`/lacak?code=${item.ticket_code.replace('#', '')}&from=dashboard`}
+                        className="text-xs font-bold flex items-center gap-1.5 mt-4 pt-3 border-t transition group hover:opacity-80 cursor-pointer"
+                        style={{
+                          color: '#1C6F8E',
+                          borderColor: '#BFEFFF'
+                        }}
+                      >
+                        <span>{isCompleted ? 'Lihat Arsip Resolusi' : 'Lihat Rincian & Percakapan'}</span>
+                        <ArrowRight className="w-3.5 h-3.5 transition group-hover:translate-x-0.5" />
+                      </Link>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
+      </section>
+
+      {/* Main Content Area */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 relative z-20">
 
         {/* Banner Bantuan Darurat Segera */}
         <div
