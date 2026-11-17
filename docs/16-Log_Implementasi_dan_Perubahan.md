@@ -1813,6 +1813,20 @@ Peningkatan tata letak (layout) editorial pada section Tentang Sistem SIGAP agar
 ---
 
 ## 📅 [Sesi 126] Selasa, 17 November 2026 — Jam 17 WIB
+**Fokus Utama**: Pembaruan data empiris pengujian fungsional *Black-Box Testing* pada naskah ilmiah LaTeX (`SIGAP.tex`, `SIGAP_Paper.tex`, dan `SIGAP-source.tex`) berdasarkan 14 skenario uji lintas 6 modul dengan tingkat keberhasilan 100,00% (Tabel II).
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP.tex` | Pembaruan data empiris Tabel II Black-Box Testing (14 TC lulus, 100,00%) dan narasi hasil |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Sinkronisasi data empiris Tabel II Black-Box Testing dan teks diskusi pada naskah paper |
+| 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi data empiris Tabel II Black-Box Testing pada berkas sumber LaTeX utama |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 126 pembaruan data pengujian naskah publikasi ilmiah |
+
+---
+
+## 📅 [Sesi 127] Selasa, 17 November 2026 — Jam 17 WIB
 
 ### Fokus Utama
 Audit menyeluruh dan optimasi performa rendering seluruh animasi Landing Page SIGAP (Hero 3D Cube, About Editorial Cards, 7 Kategori Wavy Cards, dan FAQ Reveal) guna mengeliminasi lag, stuttering, dan forced reflow tanpa mengubah desain visual maupun karakteristik animasi.
@@ -1826,4 +1840,4 @@ Audit menyeluruh dan optimasi performa rendering seluruh animasi Landing Page SI
 | 3 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Caching koordinat anchor tali penarik dinamis untuk meniadakan layout reads saat scroll, integrasi IntersectionObserver, serta eliminasi filter blur berat pada ambient glow |
 | 4 | `EDIT` | `Frontend/src/components/3d/CinematicCategoriesShowcase.jsx` | Integrasi IntersectionObserver untuk pause komputasi wavy cards saat seksi di luar viewport |
 | 5 | `EDIT` | `Frontend/src/components/3d/BackgroundMediaBackdrop.jsx` | Penambahan dukungan layerRef untuk manipulasi transform/opacity instan tanpa re-render VDOM |
-| 6 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 126 optimasi performa dan eliminasi lag animasi Landing Page |
+| 6 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 127 optimasi performa dan eliminasi lag animasi Landing Page |
