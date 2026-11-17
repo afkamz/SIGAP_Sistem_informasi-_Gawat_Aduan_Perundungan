@@ -30,7 +30,6 @@ import {
 import { useStore } from '../../context/StoreContext';
 import { api } from '../../services/api';
 import { StudentHeader } from '../../components/layout/StudentHeader';
-import { StudentFooter } from '../../components/layout/StudentFooter';
 
 export const TrackReport = () => {
   const [searchParams] = useSearchParams();
@@ -197,13 +196,83 @@ export const TrackReport = () => {
   );
 
   return (
-    <div
-      className="min-h-screen flex flex-col justify-between font-sans antialiased relative"
-      style={{ background: '#FFFFFF', color: '#1C6F8E' }}
-    >
-      <StudentHeader />
+    <div className="min-h-screen bg-white text-[#1C6F8E] flex flex-col font-sans antialiased relative overflow-hidden">
+      {/* ─── BACKGROUND DEKORATIF: KOMBINASI TIGA LINGKARAN BABY BLUE & GARIS-GARIS DIAGONAL ─── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
+        {/* Lingkaran 1: Kiri Atas */}
+        <div
+          className="absolute -left-20 sm:-left-28 md:-left-36 top-[4%] sm:top-[6%] w-[300px] sm:w-[420px] md:w-[480px] h-[300px] sm:h-[420px] md:h-[480px] rounded-full"
+          style={{
+            background: 'linear-gradient(135deg, #BFEFFF 0%, #D6F5FF 100%)',
+            opacity: 0.85
+          }}
+        />
 
-      <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-10 space-y-7 flex-1">
+        {/* Lingkaran 2: Kanan Tengah (Tambahan Lingkaran Variasi Baru) */}
+        <div
+          className="absolute -right-20 sm:-right-28 md:-right-36 top-[32%] sm:top-[36%] w-[260px] sm:w-[380px] md:w-[440px] h-[260px] sm:h-[380px] md:h-[440px] rounded-full"
+          style={{
+            background: 'linear-gradient(135deg, #D2F4FF 0%, #BFEFFF 100%)',
+            opacity: 0.78
+          }}
+        />
+
+        {/* Lingkaran 3: Kiri Bawah (Aksen Halus) */}
+        <div
+          className="hidden md:block absolute -left-16 bottom-[10%] w-[220px] h-[220px] rounded-full"
+          style={{
+            background: 'linear-gradient(135deg, #E6F8FF 0%, #BFEFFF 100%)',
+            opacity: 0.5
+          }}
+        />
+
+        {/* Garis-garis Diagonal SVG Berarah Baru (Melintang Elegan) */}
+        <svg
+          className="absolute inset-0 w-full h-full"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          viewBox="0 0 1440 900"
+          style={{ opacity: 0.75 }}
+        >
+          <line
+            x1="-100"
+            y1="520"
+            x2="920"
+            y2="-80"
+            stroke="#CBD5E1"
+            strokeWidth="1.2"
+          />
+          <line
+            x1="220"
+            y1="960"
+            x2="1240"
+            y2="360"
+            stroke="#CBD5E1"
+            strokeWidth="1.2"
+          />
+          <line
+            x1="540"
+            y1="1080"
+            x2="1560"
+            y2="480"
+            stroke="#E2E8F0"
+            strokeWidth="1.2"
+          />
+          <line
+            x1="-240"
+            y1="820"
+            x2="780"
+            y2="220"
+            stroke="#E2E8F0"
+            strokeWidth="1.2"
+          />
+        </svg>
+      </div>
+
+      {/* ─── NAVBAR TANPA GARIS PEMBATAS ─── */}
+      <StudentHeader hideBorder={true} />
+
+      <main className="max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-10 space-y-7 flex-1 relative z-20">
         
         {/* ========================================================================= */}
         {/* VIEW MODE 1: OVERVIEW / PENCARIAN & RIWAYAT                              */}
@@ -1483,8 +1552,6 @@ export const TrackReport = () => {
           </div>
         </div>
       )}
-
-      <StudentFooter />
     </div>
   );
 };
