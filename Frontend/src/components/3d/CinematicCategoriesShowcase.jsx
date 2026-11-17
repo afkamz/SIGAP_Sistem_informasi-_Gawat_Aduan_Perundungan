@@ -88,6 +88,7 @@ export const CinematicCategoriesShowcase = ({ onSelectCategory }) => {
   const trackRef = useRef(null);
   const cardRefs = useRef([]);
   const cachedMetricsRef = useRef(null);
+  const titleWrapperRef = useRef(null);
 
   // Helper render icon kategori
   const renderCategoryIcon = (iconName, color) => {
@@ -162,6 +163,18 @@ export const CinematicCategoriesShowcase = ({ onSelectCategory }) => {
 
       // Progress murni outer section (0.0 s.d. 1.0)
       const progress = Math.max(0, Math.min(1, (-rect.top) / scrollableDistance));
+
+      // ─── 0. EDITORIAL TYPOGRAPHY SCROLL ANIMATION (JUDUL SECTION) ───
+      // Mengubah judul dari oversized typography di tengah viewport menuju posisi dan ukuran header normal
+      if (titleWrapperRef.current) {
+        const titleProgress = smoothStep(0.00, 0.18, progress);
+        const startScale = isMobile ? 1.12 : 1.45;
+        const currentScale = startScale - (startScale - 1.0) * titleProgress;
+        const startTranslateY = isMobile ? viewportHeight * 0.08 : viewportHeight * 0.12;
+        const currentTranslateY = startTranslateY * (1.0 - titleProgress);
+
+        titleWrapperRef.current.style.transform = `translate3d(0, ${currentTranslateY.toFixed(1)}px, 0) scale(${currentScale.toFixed(3)})`;
+      }
 
       // ─── 1. TIMELINE ALOKASI RESMI (0–100%) ───
       // Interpolasi gerakan horizontal kontinu (10% s.d. 80%)
@@ -252,13 +265,35 @@ export const CinematicCategoriesShowcase = ({ onSelectCategory }) => {
           zIndex: 20
         }}
       >
-        {/* ─── SCENE 01: SECTION HEADER (Fokus Editorial Kategori Resmi) ─── */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-6 sm:pt-8 z-10 flex-shrink-0">
-          <h2 className="text-2xl sm:text-3xl lg:text-[40px] font-black tracking-tight leading-tight" style={{ color: '#1C6F8E' }}>
-            7 Bentuk Kekerasan Sesuai Permendikbudristek 46/2023
+        {/* ─── SCENE 01: SECTION HEADER (Oversized Editorial Typography Scroll Reveal) ─── */}
+        <div
+          ref={titleWrapperRef}
+          className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-4 sm:pt-6 z-30 flex-shrink-0 origin-top will-change-transform"
+          style={{
+            transform: 'translate3d(0, 0px, 0) scale(1)',
+            transformOrigin: '50% 0%'
+          }}
+        >
+          <div className="inline-flex items-center gap-2 mb-1.5 sm:mb-2">
+            <span className="w-2 h-2 rounded-full bg-[#1C6F8E] animate-pulse" />
+            <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider sm:tracking-[0.2em] text-[#2E84A5]">
+              Permendikbudristek No. 46 Tahun 2023
+            </span>
+          </div>
+
+          <h2 className="font-black tracking-tight leading-tight text-[#1C6F8E]">
+            <span className="text-2xl sm:text-4xl lg:text-5xl block">
+              <span className="tracking-tighter">7 Bentuk</span>{' '}
+              <span className="tracking-tight text-[#142B4A]">
+                Keke<span className="font-serif italic font-normal text-[#2E84A5]">r</span>asan
+              </span>
+            </span>
+            <span className="text-base sm:text-xl lg:text-2xl font-extrabold text-[#1C6F8E] block mt-1 tracking-normal">
+              Sesuai Permendikbudristek 46/2023
+            </span>
           </h2>
 
-          <p className="text-xs sm:text-sm lg:text-base leading-relaxed max-w-2xl mx-auto mt-1.5 font-medium" style={{ color: '#2E84A5' }}>
+          <p className="text-xs sm:text-sm lg:text-base leading-relaxed max-w-2xl mx-auto mt-2 font-medium text-[#2E84A5]">
             SIGAP mencakup seluruh spektrum bentuk kekerasan di lingkungan pendidikan sesuai regulasi nasional. Kenali bentuknya dan laporkan tanpa ragu.
           </p>
         </div>
