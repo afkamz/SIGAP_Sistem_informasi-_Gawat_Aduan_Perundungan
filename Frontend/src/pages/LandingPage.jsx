@@ -112,21 +112,44 @@ export const LandingPage = () => {
 
   useEffect(() => {
     const sections = ['about', 'categories', 'how-it-works', 'safety', 'faq'];
+    let ticking = false;
+    let cachedTops = [];
+
+    const cacheSectionTops = () => {
+      cachedTops = sections
+        .map((id) => {
+          const el = document.getElementById(id);
+          return el ? { id, top: el.offsetTop } : null;
+        })
+        .filter(Boolean);
+    };
+
+    cacheSectionTops();
+    window.addEventListener('resize', cacheSectionTops, { passive: true });
+
     const handleScrollNav = () => {
-      const scrollPos = window.scrollY + 200;
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i]);
-        if (el && el.offsetTop <= scrollPos) {
-          setActiveNav(sections[i]);
-          return;
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const scrollPos = window.scrollY + 200;
+        let found = 'about';
+        for (let i = cachedTops.length - 1; i >= 0; i--) {
+          if (cachedTops[i].top <= scrollPos) {
+            found = cachedTops[i].id;
+            break;
+          }
         }
-      }
-      setActiveNav('about');
+        setActiveNav((prev) => (prev !== found ? found : prev));
+        ticking = false;
+      });
     };
 
     window.addEventListener('scroll', handleScrollNav, { passive: true });
     handleScrollNav();
-    return () => window.removeEventListener('scroll', handleScrollNav);
+    return () => {
+      window.removeEventListener('scroll', handleScrollNav);
+      window.removeEventListener('resize', cacheSectionTops);
+    };
   }, []);
 
   useEffect(() => {
@@ -139,28 +162,66 @@ export const LandingPage = () => {
     }
   }, [activeNav, hoveredNav]);
 
-  // ─── Scroll-Driven Cinematic Stage Tracker (Scene 01 -> Scene 05) ───
+  // ─── Zero-Lag DOM-Driven Cinematic Stage Tracker (Scene 01 -> Scene 05) ───
   const scrollStageRef = useRef(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const heroContentRef = useRef(null);
+  const transitionBridgeRef = useRef(null);
+  const backdropLayerRef = useRef(null);
 
   useEffect(() => {
     let ticking = false;
+    let stageTop = 0;
+    let stageScrollable = 0;
+    let isHeroVisible = true;
+
+    const updateStageMetrics = () => {
+      if (!scrollStageRef.current) return;
+      const rect = scrollStageRef.current.getBoundingClientRect();
+      stageTop = window.scrollY + rect.top;
+      stageScrollable = rect.height - window.innerHeight;
+    };
+    updateStageMetrics();
+    window.addEventListener('resize', updateStageMetrics, { passive: true });
+
+    let observer = null;
+    if (typeof IntersectionObserver !== 'undefined' && scrollStageRef.current) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          isHeroVisible = entries[0].isIntersecting;
+        },
+        { rootMargin: '100px 0px' }
+      );
+      observer.observe(scrollStageRef.current);
+    }
 
     const updateScroll = () => {
-      if (!scrollStageRef.current) {
-        ticking = false;
-        return;
-      }
-      const rect = scrollStageRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      const scrollableDistance = rect.height - windowHeight;
-
-      if (scrollableDistance > 0) {
-        const scrolled = -rect.top;
-        const progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
-        setScrollProgress(progress);
-      }
       ticking = false;
+      if (!isHeroVisible || stageScrollable <= 0) return;
+
+      const scrolled = window.scrollY - stageTop;
+      const progress = Math.max(0, Math.min(1, scrolled / stageScrollable));
+
+      if (heroContentRef.current) {
+        const heroOpacity = Math.max(0, Math.min(1, 1 - (progress - 0.15) / 0.18));
+        const heroY = Math.max(0, progress - 0.12) * 80;
+        heroContentRef.current.style.opacity = heroOpacity.toFixed(3);
+        heroContentRef.current.style.transform = `translate3d(0, -${heroY.toFixed(1)}px, 0)`;
+        heroContentRef.current.style.pointerEvents = progress > 0.28 ? 'none' : 'auto';
+      }
+
+      if (transitionBridgeRef.current) {
+        const bridgeOpacity = Math.max(0, Math.min(1, (progress - 0.85) * 8.0));
+        const bridgeY = Math.max(0, (1 - progress) * 45);
+        transitionBridgeRef.current.style.opacity = bridgeOpacity.toFixed(3);
+        transitionBridgeRef.current.style.transform = `translate3d(0, ${bridgeY.toFixed(1)}px, 0)`;
+      }
+
+      if (backdropLayerRef.current) {
+        const bScale = (1 + progress * 0.08).toFixed(3);
+        const bOpacity = Math.max(0.2, 0.65 * (1 - progress * 0.35)).toFixed(2);
+        backdropLayerRef.current.style.transform = `scale(${bScale})`;
+        backdropLayerRef.current.style.opacity = bOpacity;
+      }
     };
 
     const handleScroll = () => {
@@ -172,7 +233,12 @@ export const LandingPage = () => {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     updateScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', updateStageMetrics);
+      if (observer) observer.disconnect();
+    };
   }, []);
 
   const isAdmin = currentUser?.role === 'admin';
@@ -230,7 +296,21 @@ export const LandingPage = () => {
       }
     };
 
+    let isFaqVisible = true;
+    let observer = null;
+    if (typeof IntersectionObserver !== 'undefined' && faqTrackRef.current) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          isFaqVisible = entries[0].isIntersecting;
+          if (isFaqVisible) updateFaqScroll();
+        },
+        { rootMargin: '120px 0px' }
+      );
+      observer.observe(faqTrackRef.current);
+    }
+
     const updateFaqScroll = () => {
+      if (!isFaqVisible) return;
       const track = faqTrackRef.current;
       if (!track) return;
 
@@ -260,7 +340,7 @@ export const LandingPage = () => {
 
     let ticking = false;
     const onScroll = () => {
-      if (!ticking) {
+      if (!ticking && isFaqVisible) {
         window.requestAnimationFrame(() => {
           updateFaqScroll();
           ticking = false;
@@ -276,6 +356,7 @@ export const LandingPage = () => {
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
+      if (observer) observer.disconnect();
     };
   }, []);
 
@@ -356,13 +437,6 @@ export const LandingPage = () => {
       a: 'Jika Anda dalam ancaman bahaya fisik mendesak, segera cari tempat aman, temui guru terdekat, atau hubungi saluran darurat kepolisian (110) atau Hotline Sahabat Perempuan & Anak SAPA 129.'
     }
   ];
-
-  // Opasitas headline spotlight di tengah saat progress 0.35 s.d. 0.60
-  const centerSpotlightOpacity =
-    scrollProgress >= 0.35 && scrollProgress <= 0.60
-      ? Math.max(0, Math.min(1, (scrollProgress - 0.35) * 8)) *
-        Math.max(0, Math.min(1, (0.60 - scrollProgress) * 8))
-      : 0;
 
   return (
     <div
@@ -577,17 +651,18 @@ export const LandingPage = () => {
             <BackgroundMediaBackdrop
               src="/assets/background/cube-background.mp4"
               type="video"
-              scrollProgress={scrollProgress}
+              layerRef={backdropLayerRef}
               opacity={0.65}
             />
 
             {/* SCENE 01 & 02: HERO INITIAL CONTENT (0–15% Visible, 15–35% Fade Out) */}
             <div
-              className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 relative z-10 transition-all duration-150"
+              ref={heroContentRef}
+              className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 relative z-10 will-change-transform"
               style={{
-                opacity: Math.max(0, Math.min(1, 1 - (scrollProgress - 0.15) / 0.18)).toFixed(3),
-                transform: `translateY(-${(Math.max(0, scrollProgress - 0.12) * 80).toFixed(1)}px)`,
-                pointerEvents: scrollProgress > 0.28 ? 'none' : 'auto'
+                opacity: 1,
+                transform: 'translate3d(0, 0px, 0)',
+                pointerEvents: 'auto'
               }}
             >
               <div className="max-w-xl lg:max-w-2xl space-y-5 text-center lg:text-left mx-auto lg:mx-0">
@@ -660,17 +735,16 @@ export const LandingPage = () => {
 
             {/* 3D CUBE CONTAINER */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 pt-16">
-              <InteractivePhotoCube
-                scrollProgress={scrollProgress}
-              />
+              <InteractivePhotoCube />
             </div>
 
             {/* SCENE 05: TRANSITION BRIDGE (85–100%) */}
             <div
-              className="absolute inset-x-0 bottom-16 max-w-2xl mx-auto px-4 text-center pointer-events-none z-10 transition-opacity duration-300"
+              ref={transitionBridgeRef}
+              className="absolute inset-x-0 bottom-16 max-w-2xl mx-auto px-4 text-center pointer-events-none z-10 will-change-transform"
               style={{
-                opacity: Math.max(0, Math.min(1, (scrollProgress - 0.85) * 8.0)).toFixed(3),
-                transform: `translateY(${Math.max(0, (1 - scrollProgress) * 45).toFixed(1)}px)`
+                opacity: 0,
+                transform: 'translate3d(0, 45px, 0)'
               }}
             >
               <div

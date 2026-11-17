@@ -60,19 +60,20 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
     const updateRopes = (waveYArr, flightP = 0) => {
       // Kelengkungan dinamis (catenary tension sag) saat kartu meluncur
       const sag = Math.sin(flightP * Math.PI) * 4 + 7;
+      const anchors = cachedMetricsRef.current?.ropeAnchors || [];
+
       for (let i = 0; i < 3; i++) {
-        const cardA = cardRefs.current[i];
-        const cardB = cardRefs.current[i + 1];
-        if (!cardA || !cardB) continue;
+        const anchor = anchors[i];
+        if (!anchor) continue;
 
-        const x1 = cardA.offsetLeft + cardA.offsetWidth;
-        const y1 = cardA.offsetTop + cardA.offsetHeight * 0.5 + (waveYArr[i] || 0);
+        const x1 = anchor.x1;
+        const y1 = anchor.midY1 + (waveYArr[i] || 0);
 
-        const x2 = cardB.offsetLeft;
-        const y2 = cardB.offsetTop + cardB.offsetHeight * 0.5 + (waveYArr[i + 1] || 0);
+        const x2 = anchor.x2;
+        const y2 = anchor.midY2 + (waveYArr[i + 1] || 0);
 
-        const midX = (x1 + x2) / 2;
-        const midY = (y1 + y2) / 2 + sag;
+        const midX = (x1 + x2) * 0.5;
+        const midY = (y1 + y2) * 0.5 + sag;
 
         const d = `M ${x1.toFixed(1)} ${y1.toFixed(1)} Q ${midX.toFixed(1)} ${midY.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
         const dShadow = `M ${x1.toFixed(1)} ${(y1 + 4).toFixed(1)} Q ${midX.toFixed(1)} ${(midY + 4).toFixed(1)} ${x2.toFixed(1)} ${(y2 + 4).toFixed(1)}`;
@@ -100,14 +101,29 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
       const trackWidth = trackRef.current.scrollWidth;
 
       // ─── LEFT TO RIGHT CONVOY ───
-      // Posisi startX dihitung presisi dari ujung kanan kartu terdepan (Card 1)
-      // agar tidak ada jeda/dead-zone: begitu animasi masuk dimulai, Card 1 langsung meluncur masuk ke layar!
       const leadCard = cardRefs.current[3];
       const leadCardRight = leadCard ? leadCard.offsetLeft + leadCard.offsetWidth : trackWidth;
       const startX = -leadCardRight;
       const endX = Math.max(isMobile ? 20 : 40, (viewportWidth - trackWidth) / 2);
 
       const offsets = cardRefs.current.map((cardEl) => (cardEl ? cardEl.offsetLeft : 0));
+
+      // Cache anchor points tali penarik untuk eliminasi forced layout reads saat scrolling
+      const ropeAnchors = [];
+      for (let i = 0; i < 3; i++) {
+        const cardA = cardRefs.current[i];
+        const cardB = cardRefs.current[i + 1];
+        if (cardA && cardB) {
+          ropeAnchors.push({
+            x1: cardA.offsetLeft + cardA.offsetWidth,
+            midY1: cardA.offsetTop + cardA.offsetHeight * 0.5,
+            x2: cardB.offsetLeft,
+            midY2: cardB.offsetTop + cardB.offsetHeight * 0.5
+          });
+        } else {
+          ropeAnchors.push(null);
+        }
+      }
 
       cachedMetricsRef.current = {
         viewportHeight,
@@ -118,7 +134,8 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
         trackWidth,
         startX,
         endX,
-        offsets
+        offsets,
+        ropeAnchors
       };
 
       updateRopes([0, 0, 0, 0], 0);
@@ -212,8 +229,21 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
       updateRopes(waveYArr, flightP);
     };
 
+    let isSectionVisible = true;
+    let observer = null;
+    if (typeof IntersectionObserver !== 'undefined' && sectionRef.current) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          isSectionVisible = entries[0].isIntersecting;
+          if (isSectionVisible) handleScroll();
+        },
+        { rootMargin: '120px 0px' }
+      );
+      observer.observe(sectionRef.current);
+    }
+
     const handleScroll = () => {
-      if (!animFrameId) {
+      if (!animFrameId && isSectionVisible) {
         animFrameId = requestAnimationFrame(updateWavyMovement);
       }
     };
@@ -232,6 +262,7 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
       if (animFrameId) cancelAnimationFrame(animFrameId);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
+      if (observer) observer.disconnect();
     };
   }, []);
 
@@ -252,15 +283,15 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
       >
         {/* ─── AMBIENT ATMOSPHERE & EDITORIAL WATERMARK (MENIADAKAN KESAN KOSONG) ─── */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-10">
-          {/* Soft ambient radial blur di pojok kanan atas */}
+          {/* Soft ambient radial glow di pojok kanan atas */}
           <div
-            className="absolute -top-32 -right-32 w-[32rem] h-[32rem] rounded-full blur-3xl opacity-40 pointer-events-none"
-            style={{ background: 'radial-gradient(circle, #BFEFFF 0%, rgba(191, 239, 255, 0) 70%)' }}
+            className="absolute -top-32 -right-32 w-[32rem] h-[32rem] rounded-full pointer-events-none opacity-40"
+            style={{ background: 'radial-gradient(circle, rgba(191, 239, 255, 0.8) 0%, rgba(191, 239, 255, 0) 70%)' }}
           />
-          {/* Soft ambient radial blur di pojok kiri bawah */}
+          {/* Soft ambient radial glow di pojok kiri bawah */}
           <div
-            className="absolute -bottom-32 -left-32 w-[32rem] h-[32rem] rounded-full blur-3xl opacity-30 pointer-events-none"
-            style={{ background: 'radial-gradient(circle, #BFEFFF 0%, rgba(191, 239, 255, 0) 70%)' }}
+            className="absolute -bottom-32 -left-32 w-[32rem] h-[32rem] rounded-full pointer-events-none opacity-30"
+            style={{ background: 'radial-gradient(circle, rgba(191, 239, 255, 0.7) 0%, rgba(191, 239, 255, 0) 70%)' }}
           />
           {/* Subtle architectural typographic watermark */}
           <div className="absolute right-4 top-16 text-[10rem] sm:text-[14rem] lg:text-[17rem] font-black text-[#1C6F8E]/[0.035] leading-none tracking-tighter uppercase font-sans select-none pointer-events-none">

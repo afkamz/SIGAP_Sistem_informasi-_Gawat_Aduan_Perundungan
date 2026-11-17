@@ -221,8 +221,21 @@ export const CinematicCategoriesShowcase = ({ onSelectCategory }) => {
       });
     };
 
+    let isSectionVisible = true;
+    let observer = null;
+    if (typeof IntersectionObserver !== 'undefined' && sectionRef.current) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          isSectionVisible = entries[0].isIntersecting;
+          if (isSectionVisible) handleScroll();
+        },
+        { rootMargin: '120px 0px' }
+      );
+      observer.observe(sectionRef.current);
+    }
+
     const handleScroll = () => {
-      if (!animFrameId) {
+      if (!animFrameId && isSectionVisible) {
         animFrameId = requestAnimationFrame(updateWavyMovement);
       }
     };
@@ -243,6 +256,7 @@ export const CinematicCategoriesShowcase = ({ onSelectCategory }) => {
       }
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
+      if (observer) observer.disconnect();
     };
   }, []);
 

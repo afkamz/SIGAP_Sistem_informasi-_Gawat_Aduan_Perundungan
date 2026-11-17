@@ -1809,3 +1809,21 @@ Peningkatan tata letak (layout) editorial pada section Tentang Sistem SIGAP agar
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Integrasi pill badge kategori, blok ringkasan editorial & 3 micro badges di sisi kanan header, atmospheric typographic watermark SIGAP di background, penomoran urut 4 pilar kartu (01-04), dan status bar interaktif di bagian bawah |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 125 restrukturisasi layout profesional section Tentang Sistem SIGAP |
+
+---
+
+## 📅 [Sesi 126] Selasa, 17 November 2026 — Jam 17 WIB
+
+### Fokus Utama
+Audit menyeluruh dan optimasi performa rendering seluruh animasi Landing Page SIGAP (Hero 3D Cube, About Editorial Cards, 7 Kategori Wavy Cards, dan FAQ Reveal) guna mengeliminasi lag, stuttering, dan forced reflow tanpa mengubah desain visual maupun karakteristik animasi.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Eliminasi React state update per scroll frame via direct DOM refs, optimasi event listener pasif throttled RAF, integrasi IntersectionObserver pada seksi FAQ, dan caching posisi navigasi |
+| 2 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Eliminasi forced layout recalculation (`getBoundingClientRect`), integrasi IntersectionObserver untuk pause/resume RAF otomatis saat kubus di luar viewport, dan optimasi bayangan radial tanpa filter blur berat |
+| 3 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Caching koordinat anchor tali penarik dinamis untuk meniadakan layout reads saat scroll, integrasi IntersectionObserver, serta eliminasi filter blur berat pada ambient glow |
+| 4 | `EDIT` | `Frontend/src/components/3d/CinematicCategoriesShowcase.jsx` | Integrasi IntersectionObserver untuk pause komputasi wavy cards saat seksi di luar viewport |
+| 5 | `EDIT` | `Frontend/src/components/3d/BackgroundMediaBackdrop.jsx` | Penambahan dukungan layerRef untuk manipulasi transform/opacity instan tanpa re-render VDOM |
+| 6 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 126 optimasi performa dan eliminasi lag animasi Landing Page |

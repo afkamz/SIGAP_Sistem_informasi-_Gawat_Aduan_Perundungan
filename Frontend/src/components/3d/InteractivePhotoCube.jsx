@@ -148,27 +148,56 @@ export const InteractivePhotoCube = ({
   useEffect(() => {
     let viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1280;
     let viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+    let stageTop = 0;
+    let stageScrollable = 0;
+    let isCubeVisible = true;
 
-    const handleResize = () => {
+    const stageEl = document.querySelector('.cube-scroll-section');
+
+    const updateMetrics = () => {
       viewportWidth = window.innerWidth;
       viewportHeight = window.innerHeight;
+      if (stageEl) {
+        const rect = stageEl.getBoundingClientRect();
+        stageTop = window.scrollY + rect.top;
+        stageScrollable = rect.height - viewportHeight;
+      }
     };
-    window.addEventListener('resize', handleResize, { passive: true });
+    updateMetrics();
+
+    window.addEventListener('resize', updateMetrics, { passive: true });
 
     let lastTime = performance.now();
     let isTabVisible = true;
 
     const handleVisibilityChange = () => {
       isTabVisible = !document.hidden;
-      if (isTabVisible) {
+      if (isTabVisible && isCubeVisible && !animFrameId.current) {
         lastTime = performance.now();
+        animFrameId.current = requestAnimationFrame(renderLoop);
       }
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
+    // ─── INTERSECTION OBSERVER: PAUSE RAF SAAT KUBUS DI LUAR VIEWPORT ───
+    let observer = null;
+    if (typeof IntersectionObserver !== 'undefined' && stageEl) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          isCubeVisible = entries[0].isIntersecting;
+          if (isCubeVisible && isTabVisible && !animFrameId.current) {
+            lastTime = performance.now();
+            animFrameId.current = requestAnimationFrame(renderLoop);
+          }
+        },
+        { rootMargin: '120px 0px' }
+      );
+      observer.observe(stageEl);
+    }
+
     const renderLoop = (time) => {
-      if (!isTabVisible) {
-        animFrameId.current = requestAnimationFrame(renderLoop);
+      if (!isTabVisible || !isCubeVisible) {
+        animFrameId.current = null;
         return;
       }
 
@@ -177,17 +206,11 @@ export const InteractivePhotoCube = ({
 
       const st = animState.current;
 
-      // Baca progress scroll secara real-time langsung dari DOM outer stage
+      // Hitung progress scroll secara instan tanpa forced synchronous layout / getBoundingClientRect
       let p = scrollProgressRef.current;
-      if (typeof document !== 'undefined') {
-        const stageEl = document.querySelector('.cube-scroll-section');
-        if (stageEl) {
-          const rect = stageEl.getBoundingClientRect();
-          const scrollableDistance = rect.height - viewportHeight;
-          if (scrollableDistance > 0) {
-            p = Math.max(0, Math.min(1, -rect.top / scrollableDistance));
-          }
-        }
+      if (stageScrollable > 0) {
+        const scrolled = window.scrollY - stageTop;
+        p = Math.max(0, Math.min(1, scrolled / stageScrollable));
       }
 
       const isMobile = viewportWidth < 640;
@@ -358,8 +381,9 @@ export const InteractivePhotoCube = ({
 
     return () => {
       if (animFrameId.current) cancelAnimationFrame(animFrameId.current);
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', updateMetrics);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (observer) observer.disconnect();
     };
   }, []);
 
@@ -521,8 +545,7 @@ export const InteractivePhotoCube = ({
         ref={shadowRef}
         className="w-[220px] sm:w-[300px] h-[18px] rounded-full pointer-events-none mt-4 transition-opacity duration-300"
         style={{
-          background: 'rgba(191, 239, 255, 0.45)',
-          filter: 'blur(4px)'
+          background: 'radial-gradient(ellipse at center, rgba(191, 239, 255, 0.7) 0%, rgba(191, 239, 255, 0) 70%)'
         }}
       />
     </div>

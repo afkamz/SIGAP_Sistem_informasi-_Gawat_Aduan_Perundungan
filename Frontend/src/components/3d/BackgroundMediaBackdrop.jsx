@@ -18,7 +18,8 @@ export const BackgroundMediaBackdrop = ({
   poster = null, // Fallback gambar poster saat video loading
   opacity = 0.55, // Opasitas media dasar (0.1 - 1.0)
   scrollProgress = 0, // 0.0 s.d. 1.0 untuk paralaks kedalaman
-  className = ''
+  className = '',
+  layerRef = null // Direct DOM ref untuk zero-overhead RAF transform updates
 }) => {
   // Deteksi otomatis format jika type === 'auto'
   const isVideo =
@@ -44,6 +45,7 @@ export const BackgroundMediaBackdrop = ({
     >
       {/* ─── Layer 1: Actual Media (Video / Image / Ambient Solid Art Canvas) ─── */}
       <div
+        ref={layerRef}
         className="absolute inset-0 w-full h-full will-change-transform"
         style={{
           transform: `scale(${scale})`,
