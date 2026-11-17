@@ -2170,3 +2170,17 @@ Implementasi tipografi aset branding resmi SIGAP (`branding-sigap.png`) mendampi
 | 2 | `EDIT` | `Frontend/src/components/layout/AdminSidebar.jsx` | Penambahan aset branding resmi SIGAP (branding-sigap.png) mendampingi logo pada brand header sidebar admin |
 | 3 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Integrasi kartu brand resmi lengkap (logo-sigap.png & branding-sigap.png) pada header dashboard analitik admin |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 149 implementasi aset branding SIGAP pada dashboard admin |
+
+---
+
+## 📅 [Sesi 150] Selasa, 17 November 2026 — Jam 23 WIB
+
+### Fokus Utama
+Integrasi hero banner berlatar belakang video pada header sambutan Dashboard Admin dengan overlay pelindung keterbacaan teks dan penyiapan jalur berkas video kustom.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Integrasi pemutar video background hero header dashboard admin dengan overlay pelindung keterbacaan teks dan fallback sumber video |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 150 implementasi background video pada header dashboard admin |

@@ -154,14 +154,48 @@ export const AdminDashboard = () => {
     <AdminLayout>
       <div className="space-y-6 max-w-7xl mx-auto">
 
-        {/* Top Header Section */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="flex items-center gap-3.5">
-            <div className="hidden sm:flex items-center gap-2 p-2 rounded-2xl bg-white/95 border border-[#BFEFFF] shadow-xs shrink-0">
+        {/* Top Header Hero Section with Background Video */}
+        <div className="relative rounded-3xl overflow-hidden border border-[#BFEFFF] shadow-md p-6 sm:p-7 flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-white/90">
+          {/* Background Video */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none select-none brightness-105"
+            aria-hidden="true"
+          >
+            <source src="/assets/background/admin-welcome.mp4" type="video/mp4" />
+            <source src="/assets/background/dashboard-welcome.mp4" type="video/mp4" />
+          </video>
+
+          {/* Solid Translucent Shield Overlay (Melindungi Keterbacaan Teks Hero) */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.55)',
+              backdropFilter: 'blur(1.5px)'
+            }}
+            aria-hidden="true"
+          />
+
+          {/* Subtle Gradient Overlay for Depth */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: 'linear-gradient(to right, rgba(255, 255, 255, 0.90) 0%, rgba(255, 255, 255, 0.70) 50%, rgba(214, 245, 255, 0.45) 100%)'
+            }}
+            aria-hidden="true"
+          />
+
+          {/* Left: Branding & Welcome Greeting */}
+          <div className="relative z-10 flex items-start sm:items-center gap-4">
+            <div className="hidden sm:flex items-center gap-2 p-2.5 rounded-2xl bg-white/95 border border-[#BFEFFF] shadow-xs shrink-0 backdrop-blur-sm">
               <img
                 src="/assets/branding/logo-sigap.png"
                 alt="Logo SIGAP"
-                className="h-9 w-auto object-contain"
+                className="h-10 w-auto object-contain"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
@@ -169,14 +203,14 @@ export const AdminDashboard = () => {
               <img
                 src="/assets/branding/branding-sigap.png"
                 alt="SIGAP"
-                className="h-6 w-auto max-w-[110px] object-contain"
+                className="h-7 w-auto max-w-[120px] object-contain"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
               />
             </div>
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
                 <span>Admin Panel</span>
                 <span>&gt;</span>
                 <span className="text-[#1C6F8E] font-bold">Dashboard Analitik</span>
@@ -184,19 +218,19 @@ export const AdminDashboard = () => {
               <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
                 {greeting}, {adminName}
               </h1>
-              <p className="text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-700 max-w-2xl leading-relaxed font-medium">
                 Monitoring real-time penanganan insiden, perbandingan tren laporan sekolah terhadap data referensi nasional PPKSP.
               </p>
             </div>
           </div>
 
           {/* Right Controls */}
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="relative z-10 flex flex-wrap items-center gap-2.5">
             {/* DB Status */}
             <div className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition shadow-xs ${
               isBackendConnected
                 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                : 'bg-white border border-[#BFEFFF] text-slate-600'
+                : 'bg-white/95 border border-[#BFEFFF] text-slate-600'
             }`}>
               <span className={`w-2 h-2 rounded-full ${isBackendConnected ? 'bg-emerald-500 animate-pulse shadow-[0_0_6px_#10b981]' : 'bg-slate-400'}`} />
               <Database className="w-3.5 h-3.5 text-[#1C6F8E]" />
@@ -207,7 +241,7 @@ export const AdminDashboard = () => {
               type="button"
               onClick={handleSync}
               disabled={isSyncing}
-              className="px-3.5 py-2 rounded-2xl bg-white border border-[#BFEFFF] text-slate-700 hover:bg-[#BFEFFF]/20 font-bold text-xs flex items-center gap-1.5 transition disabled:opacity-50 shadow-xs"
+              className="px-3.5 py-2 rounded-2xl bg-white/95 border border-[#BFEFFF] text-slate-700 hover:bg-[#BFEFFF]/20 font-bold text-xs flex items-center gap-1.5 transition disabled:opacity-50 shadow-xs backdrop-blur-xs"
             >
               <RotateCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-[#1C6F8E]' : 'text-[#1C6F8E]'}`} />
               <span>Sinkronkan</span>
