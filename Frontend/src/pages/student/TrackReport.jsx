@@ -248,10 +248,16 @@ export const TrackReport = () => {
         p = Math.max(0, Math.min(1, (topOffset - rect.top) / totalScrollable));
       }
 
+      // Helper smoothStep
+      const smoothStep = (min, max, val) => {
+        const x = Math.max(0, Math.min(1, (val - min) / (max - min)));
+        return x * x * (3 - 2 * x);
+      };
+
       // 1. Oversized Editorial Typography:
-      const pTitle = getSubProgress(p, 0.00, 0.28);
-      const titleOpacity = 1.0 - (0.88 * solveCubicBezier(pTitle));
-      const titleScale = 1.0 - (0.06 * solveCubicBezier(pTitle));
+      const titleProgress = smoothStep(0.00, 0.22, p);
+      const titleOpacity = 1.0 - (0.88 * titleProgress);
+      const titleScale = 1.0 - (0.06 * titleProgress);
       if (editorialTitleRef.current) {
         editorialTitleRef.current.style.opacity = titleOpacity;
         editorialTitleRef.current.style.transform = `scale(${titleScale}) translate3d(0, 0, 0)`;
@@ -262,24 +268,25 @@ export const TrackReport = () => {
       if (track) {
         const vw = window.innerWidth;
         const trackWidth = track.scrollWidth;
-        const padding = vw < 640 ? 24 : 48;
+        const isMobile = vw < 640;
+        const padding = isMobile ? 24 : 48;
 
-        let endX = padding;
+        let endX;
         if (trackWidth + padding * 2 <= vw) {
           endX = Math.round((vw - trackWidth) / 2);
         } else {
-          endX = vw - trackWidth - padding;
+          endX = -(trackWidth - vw + padding);
         }
 
         const startX = vw + 60; // Initial state: offscreen right
-        const pTrackNorm = getSubProgress(p, 0.05, 0.95);
-        const pTrack = solveCubicBezier(pTrackNorm);
+        // Selesaikan seluruh kartu (habiskan dulu card nya) pada p = 0.88 sebelum unpin di p = 1.0
+        const pFlight = smoothStep(0.04, 0.88, p);
 
-        const currentX = startX + (endX - startX) * pTrack;
-        const trackOpacity = solveCubicBezier(getSubProgress(p, 0.03, 0.15));
+        const currentX = startX + (endX - startX) * pFlight;
+        const trackOpacity = smoothStep(0.02, 0.10, p);
 
         track.style.opacity = trackOpacity;
-        track.style.transform = `translate3d(${currentX}px, 0, 0)`;
+        track.style.transform = `translate3d(${currentX.toFixed(1)}px, 0, 0)`;
 
         // 3. Staggered Card Animation
         const cards = reportCardsRef.current;
@@ -289,7 +296,7 @@ export const TrackReport = () => {
             if (!cardEl) return;
             const cardStart = (idx / (numCards + 1)) * 0.35;
             const cardEnd = Math.min(1, cardStart + 0.45);
-            const pCard = solveCubicBezier(getSubProgress(pTrackNorm, cardStart, cardEnd));
+            const pCard = smoothStep(cardStart, cardEnd, pFlight);
             cardEl.style.opacity = 0.35 + 0.65 * pCard;
             cardEl.style.transform = `scale(${0.92 + 0.08 * pCard}) translate3d(0, 0, 0)`;
           });
@@ -357,7 +364,7 @@ export const TrackReport = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#1C6F8E] flex flex-col font-sans antialiased relative overflow-hidden">
+    <div className="min-h-screen bg-white text-[#1C6F8E] flex flex-col font-sans antialiased relative">
       {/* ─── BACKGROUND DEKORATIF: KOMBINASI TIGA LINGKARAN BABY BLUE & GARIS-GARIS DIAGONAL ─── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
         {/* Lingkaran 1: Kiri Atas */}
@@ -1186,6 +1193,47 @@ export const TrackReport = () => {
                 </div>
               </div>
             </section>
+
+            {/* ─── Bottom Assistance & Consultation Card (Setelah Selesai Scroll Riwayat) ─── */}
+            <div className="max-w-4xl mx-auto w-full px-4 sm:px-6 pt-12 pb-20 relative z-20">
+              <div
+                className="rounded-3xl p-6 sm:p-8 border flex flex-col sm:flex-row items-center justify-between gap-6"
+                style={{
+                  background: '#FFFFFF',
+                  borderColor: '#BFEFFF',
+                  boxShadow: '0 8px 30px rgba(191, 239, 255, 0.4)'
+                }}
+              >
+                <div className="flex items-center gap-4">
+                  <div
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border"
+                    style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}
+                  >
+                    <ShieldCheck className="w-6 h-6 text-[#1C6F8E]" />
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="font-bold text-sm sm:text-base" style={{ color: '#1C6F8E' }}>
+                      Butuh Bantuan Langsung atau Pendampingan Kasus?
+                    </h4>
+                    <p className="text-xs leading-relaxed" style={{ color: '#2E84A5' }}>
+                      Konselor BK dan Tim Satgas PPKSP siap mendampingi Anda di Ruang Konseling Sekolah dengan perlindungan penuh.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowHelpModal(true)}
+                  className="px-5 py-2.5 rounded-xl font-bold text-xs shrink-0 border transition hover:opacity-90 cursor-pointer"
+                  style={{
+                    background: '#BFEFFF',
+                    color: '#1C6F8E',
+                    borderColor: '#BFEFFF'
+                  }}
+                >
+                  Pusat Bantuan
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
