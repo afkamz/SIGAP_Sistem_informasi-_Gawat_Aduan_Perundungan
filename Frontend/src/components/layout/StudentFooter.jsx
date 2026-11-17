@@ -19,13 +19,13 @@ export const StudentFooter = () => {
           <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
             <Link
               to="/"
-              className="inline-flex items-center gap-2.5 sm:gap-3 rounded-xl bg-white px-3 py-1.5 shadow-xs transition-opacity group hover:opacity-90"
+              className="inline-flex items-center gap-2 sm:gap-2.5 rounded-xl bg-white px-3 py-1.5 shadow-xs transition-opacity group hover:opacity-90"
               aria-label="Beranda SIGAP"
             >
               <img
                 src="/assets/branding/logo-sigap.png"
                 alt="Logo SIGAP"
-                className="h-8 sm:h-9 w-auto object-contain"
+                className="h-9 sm:h-10 w-auto object-contain"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
@@ -33,7 +33,7 @@ export const StudentFooter = () => {
               <img
                 src="/assets/branding/branding-sigap.png"
                 alt="SIGAP"
-                className="h-7 sm:h-8 w-auto max-w-[140px] sm:max-w-[180px] object-contain"
+                className="h-7 sm:h-8 w-auto max-w-[130px] sm:max-w-[160px] object-contain"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}

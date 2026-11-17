@@ -1594,3 +1594,218 @@ Penghapusan elemen teks spotlight teks tengah ("SATU SUARA KEBENARAN DAPAT MENGH
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penghapusan elemen overlay judul dan deskripsi spotlight tengah (Scene 03) pada seksi animasi scroll 3D Cube |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 110 penghapusan teks spotlight tengah landing page |
+
+---
+
+## 📅 [Sesi 111] Selasa, 17 November 2026 — Jam 13 WIB
+
+### Fokus Utama
+Penerapan animasi sliding pill capsule outline pada menu navigasi Landing Page SIGAP sesuai referensi visual editorial (outline kapsul biru SIGAP dengan highlight aktif/hover yang meluncur halus).
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Implementasi sliding pill capsule outline dengan warna biru SIGAP (#1C6F8E) dan aksen baby blue (#BFEFFF) transparan, pelacakan posisi hover & seksi aktif, serta standardisasi menu navigasi desktop dan mobile |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 111 implementasi animasi sliding pill capsule navbar landing page |
+
+---
+
+## 📅 [Sesi 112] Selasa, 17 November 2026 — Jam 13 WIB
+
+### Fokus Utama
+Implementasi warna background Baby Blue (#BFEFFF) dan animasi kemunculan bergantian dari kiri ke kanan (Sequential Left-to-Right Reveal) dengan mekanisme Play Once & Persist pada 4 card section "Tentang Sistem SIGAP".
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Penerapan background Baby Blue (#BFEFFF), tipografi biru tua (#0D3B4C/#0F4C64) kontras tinggi, initial state tersembunyi (translateX -60px & opacity 0), trigger IntersectionObserver sekali pakai (threshold 22%), dan sequential delay kemunculan bertahap dari card 1 hingga card 4 |
+| 2 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penyesuaian navigasi menu "TENTANG" agar langsung mengarah dan melacak seksi AboutEditorialShowcase (#about) |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 112 implementasi warna Baby Blue dan animasi sequential 4 card Tentang Sistem SIGAP |
+
+---
+
+## 📅 [Sesi 113] Selasa, 17 November 2026 — Jam 13 WIB
+
+### Fokus Utama
+Pembaruan warna 4 card ke Sky Blue (#78C9F3), penerapan animasi scroll-driven oversized editorial typography pada judul seksi identik dengan 7 Bentuk Kekerasan, serta penyempurnaan animasi kemunculan 4 card dari kiri ke kanan (Left-to-Right Reveal) dalam grid panorama 4 kolom.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Penggantian warna background kartu ke Sky Blue (#78C9F3), tipografi teks kontras tinggi (#062331/#093347), integrasi animasi scroll scale-down judul seperti 7 Bentuk Kekerasan, dan penataan 4 card sejajar dengan sweep animasi tegas dari kiri ke kanan (-320px ke 0) |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 113 pembaruan warna Sky Blue, animasi teks editorial, dan animasi card dari kiri ke kanan |
+
+---
+
+## 📅 [Sesi 114] Selasa, 17 November 2026 — Jam 14 WIB
+
+### Fokus Utama
+Penyempurnaan animasi konvoi meluncur dari kiri ke kanan (Left-to-Right Wavy Reel) dengan gelombang sinusoidal dan kemiringan dinamis pada 4 card Tentang Sistem SIGAP, serta penyesuaian navbar dengan outline kapsul murni (stroke capsule border), tata letak spasi proporsional, dan indikator panah aksi sesuai referensi visual.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Implementasi konvoi 4 kartu dari sisi kiri ke kanan secara berurutan dengan gerakan gelombang sinusoidal (`translateY`), tilt rotasi dinamis (`rotateZ`), serta judul beranimasi scale-down |
+| 2 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penerapan outline kapsul murni (`border-[1.5px] border-black bg-transparent`) pada navigasi, jarak spasi proporsional antar tautan, panah aksi `BUAT LAPORAN ↗`, dan status aktif otomatis pada tautan pertama saat halaman dimuat |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 114 implementasi animasi konvoi kartu kiri-ke-kanan dan penyesuaian navigasi kapsul editorial |
+
+---
+
+## 📅 [Sesi 115] Selasa, 17 November 2026 — Jam 14 WIB
+
+### Fokus Utama
+Penghapusan efek gelombang vertikal sinusoidal dan rotasi kemiringan pada 4 card section Tentang Sistem SIGAP, menyederhanakan pergerakan menjadi geser horizontal lurus murni dari kiri ke kanan.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Penghapusan osilasi vertikal (`translateY`), kemiringan rotasi (`rotateZ`), serta properti perspektif 3D, mempertahankan murni pergeseran horizontal track dari kiri ke kanan secara rata dan stabil |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 115 penyederhanaan animasi kartu menjadi geser horizontal lurus tanpa gelombang |
+
+---
+
+## 📅 [Sesi 116] Selasa, 17 November 2026 — Jam 14 WIB
+
+### Fokus Utama
+Penghapusan bilah micro-ticker di atas navbar pada Landing Page agar bagian atas website terlihat lebih bersih, rapi, dan berfokus langsung pada bilah navigasi utama.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penghapusan elemen micro-ticker bar (informasi layanan Permendikbudristek, nomor darurat SAPA 129 / Polisi 110, dan tautan lacak tiket) tepat di atas navbar |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 116 penghapusan micro-ticker bar di atas navbar Landing Page |
+
+---
+
+## 📅 [Sesi 117] Selasa, 17 November 2026 — Jam 14 WIB
+
+### Fokus Utama
+Penyelarasan perataan teks lencana, judul utama, dan paragraf deskripsi section Tentang Sistem SIGAP dari posisi tengah menjadi rata kiri (*left-aligned*).
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Penyesuaian layout container judul menjadi rata kiri (`text-left`, `origin-top-left`, `transformOrigin: '0% 0%'`), dan penghapusan perataan tengah pada paragraf deskripsi |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 117 perataan kiri teks judul dan deskripsi section Tentang Sistem SIGAP |
+
+---
+
+## 📅 [Sesi 118] Selasa, 17 November 2026 — Jam 14 WIB
+
+### Fokus Utama
+Penerapan animasi gelombang lembut (*subtle wave*) dan kemiringan rotasi sangat halus saat 4 card section Tentang Sistem SIGAP bergeser horizontal ke kanan, yang mereda mulus (*settles*) saat kartu mencapai posisi akhir.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Penambahan osilasi vertikal halus (`subtleAmpY` 7–12px) dan rotasi sangat lembut (`subtleRotZ` 0.8–1.5°) dengan faktor redaman otomatis saat kartu tiba di posisi akhirnya |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 118 implementasi animasi gelombang lembut kartu saat bergeser ke kanan |
+
+---
+
+## 📅 [Sesi 119] Selasa, 17 November 2026 — Jam 14 WIB
+
+### Fokus Utama
+Implementasi elemen tali penarik (*dynamic tow ropes*) berserat dan cincin kait (*anchor eyelet rings*) antar-kartu pada section Tentang Sistem SIGAP yang saling mengait dan menarik rangkaian kartu saat bergeser.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Penambahan render SVG tali penarik dinamis (bayangan, inti tali navy, dan serat kepang) dengan lengkungan lentur (*catenary tension curve*), cincin kait logam di tepi setiap kartu, dan penyesuaian jarak celah antar-kartu |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 119 implementasi elemen tali penarik antar-kartu Tentang Sistem SIGAP |
+
+---
+
+## 📅 [Sesi 120] Selasa, 17 November 2026 — Jam 14 WIB
+
+### Fokus Utama
+Penyesuaian warna background 4 card section Tentang Sistem SIGAP menjadi Baby Blue murni (`#BFEFFF`) yang lebih lembut dan teduh sesuai identitas visual tema.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Penggantian warna background kartu dari `#78C9F3` menjadi Baby Blue `#BFEFFF`, penyesuaian bayangan lembut (`boxShadow`), titik mata kait, serta border bawah seksi |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 120 penyesuaian warna Baby Blue kartu Tentang Sistem SIGAP |
+
+---
+
+## 📅 [Sesi 121] Selasa, 17 November 2026 — Jam 15 WIB
+
+### Fokus Utama
+Penyelarasan waktu pemicu animasi kemunculan 4 card agar langsung meluncur masuk dari kiri saat animasi teks baru berjalan setengah (50%), menghilangkan jeda tunggu dan meniadakan dead-zone posisi awal kartu.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Penyesuaian ambang `flightP` kartu mulai di `progress = 0.08` (tepat separuh animasi teks 0.00–0.16) serta eliminasi offset dead-zone `startX` sehingga ujung kartu terdepan langsung menyeberang masuk ke viewport |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 121 percepatan pemicu kemunculan kartu saat animasi teks setengah berjalan |
+
+---
+
+## 📅 [Sesi 122] Selasa, 17 November 2026 — Jam 15 WIB
+
+### Fokus Utama
+Penghapusan elemen lencana "FILOSOFI & SISTEM PERLINDUNGAN" dan teks deskripsi pendukung pada section Tentang Sistem SIGAP untuk menghasilkan tampilan editorial judul yang lebih bersih dan tegas.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Penghapusan badge sub-judul ("FILOSOFI & SISTEM PERLINDUNGAN") dan paragraf penjelasan sistem di bawah judul utama |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 122 penghapusan badge dan deskripsi teks section Tentang Sistem SIGAP |
+
+---
+
+## 📅 [Sesi 123] Selasa, 17 November 2026 — Jam 15 WIB
+
+### Fokus Utama
+Integrasi logo lambang baru SIGAP dan penyesuaian tata letak proporsional bersama gambar branding pada Navbar dan Footer agar lambang logo terlihat jelas, tegas, dan seimbang.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penyesuaian skala dimensi logo (`h-10 sm:h-11 md:h-12`) dan teks branding (`h-7 sm:h-8`) agar lambang perisai baru tampil proporsional dan jelas pada navbar |
+| 2 | `EDIT` | `Frontend/src/components/layout/StudentHeader.jsx` | Penyesuaian proporsi ukuran logo dan gambar branding pada bilah navigasi Portal Siswa |
+| 3 | `EDIT` | `Frontend/src/components/layout/LandingFooter.jsx` | Penyesuaian ukuran logo dan teks branding pada kontainer putih Footer Landing Page |
+| 4 | `EDIT` | `Frontend/src/components/layout/StudentFooter.jsx` | Penyesuaian ukuran logo dan teks branding pada Footer Portal Siswa |
+| 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 123 penyesuaian layout dan ukuran logo baru bersama branding SIGAP |
+
+---
+
+## 📅 [Sesi 124] Selasa, 17 November 2026 — Jam 15 WIB
+
+### Fokus Utama
+Penyempurnaan koreografi animasi scroll section Tentang Sistem SIGAP di mana kartu-kartu langsung meluncur masuk dari kiri ke kanan tepat saat teks judul mencapai setengah perjalanan gerakannya ke atas, mengeliminasi area kosong layar sesuai video referensi.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Penyesuaian rentang animasi teks judul dari posisi tengah/bawah naik ke atas serta pemicuan luncuran kartu dari kiri ke kanan tepat di titik 50% gerakan teks |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 124 sinkronisasi animasi teks dan peluncuran kartu Tentang Sistem SIGAP |
+
+---
+
+## 📅 [Sesi 125] Selasa, 17 November 2026 — Jam 16 WIB
+
+### Fokus Utama
+Peningkatan tata letak (layout) editorial pada section Tentang Sistem SIGAP agar tampak lebih seimbang, padat, dan profesional dengan menghadirkan ringkasan fitur, lencana metrik pilar, atmospheric watermark SIGAP, serta penomoran kartu terpadu.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Integrasi pill badge kategori, blok ringkasan editorial & 3 micro badges di sisi kanan header, atmospheric typographic watermark SIGAP di background, penomoran urut 4 pilar kartu (01-04), dan status bar interaktif di bagian bawah |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 125 restrukturisasi layout profesional section Tentang Sistem SIGAP |

@@ -44,11 +44,11 @@ export const StudentHeader = ({ isDashboard = false }) => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
         {/* Brand Logo & Emblem */}
-        <Link to={homePath} className="flex items-center gap-2.5 sm:gap-3 group py-1" aria-label="Beranda SIGAP">
+        <Link to={homePath} className="flex items-center gap-2 sm:gap-2.5 group py-1" aria-label="Beranda SIGAP">
           <img
             src="/assets/branding/logo-sigap.png"
             alt="Logo SIGAP"
-            className="h-9 sm:h-10 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+            className="h-10 sm:h-11 md:h-12 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
             }}
@@ -56,7 +56,7 @@ export const StudentHeader = ({ isDashboard = false }) => {
           <img
             src="/assets/branding/branding-sigap.png"
             alt="SIGAP"
-            className="h-8 sm:h-9 w-auto max-w-[140px] sm:max-w-[180px] object-contain transition-transform duration-200 group-hover:scale-105"
+            className="h-7 sm:h-8 w-auto max-w-[130px] sm:max-w-[160px] object-contain transition-transform duration-200 group-hover:scale-105"
             onError={(e) => {
               e.currentTarget.style.display = 'none';
             }}

@@ -14,11 +14,11 @@ export const LandingFooter = () => {
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b text-center md:text-left" style={{ borderColor: 'rgba(255, 255, 255, 0.15)' }}>
           <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
-            <Link to="/" className="inline-flex items-center gap-2.5 sm:gap-3 rounded-xl bg-white px-3 py-1.5 shadow-xs transition-opacity group hover:opacity-90" aria-label="Beranda SIGAP">
+            <Link to="/" className="inline-flex items-center gap-2 sm:gap-2.5 rounded-xl bg-white px-3 py-1.5 shadow-xs transition-opacity group hover:opacity-90" aria-label="Beranda SIGAP">
               <img
                 src="/assets/branding/logo-sigap.png"
                 alt="Logo SIGAP"
-                className="h-8 sm:h-9 w-auto object-contain"
+                className="h-9 sm:h-10 w-auto object-contain"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
@@ -26,7 +26,7 @@ export const LandingFooter = () => {
               <img
                 src="/assets/branding/branding-sigap.png"
                 alt="SIGAP"
-                className="h-7 sm:h-8 w-auto max-w-[150px] sm:max-w-[190px] object-contain"
+                className="h-7 sm:h-8 w-auto max-w-[130px] sm:max-w-[160px] object-contain"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}

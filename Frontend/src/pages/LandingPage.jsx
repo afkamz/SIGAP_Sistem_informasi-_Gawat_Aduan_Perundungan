@@ -38,6 +38,15 @@ import { BackgroundMediaBackdrop } from '../components/3d/BackgroundMediaBackdro
 import { CinematicCategoriesShowcase } from '../components/3d/CinematicCategoriesShowcase';
 import { AboutEditorialShowcase } from '../components/landing/AboutEditorialShowcase';
 
+const NAV_ITEMS = [
+  { id: 'about', label: 'TENTANG', type: 'section' },
+  { id: 'categories', label: '7 KATEGORI', type: 'section' },
+  { id: 'how-it-works', label: 'ALUR PENANGANAN', type: 'section' },
+  { id: 'buat-laporan', label: 'BUAT LAPORAN', type: 'action', hasArrow: true },
+  { id: 'safety', label: 'KEAMANAN', type: 'section' },
+  { id: 'faq', label: 'FAQ', type: 'section' },
+];
+
 export const LandingPage = () => {
   const navigate = useNavigate();
   const { currentUser, logout } = useStore();
@@ -46,6 +55,89 @@ export const LandingPage = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [targetRedirect, setTargetRedirect] = useState('/buat-laporan');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // ─── Editorial Sliding Pill Capsule Navigation (Ref: SMTOWN Style) ───
+  const [hoveredNav, setHoveredNav] = useState(null);
+  const [activeNav, setActiveNav] = useState('about');
+  const [pillStyle, setPillStyle] = useState({ left: 0, width: 0, opacity: 0 });
+  const navContainerRef = useRef(null);
+  const navItemRefs = useRef({});
+
+  const updatePill = (id) => {
+    const el = navItemRefs.current[id];
+    const container = navContainerRef.current;
+    if (el && container) {
+      const elRect = el.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      setPillStyle({
+        left: elRect.left - containerRect.left,
+        width: elRect.width,
+        opacity: 1,
+      });
+    }
+  };
+
+  const handleNavMouseEnter = (id) => {
+    setHoveredNav(id);
+    updatePill(id);
+  };
+
+  const handleNavMouseLeave = () => {
+    setHoveredNav(null);
+    if (activeNav && navItemRefs.current[activeNav]) {
+      updatePill(activeNav);
+    } else {
+      setPillStyle((prev) => ({ ...prev, opacity: 0 }));
+    }
+  };
+
+  useEffect(() => {
+    // Inisialisasi posisi pill pada item pertama (TENTANG)
+    const timer = setTimeout(() => {
+      if (activeNav && navItemRefs.current[activeNav]) {
+        updatePill(activeNav);
+      }
+    }, 150);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (hoveredNav) updatePill(hoveredNav);
+      else if (activeNav) updatePill(activeNav);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [hoveredNav, activeNav]);
+
+  useEffect(() => {
+    const sections = ['about', 'categories', 'how-it-works', 'safety', 'faq'];
+    const handleScrollNav = () => {
+      const scrollPos = window.scrollY + 200;
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sections[i]);
+        if (el && el.offsetTop <= scrollPos) {
+          setActiveNav(sections[i]);
+          return;
+        }
+      }
+      setActiveNav('about');
+    };
+
+    window.addEventListener('scroll', handleScrollNav, { passive: true });
+    handleScrollNav();
+    return () => window.removeEventListener('scroll', handleScrollNav);
+  }, []);
+
+  useEffect(() => {
+    if (!hoveredNav) {
+      if (activeNav && navItemRefs.current[activeNav]) {
+        updatePill(activeNav);
+      } else {
+        setPillStyle((prev) => ({ ...prev, opacity: 0 }));
+      }
+    }
+  }, [activeNav, hoveredNav]);
 
   // ─── Scroll-Driven Cinematic Stage Tracker (Scene 01 -> Scene 05) ───
   const scrollStageRef = useRef(null);
@@ -211,7 +303,7 @@ export const LandingPage = () => {
   const scrollToSection = (e, sectionId) => {
     e.preventDefault();
     setMobileMenuOpen(false);
-    const element = document.getElementById(sectionId);
+    const element = document.getElementById(sectionId) || (sectionId === 'about' && document.getElementById('mission'));
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
@@ -280,40 +372,15 @@ export const LandingPage = () => {
 
       {/* ─── FIXED GLOBAL HEADER ─── */}
       <header className="fixed top-0 inset-x-0 z-50 w-full pointer-events-auto">
-        {/* Top Micro-Ticker Bar */}
-        <div style={{ background: '#BFEFFF', color: '#1C6F8E' }} className="text-[11px] py-1.5 px-4 sm:px-6 lg:px-8 border-b border-[#BFEFFF]/40">
-          <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
-            <div className="flex items-center gap-2">
-              <span className="flex h-2.5 w-2.5 rounded-full bg-[#1C6F8E] animate-pulse" />
-              <span className="text-[#1C6F8E]">
-                Layanan Siaga Aduan Kekerasan Sekolah Sesuai <strong className="text-[#1C6F8E]">Permendikbudristek No. 46/2023</strong>
-              </span>
-            </div>
-            <div className="flex items-center gap-3 text-[11px]">
-              <span className="flex items-center gap-1.5 font-semibold text-[#1C6F8E]">
-                <PhoneCall className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                Hotline Darurat: SAPA 129 | Polisi 110
-              </span>
-              <span className="hidden md:inline text-[#1C6F8E]/40">•</span>
-              <Link
-                to="/lacak"
-                className="text-[#1C6F8E] hover:text-[#2E84A5] underline underline-offset-2 transition hidden md:inline font-bold"
-              >
-                Lacak Tiket Aduan
-              </Link>
-            </div>
-          </div>
-        </div>
-
         {/* ─── NAVIGATION BAR — Baby Blue & White Theme ─── */}
         <nav className="border-b" style={{ background: '#FFFFFF', borderColor: '#BFEFFF' }}>
           <div className="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between relative">
             {/* Brand Logo & Emblem — Mentok ke kiri */}
-            <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group py-1 flex-shrink-0 z-10" aria-label="Beranda SIGAP">
+            <Link to="/" className="flex items-center gap-2 sm:gap-2.5 group py-1 flex-shrink-0 z-10" aria-label="Beranda SIGAP">
               <img
                 src="/assets/branding/logo-sigap.png"
                 alt="Logo SIGAP"
-                className="h-8 sm:h-9 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
+                className="h-10 sm:h-11 md:h-12 w-auto object-contain transition-transform duration-200 group-hover:scale-105"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
@@ -321,57 +388,58 @@ export const LandingPage = () => {
               <img
                 src="/assets/branding/branding-sigap.png"
                 alt="SIGAP"
-                className="h-7 sm:h-8 w-auto max-w-[110px] sm:max-w-[140px] object-contain transition-transform duration-200 group-hover:scale-105"
+                className="h-7 sm:h-8 w-auto max-w-[120px] sm:max-w-[150px] object-contain transition-transform duration-200 group-hover:scale-105"
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
               />
             </Link>
 
-            {/* ─── CENTER NAVIGATION BAR (DEAD CENTER, HOVER PILL BIRU SIGAP) ─── */}
-            <div className="hidden lg:flex items-center gap-2 xl:gap-5 text-[11px] xl:text-[13px] font-bold tracking-wider text-black select-none whitespace-nowrap absolute left-1/2 -translate-x-1/2 z-10">
-              <button
-                type="button"
-                onClick={(e) => scrollToSection(e, 'mission')}
-                className="px-3.5 xl:px-5 py-1.5 rounded-full transition-all duration-200 hover:bg-[#BFEFFF] hover:text-[#1C6F8E] cursor-pointer whitespace-nowrap"
-              >
-                TENTANG
-              </button>
-              <button
-                type="button"
-                onClick={(e) => scrollToSection(e, 'categories')}
-                className="px-3.5 xl:px-5 py-1.5 rounded-full transition-all duration-200 hover:bg-[#BFEFFF] hover:text-[#1C6F8E] cursor-pointer whitespace-nowrap"
-              >
-                7 KATEGORI
-              </button>
-              <button
-                type="button"
-                onClick={(e) => scrollToSection(e, 'how-it-works')}
-                className="px-3.5 xl:px-5 py-1.5 rounded-full transition-all duration-200 hover:bg-[#BFEFFF] hover:text-[#1C6F8E] cursor-pointer whitespace-nowrap"
-              >
-                ALUR PENANGANAN
-              </button>
-              <button
-                type="button"
-                onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                className="px-3.5 xl:px-5 py-1.5 rounded-full border border-black/30 hover:border-[#BFEFFF] hover:bg-[#BFEFFF] hover:text-[#1C6F8E] transition-all duration-200 cursor-pointer whitespace-nowrap"
-              >
-                BUAT LAPORAN
-              </button>
-              <button
-                type="button"
-                onClick={(e) => scrollToSection(e, 'safety')}
-                className="px-3.5 xl:px-5 py-1.5 rounded-full transition-all duration-200 hover:bg-[#BFEFFF] hover:text-[#1C6F8E] cursor-pointer whitespace-nowrap"
-              >
-                KEAMANAN
-              </button>
-              <button
-                type="button"
-                onClick={(e) => scrollToSection(e, 'faq')}
-                className="px-3.5 xl:px-5 py-1.5 rounded-full transition-all duration-200 hover:bg-[#BFEFFF] hover:text-[#1C6F8E] cursor-pointer whitespace-nowrap"
-              >
-                FAQ
-              </button>
+            {/* ─── CENTER NAVIGATION BAR (EDITORIAL SLIDING PILL CAPSULE) ─── */}
+            <div
+              ref={navContainerRef}
+              onMouseLeave={handleNavMouseLeave}
+              className="hidden lg:flex items-center gap-3 xl:gap-6 text-[12px] xl:text-[13px] font-semibold tracking-wider select-none whitespace-nowrap absolute left-1/2 -translate-x-1/2 z-10 py-1"
+            >
+              {/* Sliding Pill Capsule Outline — Sesuai Gambar Referensi (Pure Stroke Capsule) */}
+              <span
+                className="absolute top-1/2 -translate-y-1/2 h-[34px] rounded-full border-[1.5px] border-black bg-transparent pointer-events-none transition-all duration-300 ease-out"
+                style={{
+                  transform: `translateX(${pillStyle.left}px) translateY(-50%)`,
+                  left: 0,
+                  width: `${pillStyle.width}px`,
+                  opacity: pillStyle.opacity,
+                }}
+              />
+
+              {NAV_ITEMS.map((item) => {
+                const isCurrent = hoveredNav === item.id || (!hoveredNav && activeNav === item.id);
+                return (
+                  <button
+                    key={item.id}
+                    ref={(el) => {
+                      navItemRefs.current[item.id] = el;
+                    }}
+                    type="button"
+                    onClick={(e) => {
+                      if (item.type === 'action') {
+                        handleReportAction(e, '/buat-laporan');
+                      } else {
+                        scrollToSection(e, item.id);
+                      }
+                    }}
+                    onMouseEnter={() => handleNavMouseEnter(item.id)}
+                    className="relative z-10 px-4 xl:px-5 py-1.5 rounded-full transition-colors duration-200 cursor-pointer whitespace-nowrap text-black hover:text-black flex items-center gap-1"
+                  >
+                    <span>{item.label}</span>
+                    {item.hasArrow && (
+                      <span className="text-[12px] xl:text-[13px] font-normal leading-none inline-block -mt-0.5">
+                        ↗
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
 
             {/* Right Action / Auth Buttons — Mentok ke kanan */}
@@ -428,51 +496,32 @@ export const LandingPage = () => {
           {/* Mobile Navigation Drawer */}
           {mobileMenuOpen && (
             <div className="lg:hidden px-6 pt-4 pb-6 border-t space-y-3 animate-fade-in" style={{ borderColor: '#BFEFFF', background: '#FFFFFF' }}>
-              <div className="flex flex-col gap-2 text-[13px] font-bold tracking-wider text-black">
-                <button
-                  type="button"
-                  onClick={(e) => scrollToSection(e, 'mission')}
-                  className="text-left px-3 py-1.5 rounded-full hover:bg-[#BFEFFF] hover:text-[#1C6F8E] transition cursor-pointer"
-                >
-                  TENTANG
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => scrollToSection(e, 'categories')}
-                  className="text-left px-3 py-1.5 rounded-full hover:bg-[#BFEFFF] hover:text-[#1C6F8E] transition cursor-pointer"
-                >
-                  7 KATEGORI
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => scrollToSection(e, 'how-it-works')}
-                  className="text-left px-3 py-1.5 rounded-full hover:bg-[#BFEFFF] hover:text-[#1C6F8E] transition cursor-pointer"
-                >
-                  ALUR PENANGANAN
-                </button>
-                <div>
-                  <button
-                    type="button"
-                    onClick={(e) => { setMobileMenuOpen(false); handleReportAction(e, '/buat-laporan'); }}
-                    className="inline-block px-4 py-1.5 rounded-full border border-black/30 hover:border-[#BFEFFF] hover:bg-[#BFEFFF] hover:text-[#1C6F8E] transition cursor-pointer"
-                  >
-                    BUAT LAPORAN
-                  </button>
-                </div>
-                <button
-                  type="button"
-                  onClick={(e) => scrollToSection(e, 'safety')}
-                  className="text-left px-3 py-1.5 rounded-full hover:bg-[#BFEFFF] hover:text-[#1C6F8E] transition cursor-pointer"
-                >
-                  KEAMANAN
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => scrollToSection(e, 'faq')}
-                  className="text-left px-3 py-1.5 rounded-full hover:bg-[#BFEFFF] hover:text-[#1C6F8E] transition cursor-pointer"
-                >
-                  FAQ
-                </button>
+              <div className="flex flex-col gap-1.5 text-[13px] font-bold tracking-wider text-black">
+                {NAV_ITEMS.map((item) => {
+                  const isCurrent = activeNav === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={(e) => {
+                        setMobileMenuOpen(false);
+                        if (item.type === 'action') {
+                          handleReportAction(e, '/buat-laporan');
+                        } else {
+                          scrollToSection(e, item.id);
+                        }
+                      }}
+                      className={`text-left px-4 py-2 rounded-full border transition-all cursor-pointer flex items-center justify-between ${
+                        isCurrent
+                          ? 'border-[1.5px] border-black text-black font-semibold bg-transparent'
+                          : 'border-transparent text-black hover:border-[1.5px] hover:border-black'
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      {item.hasArrow && <span className="text-[12px] font-normal leading-none">↗</span>}
+                    </button>
+                  );
+                })}
 
                 <div className="pt-3 border-t flex flex-col gap-2" style={{ borderColor: '#BFEFFF' }}>
                   {!currentUser ? (
