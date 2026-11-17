@@ -279,21 +279,6 @@ export const TrackReport = () => {
         {/* ========================================================================= */}
         {viewMode === 'overview' && (
           <div className="space-y-8 animate-fade-in">
-            {/* Top Pill Badge */}
-            <div className="flex justify-center">
-              <div
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold border shadow-xs"
-                style={{
-                  background: '#BFEFFF',
-                  color: '#1C6F8E',
-                  borderColor: '#BFEFFF'
-                }}
-              >
-                <Lock className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                <span>Pelacakan Aman &amp; Anonim Tanpa Perlu Masuk</span>
-              </div>
-            </div>
-
             {/* Title & Description */}
             <div className="text-center space-y-2 max-w-2xl mx-auto">
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
