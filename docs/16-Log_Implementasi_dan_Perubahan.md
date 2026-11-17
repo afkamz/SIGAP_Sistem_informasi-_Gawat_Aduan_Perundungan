@@ -1857,11 +1857,19 @@ Penambahan dan pelacakan berkas video latar belakang `cube-background.mp4` dan `
 | 2 | `TAMBAH` | `public/assets/background/sigap-background.mp4` | Video latar belakang sinematik sistem SIGAP pada direktori root publik |
 | 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 128 sinkronisasi aset video latar belakang repositori GitHub |
 
-## 📅 [Sesi 129] Senin, 17 November 2026 — Jam 18 WIB
+---
 
-**Fokus Utama:** Perbaikan tampilan video background Landing Page dan cube 3D yang tidak muncul akibat `Frontend/dist/` belum diperbarui. Rebuild frontend berhasil menyertakan semua aset video ke dalam dist.
+## 📅 [Sesi 129] Selasa, 17 November 2026 — Jam 18 WIB
+
+### Fokus Utama
+Perbaikan animasi section "Tentang Sistem SIGAP" agar tidak ada ruang kosong berlebih — tinggi section diperpendek, kartu masuk lebih awal dan lebih cepat, dan teks judul hanya bergerak sedikit di awal scroll.
+
+### Ringkasan Perubahan Berkas
 
 | No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
 |:--:|:---------:|---|---|
-| 1 | `EDIT` | `Frontend/dist/` (rebuild) | Build ulang seluruh frontend agar aset video `/assets/background/*.mp4` dan `/assets/cube/*.mp4` tersedia di dist untuk disajikan nginx |
-| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 129 perbaikan video background |
+| 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Kurangi tinggi section dari 320vh/360vh → 230vh/270vh, percepat timing animasi teks (0.00–0.12), kurangi startTranslateY, kartu masuk lebih awal (flightP 0.04–0.65) |
+| 2 | `EDIT` | `Frontend/nginx.conf` | Konfigurasi penanganan video MP4 streaming byte-range (`Accept-Ranges`, `sendfile`) dan proteksi fallback 404 aset statis |
+| 3 | `TAMBAH` | `Frontend/.dockerignore` | Pengecualian node_modules, dist, dan file log agar build Docker frontend bersih dan cepat |
+| 4 | `TAMBAH` | `.dockerignore` | Pengecualian root konteks build Docker |
+| 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 129 perbaikan animasi ruang kosong section About dan konfigurasi streaming video Docker |

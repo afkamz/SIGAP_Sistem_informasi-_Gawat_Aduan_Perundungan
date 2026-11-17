@@ -170,8 +170,8 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
       // ─── 0. EDITORIAL TYPOGRAPHY SCROLL ANIMATION (JUDUL SECTION) ───
       // Bergerak dari posisi tengah/bawah naik ke atas (progress 0.00 hingga 0.20)
       if (titleWrapperRef.current) {
-        const titleProgress = smoothStep(0.00, 0.20, progress);
-        const startTranslateY = isMobile ? viewportHeight * 0.12 : Math.min(180, viewportHeight * 0.18);
+        const titleProgress = smoothStep(0.00, 0.12, progress);
+        const startTranslateY = isMobile ? viewportHeight * 0.07 : Math.min(80, viewportHeight * 0.09);
         const currentTranslateY = startTranslateY * (1.0 - titleProgress);
 
         titleWrapperRef.current.style.transform = `translate3d(0, ${currentTranslateY.toFixed(1)}px, 0)`;
@@ -187,7 +187,7 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
       // ─── 1. HORIZONTAL TRACK PAN DARI KIRI KE KANAN ───
       // Begitu teks bergerak setengah ke atas (progress = 0.10, yaitu 50% dari interval teks 0.00 - 0.20),
       // deretan kartu langsung meluncur masuk dari kiri ke kanan agar layar tidak kosong!
-      const flightP = smoothStep(0.10, 0.85, progress);
+      const flightP = smoothStep(0.04, 0.65, progress);
       const currentTrackX = startX + (endX - startX) * flightP;
 
       trackRef.current.style.transform = `translate3d(${currentTrackX.toFixed(1)}px, 0px, 0px)`;
@@ -270,7 +270,7 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
     <section
       id="about"
       ref={sectionRef}
-      className="about-editorial-section relative w-full h-[320vh] lg:h-[360vh]"
+      className="about-editorial-section relative w-full h-[230vh] lg:h-[270vh]"
       style={{ overflow: 'visible', background: '#FFFFFF' }}
     >
       {/* ─── Pinned Viewport Container (100dvh) ─── */}
