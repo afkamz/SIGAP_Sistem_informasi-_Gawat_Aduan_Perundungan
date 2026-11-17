@@ -8,7 +8,8 @@ import {
   ArrowRight,
   ArrowLeft,
   SearchCheck,
-  Info
+  Info,
+  Headphones
 } from 'lucide-react';
 import { api } from '../../services/api';
 import { useStore } from '../../context/StoreContext';
@@ -20,6 +21,7 @@ export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const { loginUser } = useStore();
@@ -31,9 +33,15 @@ export const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMsg('');
+    setEmailError('');
 
-    if (!identifier.trim() || !password) {
-      setErrorMsg('Harap isi NISN dan Kata Sandi.');
+    if (!identifier.trim()) {
+      setEmailError('Silakan masukkan alamat email atau NISN Anda.');
+      return;
+    }
+
+    if (!password) {
+      setErrorMsg('Silakan masukkan kata sandi Anda.');
       return;
     }
 
@@ -75,159 +83,140 @@ export const Login = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex flex-col font-sans relative"
-      style={{ background: '#FFFFFF', color: '#1C6F8E' }}
-    >
+    <div className="min-h-screen bg-white text-[#111827] flex flex-col font-sans relative">
+      {/* ─── NAVBAR TANPA GARIS PEMBATAS ─── */}
       <StudentHeader hideBorder={true} />
 
-      {/* Main Login Content */}
-      <main className="max-w-md mx-auto w-full px-4 py-8 lg:py-12 flex flex-col justify-center items-center relative z-20 flex-1">
-        {/* Tombol Kembali ke Halaman Utama */}
-        <div className="w-full flex justify-start mb-4">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-full transition border hover:opacity-90"
-            style={{
-              background: '#FFFFFF',
-              color: '#1C6F8E',
-              borderColor: '#BFEFFF'
-            }}
-          >
-            <ArrowLeft className="w-3.5 h-3.5 text-[#1C6F8E]" />
-            <span>Kembali ke Halaman Utama</span>
-          </Link>
-        </div>
+      {/* ─── MAIN CONTENT: TAMPILAN LOGIN MINIMALIS FLAT SESUAI REFERENSI ─── */}
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-8 sm:py-12 relative z-20">
+        <div className="w-full max-w-[420px] space-y-5">
+          {/* Tombol Kembali ke Halaman Utama */}
+          <div className="w-full flex justify-start">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-full transition border hover:opacity-90"
+              style={{
+                background: '#FFFFFF',
+                color: '#1C6F8E',
+                borderColor: '#BFEFFF'
+              }}
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-[#1C6F8E]" />
+              <span>Kembali ke Halaman Utama</span>
+            </Link>
+          </div>
 
-        {/* Card Login / Akses Masuk */}
-        <div className="w-full">
-          <div
-            className="p-7 lg:p-8 rounded-3xl border space-y-5"
-            style={{
-              background: '#FFFFFF',
-              borderColor: '#BFEFFF',
-              boxShadow: '0 24px 70px rgba(191, 239, 255, 0.45)'
-            }}
-          >
-            <div className="flex items-center gap-3 pb-3 border-b" style={{ borderColor: '#BFEFFF' }}>
-              <div
-                className="w-11 h-11 rounded-2xl flex items-center justify-center border shadow-xs"
-                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-              >
-                <Shield className="w-6 h-6 text-[#1C6F8E]" />
-              </div>
-              <div>
-                <h3 className="text-xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
-                  Masuk Portal Siswa
-                </h3>
-                <p className="text-xs" style={{ color: '#2E84A5' }}>
-                  Silakan masuk dengan akun siswa terdaftar Anda.
+          {/* Judul: Login Email (Persis Referensi) */}
+          <div className="text-left w-full pt-1">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111827]">
+              Login Email
+            </h1>
+          </div>
+
+          {isFromReport && (
+            <div
+              className="p-3.5 rounded-2xl text-xs flex items-start gap-2.5 border text-left"
+              style={{
+                background: 'rgba(191, 239, 255, 0.35)',
+                borderColor: '#BFEFFF',
+                color: '#1C6F8E'
+              }}
+            >
+              <Info className="w-4 h-4 text-[#1C6F8E] shrink-0 mt-0.5" />
+              <span>
+                <strong>Akses Buat Aduan:</strong> Harap masuk atau buat akun terlebih dahulu agar dapat membuat dan memantau laporan aduan Anda secara aman.
+              </span>
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} className="space-y-4">
+            {/* Input: Alamat email */}
+            <div className="text-left">
+              <label className="block text-xs font-medium text-slate-500 mb-1.5">
+                Alamat email
+              </label>
+              <input
+                type="text"
+                value={identifier}
+                onChange={(e) => {
+                  setIdentifier(e.target.value);
+                  if (emailError) setEmailError('');
+                }}
+                placeholder=""
+                className={`w-full px-3.5 py-3 rounded-md text-sm border focus:outline-none transition ${
+                  emailError || (errorMsg && !identifier)
+                    ? 'border-red-400 bg-red-50/20'
+                    : 'border-slate-300 focus:border-slate-500'
+                }`}
+              />
+              {emailError && (
+                <p className="text-xs text-red-500 mt-1.5 flex items-center gap-1">
+                  <span>ⓘ</span>
+                  <span>{emailError}</span>
                 </p>
+              )}
+            </div>
+
+            {/* Input: kata sandi */}
+            <div className="text-left">
+              <label className="block text-xs font-medium text-slate-500 mb-1.5">
+                kata sandi
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder=""
+                  className="w-full pl-3.5 pr-10 py-3 rounded-md text-sm border border-slate-300 focus:border-slate-500 focus:outline-none transition"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              <div className="mt-1.5">
+                <Link
+                  to="/lupa-sandi"
+                  className="text-xs text-slate-400 hover:text-slate-600 transition"
+                >
+                  Lupa kata sandi Anda?
+                </Link>
               </div>
             </div>
 
-            {isFromReport && (
-              <div
-                className="p-3.5 rounded-2xl text-xs flex items-start gap-2.5 border"
-                style={{
-                  background: 'rgba(191, 239, 255, 0.35)',
-                  borderColor: '#BFEFFF',
-                  color: '#1C6F8E'
-                }}
-              >
-                <Info className="w-4 h-4 text-[#1C6F8E] shrink-0 mt-0.5" />
-                <span>
-                  <strong>Akses Buat Aduan:</strong> Harap masuk atau daftar terlebih dahulu agar dapat membuat dan memantau laporan aduan Anda secara aman.
-                </span>
-              </div>
-            )}
-
+            {/* Error Message Global */}
             {errorMsg && (
-              <div
-                className="p-3.5 rounded-2xl text-xs font-semibold animate-fade-in border"
-                style={{
-                  background: '#FFF5F5',
-                  borderColor: '#FEB2B2',
-                  color: '#C53030'
-                }}
-              >
-                {errorMsg}
-              </div>
+              <p className="text-xs text-red-500 flex items-center gap-1 text-left">
+                <span>ⓘ</span>
+                <span>{errorMsg}</span>
+              </p>
             )}
 
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#1C6F8E' }}>
-                    NISN (Nomor Induk Siswa Nasional) *
-                  </label>
-                  <span className="text-[11px]" style={{ color: '#2E84A5' }}>10 Digit</span>
-                </div>
-                <input
-                  type="text"
-                  required
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  placeholder="Contoh: 1234567890"
-                  className="w-full px-4 py-3 rounded-2xl text-xs sm:text-sm focus:outline-none border"
-                  style={{
-                    background: '#FFFFFF',
-                    color: '#1C6F8E',
-                    borderColor: '#BFEFFF'
-                  }}
-                />
-              </div>
+            {/* Checkbox Ingat Sesi */}
+            <div className="flex items-center gap-2 pt-1 text-left">
+              <input
+                type="checkbox"
+                id="rememberMe"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="rounded border-slate-300 text-[#1C6F8E] focus:ring-[#BFEFFF]"
+              />
+              <label htmlFor="rememberMe" className="text-xs text-slate-600 cursor-pointer">
+                Ingat sesi saya di perangkat ini
+              </label>
+            </div>
 
-              <div>
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="text-xs font-bold uppercase tracking-wider" style={{ color: '#1C6F8E' }}>
-                    Kata Sandi *
-                  </label>
-                  <a href="#/lupa-sandi" className="text-[11px] font-bold hover:underline" style={{ color: '#1C6F8E' }}>
-                    Lupa kata sandi?
-                  </a>
-                </div>
-                <div className="relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Masukkan kata sandi"
-                    className="w-full pl-4 pr-10 py-3 rounded-2xl text-xs sm:text-sm focus:outline-none border"
-                    style={{
-                      background: '#FFFFFF',
-                      color: '#1C6F8E',
-                      borderColor: '#BFEFFF'
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="rememberMe"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="rounded border-[#BFEFFF] text-[#1C6F8E] focus:ring-[#BFEFFF]"
-                />
-                <label htmlFor="rememberMe" className="text-xs cursor-pointer" style={{ color: '#2E84A5' }}>
-                  Ingat sesi saya di perangkat ini
-                </label>
-              </div>
-
+            {/* ─── TOMBOL AKSI (DIPERTAHANKAN SESUAI PERMINTAAN) ─── */}
+            <div className="pt-2 space-y-2.5">
+              {/* Tombol Utama: Masuk */}
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3.5 px-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50 border hover:opacity-90 shadow-xs cursor-pointer transition active:scale-95"
+                className="w-full py-3.5 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50 border hover:opacity-90 shadow-xs cursor-pointer transition active:scale-95"
                 style={{
                   background: '#BFEFFF',
                   color: '#1C6F8E',
@@ -237,51 +226,59 @@ export const Login = () => {
                 <span>{isLoading ? 'Memverifikasi Sesi...' : 'Masuk ke Portal Siswa'}</span>
                 <ArrowRight className="w-4 h-4 text-[#1C6F8E]" />
               </button>
-            </form>
 
-            <div className="text-center text-xs" style={{ color: '#2E84A5' }}>
-              Belum memiliki akun siswa?{' '}
+              {/* Tombol: Buat akun */}
               <Link
                 to={redirectTarget ? `/register?redirect=${encodeURIComponent(redirectTarget)}` : '/register'}
-                className="font-bold hover:underline"
-                style={{ color: '#1C6F8E' }}
-              >
-                Daftar akun di sini →
-              </Link>
-            </div>
-
-            {/* Pembatas Atau */}
-            <div className="relative flex py-1 items-center">
-              <div className="flex-grow border-t" style={{ borderColor: '#BFEFFF' }} />
-              <span className="flex-shrink mx-3 text-[10px] font-bold uppercase tracking-wider" style={{ color: '#2E84A5' }}>
-                Atau
-              </span>
-              <div className="flex-grow border-t" style={{ borderColor: '#BFEFFF' }} />
-            </div>
-
-            {/* Lacak Tanpa Login Button */}
-            <div className="space-y-1.5">
-              <Link
-                to="/lacak"
-                className="w-full py-2.5 px-4 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 transition border hover:opacity-90"
+                className="w-full py-3 px-4 rounded-xl font-bold text-sm border flex items-center justify-center transition hover:bg-slate-50 cursor-pointer"
                 style={{
                   background: '#FFFFFF',
                   color: '#1C6F8E',
                   borderColor: '#BFEFFF'
                 }}
               >
-                <SearchCheck className="w-4 h-4 text-[#1C6F8E]" />
-                <span>Lacak Status Laporan Tanpa Login</span>
+                Buat akun
               </Link>
-              <p className="text-[11px] text-center" style={{ color: '#2E84A5' }}>
-                Punya Kode Tiket Aduan? Periksa progres penanganan secara transparan di sini.
-              </p>
             </div>
+          </form>
 
-            <div className="pt-3 border-t flex items-start gap-2 text-[11px] leading-relaxed" style={{ borderColor: '#BFEFFF', color: '#2E84A5' }}>
-              <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5 text-[#1C6F8E]" />
-              <span>Data Anda dienkripsi dan diproteksi sesuai standar perlindungan kerahasiaan data anak.</span>
-            </div>
+          {/* Pembatas Atau */}
+          <div className="relative flex py-1 items-center">
+            <div className="flex-grow border-t border-slate-200" />
+            <span className="flex-shrink mx-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              Atau
+            </span>
+            <div className="flex-grow border-t border-slate-200" />
+          </div>
+
+          {/* Tombol: Lacak Status Laporan Tanpa Login */}
+          <div className="space-y-1.5">
+            <Link
+              to="/lacak"
+              className="w-full py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition border hover:opacity-90"
+              style={{
+                background: '#FFFFFF',
+                color: '#1C6F8E',
+                borderColor: '#BFEFFF'
+              }}
+            >
+              <SearchCheck className="w-4 h-4 text-[#1C6F8E]" />
+              <span>Lacak Status Laporan Tanpa Login</span>
+            </Link>
+            <p className="text-[11px] text-center text-slate-400">
+              Punya Kode Tiket Aduan? Periksa progres penanganan secara transparan di sini.
+            </p>
+          </div>
+
+          {/* Link Bantuan: Apakah Anda mengalami kesulitan saat masuk? (Persis Referensi) */}
+          <div className="pt-4 text-center">
+            <Link
+              to="/lacak"
+              className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-600 hover:underline transition"
+            >
+              <Headphones className="w-3.5 h-3.5 text-slate-400" />
+              <span>Apakah Anda mengalami kesulitan saat masuk?</span>
+            </Link>
           </div>
         </div>
       </main>

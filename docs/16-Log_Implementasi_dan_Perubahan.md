@@ -1959,3 +1959,17 @@ Penyempurnaan laman login siswa dengan meniadakan garis pembatas navbar serta me
 | 1 | `EDIT` | `Frontend/src/components/layout/StudentHeader.jsx` | Penambahan dukungan properti hideBorder untuk meniadakan garis pembatas dan bayangan navbar |
 | 2 | `EDIT` | `Frontend/src/pages/student/Login.jsx` | Penerapan hideBorder pada navbar dan penghapusan komponen footer |
 | 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 135 penghapusan garis pembatas navbar dan footer login |
+
+---
+
+## 📅 [Sesi 136] Selasa, 17 November 2026 — Jam 20 WIB
+
+### Fokus Utama
+Penyesuaian tata letak laman login siswa persis referensi SM Entertainment — tata letak flat minimalis tanpa card border, judul Login Email rata kiri, input field minimalis, dengan mempertahankan seluruh tombol dan fungsionalitas yang ada.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/student/Login.jsx` | Implementasi antarmuka login flat minimalis persis referensi tanpa card border dengan mempertahankan semua tombol |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 136 penyesuaian desain login minimalis persis referensi |
