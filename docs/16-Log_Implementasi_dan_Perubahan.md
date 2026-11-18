@@ -2271,3 +2271,20 @@ Implementasi animasi transisi halus dan muncul bergantian (staggered delay) pada
 | 1 | `EDIT` | `Frontend/src/components/charts/DashboardCharts.jsx` | Konfigurasi animasi ECharts kubik dan sinkronisasi render ulang melalui prop syncKey pada komponen TrendLineChart |
 | 2 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Pembuatan komponen AnimatedCategoryRow dengan staggered delay, animasi count-up kasus, dan ekspansi dinamis progress bar 7 kategori kekerasan |
 | 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 156 implementasi animasi muncul bergantian pada tren kasus dan 7 kategori distribusi |
+
+---
+
+## 📅 [Sesi 157] Rabu, 18 November 2026 — Jam 07 WIB
+
+### Fokus Utama
+Pembaruan media permukaan kubus 3D interaktif pada Landing Page dengan mengganti video-1, video-2, dan video-5 menggunakan foto-foto baru (photo-2, photo-3, dan photo-5).
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Konfigurasi permukaan sisi front, back, dan top kubus dari video ke foto statis resolusi tinggi |
+| 2 | `TAMBAH` | `Frontend/public/assets/cube/photo-2.jpg` | Berkas aset foto baru untuk permukaan sisi depan (front) kubus 3D |
+| 3 | `TAMBAH` | `Frontend/public/assets/cube/photo-3.jpg` | Berkas aset foto baru untuk permukaan sisi belakang (back) kubus 3D |
+| 4 | `TAMBAH` | `Frontend/public/assets/cube/photo-5.jpg` | Berkas aset foto baru untuk permukaan sisi atas (top) kubus 3D |
+| 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 157 pembaruan media foto pada kubus 3D landing page |

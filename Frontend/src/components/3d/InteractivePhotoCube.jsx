@@ -32,8 +32,8 @@ import React, { useEffect, useRef } from 'react';
 export const DEFAULT_CUBE_FACES = [
   {
     id: 'front',
-    type: 'video',
-    mediaSrc: '/assets/cube/video-1.mp4',
+    type: 'image',
+    mediaSrc: '/assets/cube/photo-2.jpg',
     label: 'SURFACE 01',
     title: 'SUARAKAN KEBENARAN',
     subtitle: 'Keberanian Melangkah Bersama',
@@ -44,8 +44,8 @@ export const DEFAULT_CUBE_FACES = [
   },
   {
     id: 'back',
-    type: 'video',
-    mediaSrc: '/assets/cube/video-2.mp4',
+    type: 'image',
+    mediaSrc: '/assets/cube/photo-3.jpg',
     label: 'SURFACE 02',
     title: 'ANONYMOUS SHIELD',
     subtitle: 'Kerahasiaan Data Terenkripsi',
@@ -80,8 +80,8 @@ export const DEFAULT_CUBE_FACES = [
   },
   {
     id: 'top',
-    type: 'video',
-    mediaSrc: '/assets/cube/video-5.mp4',
+    type: 'image',
+    mediaSrc: '/assets/cube/photo-5.jpg',
     label: 'SURFACE 05',
     title: 'SAFE SANCTUARY',
     subtitle: 'Ruang Pendidikan Merdeka',
