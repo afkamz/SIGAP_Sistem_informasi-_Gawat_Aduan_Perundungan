@@ -173,10 +173,10 @@ export const Login = () => {
             </Link>
           </div>
 
-          {/* Judul: Login Email (Persis Referensi) */}
+          {/* Judul: Login Siswa */}
           <div className="text-left w-full pt-1">
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111827]">
-              Login Email
+              Login Siswa
             </h1>
           </div>
 

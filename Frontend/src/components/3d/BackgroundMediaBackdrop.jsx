@@ -21,18 +21,17 @@ export const BackgroundMediaBackdrop = ({
   className = '',
   layerRef = null // Direct DOM ref untuk zero-overhead RAF transform updates
 }) => {
-  // Deteksi otomatis format jika type === 'auto'
+  // Deteksi otomatis format secara cerdas (ekstensi file mengabaikan query string)
+  const cleanSrc = typeof src === 'string' ? src.split('?')[0].toLowerCase() : '';
   const isVideo =
     type === 'video' ||
     (type === 'auto' &&
-      typeof src === 'string' &&
-      (src.endsWith('.mp4') || src.endsWith('.webm') || src.endsWith('.ogg')));
+      (cleanSrc.endsWith('.mp4') || cleanSrc.endsWith('.webm') || cleanSrc.endsWith('.mov') || cleanSrc.endsWith('.ogg')));
 
   const isImage =
     type === 'image' ||
     (type === 'auto' &&
-      typeof src === 'string' &&
-      (src.endsWith('.jpg') || src.endsWith('.jpeg') || src.endsWith('.png') || src.endsWith('.webp') || src.endsWith('.svg')));
+      (cleanSrc.endsWith('.jpg') || cleanSrc.endsWith('.jpeg') || cleanSrc.endsWith('.png') || cleanSrc.endsWith('.webp') || cleanSrc.endsWith('.svg')));
 
   // Efek transisi skala dan opasitas halus berbasis scroll (Scene 01 -> Scene 05)
   const scale = (1 + scrollProgress * 0.08).toFixed(3);
@@ -60,7 +59,17 @@ export const BackgroundMediaBackdrop = ({
             loop
             muted
             playsInline
-            preload="metadata"
+            preload="auto"
+            ref={(el) => {
+              if (el) {
+                el.defaultMuted = true;
+                el.muted = true;
+                if (el.paused) el.play().catch(() => {});
+              }
+            }}
+            onLoadedData={(e) => {
+              e.target.play().catch(() => {});
+            }}
             className="w-full h-full object-cover brightness-105"
           />
         ) : isImage && src ? (

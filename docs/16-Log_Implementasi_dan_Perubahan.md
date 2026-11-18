@@ -2316,3 +2316,114 @@ Pembersihan antarmuka header hero dashboard admin dengan menghapus elemen badge 
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Penghapusan badge kapsul status "Panel Monitoring Insiden & Layanan Terpadu" pada hero greeting dashboard admin |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 159 pembersihan badge judul panel pada hero dashboard admin |
+
+---
+
+## 📅 [Sesi 160] Rabu, 18 November 2026 — Jam 09 WIB
+
+### Fokus Utama
+Optimasi performa rendering menyeluruh di seluruh aplikasi melalui manajemen siklus hidup pemutaran video berbasis viewport IntersectionObserver, eliminasi repaint CPU pada CSS background-attachment, dan penghapusan beban backdrop blur berat pada video hero.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Integrasi kontrol otomatis pause/play video 3D dan pengurangan overhead preload media |
+| 2 | `EDIT` | `Frontend/src/components/3d/BackgroundMediaBackdrop.jsx` | Penerapan IntersectionObserver untuk menjeda video latar belakang berat saat berada di luar viewport |
+| 3 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Sinkronisasi pause otomatis pemutaran video latar kategori saat tidak terlihat di layar pengguna |
+| 4 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Penghentian beban decode video hero saat scroll ke tabel dan eliminasi backdropFilter blur berat |
+| 5 | `EDIT` | `Frontend/src/pages/student/StudentDashboard.jsx` | Manajemen pemutaran hemat sumber daya pada video hero sambutan siswa berbasis IntersectionObserver |
+| 6 | `EDIT` | `Frontend/src/index.css` | Penghapusan background-attachment fixed untuk mengaktifkan GPU compositing mulus pada scroll |
+| 7 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 160 optimasi performa menyeluruh web agar bebas lag dan 60 FPS |
+
+---
+
+## 📅 [Sesi 161] Rabu, 18 November 2026 — Jam 10 WIB
+
+### Fokus Utama
+Penambahan wadah ikon resmi (Shield) pada Card 1 (Filosofi & Regulasi) di seksi Tentang Sistem SIGAP Landing Page agar selaras dan konsisten dengan Card 2, 3, dan 4.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Penambahan ikon Shield berlatar putih dengan border presisi pada header Card 1 Filosofi & Regulasi |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 161 penambahan ikon pada Card 1 seksi Tentang Sistem SIGAP |
+
+---
+
+## 📅 [Sesi 162] Rabu, 18 November 2026 — Jam 10 WIB
+
+### Fokus Utama
+Implementasi integrasi berkas video latar belakang baru (cube-background dan sigap-background) serta optimasi pemutaran autoplay video kubus 3D dan backdrop Landing Page.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/public/assets/background/cube-background.mp4` | Penggantian aset video baru latar belakang hero di belakang kubus 3D |
+| 2 | `EDIT` | `Frontend/public/assets/background/sigap-background.mp4` | Penggantian aset video baru latar belakang sinematik seksi 7 Bentuk Kekerasan dan Keamanan |
+| 3 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Konfigurasi jaminan autoplay (defaultMuted & onLoadedData) pada pemutaran video kubus 3D |
+| 4 | `EDIT` | `Frontend/src/components/3d/BackgroundMediaBackdrop.jsx` | Peningkatan keandalan pemutaran otomatis dan preload auto pada video backdrop hero |
+| 5 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penyesuaian opasitas overlay scrim dan keandalan pemutaran video sigap-background |
+| 6 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 162 implementasi video kubus dan latar belakang baru |
+
+---
+
+## 📅 [Sesi 163] Rabu, 18 November 2026 — Jam 11 WIB
+
+### Fokus Utama
+Implementasi deteksi otomatis format media (foto/video) cerdas pada kubus 3D agar file foto dan video selalu terbaca tanpa error tipe, serta pencegahan browser caching pada konfigurasi Nginx Docker.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Implementasi fungsi isVideoMedia otomatis berbasis ekstensi berkas video/gambar dan penanganan fallback onError |
+| 2 | `EDIT` | `Frontend/src/components/3d/BackgroundMediaBackdrop.jsx` | Peningkatan deteksi ekstensi berkas media dengan pengabaian query string |
+| 3 | `EDIT` | `Frontend/nginx.conf` | Penggantian header Cache-Control aset media ke no-cache must-revalidate untuk memastikan browser selalu memuat aset terbaru di Docker |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 163 auto-detect format foto/video kubus dan no-cache Nginx Docker |
+
+---
+
+## 📅 [Sesi 164] Rabu, 18 November 2026 — Jam 11 WIB
+
+### Fokus Utama
+Penyelarasan berkas video baru kubus 3D (video-4 dan video-5) ke direktori aset frontend publik serta pembaruan dan rebuild container Docker frontend.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/public/assets/cube/video-4.mp4` | Pembaruan berkas video-4 versi baru pada direktori aset kubus 3D frontend |
+| 2 | `TAMBAH` | `Frontend/public/assets/cube/video-5.mp4` | Penambahan berkas video-5 versi baru pada direktori aset kubus 3D frontend |
+| 3 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Konfigurasi permukaan atas kubus (top) menjadi video-5 menggantikan foto statis |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 164 sinkronisasi video kubus baru dan rebuild Docker |
+
+---
+
+## 📅 [Sesi 165] Rabu, 18 November 2026 — Jam 11 WIB
+
+### Fokus Utama
+Penerapan cache-busting versioning query string pada tautan aset kubus 3D untuk memaksa pembaruan cache media video pada Google Chrome.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Penambahan cache-busting versioning parameter pada konfigurasi seluruh media kubus 3D |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 165 cache-busting Chrome media cache kubus 3D |
+
+---
+
+## 📅 [Sesi 166] Rabu, 18 November 2026 — Jam 13 WIB
+
+### Fokus Utama
+Pembaruan teks judul pada laman autentikasi siswa dari "Login Email" menjadi "Login Siswa".
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/student/Login.jsx` | Penggantian teks heading utama dari "Login Email" menjadi "Login Siswa" |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 166 pembaruan judul login siswa |

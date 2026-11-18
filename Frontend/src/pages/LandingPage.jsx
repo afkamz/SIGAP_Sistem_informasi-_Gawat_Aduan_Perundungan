@@ -876,7 +876,17 @@ export const LandingPage = () => {
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
+          ref={(el) => {
+            if (el) {
+              el.defaultMuted = true;
+              el.muted = true;
+              if (el.paused) el.play().catch(() => {});
+            }
+          }}
+          onLoadedData={(e) => {
+            e.target.play().catch(() => {});
+          }}
           style={{
             position: 'absolute',
             top: 0,
@@ -895,7 +905,7 @@ export const LandingPage = () => {
         <div
           className="absolute inset-0 pointer-events-none z-1"
           style={{
-            background: 'rgba(255, 255, 255, 0.92)'
+            background: 'rgba(255, 255, 255, 0.82)'
           }}
         />
 

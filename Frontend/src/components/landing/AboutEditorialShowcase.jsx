@@ -594,8 +594,13 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
                 <div className="w-1.5 h-1.5 rounded-full bg-[#BFEFFF]" />
               </div>
               <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: '#062331' }} />
+                <div className="flex items-center justify-between mb-3">
+                  <div
+                    className="w-10 h-10 rounded-2xl flex items-center justify-center font-bold shadow-xs"
+                    style={{ background: '#FFFFFF', color: '#062331', border: '1px solid rgba(6, 35, 49, 0.15)' }}
+                  >
+                    <Shield className="w-5 h-5 text-[#062331]" />
+                  </div>
                   <span className="text-xs font-mono font-bold tracking-widest uppercase text-[#062331]">
                     01 // FILOSOFI &amp; REGULASI
                   </span>

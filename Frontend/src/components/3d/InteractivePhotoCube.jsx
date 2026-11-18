@@ -33,7 +33,7 @@ export const DEFAULT_CUBE_FACES = [
   {
     id: 'front',
     type: 'image',
-    mediaSrc: '/assets/cube/photo-2.jpg',
+    mediaSrc: '/assets/cube/photo-2.jpg?v=20261118',
     label: 'SURFACE 01',
     title: 'SUARAKAN KEBENARAN',
     subtitle: 'Keberanian Melangkah Bersama',
@@ -45,7 +45,7 @@ export const DEFAULT_CUBE_FACES = [
   {
     id: 'back',
     type: 'image',
-    mediaSrc: '/assets/cube/photo-3.jpg',
+    mediaSrc: '/assets/cube/photo-3.jpg?v=20261118',
     label: 'SURFACE 02',
     title: 'ANONYMOUS SHIELD',
     subtitle: 'Kerahasiaan Data Terenkripsi',
@@ -57,7 +57,7 @@ export const DEFAULT_CUBE_FACES = [
   {
     id: 'right',
     type: 'video',
-    mediaSrc: '/assets/cube/video-3.mp4',
+    mediaSrc: '/assets/cube/video-3.mp4?v=20261118',
     label: 'SURFACE 03',
     title: 'ZERO RETALIATION',
     subtitle: 'Proteksi Penuh Tanpa Takut',
@@ -69,7 +69,7 @@ export const DEFAULT_CUBE_FACES = [
   {
     id: 'left',
     type: 'video',
-    mediaSrc: '/assets/cube/video-4.mp4',
+    mediaSrc: '/assets/cube/video-4.mp4?v=20261118',
     label: 'SURFACE 04',
     title: 'AI SMART TRIASE',
     subtitle: 'Pemetaan Cerdas IndoBERT',
@@ -80,8 +80,8 @@ export const DEFAULT_CUBE_FACES = [
   },
   {
     id: 'top',
-    type: 'image',
-    mediaSrc: '/assets/cube/photo-5.jpg',
+    type: 'video',
+    mediaSrc: '/assets/cube/video-5.mp4?v=20261118',
     label: 'SURFACE 05',
     title: 'SAFE SANCTUARY',
     subtitle: 'Ruang Pendidikan Merdeka',
@@ -93,7 +93,7 @@ export const DEFAULT_CUBE_FACES = [
   {
     id: 'bottom',
     type: 'image',
-    mediaSrc: '/assets/cube/photo-1.jpg',
+    mediaSrc: '/assets/cube/photo-1.jpg?v=20261118',
     label: 'SURFACE 06',
     title: 'AUDIT & INTEGRITY',
     subtitle: 'Tindakan Terpercaya Satgas BK',
@@ -103,6 +103,36 @@ export const DEFAULT_CUBE_FACES = [
     quote: 'Audit trail digital transparan dan akuntabel.'
   }
 ];
+
+// Helper otomatis deteksi apakah media berjenis video atau foto (gambar) secara cerdas
+const isVideoMedia = (face) => {
+  if (!face || !face.mediaSrc) return false;
+  const cleanSrc = (face.mediaSrc || '').split('?')[0].toLowerCase();
+  // Deteksi ekstensi video umum
+  if (
+    cleanSrc.endsWith('.mp4') ||
+    cleanSrc.endsWith('.webm') ||
+    cleanSrc.endsWith('.mov') ||
+    cleanSrc.endsWith('.ogg') ||
+    cleanSrc.endsWith('.m4v')
+  ) {
+    return true;
+  }
+  // Deteksi ekstensi foto / gambar umum
+  if (
+    cleanSrc.endsWith('.jpg') ||
+    cleanSrc.endsWith('.jpeg') ||
+    cleanSrc.endsWith('.png') ||
+    cleanSrc.endsWith('.webp') ||
+    cleanSrc.endsWith('.svg') ||
+    cleanSrc.endsWith('.gif') ||
+    cleanSrc.endsWith('.avif')
+  ) {
+    return false;
+  }
+  // Fallback ke deklarasi type jika ekstensi tidak dikenali
+  return face.type === 'video';
+};
 
 // Helper interpolasi matematika smoothstep (Hermite easing)
 const smoothStep = (min, max, value) => {
@@ -508,31 +538,57 @@ export const InteractivePhotoCube = ({
                       outline: 'none'
                     }}
                   >
-                    {face.type === 'video' && face.mediaSrc ? (
-                      /* Permukaan Video Lokal */
-                      <div className="relative w-full h-full overflow-hidden bg-black pointer-events-none">
-                        <video
-                          src={face.mediaSrc}
-                          autoPlay
-                          muted
-                          loop
-                          playsInline
-                          preload="auto"
-                          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-                        />
-                      </div>
-                    ) : face.type === 'image' && face.mediaSrc ? (
-                      /* Permukaan Foto Statis Lokal */
-                      <div className="relative w-full h-full overflow-hidden bg-black pointer-events-none">
-                        <img
-                          src={face.mediaSrc}
-                          alt="SIGAP 3D Cube"
-                          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-                        />
-                      </div>
-                    ) : (
-                      <div className="relative w-full h-full bg-black pointer-events-none" />
-                    )}
+                    {(() => {
+                      if (!face.mediaSrc) {
+                        return <div className="relative w-full h-full bg-black pointer-events-none" />;
+                      }
+
+                      const isVideo = isVideoMedia(face);
+
+                      if (isVideo) {
+                        return (
+                          /* Permukaan Video Lokal — Otomatis Deteksi Format Video */
+                          <div className="relative w-full h-full overflow-hidden bg-black pointer-events-none">
+                            <video
+                              src={face.mediaSrc}
+                              autoPlay
+                              muted
+                              loop
+                              playsInline
+                              preload="auto"
+                              ref={(el) => {
+                                if (el) {
+                                  el.defaultMuted = true;
+                                  el.muted = true;
+                                  if (el.paused) el.play().catch(() => {});
+                                }
+                              }}
+                              onLoadedData={(e) => {
+                                e.target.play().catch(() => {});
+                              }}
+                              onError={(e) => {
+                                console.warn(`Cube video failed on face ${face.id}:`, face.mediaSrc);
+                              }}
+                              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                            />
+                          </div>
+                        );
+                      }
+
+                      /* Permukaan Foto Statis Lokal — Otomatis Deteksi Format Gambar */
+                      return (
+                        <div className="relative w-full h-full overflow-hidden bg-black pointer-events-none">
+                          <img
+                            src={face.mediaSrc}
+                            alt={face.title || 'SIGAP 3D Cube'}
+                            onError={(e) => {
+                              console.warn(`Cube photo failed on face ${face.id}:`, face.mediaSrc);
+                            }}
+                            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                          />
+                        </div>
+                      );
+                    })()}
                   </div>
                 );
               })}
