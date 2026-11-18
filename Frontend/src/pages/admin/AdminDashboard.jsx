@@ -95,6 +95,91 @@ const AnimatedKpiValue = ({
   );
 };
 
+// Komponen Bar Kategori dengan Animasi Muncul Bergantian, Progress Bar & Hitung Maju (Count-Up) Dinamis
+const AnimatedCategoryRow = ({ cat, index = 0, syncKey = 0 }) => {
+  const [activeCount, setActiveCount] = useState(0);
+  const [refCount, setRefCount] = useState(0);
+  const [progressWidth, setProgressWidth] = useState(0);
+  const [refProgressWidth, setRefProgressWidth] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const targetActivePercent = Math.min(100, Math.round((cat.activeCount / cat.max) * 100));
+  const targetRefPercent = Math.min(100, Math.round((cat.refCount / cat.max) * 100));
+  // Efek stagger delay bergantian: baris 1 muncul pertama, lalu 2, 3, dst.
+  const delay = 100 + index * 140;
+
+  useEffect(() => {
+    setIsVisible(false);
+    setActiveCount(0);
+    setRefCount(0);
+    setProgressWidth(0);
+    setRefProgressWidth(0);
+
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+      const duration = 650;
+      const startTime = performance.now();
+
+      const animate = (now) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // Kurva easeOutExpo yang dinamis dan halus
+        const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+
+        setActiveCount(Math.round(cat.activeCount * ease));
+        setRefCount(Math.round(cat.refCount * ease));
+        setProgressWidth(targetActivePercent * ease);
+        setRefProgressWidth(targetRefPercent * ease);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          setActiveCount(cat.activeCount);
+          setRefCount(cat.refCount);
+          setProgressWidth(targetActivePercent);
+          setRefProgressWidth(targetRefPercent);
+        }
+      };
+
+      requestAnimationFrame(animate);
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [cat, delay, targetActivePercent, targetRefPercent, syncKey]);
+
+  return (
+    <div
+      className={`space-y-1 transition-all duration-500 ease-out ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2.5'
+      }`}
+    >
+      <div className="flex items-center justify-between text-xs">
+        <span className={`font-semibold ${cat.isAlert ? 'text-rose-700 font-bold' : 'text-slate-800'}`}>
+          {cat.name}
+        </span>
+        <div className="flex items-center gap-1.5 tabular-nums">
+          <strong className={cat.isAlert ? 'text-rose-700 font-bold' : 'text-[#1C6F8E] font-bold'}>
+            {activeCount} kasus
+          </strong>
+          <span className="text-slate-400 text-[11px]">(Ref: {refCount})</span>
+        </div>
+      </div>
+      <div className="h-2 w-full bg-slate-200/60 rounded-full relative overflow-hidden">
+        <div
+          className="absolute left-0 top-0 bottom-0 bg-slate-300/80 rounded-full transition-all duration-300"
+          style={{ width: `${refProgressWidth}%` }}
+        />
+        <div
+          className={`absolute left-0 top-0 bottom-0 rounded-full shadow-xs transition-all duration-300 ${
+            cat.isAlert ? 'bg-rose-500' : 'bg-[#1C6F8E]'
+          }`}
+          style={{ width: `${progressWidth}%` }}
+        />
+      </div>
+    </div>
+  );
+};
+
 export const AdminDashboard = () => {
   const { reports, getMetrics, fetchDashboardSummary, fetchAdminReports, isBackendConnected, currentUser } = useStore();
   const navigate = useNavigate();
@@ -469,7 +554,7 @@ export const AdminDashboard = () => {
             </div>
 
             <div className="w-full">
-              <TrendLineChart />
+              <TrendLineChart syncKey={syncKey} />
             </div>
 
             <div className="bg-[#F8FDFF] border border-[#BFEFFF] rounded-2xl p-4 flex items-start gap-3 text-xs text-slate-700">
@@ -493,38 +578,9 @@ export const AdminDashboard = () => {
             </div>
 
             <div className="space-y-3">
-              {categoryData.map((cat) => {
-                const activePercent = Math.min(100, Math.round((cat.activeCount / cat.max) * 100));
-                const refPercent = Math.min(100, Math.round((cat.refCount / cat.max) * 100));
-
-                return (
-                  <div key={cat.id} className="space-y-1">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className={`font-semibold ${cat.isAlert ? 'text-rose-700 font-bold' : 'text-slate-800'}`}>
-                        {cat.name}
-                      </span>
-                      <div className="flex items-center gap-1.5">
-                        <strong className={cat.isAlert ? 'text-rose-700 font-bold' : 'text-[#1C6F8E] font-bold'}>
-                          {cat.activeCount} kasus
-                        </strong>
-                        <span className="text-slate-400 text-[11px]">(Ref: {cat.refCount})</span>
-                      </div>
-                    </div>
-                    <div className="h-2 w-full bg-slate-200/60 rounded-full relative overflow-hidden">
-                      <div
-                        className="absolute left-0 top-0 bottom-0 bg-slate-300/80 rounded-full"
-                        style={{ width: `${refPercent}%` }}
-                      />
-                      <div
-                        className={`absolute left-0 top-0 bottom-0 rounded-full transition-all duration-500 shadow-xs ${
-                          cat.isAlert ? 'bg-rose-500' : 'bg-[#1C6F8E]'
-                        }`}
-                        style={{ width: `${activePercent}%` }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
+              {categoryData.map((cat, idx) => (
+                <AnimatedCategoryRow key={cat.id} cat={cat} index={idx} syncKey={syncKey} />
+              ))}
             </div>
 
             <div className="pt-2 border-t border-[#BFEFFF]/60 flex items-center justify-between text-[11px] text-slate-500">

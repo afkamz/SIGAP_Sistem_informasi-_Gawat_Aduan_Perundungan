@@ -2256,3 +2256,18 @@ Penerapan animasi sequential count-up dinamis pada 4 angka kartu KPI Dashboard A
 | 1 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Integrasi komponen AnimatedKpiValue dengan kurva easeOutExpo dan staggered delay pada keempat kartu metrik KPI |
 | 2 | `EDIT` | `Frontend/public/assets/background/admin-welcome.mp4` | Pembaruan berkas video kustom latar belakang hero dashboard admin oleh pengguna |
 | 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 155 implementasi animasi angka metrik KPI muncul bergantian |
+
+---
+
+## 📅 [Sesi 156] Rabu, 18 November 2026 — Jam 07 WIB
+
+### Fokus Utama
+Implementasi animasi transisi halus dan muncul bergantian (staggered delay) pada grafik tren kasus per bulan serta hitung maju dan ekspansi bar pada 7 kategori distribusi kasus kekerasan.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/charts/DashboardCharts.jsx` | Konfigurasi animasi ECharts kubik dan sinkronisasi render ulang melalui prop syncKey pada komponen TrendLineChart |
+| 2 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Pembuatan komponen AnimatedCategoryRow dengan staggered delay, animasi count-up kasus, dan ekspansi dinamis progress bar 7 kategori kekerasan |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 156 implementasi animasi muncul bergantian pada tren kasus dan 7 kategori distribusi |

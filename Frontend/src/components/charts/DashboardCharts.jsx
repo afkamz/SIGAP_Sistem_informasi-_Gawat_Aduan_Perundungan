@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
 
-export const TrendLineChart = () => {
+export const TrendLineChart = ({ syncKey = 0 }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -9,6 +9,9 @@ export const TrendLineChart = () => {
     const chart = echarts.init(chartRef.current);
 
     const option = {
+      animation: true,
+      animationDuration: 1400,
+      animationEasing: 'cubicOut',
       tooltip: {
         trigger: 'axis',
         backgroundColor: 'rgba(15, 23, 42, 0.95)',
@@ -94,7 +97,7 @@ export const TrendLineChart = () => {
       window.removeEventListener('resize', handleResize);
       chart.dispose();
     };
-  }, []);
+  }, [syncKey]);
 
   return <div ref={chartRef} className="w-full h-64 sm:h-72" />;
 };
