@@ -196,7 +196,7 @@ const BatchApproveModal = ({ isOpen, onClose, highConfidenceCount, onConfirm, is
           <button
             onClick={onConfirm}
             disabled={isProcessing || highConfidenceCount === 0}
-            className="flex-1 px-4 py-2.5 rounded-xl bg-[#3B7DE8] text-white text-xs font-semibold hover:bg-[#2563c0] transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-sm"
+            className="flex-1 px-4 py-2.5 rounded-xl bg-[#BFEFFF] hover:bg-[#A7D8F0] border border-[#BFEFFF] text-[#1C6F8E] hover:text-[#0F3E50] text-xs font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-sm"
           >
             {isProcessing ? (
               <>
@@ -751,9 +751,9 @@ export const AiValidation = () => {
             <button
               onClick={() => setIsBatchModalOpen(true)}
               disabled={stats.highConfidenceMenunggu === 0}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#3B7DE8] text-white text-xs font-bold hover:bg-[#2563c0] active:scale-95 transition-all shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#BFEFFF] hover:bg-[#A7D8F0] border border-[#BFEFFF] text-[#1C6F8E] hover:text-[#0F3E50] text-xs font-bold active:scale-95 transition-all shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5 text-[#1C6F8E]" />
               Proses Validasi Massal
             </button>
 

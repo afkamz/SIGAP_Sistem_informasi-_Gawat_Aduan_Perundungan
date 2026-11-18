@@ -198,9 +198,9 @@ export const ReportList = ({ defaultFilter = '' }) => {
 
             <button
               onClick={handleExportCSV}
-              className="px-4 py-2 rounded-2xl glass-button-primary text-white font-bold text-xs flex items-center gap-2"
+              className="px-4 py-2 rounded-2xl glass-button-primary text-[#1C6F8E] font-bold text-xs flex items-center gap-2"
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-4 h-4 text-[#1C6F8E]" />
               <span>Ekspor Data (CSV)</span>
             </button>
           </div>
@@ -218,17 +218,17 @@ export const ReportList = ({ defaultFilter = '' }) => {
                 onClick={() => { setActiveTab(tab.key); setCurrentPage(1); }}
                 className={`p-4 rounded-3xl text-left transition-all flex flex-col justify-between space-y-2 ${
                   isActive
-                    ? 'glass-button-primary text-white shadow-lg'
+                    ? 'glass-button-primary text-[#1C6F8E] shadow-md'
                     : 'glass-card text-slate-700'
                 }`}
               >
                 <div className="flex items-center justify-between text-xs font-semibold">
-                  <span className={isActive ? 'text-white/90 font-bold' : 'text-slate-600'}>{tab.label}</span>
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-[#F5C518]' : 'text-slate-400'}`} />
+                  <span className={isActive ? 'text-[#1C6F8E] font-bold' : 'text-slate-600'}>{tab.label}</span>
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-[#1C6F8E]' : 'text-slate-400'}`} />
                 </div>
                 <div className="flex items-baseline gap-1.5">
-                  <span className={`text-2xl font-black ${isActive ? 'text-white' : 'text-slate-900'}`}>{tab.count}</span>
-                  <span className={`text-xs font-medium ${isActive ? 'text-white/80' : 'text-slate-400'}`}>{tab.sub}</span>
+                  <span className={`text-2xl font-black ${isActive ? 'text-[#1C6F8E]' : 'text-slate-900'}`}>{tab.count}</span>
+                  <span className={`text-xs font-medium ${isActive ? 'text-[#1C6F8E]/80' : 'text-slate-400'}`}>{tab.sub}</span>
                 </div>
               </button>
             );
@@ -300,7 +300,7 @@ export const ReportList = ({ defaultFilter = '' }) => {
 
             <button
               type="button"
-              className="p-2 rounded-2xl glass-button-primary text-white"
+              className="p-2 rounded-2xl glass-button-primary text-[#1C6F8E]"
               title="Filter Lanjutan"
             >
               <SlidersHorizontal className="w-4 h-4" />
@@ -517,7 +517,7 @@ export const ReportList = ({ defaultFilter = '' }) => {
                     onClick={() => setCurrentPage(p)}
                     className={`w-7 h-7 rounded-xl text-xs font-bold transition ${
                       currentPage === p
-                        ? 'glass-button-primary text-white'
+                        ? 'glass-button-primary text-[#1C6F8E]'
                         : 'glass-card text-slate-600'
                     }`}
                   >

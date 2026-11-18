@@ -250,9 +250,9 @@ export const ReportDetail = () => {
                   setNextTargetStatus(nextStatus);
                   setShowStatusModal(true);
                 }}
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-2xl glass-button-primary text-white text-xs font-bold transition"
+                className="flex items-center gap-1.5 px-4 py-1.5 rounded-2xl glass-button-primary text-[#1C6F8E] text-xs font-bold transition"
               >
-                <Edit3 className="w-3.5 h-3.5" />
+                <Edit3 className="w-3.5 h-3.5 text-[#1C6F8E]" />
                 Tindak Lanjuti Kasus
               </button>
             )}
@@ -569,9 +569,9 @@ export const ReportDetail = () => {
                   <button
                     onClick={handleApproveAI}
                     disabled={isApproved}
-                    className="py-2.5 px-3 rounded-2xl glass-button-primary text-white font-bold text-xs flex items-center justify-center gap-1.5 transition disabled:opacity-60"
+                    className="py-2.5 px-3 rounded-2xl glass-button-primary text-[#1C6F8E] font-bold text-xs flex items-center justify-center gap-1.5 transition disabled:opacity-60"
                   >
-                    <Check className="w-4 h-4" />
+                    <Check className="w-4 h-4 text-[#1C6F8E]" />
                     {isApproved ? 'Telah Disetujui' : 'Setujui Kategori Ini'}
                   </button>
 
@@ -680,9 +680,9 @@ export const ReportDetail = () => {
 
                 <button
                   onClick={() => flash('✓ Notifikasi kasus berhasil diteruskan ke tim Satgas PPKSP!')}
-                  className="py-2.5 px-3 rounded-2xl glass-button-primary text-white text-xs font-bold flex items-center justify-center gap-1.5 transition"
+                  className="py-2.5 px-3 rounded-2xl glass-button-primary text-[#1C6F8E] text-xs font-bold flex items-center justify-center gap-1.5 transition"
                 >
-                  <Send className="w-3.5 h-3.5" />
+                  <Send className="w-3.5 h-3.5 text-[#1C6F8E]" />
                   Notifikasi Satgas
                 </button>
               </div>
@@ -739,7 +739,7 @@ export const ReportDetail = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-2xl glass-button-primary text-white font-bold"
+                  className="px-5 py-2 rounded-2xl glass-button-primary text-[#1C6F8E] font-bold"
                 >
                   Simpan Override
                 </button>
@@ -785,7 +785,7 @@ export const ReportDetail = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-2xl glass-button-primary text-white font-bold"
+                  className="px-5 py-2 rounded-2xl glass-button-primary text-[#1C6F8E] font-bold"
                 >
                   Konfirmasi Transisi
                 </button>

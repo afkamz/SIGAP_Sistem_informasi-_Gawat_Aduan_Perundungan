@@ -405,9 +405,9 @@ export const AdminDashboard = () => {
 
               <button
                 onClick={handleDownloadReport}
-                className="px-4 py-2 rounded-2xl bg-[#1C6F8E] hover:bg-[#165870] text-white font-bold text-xs flex items-center gap-2 transition shadow-xs cursor-pointer active:scale-95"
+                className="px-4 py-2 rounded-2xl bg-[#BFEFFF] hover:bg-[#A7D8F0] border border-[#BFEFFF] text-[#1C6F8E] hover:text-[#0F3E50] font-bold text-xs flex items-center gap-2 transition shadow-xs cursor-pointer active:scale-95"
               >
-                <Download className="w-4 h-4" />
+                <Download className="w-4 h-4 text-[#1C6F8E]" />
                 <span>Unduh Laporan</span>
               </button>
             </div>
@@ -716,7 +716,7 @@ export const AdminDashboard = () => {
               <button type="button" disabled className="px-3 py-1 rounded-xl bg-white border border-[#BFEFFF] text-slate-400 text-xs disabled:opacity-50">
                 Sebelumnya
               </button>
-              <span className="px-3 py-1 rounded-xl bg-[#1C6F8E] text-white font-bold text-xs">1</span>
+              <span className="px-3 py-1 rounded-xl bg-[#BFEFFF] border border-[#BFEFFF] text-[#1C6F8E] font-bold text-xs">1</span>
               <button type="button" disabled className="px-3 py-1 rounded-xl bg-white border border-[#BFEFFF] text-slate-400 text-xs disabled:opacity-50">
                 Selanjutnya
               </button>

@@ -2441,3 +2441,21 @@ Pembaruan label dan pesan validasi input pada formulir login siswa dari "Alamat 
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `Frontend/src/pages/student/Login.jsx` | Penggantian label input "Alamat email" dan pesan validasi menjadi "NISN (Nomor Induk Siswa Nasional)" |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 167 pembaruan label login siswa NISN |
+
+---
+
+## 📅 [Sesi 168] Rabu, 18 November 2026 — Jam 13 WIB
+
+### Fokus Utama
+Penyelarasan seluruh tombol aksi pada laman admin dari warna biru tua ke warna biru muda (baby blue) sesuai tema utama sistem SIGAP.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/index.css` | Pembaruan style `.glass-button-primary` dan `.glass-pill-blue` ke tema gradasi biru muda `#BFEFFF` dan warna teks `#1C6F8E` |
+| 2 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Penyelarasan tombol Unduh Laporan dan penomoran paginasi aktif ke tema biru muda |
+| 3 | `EDIT` | `Frontend/src/pages/admin/ReportList.jsx` | Penyelarasan tombol Ekspor Data CSV, KPI filter tabs aktif, dan paginasi ke tema biru muda |
+| 4 | `EDIT` | `Frontend/src/pages/admin/ReportDetail.jsx` | Pembaruan tombol aksi tindak lanjuti kasus, persetujuan AI, notifikasi satgas, dan modal transisi ke tema biru muda |
+| 5 | `EDIT` | `Frontend/src/pages/admin/AiValidation.jsx` | Penyelarasan tombol proses validasi massal dan konfirmasi batch ke tema biru muda |
+| 6 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 168 penyesuaian tombol admin tema biru muda |
