@@ -369,12 +369,6 @@ export const AdminDashboard = () => {
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             {/* Left: Professional Editorial Plaque */}
             <div className="space-y-3 max-w-2xl">
-              {/* Status Capsule Pill */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-white/90 text-[#1C6F8E] border border-[#BFEFFF] shadow-xs backdrop-blur-md">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Panel Monitoring Insiden &amp; Layanan Terpadu</span>
-              </div>
-
               {/* Main Greeting Heading */}
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-[1.15]">
                 {greeting}, <span className="text-[#1C6F8E]">{adminName}</span>
