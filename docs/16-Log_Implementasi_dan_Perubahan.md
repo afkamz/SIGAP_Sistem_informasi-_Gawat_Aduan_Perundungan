@@ -2484,3 +2484,14 @@ Penggantian media pada permukaan kubus 3D bagian atas (top face) menjadi foto st
 | 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Penambahan definisi variabel persamaan Cosine Similarity) |
 | 3 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Penambahan definisi variabel persamaan Cosine Similarity) |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 131 dokumentasi pembaruan naskah ilmiah |
+
+## 📅 [Sesi 132] Rabu, 18 November 2026 — Jam 20 WIB
+
+**Fokus Utama:** Penyesuaian nomenklatur pengujian pada naskah publikasi ilmiah LaTeX dari *User Acceptance Testing (UAT)* menjadi *Respondent Validation* pada Bab V Subbab D, pengantar hasil evaluasi, dan abstrak.
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP.tex` | Naskah Publikasi Ilmiah Utama (Penyesuaian istilah subbab V.D menjadi *Respondent Validation*) |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Penyesuaian istilah subbab V.D menjadi *Respondent Validation*) |
+| 3 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Penyesuaian istilah subbab V.D menjadi *Respondent Validation*) |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 132 dokumentasi perubahan terminologi pengujian |
