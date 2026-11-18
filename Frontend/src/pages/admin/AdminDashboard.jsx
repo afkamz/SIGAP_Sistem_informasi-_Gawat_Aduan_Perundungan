@@ -153,7 +153,7 @@ export const AdminDashboard = () => {
   return (
     <AdminLayout>
       {/* ─── Hero Section Admin Full-Width dengan Background Video & Degradasi Halus (Menampung Header & 4 KPI Cards) ─── */}
-      <section className="-mt-4 sm:-mt-6 lg:-mt-8 -mx-4 sm:-mx-6 lg:-mx-8 relative overflow-hidden z-0 px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 pb-16 sm:pb-24 mb-6 sm:mb-8">
+      <section className="-mt-4 sm:-mt-6 lg:-mt-8 -mx-4 sm:-mx-6 lg:-mx-8 relative overflow-hidden z-0 px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 pb-14 sm:pb-20 mb-6 sm:mb-8">
         {/* Background Video (Memenuhi Seluruh Viewport Hero yang Lebih Luas) */}
         <video
           autoPlay
@@ -178,22 +178,22 @@ export const AdminDashboard = () => {
           <source src="/assets/background/dashboard-welcome.mp4" type="video/mp4" />
         </video>
 
-        {/* Clean Solid Translucent Shield Overlay (Melindungi Keterbacaan Teks Hero & Kartu KPI) */}
+        {/* Clean Directional Scrim Overlay: Sangat terang di sisi kiri agar teks 100% kontras tajam, transparan halus di kanan */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.45)',
-            backdropFilter: 'blur(2px)',
+            background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.82) 45%, rgba(255, 255, 255, 0.45) 75%, rgba(255, 255, 255, 0.20) 100%)',
+            backdropFilter: 'blur(1.5px)',
             zIndex: 1
           }}
           aria-hidden="true"
         />
 
-        {/* Bottom Seamless Gradient Fade (Degradasi Halus Menyatu ke Web Bawahnya di Bawah Kartu KPI) */}
+        {/* Bottom Seamless Gradient Fade (Menyatu lembut ke halaman putih bawah) */}
         <div
-          className="absolute inset-x-0 bottom-0 h-32 sm:h-44 lg:h-52 pointer-events-none"
+          className="absolute inset-x-0 bottom-0 h-28 sm:h-36 pointer-events-none"
           style={{
-            background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.40) 35%, rgba(255, 255, 255, 0.85) 75%, #FFFFFF 100%)',
+            background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.50) 45%, #FFFFFF 100%)',
             zIndex: 2
           }}
           aria-hidden="true"
@@ -203,29 +203,32 @@ export const AdminDashboard = () => {
         <div className="max-w-7xl mx-auto relative z-10 space-y-8 sm:space-y-10">
           {/* Top Row: Greeting & Controls */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            {/* Left: Welcome Greeting */}
-            <div className="space-y-1.5">
-              <h1
-                className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight"
-                style={{ textShadow: '0 2px 14px rgba(255, 255, 255, 0.9)' }}
-              >
-                {greeting}, {adminName}
+            {/* Left: Professional Editorial Plaque */}
+            <div className="space-y-3 max-w-2xl">
+              {/* Status Capsule Pill */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-bold bg-white/90 text-[#1C6F8E] border border-[#BFEFFF] shadow-xs backdrop-blur-md">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Panel Monitoring Insiden &amp; Layanan Terpadu</span>
+              </div>
+
+              {/* Main Greeting Heading */}
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-[1.15]">
+                {greeting}, <span className="text-[#1C6F8E]">{adminName}</span>
               </h1>
-              <p
-                className="text-xs sm:text-base text-slate-700 max-w-2xl leading-relaxed font-semibold"
-                style={{ textShadow: '0 1px 10px rgba(255, 255, 255, 0.9)' }}
-              >
-                Monitoring real-time penanganan insiden, perbandingan tren laporan sekolah terhadap data referensi nasional PPKSP.
+
+              {/* Professional Subtitle */}
+              <p className="text-xs sm:text-sm md:text-base text-slate-600 leading-relaxed font-medium">
+                Sistem pemantauan real-time penanganan aduan perundungan, pelacakan proses investigasi, dan sinkronisasi standar PPKSP Kemendikbudristek.
               </p>
             </div>
 
-            {/* Right Controls */}
-            <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            {/* Right Controls in Grouped Frosted Glass Container */}
+            <div className="p-2 sm:p-2.5 rounded-3xl bg-white/85 backdrop-blur-md border border-white/80 shadow-[0_8px_24px_rgba(28,111,142,0.08)] flex flex-wrap items-center gap-2.5 self-start lg:self-center shrink-0">
               {/* DB Status */}
-              <div className={`inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition shadow-md ${
+              <div className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-xs font-bold transition shadow-2xs ${
                 isBackendConnected
-                  ? 'bg-emerald-50/95 text-emerald-800 border border-emerald-200'
-                  : 'bg-white/95 border border-[#BFEFFF] text-slate-700'
+                  ? 'bg-emerald-50/90 text-emerald-800 border border-emerald-200'
+                  : 'bg-white border border-[#BFEFFF] text-slate-700'
               }`}>
                 <span className={`w-2 h-2 rounded-full ${isBackendConnected ? 'bg-emerald-500 animate-pulse shadow-[0_0_6px_#10b981]' : 'bg-slate-400'}`} />
                 <Database className="w-3.5 h-3.5 text-[#1C6F8E]" />
@@ -236,7 +239,7 @@ export const AdminDashboard = () => {
                 type="button"
                 onClick={handleSync}
                 disabled={isSyncing}
-                className="px-4 py-2.5 rounded-2xl bg-white/95 border border-[#BFEFFF] text-slate-800 hover:bg-[#BFEFFF]/30 font-bold text-xs flex items-center gap-2 transition disabled:opacity-50 shadow-md backdrop-blur-xs cursor-pointer active:scale-95"
+                className="px-4 py-2 rounded-2xl bg-white border border-[#BFEFFF] text-slate-800 hover:bg-[#BFEFFF]/20 font-bold text-xs flex items-center gap-2 transition disabled:opacity-50 shadow-2xs cursor-pointer active:scale-95"
               >
                 <RotateCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-[#1C6F8E]' : 'text-[#1C6F8E]'}`} />
                 <span>Sinkronkan</span>
@@ -244,7 +247,7 @@ export const AdminDashboard = () => {
 
               <button
                 onClick={handleDownloadReport}
-                className="px-5 py-2.5 rounded-2xl bg-[#1C6F8E] hover:bg-[#165870] text-white font-bold text-xs flex items-center gap-2 transition shadow-md cursor-pointer active:scale-95"
+                className="px-4 py-2 rounded-2xl bg-[#1C6F8E] hover:bg-[#165870] text-white font-bold text-xs flex items-center gap-2 transition shadow-xs cursor-pointer active:scale-95"
               >
                 <Download className="w-4 h-4" />
                 <span>Unduh Laporan</span>
@@ -255,7 +258,7 @@ export const AdminDashboard = () => {
           {/* 4 Summary KPI Cards — Di Dalam Hero Section Background Video */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
             {/* Card 1: Total Laporan */}
-            <div className="bg-white/90 backdrop-blur-md border border-[#BFEFFF] p-5 rounded-3xl shadow-md space-y-3 hover:shadow-lg transition-shadow">
+            <div className="bg-white/90 backdrop-blur-xl border border-white/90 shadow-[0_8px_24px_rgba(28,111,142,0.08)] hover:shadow-[0_12px_32px_rgba(28,111,142,0.14)] hover:-translate-y-0.5 transition-all duration-300 p-5 rounded-3xl space-y-3">
               <div className="flex items-center justify-between">
                 <div className="w-10 h-10 rounded-2xl bg-[#D6F5FF] text-[#1C6F8E] flex items-center justify-center shadow-xs">
                   <FileText className="w-5 h-5 text-[#1C6F8E]" />
@@ -279,7 +282,7 @@ export const AdminDashboard = () => {
             </div>
 
             {/* Card 2: Menunggu Verifikasi */}
-            <div className="bg-white/90 backdrop-blur-md border border-amber-200 p-5 rounded-3xl shadow-md space-y-3 hover:shadow-lg transition-shadow">
+            <div className="bg-white/90 backdrop-blur-xl border border-white/90 shadow-[0_8px_24px_rgba(28,111,142,0.08)] hover:shadow-[0_12px_32px_rgba(28,111,142,0.14)] hover:-translate-y-0.5 transition-all duration-300 p-5 rounded-3xl space-y-3">
               <div className="flex items-center justify-between">
                 <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 shadow-xs">
                   <ClipboardList className="w-5 h-5 text-amber-600" />
@@ -304,7 +307,7 @@ export const AdminDashboard = () => {
             </div>
 
             {/* Card 3: Ditindaklanjuti */}
-            <div className="bg-white/90 backdrop-blur-md border border-purple-200 p-5 rounded-3xl shadow-md space-y-3 hover:shadow-lg transition-shadow">
+            <div className="bg-white/90 backdrop-blur-xl border border-white/90 shadow-[0_8px_24px_rgba(28,111,142,0.08)] hover:shadow-[0_12px_32px_rgba(28,111,142,0.14)] hover:-translate-y-0.5 transition-all duration-300 p-5 rounded-3xl space-y-3">
               <div className="flex items-center justify-between">
                 <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center border border-purple-100 shadow-xs">
                   <RotateCw className="w-5 h-5 text-purple-600" />
@@ -328,7 +331,7 @@ export const AdminDashboard = () => {
             </div>
 
             {/* Card 4: Selesai & Ditutup */}
-            <div className="bg-white/90 backdrop-blur-md border border-emerald-200 p-5 rounded-3xl shadow-md space-y-3 hover:shadow-lg transition-shadow">
+            <div className="bg-white/90 backdrop-blur-xl border border-white/90 shadow-[0_8px_24px_rgba(28,111,142,0.08)] hover:shadow-[0_12px_32px_rgba(28,111,142,0.14)] hover:-translate-y-0.5 transition-all duration-300 p-5 rounded-3xl space-y-3">
               <div className="flex items-center justify-between">
                 <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 shadow-xs">
                   <CheckCircle2 className="w-5 h-5 text-emerald-600" />
