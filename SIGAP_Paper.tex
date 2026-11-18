@@ -1,4 +1,4 @@
-\documentclass[conference]{IEEEtran}
+bahan di\documentclass[conference]{IEEEtran}
 
 % =========================
 % PACKAGE
@@ -155,6 +155,7 @@ Setiap narasi pengaduan yang masuk diproses melalui \textit{text preprocessing} 
   \text{sim}(\vec{u}, \vec{v}_k) = \frac{\vec{u} \cdot \vec{v}_k}{\|\vec{u}\|\,\|\vec{v}_k\|} = \frac{\displaystyle\sum_{i=1}^{n} u_i v_{k,i}}{\sqrt{\displaystyle\sum_{i=1}^{n} u_i^2}\;\sqrt{\displaystyle\sum_{i=1}^{n} v_{k,i}^2} }
   \label{eq:cosine}
 \end{equation}
+di mana $\text{sim}(\vec{u}, \vec{v}_k)$ merepresentasikan koefisien kemiripan semantik; $\vec{u} \in \mathbb{R}^n$ merupakan vektor representasi narasi aduan siswa hasil ekstraksi \textit{sentence embedding} IndoBERT dengan dimensi ruang fitur $n = 768$; $\vec{v}_k \in \mathbb{R}^n$ adalah vektor \textit{centroid} acuan untuk kategori yuridis ke-$k$ ($k \in \{1, 2, \dots, 7\}$); $u_i$ dan $v_{k,i}$ masing-masing menyatakan nilai bobot fitur pada dimensi ke-$i$; sedangkan $\|\cdot\|$ melambangkan norma Euclidean (\textit{magnitude}) dari masing-masing vektor.
 
 Kategori dengan nilai kemiripan tertinggi dijadikan rekomendasi awal dengan \textit{confidence score} ternormalisasi fungsi \textit{softmax}. Rekomendasi ini berstatus \textit{pending review} di mana keputusan verifikasi akhir tetap berada pada Guru BK sesuai prinsip \textit{human-in-the-loop} \cite{sele2024,nabiilah2024}.
 
