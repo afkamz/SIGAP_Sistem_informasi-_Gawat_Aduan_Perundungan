@@ -2506,3 +2506,22 @@ Penggantian media pada permukaan kubus 3D bagian atas (top face) menjadi foto st
 | 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Penghapusan em-dash dan pemenggalan kalimat pada subbab Diskusi) |
 | 3 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Penghapusan em-dash dan pemenggalan kalimat pada subbab Diskusi) |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 133 dokumentasi perbaikan gaya bahasa naskah ilmiah |
+
+
+---
+
+## 🏁 Akhir Sesi Pengerjaan — Minggu ke-12
+
+> **Catatan Penutupan Siklus Pengembangan (Milestone Minggu 12)**:  
+> Seluruh rangkaian pengerjaan dari **Sesi 43 hingga Sesi 133** secara resmi menutup agenda capaian pada **Minggu ke-12**. Pada fase ini, sistem SIGAP telah menuntaskan:
+> 1. Penyusunan instrumen evaluasi responden kuesioner Google Form (SUS & TAM) dan skenario panduan pengujian.
+> 2. Redesain visual sinematik Landing Page (kubus 3D interaktif, backdrop video latar kontinu, tema Baby Blue & White Minimalist).
+> 3. Resolusi format video H.264 standar ISO (web-compatible lintas sistem operasi dan browser).
+> 4. Sinkronisasi data empiris Black-Box Testing pada naskah publikasi ilmiah (14 skenario, 100% kelulusan).
+> 5. Penambahan notasi matematis persamaan Cosine Similarity (Persamaan 1) sesuai standar IEEE.
+> 6. Penyesuaian nomenklatur pengujian menjadi *Respondent Validation* serta pembersihan indikasi gaya kalimat AI (penghapusan em-dash) pada subbab Diskusi.
+>  
+> 📌 **Catatan Transisi Sesi Berikutnya**:  
+> Mulai sesi pengerjaan berikutnya (**Sesi 134 dan seterusnya**), seluruh catatan implementasi dan pembaruan fitur akan secara resmi masuk ke dalam agenda **Minggu ke-13**.
+
+---
