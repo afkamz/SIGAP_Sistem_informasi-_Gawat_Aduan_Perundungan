@@ -2459,3 +2459,17 @@ Penyelarasan seluruh tombol aksi pada laman admin dari warna biru tua ke warna b
 | 4 | `EDIT` | `Frontend/src/pages/admin/ReportDetail.jsx` | Pembaruan tombol aksi tindak lanjuti kasus, persetujuan AI, notifikasi satgas, dan modal transisi ke tema biru muda |
 | 5 | `EDIT` | `Frontend/src/pages/admin/AiValidation.jsx` | Penyelarasan tombol proses validasi massal dan konfirmasi batch ke tema biru muda |
 | 6 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 168 penyesuaian tombol admin tema biru muda |
+
+---
+
+## 📅 [Sesi 169] Rabu, 18 November 2026 — Jam 14 WIB
+
+### Fokus Utama
+Penggantian media pada permukaan kubus 3D bagian atas (top face) menjadi foto statis `photo-1.jpg`.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Mengubah konfigurasi permukaan atas kubus (top) dari video-5.mp4 menjadi photo-1.jpg |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 169 penggantian media sisi atas kubus 3D |

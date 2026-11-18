@@ -80,8 +80,8 @@ export const DEFAULT_CUBE_FACES = [
   },
   {
     id: 'top',
-    type: 'video',
-    mediaSrc: '/assets/cube/video-5.mp4?v=20261118',
+    type: 'image',
+    mediaSrc: '/assets/cube/photo-1.jpg?v=20261118',
     label: 'SURFACE 05',
     title: 'SAFE SANCTUARY',
     subtitle: 'Ruang Pendidikan Merdeka',
