@@ -2495,3 +2495,14 @@ Penggantian media pada permukaan kubus 3D bagian atas (top face) menjadi foto st
 | 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Penyesuaian istilah subbab V.D menjadi *Respondent Validation*) |
 | 3 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Penyesuaian istilah subbab V.D menjadi *Respondent Validation*) |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 132 dokumentasi perubahan terminologi pengujian |
+
+## 📅 [Sesi 133] Rabu, 18 November 2026 — Jam 20 WIB
+
+**Fokus Utama:** Penghapusan karakter em-dash (---) dan restrukturisasi kalimat pada Bab V Subbab E (Diskusi) naskah publikasi ilmiah LaTeX agar bergaya akademik natural dan bebas indikasi pola kalimat generatif AI.
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP.tex` | Naskah Publikasi Ilmiah Utama (Penghapusan em-dash dan pemenggalan kalimat pada subbab Diskusi) |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Penghapusan em-dash dan pemenggalan kalimat pada subbab Diskusi) |
+| 3 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Penghapusan em-dash dan pemenggalan kalimat pada subbab Diskusi) |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 133 dokumentasi perbaikan gaya bahasa naskah ilmiah |
