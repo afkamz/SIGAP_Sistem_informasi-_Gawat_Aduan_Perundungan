@@ -2288,3 +2288,17 @@ Pembaruan media permukaan kubus 3D interaktif pada Landing Page dengan mengganti
 | 3 | `TAMBAH` | `Frontend/public/assets/cube/photo-3.jpg` | Berkas aset foto baru untuk permukaan sisi belakang (back) kubus 3D |
 | 4 | `TAMBAH` | `Frontend/public/assets/cube/photo-5.jpg` | Berkas aset foto baru untuk permukaan sisi atas (top) kubus 3D |
 | 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 157 pembaruan media foto pada kubus 3D landing page |
+
+---
+
+## 📅 [Sesi 158] Rabu, 18 November 2026 — Jam 08 WIB
+
+### Fokus Utama
+Penghapusan garis tepi biru, inset shadow, dan border-radius pada kubus 3D Landing Page agar seluruh komponen foto dan video tersambung menyatu secara seamless tanpa celah atau batas garis antar-sisi.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Penghapusan border biru, inset shadow, dan border-radius pada cube surface serta penggantian inner box core menjadi netral seamless |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 158 penghapusan garis biru dan penyatuan seamless foto/video pada kubus 3D |

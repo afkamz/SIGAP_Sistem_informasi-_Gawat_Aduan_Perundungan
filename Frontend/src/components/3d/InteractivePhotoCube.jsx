@@ -425,7 +425,7 @@ export const InteractivePhotoCube = ({
             box-sizing: border-box !important;
             backface-visibility: visible !important;
             -webkit-backface-visibility: visible !important;
-            border-radius: 8px;
+            border-radius: 0 !important;
           }
         `}</style>
 
@@ -456,13 +456,13 @@ export const InteractivePhotoCube = ({
                 willChange: 'transform'
               }}
             >
-              {/* Solid Inner Core Box: Menghilangkan 100% rongga tembus pandang di sambungan sisi */}
+              {/* Solid Inner Core Box: Menghilangkan rongga tembus pandang tanpa garis/warna biru */}
               <div
-                className="absolute inset-0 pointer-events-none rounded-lg"
+                className="absolute inset-0 pointer-events-none"
                 style={{
                   width: 'var(--cube-size)',
                   height: 'var(--cube-size)',
-                  background: '#BFEFFF',
+                  background: '#090d16',
                   transform: 'translateZ(0px)',
                   transformStyle: 'preserve-3d'
                 }}
@@ -502,14 +502,15 @@ export const InteractivePhotoCube = ({
                       transformStyle: 'preserve-3d',
                       backfaceVisibility: 'visible',
                       WebkitBackfaceVisibility: 'visible',
-                      background: '#FFFFFF',
-                      border: '1px solid rgba(191, 239, 255, 0.75)',
-                      boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.2)'
+                      background: '#090d16',
+                      border: 'none',
+                      boxShadow: 'none',
+                      outline: 'none'
                     }}
                   >
                     {face.type === 'video' && face.mediaSrc ? (
-                      /* Permukaan Video Lokal (5 Sisi) */
-                      <div className="relative w-full h-full overflow-hidden bg-[#BFEFFF] pointer-events-none">
+                      /* Permukaan Video Lokal */
+                      <div className="relative w-full h-full overflow-hidden bg-black pointer-events-none">
                         <video
                           src={face.mediaSrc}
                           autoPlay
@@ -521,8 +522,8 @@ export const InteractivePhotoCube = ({
                         />
                       </div>
                     ) : face.type === 'image' && face.mediaSrc ? (
-                      /* Permukaan Foto Statis Lokal (1 Sisi: Bottom) */
-                      <div className="relative w-full h-full overflow-hidden bg-[#BFEFFF] pointer-events-none">
+                      /* Permukaan Foto Statis Lokal */
+                      <div className="relative w-full h-full overflow-hidden bg-black pointer-events-none">
                         <img
                           src={face.mediaSrc}
                           alt="SIGAP 3D Cube"
@@ -530,7 +531,7 @@ export const InteractivePhotoCube = ({
                         />
                       </div>
                     ) : (
-                      <div className="relative w-full h-full bg-[#BFEFFF] pointer-events-none" />
+                      <div className="relative w-full h-full bg-black pointer-events-none" />
                     )}
                   </div>
                 );
