@@ -36,7 +36,7 @@ export const Login = () => {
     setEmailError('');
 
     if (!identifier.trim()) {
-      setEmailError('Silakan masukkan alamat email atau NISN Anda.');
+      setEmailError('Silakan masukkan NISN (Nomor Induk Siswa Nasional) Anda.');
       return;
     }
 
@@ -197,10 +197,10 @@ export const Login = () => {
           )}
 
           <form onSubmit={handleLogin} className="space-y-4">
-            {/* Input: Alamat email */}
+            {/* Input: NISN */}
             <div className="text-left">
               <label className="block text-xs font-medium text-slate-500 mb-1.5">
-                Alamat email
+                NISN (Nomor Induk Siswa Nasional)
               </label>
               <input
                 type="text"

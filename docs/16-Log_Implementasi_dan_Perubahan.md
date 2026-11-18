@@ -2427,3 +2427,17 @@ Pembaruan teks judul pada laman autentikasi siswa dari "Login Email" menjadi "Lo
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `Frontend/src/pages/student/Login.jsx` | Penggantian teks heading utama dari "Login Email" menjadi "Login Siswa" |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 166 pembaruan judul login siswa |
+
+---
+
+## 📅 [Sesi 167] Rabu, 18 November 2026 — Jam 13 WIB
+
+### Fokus Utama
+Pembaruan label dan pesan validasi input pada formulir login siswa dari "Alamat email" menjadi "NISN (Nomor Induk Siswa Nasional)".
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/student/Login.jsx` | Penggantian label input "Alamat email" dan pesan validasi menjadi "NISN (Nomor Induk Siswa Nasional)" |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 167 pembaruan label login siswa NISN |
