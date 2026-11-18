@@ -18,12 +18,90 @@ import { useStore } from '../../context/StoreContext';
 import { AdminLayout } from '../../components/layout/AdminLayout';
 import { TrendLineChart } from '../../components/charts/DashboardCharts';
 
+// Komponen Angka Metrik KPI dengan Animasi Muncul Bergantian & Hitung Maju (Count-Up) Dinamis
+const AnimatedKpiValue = ({
+  targetValue = 0,
+  delay = 0,
+  duration = 750,
+  textColor = 'text-slate-900',
+  suffix = null,
+  suffixClass = '',
+  syncKey = 0
+}) => {
+  const [count, setCount] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
+
+  useEffect(() => {
+    setHasStarted(false);
+    setIsFinished(false);
+    setCount(0);
+
+    const timer = setTimeout(() => {
+      setHasStarted(true);
+      const start = 0;
+      const end = Number(targetValue) || 0;
+      const startTime = performance.now();
+
+      if (end === 0) {
+        setCount(0);
+        setIsFinished(true);
+        return;
+      }
+
+      const animate = (now) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // Kurva easeOutExpo halus untuk akselerasi awal dan perlambatan presisi
+        const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const current = Math.round(start + (end - start) * ease);
+        setCount(current);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          setCount(end);
+          setIsFinished(true);
+        }
+      };
+
+      requestAnimationFrame(animate);
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [targetValue, delay, duration, syncKey]);
+
+  return (
+    <div className="flex items-baseline gap-2 mt-0.5 overflow-hidden">
+      <span
+        className={`text-3xl sm:text-4xl font-black leading-none tabular-nums inline-block transition-all duration-500 ease-out ${textColor} ${
+          hasStarted ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-3 scale-90'
+        }`}
+      >
+        {count}
+      </span>
+      {suffix && (
+        <span
+          className={`inline-flex items-center transition-all duration-500 ease-out delay-100 ${suffixClass} ${
+            isFinished || (hasStarted && count > 0)
+              ? 'opacity-100 translate-x-0'
+              : 'opacity-0 -translate-x-2'
+          }`}
+        >
+          {suffix}
+        </span>
+      )}
+    </div>
+  );
+};
+
 export const AdminDashboard = () => {
   const { reports, getMetrics, fetchDashboardSummary, fetchAdminReports, isBackendConnected, currentUser } = useStore();
   const navigate = useNavigate();
 
   const metrics = getMetrics();
   const [isSyncing, setIsSyncing] = useState(false);
+  const [syncKey, setSyncKey] = useState(0);
 
   useEffect(() => {
     fetchDashboardSummary();
@@ -34,6 +112,7 @@ export const AdminDashboard = () => {
     setIsSyncing(true);
     await Promise.all([fetchDashboardSummary(), fetchAdminReports()]);
     setIsSyncing(false);
+    setSyncKey((prev) => prev + 1);
   };
 
   // 7 Kategori Resmi Permendikbudristek No. 46/2023 (Data distribusi benchmark per kategori)
@@ -269,14 +348,15 @@ export const AdminDashboard = () => {
               </div>
               <div>
                 <span className="text-xs font-semibold text-slate-600 block">Total Laporan</span>
-                <div className="flex items-baseline gap-2 mt-0.5">
-                  <span className="text-3xl font-black text-[#1C6F8E] leading-none">
-                    {metrics.total ?? 0}
-                  </span>
-                  <span className="text-xs font-bold text-emerald-600 flex items-center gap-0.5">
-                    <TrendingUp className="w-3 h-3" /> +12%
-                  </span>
-                </div>
+                <AnimatedKpiValue
+                  targetValue={metrics.total ?? 0}
+                  delay={150}
+                  duration={750}
+                  textColor="text-[#1C6F8E]"
+                  suffix={<><TrendingUp className="w-3 h-3" /> +12%</>}
+                  suffixClass="text-xs font-bold text-emerald-600 gap-0.5"
+                  syncKey={syncKey}
+                />
                 <span className="text-[11px] text-slate-500 mt-1.5 block">Dari bulan lalu (internal satuan)</span>
               </div>
             </div>
@@ -293,12 +373,15 @@ export const AdminDashboard = () => {
               </div>
               <div>
                 <span className="text-xs font-semibold text-slate-600 block">Menunggu Verifikasi</span>
-                <div className="flex items-baseline gap-2 mt-0.5">
-                  <span className="text-3xl font-black text-slate-900 leading-none">
-                    {metrics.menunggu ?? 0}
-                  </span>
-                  <span className="text-xs font-bold text-amber-600">Butuh tindakan</span>
-                </div>
+                <AnimatedKpiValue
+                  targetValue={metrics.menunggu ?? 0}
+                  delay={550}
+                  duration={750}
+                  textColor="text-slate-900"
+                  suffix="Butuh tindakan"
+                  suffixClass="text-xs font-bold text-amber-600"
+                  syncKey={syncKey}
+                />
                 <span className="text-[11px] text-red-600 font-semibold mt-1.5 flex items-center gap-1">
                   <Clock className="w-3 h-3 text-red-500" />
                   <span>Respons &lt; 24 jam</span>
@@ -318,14 +401,15 @@ export const AdminDashboard = () => {
               </div>
               <div>
                 <span className="text-xs font-semibold text-slate-600 block">Ditindaklanjuti</span>
-                <div className="flex items-baseline gap-2 mt-0.5">
-                  <span className="text-3xl font-black text-slate-900 leading-none">
-                    {metrics.proses ?? 0}
-                  </span>
-                  <span className="text-xs font-bold text-slate-500">
-                    {metrics.total ? `${((metrics.proses / metrics.total) * 100).toFixed(1)}% beban` : '0%'}
-                  </span>
-                </div>
+                <AnimatedKpiValue
+                  targetValue={metrics.proses ?? 0}
+                  delay={950}
+                  duration={750}
+                  textColor="text-slate-900"
+                  suffix={metrics.total ? `${((metrics.proses / metrics.total) * 100).toFixed(1)}% beban` : '0% beban'}
+                  suffixClass="text-xs font-bold text-slate-500"
+                  syncKey={syncKey}
+                />
                 <span className="text-[11px] text-slate-500 mt-1.5 block">Tahap mediasi &amp; konseling BK</span>
               </div>
             </div>
@@ -342,12 +426,15 @@ export const AdminDashboard = () => {
               </div>
               <div>
                 <span className="text-xs font-semibold text-slate-600 block">Selesai &amp; Ditutup</span>
-                <div className="flex items-baseline gap-2 mt-0.5">
-                  <span className="text-3xl font-black text-slate-900 leading-none">
-                    {metrics.selesai ?? 0}
-                  </span>
-                  <span className="text-xs font-bold text-emerald-600">Terselesaikan</span>
-                </div>
+                <AnimatedKpiValue
+                  targetValue={metrics.selesai ?? 0}
+                  delay={1350}
+                  duration={750}
+                  textColor="text-slate-900"
+                  suffix="Terselesaikan"
+                  suffixClass="text-xs font-bold text-emerald-600"
+                  syncKey={syncKey}
+                />
                 <span className="text-[11px] text-slate-500 mt-1.5 block">Tingkat resolusi kasus 78.2%</span>
               </div>
             </div>

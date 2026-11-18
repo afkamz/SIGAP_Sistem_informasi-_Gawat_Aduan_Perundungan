@@ -2241,3 +2241,18 @@ Peningkatan tata letak dan keterbacaan tipografi di atas background video dashbo
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Penerapan scrim directional gradien horizontal kontras tinggi, pill status layanan, kartu kontrol frosted glass, dan styling kartu KPI profesional |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 154 optimalisasi layout profesional dan kontras tipografi di atas video hero admin |
+
+---
+
+## 📅 [Sesi 155] Rabu, 18 November 2026 — Jam 07 WIB
+
+### Fokus Utama
+Penerapan animasi sequential count-up dinamis pada 4 angka kartu KPI Dashboard Admin agar muncul bergantian secara bertahap dan halus.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/admin/AdminDashboard.jsx` | Integrasi komponen AnimatedKpiValue dengan kurva easeOutExpo dan staggered delay pada keempat kartu metrik KPI |
+| 2 | `EDIT` | `Frontend/public/assets/background/admin-welcome.mp4` | Pembaruan berkas video kustom latar belakang hero dashboard admin oleh pengguna |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 155 implementasi animasi angka metrik KPI muncul bergantian |
