@@ -203,45 +203,20 @@ export const AdminDashboard = () => {
         <div className="max-w-7xl mx-auto relative z-10 space-y-8 sm:space-y-10">
           {/* Top Row: Greeting & Controls */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            {/* Left: Branding & Welcome Greeting */}
-            <div className="flex items-start sm:items-center gap-4">
-              <div className="hidden sm:flex items-center gap-2 p-2.5 rounded-2xl bg-white/95 border border-[#BFEFFF] shadow-md shrink-0 backdrop-blur-xs">
-                <img
-                  src="/assets/branding/logo-sigap.png"
-                  alt="Logo SIGAP"
-                  className="h-10 w-auto object-contain"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-                <img
-                  src="/assets/branding/branding-sigap.png"
-                  alt="SIGAP"
-                  className="h-7 w-auto max-w-[120px] object-contain"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-                  <span>Admin Panel</span>
-                  <span>&gt;</span>
-                  <span className="text-[#1C6F8E] font-bold">Dashboard Analitik</span>
-                </div>
-                <h1
-                  className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight"
-                  style={{ textShadow: '0 2px 14px rgba(255, 255, 255, 0.9)' }}
-                >
-                  {greeting}, {adminName}
-                </h1>
-                <p
-                  className="text-xs sm:text-base text-slate-700 max-w-2xl leading-relaxed font-semibold"
-                  style={{ textShadow: '0 1px 10px rgba(255, 255, 255, 0.9)' }}
-                >
-                  Monitoring real-time penanganan insiden, perbandingan tren laporan sekolah terhadap data referensi nasional PPKSP.
-                </p>
-              </div>
+            {/* Left: Welcome Greeting */}
+            <div className="space-y-1.5">
+              <h1
+                className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight"
+                style={{ textShadow: '0 2px 14px rgba(255, 255, 255, 0.9)' }}
+              >
+                {greeting}, {adminName}
+              </h1>
+              <p
+                className="text-xs sm:text-base text-slate-700 max-w-2xl leading-relaxed font-semibold"
+                style={{ textShadow: '0 1px 10px rgba(255, 255, 255, 0.9)' }}
+              >
+                Monitoring real-time penanganan insiden, perbandingan tren laporan sekolah terhadap data referensi nasional PPKSP.
+              </p>
             </div>
 
             {/* Right Controls */}
