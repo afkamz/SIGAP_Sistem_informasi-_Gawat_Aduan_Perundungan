@@ -29,13 +29,26 @@ import {
   Edit3,
   Check,
   X,
-  AlertCircle
+  AlertCircle,
+  Calendar,
+  MapPin,
+  HeartHandshake,
+  HelpCircle,
+  ShieldCheck
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { StudentHeader } from '../../components/layout/StudentHeader';
 
 export const StudentDashboard = () => {
-  const { currentUser, reports, fetchRiwayatSiswa, isBackendConnected, token, updateStudentProfile } = useStore();
+  const {
+    currentUser,
+    reports,
+    fetchRiwayatSiswa,
+    isBackendConnected,
+    token,
+    updateStudentProfile,
+    confirmAppointmentAttendance
+  } = useStore();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -55,6 +68,10 @@ export const StudentDashboard = () => {
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   const [settingsSuccess, setSettingsSuccess] = useState('');
   const [settingsError, setSettingsError] = useState('');
+
+  // State Jadwal Konseling Tatap Muka (Appointment Tracker)
+  const [showAppointmentGuide, setShowAppointmentGuide] = useState(false);
+  const [confirmingAppt, setConfirmingAppt] = useState(false);
 
   // Sinkronkan form modal dengan data akun currentUser
   useEffect(() => {
@@ -181,6 +198,20 @@ export const StudentDashboard = () => {
       return false;
     });
   }, [reports, currentUser]);
+
+  // Daftar jadwal sesi konseling tatap muka dari laporan milik siswa
+  const activeAppointments = useMemo(() => {
+    return myReports
+      .filter((r) => r.counseling_appointment && r.counseling_appointment.status !== 'dibatalkan')
+      .map((r) => ({
+        ...r.counseling_appointment,
+        reportId: r.id,
+        ticketCode: r.ticket_code,
+        caseTitle: r.judul || r.kategori_nama,
+      }));
+  }, [myReports]);
+
+  const latestAppointment = activeAppointments[0] || null;
 
   const totalCount = myReports.length;
   const pendingCount = myReports.filter((r) => r.status === 'menunggu').length;
@@ -826,6 +857,189 @@ export const StudentDashboard = () => {
               <span>Sinkronkan Data</span>
             </button>
           </div>
+
+          {/* ─── KARTU JADWAL KONSELING TATAP MUKA (APPOINTMENT TRACKER) ─── */}
+          {latestAppointment && (
+            <div
+              className="w-full max-w-2xl mt-1 mb-2 p-5 sm:p-6 rounded-3xl border shadow-xl backdrop-blur-xl relative overflow-hidden transition-all duration-300 text-left"
+              style={{
+                background: 'rgba(255, 255, 255, 0.96)',
+                borderColor: '#BFEFFF',
+                boxShadow: '0 12px 36px -6px rgba(28, 111, 142, 0.18)',
+                opacity: isHeroInView ? 1 : 0,
+                transform: isHeroInView ? 'translateY(0)' : 'translateY(16px)',
+                transition: `opacity 500ms ${easeCurve} 650ms, transform 500ms ${easeCurve} 650ms`
+              }}
+            >
+              {/* Soft decorative ambient shape */}
+              <div
+                className="absolute -right-16 -top-16 w-44 h-44 rounded-full pointer-events-none select-none"
+                style={{
+                  background: 'linear-gradient(135deg, #BFEFFF 0%, #D6F5FF 100%)',
+                  opacity: 0.65
+                }}
+              />
+
+              {/* Card Header: Icon, Badge, and Title */}
+              <div
+                className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b"
+                style={{ borderColor: 'rgba(191, 239, 255, 0.7)' }}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-10 h-10 rounded-2xl flex items-center justify-center border shadow-xs shrink-0"
+                    style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+                  >
+                    <Calendar className="w-5 h-5 text-[#1C6F8E]" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-[#1C6F8E]">
+                        Jadwal Konseling Tatap Muka
+                      </span>
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping inline-block" />
+                    </div>
+                    <p className="text-[11px] text-slate-500 font-medium">
+                      Sesi pendampingan privat resmi dari Tim Guru BK &amp; Satgas PPKSP
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span
+                    className="px-3 py-1 rounded-full text-[11px] font-extrabold border shadow-2xs flex items-center gap-1.5"
+                    style={{
+                      background: latestAppointment.is_confirmed ? '#D1FAE5' : '#D6F5FF',
+                      color: latestAppointment.is_confirmed ? '#065F46' : '#1C6F8E',
+                      borderColor: latestAppointment.is_confirmed ? '#A7F3D0' : '#BFEFFF'
+                    }}
+                  >
+                    {latestAppointment.is_confirmed ? (
+                      <>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Kehadiran Terkonfirmasi</span>
+                      </>
+                    ) : (
+                      <>
+                        <Clock className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                        <span>Dijadwalkan Konselor</span>
+                      </>
+                    )}
+                  </span>
+                </div>
+              </div>
+
+              {/* Card Body: Detail Waktu, Ruangan, Konselor, dan Kasus Terkait */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 py-3.5 text-xs">
+                {/* Waktu & Tanggal */}
+                <div className="p-3 rounded-2xl border" style={{ background: '#F0FAFD', borderColor: '#BFEFFF' }}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Clock className="w-4 h-4 text-[#1C6F8E]" />
+                    <span className="text-[10px] font-bold uppercase text-slate-500">WAKTU PERTEMUAN:</span>
+                  </div>
+                  <div className="font-bold text-slate-900 text-xs sm:text-[13px]">
+                    {latestAppointment.scheduled_date || 'Jumat, 20 November 2026'}
+                  </div>
+                  <div className="text-[11px] font-semibold text-[#1C6F8E] mt-0.5">
+                    Pukul {latestAppointment.scheduled_time || '10:00 - 11:00 WIB'}
+                  </div>
+                </div>
+
+                {/* Lokasi Ruangan Aman */}
+                <div className="p-3 rounded-2xl border" style={{ background: '#F0FAFD', borderColor: '#BFEFFF' }}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <MapPin className="w-4 h-4 text-[#1C6F8E]" />
+                    <span className="text-[10px] font-bold uppercase text-slate-500">LOKASI RUANG PRIVAT:</span>
+                  </div>
+                  <div className="font-bold text-slate-900 text-xs sm:text-[13px]">
+                    {latestAppointment.location || 'Ruang Bimbingan Konseling (BK) Privat - Lantai 2'}
+                  </div>
+                  <div className="text-[11px] text-slate-500 mt-0.5 leading-tight">
+                    {latestAppointment.room_detail || 'Ruang aman tertutup, tanpa paparan teman lain.'}
+                  </div>
+                </div>
+
+                {/* Konselor Pendamping */}
+                <div className="p-3 rounded-2xl border" style={{ background: '#FFFFFF', borderColor: '#BFEFFF' }}>
+                  <span className="text-[10px] font-bold uppercase text-slate-500 block mb-1">GURU BK PENDAMPING:</span>
+                  <div className="font-bold text-slate-800 text-xs">
+                    {latestAppointment.counselor || 'Ibu Rahmawati, S.Pd (Konselor Satgas PPKSP)'}
+                  </div>
+                  <div className="text-[10px] text-slate-500 mt-0.5">
+                    Kasus: <span className="font-semibold text-[#1C6F8E]">#{latestAppointment.ticketCode}</span> • {latestAppointment.caseTitle || 'Perundungan Siber'}
+                  </div>
+                </div>
+
+                {/* Jaminan Keamanan */}
+                <div className="p-3 rounded-2xl border flex flex-col justify-between" style={{ background: '#FFFFFF', borderColor: '#BFEFFF' }}>
+                  <span className="text-[10px] font-bold uppercase text-slate-500 block mb-1">JAMINAN PERLINDUNGAN:</span>
+                  <div className="flex items-center gap-1.5 text-slate-700 font-semibold text-[11px]">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>100% Rahasia &amp; Bebas Konfrontasi</span>
+                  </div>
+                  <span className="text-[10px] text-slate-400 mt-0.5">Dilindungi SOP Satgas PPKSP</span>
+                </div>
+              </div>
+
+              {/* Catatan Konselor untuk Siswa */}
+              {latestAppointment.notes && (
+                <div
+                  className="p-3 rounded-2xl text-[11px] leading-relaxed border mb-3"
+                  style={{
+                    background: 'rgba(191, 239, 255, 0.25)',
+                    borderColor: '#BFEFFF',
+                    color: '#1C6F8E'
+                  }}
+                >
+                  <span className="font-bold block mb-0.5">Pesan dari Konselor:</span>
+                  {latestAppointment.notes}
+                </div>
+              )}
+
+              {/* Action Buttons Footer */}
+              <div
+                className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 pt-2 border-t"
+                style={{ borderColor: 'rgba(191, 239, 255, 0.6)' }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setShowAppointmentGuide(true)}
+                  className="px-3.5 py-2 rounded-xl text-xs font-bold border transition hover:opacity-90 flex items-center gap-1.5 cursor-pointer"
+                  style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                >
+                  <HelpCircle className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                  <span>Panduan Masuk Ruang BK</span>
+                </button>
+
+                <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                  {!latestAppointment.is_confirmed ? (
+                    <button
+                      type="button"
+                      disabled={confirmingAppt}
+                      onClick={async () => {
+                        setConfirmingAppt(true);
+                        confirmAppointmentAttendance(latestAppointment.reportId, currentUser?.nama || 'Siswa');
+                        setTimeout(() => setConfirmingAppt(false), 500);
+                      }}
+                      className="px-4 py-2 rounded-xl text-xs font-bold border transition active:scale-95 shadow-xs flex items-center gap-1.5 cursor-pointer hover:opacity-90 w-full sm:w-auto justify-center"
+                      style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                    >
+                      <Check className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                      <span>{confirmingAppt ? 'Mengonfirmasi...' : 'Konfirmasi: Saya Siap Hadir'}</span>
+                    </button>
+                  ) : (
+                    <span
+                      className="px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 border"
+                      style={{ background: '#ECFDF5', color: '#065F46', borderColor: '#A7F3D0' }}
+                    >
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Kehadiran Anda Telah Dicatat BK</span>
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           <span
             className="text-[11px] sm:text-xs font-semibold px-3.5 py-1 rounded-full border shadow-xs"
@@ -1718,6 +1932,121 @@ export const StudentDashboard = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ─── MODAL PANDUAN MASUK RUANG BK ─── */}
+      {showAppointmentGuide && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-fade-in">
+          <div
+            className="w-full max-w-lg rounded-3xl border shadow-2xl p-6 sm:p-7 relative overflow-hidden text-left"
+            style={{
+              background: '#FFFFFF',
+              borderColor: '#BFEFFF',
+              boxShadow: '0 20px 48px -12px rgba(28, 111, 142, 0.22)'
+            }}
+          >
+            {/* Ambient accent background */}
+            <div
+              className="absolute -right-12 -top-12 w-36 h-36 rounded-full pointer-events-none"
+              style={{
+                background: 'linear-gradient(135deg, #BFEFFF 0%, #D6F5FF 100%)',
+                opacity: 0.6
+              }}
+            />
+
+            {/* Modal Header */}
+            <div className="flex items-start justify-between gap-3 pb-4 border-b relative" style={{ borderColor: '#BFEFFF' }}>
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center border shadow-xs shrink-0"
+                  style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+                >
+                  <HeartHandshake className="w-5 h-5 text-[#1C6F8E]" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-800">
+                    Panduan Sesi Konseling Tatap Muka
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium">
+                    Ruang aman privat tanpa cemas, dijamin 100% rahasia &amp; nyaman
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowAppointmentGuide(false)}
+                className="p-1.5 rounded-xl border border-slate-200 text-slate-400 hover:text-slate-700 hover:border-slate-300 transition cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Body: Point-Point Penentram Hati */}
+            <div className="py-4 space-y-3.5 text-xs text-slate-600 relative">
+              <div className="flex items-start gap-3 p-3 rounded-2xl border" style={{ background: '#F0FAFD', borderColor: '#BFEFFF' }}>
+                <div className="w-6 h-6 rounded-xl flex items-center justify-center shrink-0 font-bold text-xs" style={{ background: '#BFEFFF', color: '#1C6F8E' }}>
+                  1
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-800 text-xs mb-0.5">100% Rahasia &amp; Tertutup</h4>
+                  <p className="text-slate-600 leading-relaxed text-[11.5px]">
+                    Segala hal yang Anda ceritakan di dalam ruangan dijamin kerahasiaannya oleh kode etik Guru BK dan SOP Satgas PPKSP. Tidak akan dibocorkan ke teman sekelas atau pihak lain.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-2xl border" style={{ background: '#F0FAFD', borderColor: '#BFEFFF' }}>
+                <div className="w-6 h-6 rounded-xl flex items-center justify-center shrink-0 font-bold text-xs" style={{ background: '#BFEFFF', color: '#1C6F8E' }}>
+                  2
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-800 text-xs mb-0.5">Bebas Konfrontasi Langsung</h4>
+                  <p className="text-slate-600 leading-relaxed text-[11.5px]">
+                    Sesi ini khusus untuk mendengar cerita Anda dan mendampingi pemulihan kondisi emosional Anda. Pihak terlapor <strong>TIDAK AKAN</strong> dihadirkan atau dipertemukan di sesi ini tanpa persetujuan Anda.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-2xl border" style={{ background: '#F0FAFD', borderColor: '#BFEFFF' }}>
+                <div className="w-6 h-6 rounded-xl flex items-center justify-center shrink-0 font-bold text-xs" style={{ background: '#BFEFFF', color: '#1C6F8E' }}>
+                  3
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-800 text-xs mb-0.5">Boleh Mengajak Pendamping</h4>
+                  <p className="text-slate-600 leading-relaxed text-[11.5px]">
+                    Jika Anda merasa cemas atau gugup untuk hadir sendiri, Anda diperbolehkan mengajak satu orang yang Anda percayai (sahabat, wali kelas, atau orang tua).
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 rounded-2xl border" style={{ background: '#F0FAFD', borderColor: '#BFEFFF' }}>
+                <div className="w-6 h-6 rounded-xl flex items-center justify-center shrink-0 font-bold text-xs" style={{ background: '#BFEFFF', color: '#1C6F8E' }}>
+                  4
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-800 text-xs mb-0.5">Tidak Ada Hukuman Bagi Pelapor</h4>
+                  <p className="text-slate-600 leading-relaxed text-[11.5px]">
+                    Melaporkan kekerasan atau perundungan adalah tindakan terpuji dan dilindungi undang-undang. Anda adalah prioritas perlindungan pihak sekolah.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="pt-3 border-t flex justify-end" style={{ borderColor: 'rgba(191, 239, 255, 0.6)' }}>
+              <button
+                type="button"
+                onClick={() => setShowAppointmentGuide(false)}
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-xs transition active:scale-[0.98] border shadow-xs cursor-pointer hover:opacity-90 flex items-center justify-center gap-2"
+                style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+              >
+                <Check className="w-4 h-4 text-[#1C6F8E]" />
+                <span>Saya Mengerti &amp; Merasa Lebih Tenang</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

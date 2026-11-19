@@ -20,6 +20,25 @@ export const INITIAL_LAPORAN = [
     catatan_konselor: 'Laporan telah diverifikasi oleh Guru Bimbingan Konseling. Tim Satgas saat ini sedang melakukan pemanggilan tertutup dan koordinasi bersama wali kelas tanpa membuka identitas pelapor. Tetap pantau halaman ini untuk pembaruan berikutnya.',
     konselor_nama: 'Ibu Rahmawati, S.Pd (Konselor BK)',
     catatan_updated_at: '15 Mei 2024, 10:45 WIB',
+    counseling_appointment: {
+      id: 'APT-2026-001',
+      ticket_code: 'SGP-2026-0091',
+      case_title: 'Perundungan Siber (Cyberbullying)',
+      scheduled_date: 'Jumat, 20 November 2026',
+      scheduled_time: '10:00 - 11:00 WIB',
+      location: 'Ruang Bimbingan Konseling (BK) Privat - Lantai 2',
+      room_detail: 'Pintu tertutup, ruang kedap suara, akses aman tanpa lewat koridor kelas utama.',
+      counselor: 'Ibu Rahmawati, S.Pd (Konselor Satgas PPKSP)',
+      notes: 'Sesi pendampingan pribadi dan klarifikasi santai tanpa konfrontasi dengan pihak terlapor. Kehadiran dan kenyamanan Anda terlindungi penuh.',
+      status: 'dijadwalkan',
+      is_confirmed: false,
+      confirmed_at: null,
+      tips: [
+        'Siswa tidak perlu membawa dokumen rumit, cukup hadir dengan tenang.',
+        'Sesi berlangsung santai untuk mendengarkan cerita dan mencari solusi damai bersama.',
+        'Kerahasiaan identitas dijamin 100% dan tidak akan dibuka di depan teman sekelas.'
+      ]
+    },
     step_dates: {
       step1: '14 Mei 2024 • 14:15 WIB',
       step2: '14 Mei 2024 • 15:30 WIB',

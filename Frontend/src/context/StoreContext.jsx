@@ -18,7 +18,15 @@ export const StoreProvider = ({ children }) => {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed.reports && Array.isArray(parsed.reports)) {
-          return parsed.reports;
+          return parsed.reports.map((r) => {
+            if (r.id === 91 && !r.counseling_appointment) {
+              const default91 = INITIAL_LAPORAN.find((d) => d.id === 91);
+              if (default91?.counseling_appointment) {
+                return { ...r, counseling_appointment: default91.counseling_appointment };
+              }
+            }
+            return r;
+          });
         }
       }
     } catch (_) {}
@@ -857,6 +865,90 @@ export const StoreProvider = ({ children }) => {
     return { success: true, user: updatedUser };
   };
 
+  const scheduleCounselingAppointment = (reportId, appointmentData) => {
+    const timestamp = new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date()) + ' WIB';
+
+    setReports((prev) =>
+      prev.map((r) => {
+        if (r.id === Number(reportId) || r.ticket_code === reportId) {
+          return {
+            ...r,
+            counseling_appointment: {
+              ...appointmentData,
+              updated_at: timestamp,
+              status: appointmentData.status || 'dijadwalkan',
+            },
+            history: [
+              ...(r.history || []),
+              {
+                waktu: timestamp,
+                status: r.status,
+                pelaksana: appointmentData.counselor || 'Ibu Rahmawati, S.Pd (Konselor BK)',
+                catatan: `Jadwal sesi konseling tatap muka ditetapkan: ${appointmentData.scheduled_date} (${appointmentData.scheduled_time}) di ${appointmentData.location}.`
+              }
+            ]
+          };
+        }
+        return r;
+      })
+    );
+
+    addAuditEntry({
+      pelaksana_nama: appointmentData.counselor || 'Ibu Rahmawati, S.Pd',
+      pelaksana_role: 'Konselor BK Utama',
+      pelaksana_avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80',
+      tipe_aksi: 'appointment',
+      deskripsi: `Menjadwalkan konseling tatap muka untuk tiket #${reportId}`,
+      detail_perubahan: `Tanggal: ${appointmentData.scheduled_date} (${appointmentData.scheduled_time}) • Ruangan: ${appointmentData.location}`,
+      ticket_code: String(reportId)
+    });
+
+    return { success: true };
+  };
+
+  const confirmAppointmentAttendance = (reportId, studentName = 'Siswa') => {
+    const timestamp = new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date()) + ' WIB';
+
+    setReports((prev) =>
+      prev.map((r) => {
+        if (r.id === Number(reportId) || r.ticket_code === reportId) {
+          const appt = r.counseling_appointment;
+          if (!appt) return r;
+          return {
+            ...r,
+            counseling_appointment: {
+              ...appt,
+              is_confirmed: true,
+              confirmed_at: timestamp,
+            },
+            history: [
+              ...(r.history || []),
+              {
+                waktu: timestamp,
+                status: r.status,
+                pelaksana: studentName,
+                catatan: 'Pelapor mengonfirmasi kesiapan hadir pada sesi pendampingan konseling tatap muka.'
+              }
+            ]
+          };
+        }
+        return r;
+      })
+    );
+
+    addAuditEntry({
+      pelaksana_nama: studentName,
+      pelaksana_role: 'Pelapor Terverifikasi',
+      pelaksana_avatar: '',
+      tipe_aksi: 'confirmation',
+      deskripsi: `Siswa mengonfirmasi kehadiran sesi konseling tatap muka`,
+      detail_perubahan: `Pelapor menyatakan siap hadir sesuai jadwal yang ditetapkan Konselor BK.`,
+      ticket_code: String(reportId)
+    });
+
+    return { success: true };
+  };
+
   return (
     <StoreContext.Provider
       value={{
@@ -882,6 +974,8 @@ export const StoreProvider = ({ children }) => {
         getMetrics,
         resetDefault,
         updateStudentProfile,
+        scheduleCounselingAppointment,
+        confirmAppointmentAttendance,
         addReportMessage,
         categories: KATEGORI_DATA
       }}

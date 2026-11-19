@@ -41,6 +41,7 @@ export const ReportDetail = () => {
     overrideCategory,
     currentUser,
     fetchReportDetail,
+    scheduleCounselingAppointment,
   } = useStore();
 
   const report = reports.find((r) => r.id === Number(reportId)) || reports[0];
@@ -69,6 +70,26 @@ export const ReportDetail = () => {
   const [counselorNote, setCounselorNote] = useState('');
   const [actionSuccessMsg, setActionSuccessMsg] = useState('');
   const [counselorInterventionNote, setCounselorInterventionNote] = useState('');
+
+  // States Jadwal Konseling Tatap Muka
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [schedDate, setSchedDate] = useState('Jumat, 20 November 2026');
+  const [schedTime, setSchedTime] = useState('10:00 - 11:00 WIB');
+  const [schedLocation, setSchedLocation] = useState('Ruang Konseling BK Privat - Lantai 2');
+  const [schedRoomDetail, setSchedRoomDetail] = useState('Ruang kedap suara, tertutup privat tanpa paparan teman lain.');
+  const [schedCounselor, setSchedCounselor] = useState('Ibu Rahmawati, S.Pd (Konselor Satgas PPKSP)');
+  const [schedNotes, setSchedNotes] = useState('Sesi pendampingan privat untuk mendengar keluh kesah dan pemulihan psikologis.');
+
+  useEffect(() => {
+    if (report?.counseling_appointment) {
+      setSchedDate(report.counseling_appointment.scheduled_date || 'Jumat, 20 November 2026');
+      setSchedTime(report.counseling_appointment.scheduled_time || '10:00 - 11:00 WIB');
+      setSchedLocation(report.counseling_appointment.location || 'Ruang Konseling BK Privat - Lantai 2');
+      setSchedRoomDetail(report.counseling_appointment.room_detail || 'Ruang kedap suara, tertutup privat tanpa paparan teman lain.');
+      setSchedCounselor(report.counseling_appointment.counselor || (currentUser?.nama ? `${currentUser.nama} (Konselor Satgas PPKSP)` : 'Ibu Rahmawati, S.Pd (Konselor Satgas PPKSP)'));
+      setSchedNotes(report.counseling_appointment.notes || 'Sesi pendampingan privat untuk mendengar keluh kesah dan pemulihan psikologis.');
+    }
+  }, [report, currentUser]);
 
   // Fetch real detail from backend on mount or ID change
   useEffect(() => {
@@ -668,19 +689,58 @@ export const ReportDetail = () => {
                 ></textarea>
               </div>
 
+              {/* Info Sesi Konseling Aktif jika sudah dijadwalkan */}
+              {report?.counseling_appointment && (
+                <div
+                  className="p-3.5 rounded-2xl border text-xs space-y-1.5 transition-all"
+                  style={{
+                    background: 'rgba(240, 250, 253, 0.9)',
+                    borderColor: '#BFEFFF'
+                  }}
+                >
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="font-extrabold text-[#1C6F8E] flex items-center gap-1.5 text-[11px] uppercase tracking-wide">
+                      <Calendar className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                      Sesi Konseling Aktif
+                    </span>
+                    {report.counseling_appointment.is_confirmed ? (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1">
+                        <Check className="w-3 h-3" />
+                        Siswa Siap Hadir
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-300">
+                        Menunggu Konfirmasi Siswa
+                      </span>
+                    )}
+                  </div>
+                  <div className="font-bold text-slate-800 text-xs">
+                    {report.counseling_appointment.scheduled_date} • {report.counseling_appointment.scheduled_time}
+                  </div>
+                  <div className="text-slate-600 text-[11px]">
+                    📍 {report.counseling_appointment.location}
+                  </div>
+                  <div className="text-slate-500 text-[10px]">
+                    Konselor: {report.counseling_appointment.counselor}
+                  </div>
+                </div>
+              )}
+
               {/* Action Buttons */}
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <button
-                  onClick={() => alert('Jadwal konseling telah dimasukkan ke agenda BK.')}
-                  className="py-2.5 px-3 rounded-2xl glass-card hover:bg-white text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 transition"
+                  type="button"
+                  onClick={() => setShowScheduleModal(true)}
+                  className="py-2.5 px-3 rounded-2xl glass-card hover:bg-white text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 transition cursor-pointer"
                 >
-                  <Calendar className="w-3.5 h-3.5 text-slate-500" />
-                  Jadwal Konseling
+                  <Calendar className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                  {report?.counseling_appointment ? 'Ubah Jadwal BK' : 'Jadwal Konseling'}
                 </button>
 
                 <button
+                  type="button"
                   onClick={() => flash('✓ Notifikasi kasus berhasil diteruskan ke tim Satgas PPKSP!')}
-                  className="py-2.5 px-3 rounded-2xl glass-button-primary text-[#1C6F8E] text-xs font-bold flex items-center justify-center gap-1.5 transition"
+                  className="py-2.5 px-3 rounded-2xl glass-button-primary text-[#1C6F8E] text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer"
                 >
                   <Send className="w-3.5 h-3.5 text-[#1C6F8E]" />
                   Notifikasi Satgas
@@ -836,6 +896,145 @@ export const ReportDetail = () => {
                 className="max-h-[70vh] max-w-full object-contain rounded-2xl shadow-xl"
               />
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* SCHEDULE COUNSELING MODAL */}
+      {showScheduleModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="glass-panel-elevated rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-white/90 animate-fade-in text-left">
+            <div className="flex justify-between items-center border-b border-white/50 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div
+                  className="w-9 h-9 rounded-2xl flex items-center justify-center border shadow-xs"
+                  style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+                >
+                  <Calendar className="w-4 h-4 text-[#1C6F8E]" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-slate-900">Jadwalkan Sesi Konseling Tatap Muka</h4>
+                  <p className="text-[11px] text-slate-500">
+                    Tiket #{report?.ticket_code} — {report?.judul || report?.kategori_nama}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowScheduleModal(false)}
+                className="p-1 rounded-xl glass-pill text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                scheduleCounselingAppointment(report.id, {
+                  scheduled_date: schedDate,
+                  scheduled_time: schedTime,
+                  location: schedLocation,
+                  room_detail: schedRoomDetail,
+                  counselor: schedCounselor,
+                  notes: schedNotes,
+                  is_confirmed: report?.counseling_appointment?.is_confirmed || false,
+                  status: 'dijadwalkan'
+                });
+                setShowScheduleModal(false);
+                flash('✓ Jadwal konseling tatap muka berhasil diterbitkan ke dashboard siswa!');
+              }}
+              className="space-y-3.5 text-xs"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">Hari &amp; Tanggal: *</label>
+                  <input
+                    type="text"
+                    required
+                    value={schedDate}
+                    onChange={(e) => setSchedDate(e.target.value)}
+                    placeholder="cth: Jumat, 20 November 2026"
+                    className="w-full p-2.5 rounded-xl glass-input text-xs text-slate-800 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">Waktu / Jam: *</label>
+                  <input
+                    type="text"
+                    required
+                    value={schedTime}
+                    onChange={(e) => setSchedTime(e.target.value)}
+                    placeholder="cth: 10:00 - 11:00 WIB"
+                    className="w-full p-2.5 rounded-xl glass-input text-xs text-slate-800 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">Lokasi Ruang Konseling: *</label>
+                <input
+                  type="text"
+                  required
+                  value={schedLocation}
+                  onChange={(e) => setSchedLocation(e.target.value)}
+                  placeholder="cth: Ruang Konseling BK Privat - Lantai 2"
+                  className="w-full p-2.5 rounded-xl glass-input text-xs text-slate-800 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">Detail Keamanan Ruang Privasi:</label>
+                <input
+                  type="text"
+                  value={schedRoomDetail}
+                  onChange={(e) => setSchedRoomDetail(e.target.value)}
+                  placeholder="cth: Ruang kedap suara, tertutup privat tanpa paparan teman lain."
+                  className="w-full p-2.5 rounded-xl glass-input text-xs text-slate-800 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">Konselor Pendamping: *</label>
+                <input
+                  type="text"
+                  required
+                  value={schedCounselor}
+                  onChange={(e) => setSchedCounselor(e.target.value)}
+                  placeholder="cth: Ibu Rahmawati, S.Pd (Konselor BK)"
+                  className="w-full p-2.5 rounded-xl glass-input text-xs text-slate-800 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">Pesan Penenang untuk Siswa:</label>
+                <textarea
+                  rows="2"
+                  value={schedNotes}
+                  onChange={(e) => setSchedNotes(e.target.value)}
+                  placeholder="Tuliskan pesan penenang agar siswa tidak cemas..."
+                  className="w-full p-2.5 rounded-xl glass-input text-xs text-slate-800 focus:outline-none resize-none"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setShowScheduleModal(false)}
+                  className="px-4 py-2.5 rounded-xl glass-card text-slate-600 font-bold cursor-pointer"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 rounded-xl font-bold border shadow-xs transition active:scale-95 cursor-pointer flex items-center gap-1.5"
+                  style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                >
+                  <Calendar className="w-4 h-4 text-[#1C6F8E]" />
+                  <span>Terbitkan Jadwal Sesi</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
