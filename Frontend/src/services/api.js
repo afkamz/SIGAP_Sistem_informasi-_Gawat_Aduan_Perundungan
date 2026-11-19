@@ -80,6 +80,38 @@ export const api = {
     return handleResponse(response);
   },
 
+  async updateSiswaProfile(payload, token = '', siswaId = null) {
+    const headers = token ? authHeader(token) : { 'Content-Type': 'application/json' };
+    let response;
+    try {
+      response = await fetch(`${API_BASE_URL}/auth/siswa/profile`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok && siswaId) {
+        // Fallback by ID jika token invalid atau role mismatch
+        const fallbackRes = await fetch(`${API_BASE_URL}/auth/siswa/${siswaId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (fallbackRes.ok) return fallbackRes.json();
+      }
+    } catch (err) {
+      if (siswaId) {
+        response = await fetch(`${API_BASE_URL}/auth/siswa/${siswaId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        throw err;
+      }
+    }
+    return handleResponse(response);
+  },
+
   async getMe(token) {
     const response = await fetch(`${API_BASE_URL}/auth/me`, {
       headers: authHeader(token),

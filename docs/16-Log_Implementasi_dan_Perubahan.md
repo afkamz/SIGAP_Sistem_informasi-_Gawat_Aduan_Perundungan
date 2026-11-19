@@ -2568,3 +2568,22 @@ Penggantian media pada permukaan kubus 3D bagian atas (top face) menjadi foto st
 | 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Kalimat pembuka V.D tanpa pengulangan bilingual) |
 | 3 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Kalimat pembuka V.D tanpa pengulangan bilingual) |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 137 |
+
+---
+
+## 📅 [Sesi 138] Kamis, 19 November 2026 — Jam 19 WIB
+
+### Fokus Utama
+Implementasi fitur Pengaturan Akun pada Dashboard Siswa yang memungkinkan koreksi mandiri data identitas (seperti typo NISN, nama, dan asal sekolah) serta opsi ubah kata sandi dengan tema visual baby blue konsisten sesuai halaman login.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `backend/sigap-backend/app/schemas/auth.py` | Penambahan skema `SiswaUpdateRequest` untuk payload pembaruan profil dan NISN siswa |
+| 2 | `EDIT` | `backend/sigap-backend/app/routers/auth.py` | Penambahan endpoint `PUT /api/auth/siswa/profile` dan `PUT /api/auth/siswa/{siswa_id}` dengan validasi keunikan NISN |
+| 3 | `EDIT` | `Frontend/src/services/api.js` | Penambahan fungsi client `api.updateSiswaProfile` dengan fallback autentikasi ID |
+| 4 | `EDIT` | `Frontend/src/context/StoreContext.jsx` | Implementasi metode `updateStudentProfile` untuk sinkronisasi state lokal dan backend |
+| 5 | `EDIT` | `Frontend/src/pages/student/StudentDashboard.jsx` | Penambahan badge interaktif NISN hero, tombol Pengaturan Akun, serta modal pengaturan profil bertema login |
+| 6 | `EDIT` | `Frontend/src/components/layout/StudentHeader.jsx` | Penambahan tombol akses cepat Pengaturan Akun pada header desktop dan mobile drawer |
+| 7 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 138 implementasi pengaturan akun siswa dan koreksi NISN |

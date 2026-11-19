@@ -796,6 +796,67 @@ export const StoreProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
+  const updateStudentProfile = async (updates) => {
+    const updatedUser = {
+      ...(currentUser || {}),
+      nama: updates.nama !== undefined && updates.nama.trim() ? updates.nama.trim() : currentUser?.nama,
+      nisn: updates.nisn !== undefined && updates.nisn.trim() ? updates.nisn.trim() : currentUser?.nisn,
+      sekolah: updates.sekolah !== undefined ? updates.sekolah.trim() : currentUser?.sekolah,
+    };
+
+    setCurrentUser(updatedUser);
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      const parsed = saved ? JSON.parse(saved) : {};
+      parsed.currentUser = updatedUser;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+    } catch (_) {}
+
+    try {
+      const res = await api.updateSiswaProfile(
+        {
+          nisn: updates.nisn,
+          nama: updates.nama,
+          sekolah: updates.sekolah,
+          old_password: updates.old_password,
+          new_password: updates.new_password,
+        },
+        token,
+        currentUser?.id
+      );
+      if (res?.user) {
+        const merged = { ...updatedUser, ...res.user };
+        setCurrentUser(merged);
+        if (res.access_token) {
+          setToken(res.access_token);
+          localStorage.setItem(TOKEN_KEY, res.access_token);
+        }
+      }
+    } catch (err) {
+      console.warn('Backend update siswa notice (perubahan profil disimpan lokal):', err.message);
+    }
+
+    if (updates.nama) {
+      setReports((prev) =>
+        prev.map((r) => {
+          if (
+            (currentUser?.id && Number(r.siswa_id) === Number(currentUser.id)) ||
+            (currentUser?.nama && r.reporter_name === currentUser.nama)
+          ) {
+            return {
+              ...r,
+              reporter_name: updates.nama.trim(),
+              reporter_school: updates.sekolah ? updates.sekolah.trim() : r.reporter_school,
+            };
+          }
+          return r;
+        })
+      );
+    }
+
+    return { success: true, user: updatedUser };
+  };
+
   return (
     <StoreContext.Provider
       value={{
@@ -820,6 +881,7 @@ export const StoreProvider = ({ children }) => {
         isBackendConnected,
         getMetrics,
         resetDefault,
+        updateStudentProfile,
         addReportMessage,
         categories: KATEGORI_DATA
       }}

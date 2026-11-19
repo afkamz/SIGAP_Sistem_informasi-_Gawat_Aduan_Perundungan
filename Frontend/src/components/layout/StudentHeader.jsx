@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Search, Lock, LogOut, PlusCircle, LogIn, Menu, X, LayoutDashboard } from 'lucide-react';
+import { Search, Lock, LogOut, PlusCircle, LogIn, Menu, X, LayoutDashboard, Settings } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 
 export const StudentHeader = ({ isDashboard = false, hideBorder = false }) => {
@@ -131,6 +131,21 @@ export const StudentHeader = ({ isDashboard = false, hideBorder = false }) => {
                   </span>
                 )}
               </Link>
+
+              {!isAdmin && (
+                <Link
+                  to="/dashboard?tab=pengaturan"
+                  title="Pengaturan Akun & NISN"
+                  className="p-1.5 rounded-xl border transition hover:opacity-90 flex items-center justify-center cursor-pointer shadow-2xs"
+                  style={{
+                    background: '#FFFFFF',
+                    color: '#1C6F8E',
+                    borderColor: '#BFEFFF'
+                  }}
+                >
+                  <Settings className="w-4 h-4 text-[#1C6F8E]" />
+                </Link>
+              )}
 
               <button
                 type="button"
@@ -268,6 +283,17 @@ export const StudentHeader = ({ isDashboard = false, hideBorder = false }) => {
                     {isAdmin ? 'Dashboard Admin' : `Dashboard (${currentUser.nama})`}
                   </span>
                 </Link>
+                {!isAdmin && (
+                  <Link
+                    to="/dashboard?tab=pengaturan"
+                    onClick={() => setMobileOpen(false)}
+                    className="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 border"
+                    style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                  >
+                    <Settings className="w-4 h-4 text-[#1C6F8E]" />
+                    <span>Pengaturan Akun &amp; NISN</span>
+                  </Link>
+                )}
                 <button
                   type="button"
                   onClick={() => {

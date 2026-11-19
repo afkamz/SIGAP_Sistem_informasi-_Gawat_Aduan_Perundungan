@@ -59,3 +59,11 @@ class SiswaOut(BaseModel):
     sekolah: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class SiswaUpdateRequest(BaseModel):
+    nisn: str | None = Field(default=None, min_length=4, max_length=20)
+    nama: str | None = Field(default=None, min_length=2, max_length=150)
+    sekolah: str | None = None
+    old_password: str | None = None
+    new_password: str | None = None

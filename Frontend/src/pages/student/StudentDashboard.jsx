@@ -1,7 +1,8 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Shield,
+  Eye,
   EyeOff,
   Clock,
   PlusCircle,
@@ -23,18 +24,53 @@ import {
   ArrowRight,
   PhoneCall,
   Phone,
-  Search
+  Search,
+  Settings,
+  Edit3,
+  Check,
+  X,
+  AlertCircle
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { StudentHeader } from '../../components/layout/StudentHeader';
 
 export const StudentDashboard = () => {
-  const { currentUser, reports, fetchRiwayatSiswa, isBackendConnected, token } = useStore();
+  const { currentUser, reports, fetchRiwayatSiswa, isBackendConnected, token, updateStudentProfile } = useStore();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortOrder, setSortOrder] = useState('newest');
   const [isLoadingRiwayat, setIsLoadingRiwayat] = useState(false);
+
+  // State Pengaturan Akun (NISN, Nama, Sekolah, Kata Sandi)
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [settingNisn, setSettingNisn] = useState('');
+  const [settingNama, setSettingNama] = useState('');
+  const [settingSekolah, setSettingSekolah] = useState('');
+  const [settingOldPassword, setSettingOldPassword] = useState('');
+  const [settingNewPassword, setSettingNewPassword] = useState('');
+  const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [settingsSuccess, setSettingsSuccess] = useState('');
+  const [settingsError, setSettingsError] = useState('');
+
+  // Sinkronkan form modal dengan data akun currentUser
+  useEffect(() => {
+    if (currentUser) {
+      setSettingNisn(currentUser.nisn || '');
+      setSettingNama(currentUser.nama || '');
+      setSettingSekolah(currentUser.sekolah || '');
+    }
+  }, [currentUser, isSettingsOpen]);
+
+  // Buka modal jika parameter URL ?tab=pengaturan terdeteksi
+  useEffect(() => {
+    if (searchParams.get('tab') === 'pengaturan') {
+      setIsSettingsOpen(true);
+    }
+  }, [searchParams]);
 
   // Background Video Ref & Autoplay Enforcer
   const videoRef = useRef(null);
@@ -307,6 +343,63 @@ export const StudentDashboard = () => {
       await fetchRiwayatSiswa(currentUser.id, token);
     } finally {
       setIsLoadingRiwayat(false);
+    }
+  };
+
+  const handleSaveSettings = async (e) => {
+    e.preventDefault();
+    setSettingsError('');
+    setSettingsSuccess('');
+
+    if (!settingNisn.trim()) {
+      setSettingsError('NISN tidak boleh kosong.');
+      return;
+    }
+    if (settingNisn.trim().length < 4) {
+      setSettingsError('NISN minimal 4 karakter/angka.');
+      return;
+    }
+    if (!settingNama.trim()) {
+      setSettingsError('Nama siswa tidak boleh kosong.');
+      return;
+    }
+
+    if (showPasswordFields && settingNewPassword) {
+      if (settingNewPassword.length < 4) {
+        setSettingsError('Kata sandi baru minimal 4 karakter.');
+        return;
+      }
+    }
+
+    setIsSavingSettings(true);
+    try {
+      await updateStudentProfile({
+        nisn: settingNisn.trim(),
+        nama: settingNama.trim(),
+        sekolah: settingSekolah.trim(),
+        old_password: settingOldPassword || undefined,
+        new_password: showPasswordFields && settingNewPassword ? settingNewPassword : undefined,
+      });
+
+      setSettingsSuccess('Perubahan profil dan NISN Anda berhasil disimpan!');
+      setSettingOldPassword('');
+      setSettingNewPassword('');
+      setShowPasswordFields(false);
+
+      if (searchParams.get('tab') === 'pengaturan') {
+        const newParams = new URLSearchParams(searchParams);
+        newParams.delete('tab');
+        setSearchParams(newParams, { replace: true });
+      }
+
+      setTimeout(() => {
+        setSettingsSuccess('');
+        setIsSettingsOpen(false);
+      }, 1200);
+    } catch (err) {
+      setSettingsError(err.message || 'Gagal menyimpan pengaturan akun. Silakan coba lagi.');
+    } finally {
+      setIsSavingSettings(false);
     }
   };
 
@@ -621,6 +714,47 @@ export const StudentDashboard = () => {
             Ruang perlindungan siswa SIGAP. Setiap suara Anda didengar, dilindungi, dan ditindaklanjuti secara profesional.
           </p>
 
+          {/* Badge Interaktif NISN & Profil Siswa (Klik untuk mengubah NISN jika ada salah ketik/typo) */}
+          <div
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl border shadow-md backdrop-blur-md transition hover:scale-[1.02] cursor-pointer active:scale-98"
+            onClick={() => setIsSettingsOpen(true)}
+            title="Klik untuk mengubah NISN atau data diri siswa jika terdapat salah ketik (typo)"
+            style={{
+              background: 'rgba(255, 255, 255, 0.94)',
+              borderColor: '#BFEFFF',
+              opacity: isHeroInView ? 1 : 0,
+              transform: isHeroInView ? 'translateY(0)' : 'translateY(16px)',
+              transition: `opacity 500ms ${easeCurve} 500ms, transform 500ms ${easeCurve} 500ms`
+            }}
+          >
+            <div
+              className="w-7 h-7 rounded-xl flex items-center justify-center font-bold text-xs"
+              style={{ background: '#BFEFFF', color: '#1C6F8E' }}
+            >
+              <GraduationCap className="w-4 h-4 text-[#1C6F8E]" />
+            </div>
+            <div className="text-left leading-tight">
+              <span className="text-[10px] font-semibold text-slate-500 block">NISN TERDAFTAR</span>
+              <span className="text-xs font-bold text-[#1C6F8E] font-mono tracking-wide">
+                {currentUser?.nisn || '0061234567'}
+              </span>
+            </div>
+            <span className="text-slate-300">|</span>
+            <div className="text-left leading-tight hidden xs:block">
+              <span className="text-[10px] font-semibold text-slate-500 block">SEKOLAH</span>
+              <span className="text-xs font-bold text-slate-700 truncate max-w-[150px] block">
+                {currentUser?.sekolah || 'SMAN 1 Teladan'}
+              </span>
+            </div>
+            <div
+              className="ml-1 px-2 py-0.5 rounded-lg text-[10px] font-bold flex items-center gap-1 border"
+              style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+            >
+              <Edit3 className="w-3 h-3 text-[#1C6F8E]" />
+              <span>Koreksi NISN</span>
+            </div>
+          </div>
+
           {/* Group Tombol Aksi - Fokus Utama "Buat Aduan Baru" */}
           <div
             className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto pt-2"
@@ -644,6 +778,22 @@ export const StudentDashboard = () => {
               <PlusCircle className="w-5 h-5 text-[#142B4A]" />
               <span>Buat Aduan Baru</span>
             </Link>
+
+            {/* Tombol Sekunder: Pengaturan Akun */}
+            <button
+              type="button"
+              onClick={() => setIsSettingsOpen(true)}
+              className="w-full sm:w-auto px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition hover:opacity-95 border shadow-md active:scale-95 cursor-pointer"
+              style={{
+                background: '#FFFFFF',
+                color: '#1C6F8E',
+                borderColor: '#BFEFFF'
+              }}
+              title="Pengaturan akun siswa (Ubah NISN, Nama, atau Sekolah jika typo)"
+            >
+              <Settings className="w-4 h-4 text-[#1C6F8E]" />
+              <span>Pengaturan Akun</span>
+            </button>
 
             {/* Tombol Sekunder: Lacak Tiket */}
             <Link
@@ -1310,6 +1460,267 @@ export const StudentDashboard = () => {
           </div>
         </div>
       </main>
+
+      {/* ─── MODAL PENGATURAN AKUN SISWA (TEMA PERSIS HALAMAN LOGIN) ─── */}
+      {isSettingsOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in overflow-y-auto"
+          onClick={() => {
+            setIsSettingsOpen(false);
+            if (searchParams.get('tab') === 'pengaturan') {
+              const newParams = new URLSearchParams(searchParams);
+              newParams.delete('tab');
+              setSearchParams(newParams, { replace: true });
+            }
+          }}
+        >
+          <div
+            className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 relative overflow-hidden shadow-2xl border my-8"
+            style={{ borderColor: '#BFEFFF' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Lingkaran Dekoratif Baby Blue persis halaman Login */}
+            <div
+              className="absolute -right-24 -top-24 w-64 h-64 rounded-full pointer-events-none select-none z-0"
+              style={{
+                background: 'linear-gradient(135deg, #BFEFFF 0%, #D6F5FF 100%)',
+                opacity: 0.82
+              }}
+            />
+            <div
+              className="absolute -left-20 -bottom-20 w-48 h-48 rounded-full pointer-events-none select-none z-0"
+              style={{
+                background: 'linear-gradient(135deg, #BFEFFF 0%, #D6F5FF 100%)',
+                opacity: 0.5
+              }}
+            />
+
+            {/* Header Modal */}
+            <div
+              className="relative z-10 flex items-start justify-between gap-3 border-b pb-4 mb-4"
+              style={{ borderColor: 'rgba(191, 239, 255, 0.6)' }}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-11 h-11 rounded-2xl flex items-center justify-center border shadow-xs"
+                  style={{
+                    background: '#BFEFFF',
+                    borderColor: '#BFEFFF',
+                    color: '#1C6F8E'
+                  }}
+                >
+                  <UserCheck className="w-5 h-5 text-[#1C6F8E]" />
+                </div>
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111827]">
+                    Pengaturan Akun Siswa
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Koreksi data profil atau perbaiki salah ketik (typo) NISN Anda
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSettingsOpen(false);
+                  if (searchParams.get('tab') === 'pengaturan') {
+                    const newParams = new URLSearchParams(searchParams);
+                    newParams.delete('tab');
+                    setSearchParams(newParams, { replace: true });
+                  }
+                }}
+                className="p-1.5 rounded-full text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition cursor-pointer"
+                title="Tutup"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Callout Info Tip persis gaya Login */}
+            <div
+              className="relative z-10 p-3.5 rounded-2xl text-xs flex items-start gap-2.5 border text-left mb-4"
+              style={{
+                background: 'rgba(191, 239, 255, 0.35)',
+                borderColor: '#BFEFFF',
+                color: '#1C6F8E'
+              }}
+            >
+              <Info className="w-4 h-4 text-[#1C6F8E] shrink-0 mt-0.5" />
+              <span>
+                <strong>Koreksi NISN &amp; Profil:</strong> Jika terdapat salah ketik (typo) pada nomor NISN saat registrasi, Anda dapat langsung mengoreksinya di bawah ini agar selalu sinkron dengan data sekolah.
+              </span>
+            </div>
+
+            {/* Form Pengaturan Akun */}
+            <form onSubmit={handleSaveSettings} className="relative z-10 space-y-4 text-left">
+              {/* Field 1: NISN */}
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1.5">
+                  NISN (Nomor Induk Siswa Nasional) <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    required
+                    value={settingNisn}
+                    onChange={(e) => setSettingNisn(e.target.value)}
+                    placeholder="Masukkan NISN (cth: 0061234567)"
+                    className="w-full px-3.5 py-2.5 rounded-md text-sm font-mono font-medium border border-slate-300 focus:border-slate-500 focus:outline-none transition bg-white"
+                  />
+                  <span
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold px-2 py-0.5 rounded-md border"
+                    style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                  >
+                    Kunci Login
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-400 mt-1">
+                  Nomor ini digunakan untuk masuk ke portal siswa. Ubah nomor di atas jika sebelumnya typo.
+                </p>
+              </div>
+
+              {/* Field 2: Nama Lengkap Siswa */}
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1.5">
+                  Nama Lengkap Siswa <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={settingNama}
+                  onChange={(e) => setSettingNama(e.target.value)}
+                  placeholder="Nama lengkap siswa"
+                  className="w-full px-3.5 py-2.5 rounded-md text-sm border border-slate-300 focus:border-slate-500 focus:outline-none transition bg-white"
+                />
+              </div>
+
+              {/* Field 3: Asal Sekolah */}
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1.5">
+                  Asal Satuan Pendidikan / Sekolah
+                </label>
+                <input
+                  type="text"
+                  value={settingSekolah}
+                  onChange={(e) => setSettingSekolah(e.target.value)}
+                  placeholder="cth: SMAN 1 Teladan"
+                  className="w-full px-3.5 py-2.5 rounded-md text-sm border border-slate-300 focus:border-slate-500 focus:outline-none transition bg-white"
+                />
+              </div>
+
+              {/* Accordion / Toggle: Ganti Kata Sandi */}
+              <div className="pt-1">
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordFields(!showPasswordFields)}
+                  className="text-xs font-bold flex items-center gap-1.5 transition hover:underline cursor-pointer"
+                  style={{ color: '#1C6F8E' }}
+                >
+                  <Lock className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                  <span>{showPasswordFields ? '− Batalkan ganti kata sandi' : '+ Ingin ganti kata sandi?'}</span>
+                </button>
+
+                {showPasswordFields && (
+                  <div className="mt-3 p-3.5 rounded-2xl border space-y-3 bg-slate-50/70" style={{ borderColor: '#BFEFFF' }}>
+                    <div>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">
+                        Kata Sandi Baru
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={showNewPassword ? 'text' : 'password'}
+                          value={settingNewPassword}
+                          onChange={(e) => setSettingNewPassword(e.target.value)}
+                          placeholder="Minimal 4 karakter"
+                          className="w-full pl-3.5 pr-10 py-2 rounded-md text-sm border border-slate-300 focus:border-slate-500 focus:outline-none transition bg-white"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowNewPassword(!showNewPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                        >
+                          {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-medium text-slate-500 mb-1">
+                        Kata Sandi Saat Ini (Konfirmasi Keamanan)
+                      </label>
+                      <input
+                        type="password"
+                        value={settingOldPassword}
+                        onChange={(e) => setSettingOldPassword(e.target.value)}
+                        placeholder="Kata sandi lama"
+                        className="w-full px-3.5 py-2 rounded-md text-sm border border-slate-300 focus:border-slate-500 focus:outline-none transition bg-white"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Feedback Error / Sukses */}
+              {settingsError && (
+                <div className="p-3 rounded-xl text-xs bg-red-50 border border-red-200 text-red-600 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{settingsError}</span>
+                </div>
+              )}
+
+              {settingsSuccess && (
+                <div className="p-3 rounded-xl text-xs bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center gap-2">
+                  <Check className="w-4 h-4 shrink-0 text-emerald-600" />
+                  <span>{settingsSuccess}</span>
+                </div>
+              )}
+
+              {/* Action Buttons Footer */}
+              <div
+                className="flex items-center justify-end gap-2.5 pt-3 border-t"
+                style={{ borderColor: 'rgba(191, 239, 255, 0.6)' }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setIsSettingsOpen(false)}
+                  className="px-4 py-2.5 rounded-md font-bold text-xs border hover:opacity-90 transition cursor-pointer"
+                  style={{
+                    background: '#FFFFFF',
+                    color: '#1C6F8E',
+                    borderColor: '#BFEFFF'
+                  }}
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSavingSettings}
+                  className="px-5 py-2.5 rounded-md font-bold text-xs sm:text-sm transition active:scale-[0.99] disabled:opacity-50 cursor-pointer shadow-xs border hover:opacity-90 flex items-center gap-2"
+                  style={{
+                    background: '#BFEFFF',
+                    color: '#1C6F8E',
+                    borderColor: '#BFEFFF'
+                  }}
+                >
+                  {isSavingSettings ? (
+                    <>
+                      <RotateCw className="w-4 h-4 animate-spin text-[#1C6F8E]" />
+                      <span>Menyimpan...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Check className="w-4 h-4 text-[#1C6F8E]" />
+                      <span>Simpan Perubahan</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

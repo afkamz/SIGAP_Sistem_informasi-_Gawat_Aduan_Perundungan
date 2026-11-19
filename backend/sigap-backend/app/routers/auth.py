@@ -7,7 +7,7 @@ from app.models.admin import Admin
 from app.models.siswa import Siswa
 from app.schemas.auth import (
     TokenResponse, AdminLoginResponse, AdminOut, AdminCreateRequest, UserInfo,
-    SiswaRegisterRequest, SiswaLoginRequest, SiswaOut,
+    SiswaRegisterRequest, SiswaLoginRequest, SiswaOut, SiswaUpdateRequest,
 )
 from app.core.security import (
     verify_password, hash_password, create_access_token, get_current_user,
@@ -186,3 +186,122 @@ def get_current_user_profile(
 ):
     """Mendapatkan informasi profil user (admin atau siswa) yang sedang login."""
     return user
+
+
+@router.put("/siswa/profile", response_model=TokenResponse)
+def update_siswa_profile(
+    payload: SiswaUpdateRequest,
+    current_user: dict = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """
+    Pembaruan profil siswa (NISN, Nama, Sekolah, dan Kata Sandi).
+    Memungkinkan siswa memperbaiki typo NISN secara mandiri.
+    """
+    raw_sub = current_user.get("sub") or current_user.get("id")
+    try:
+        siswa_id = int(raw_sub)
+    except (TypeError, ValueError):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Autentikasi siswa tidak valid",
+        )
+
+    siswa = db.query(Siswa).filter(Siswa.id == siswa_id).first()
+    if not siswa:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Akun siswa tidak ditemukan",
+        )
+
+    # Validasi perubahan NISN: pastikan tidak bentrok dengan siswa lain
+    if payload.nisn and payload.nisn.strip() != siswa.nisn:
+        clean_nisn = payload.nisn.strip()
+        ada = db.query(Siswa).filter(Siswa.nisn == clean_nisn, Siswa.id != siswa.id).first()
+        if ada:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="NISN baru ini sudah terdaftar pada akun lain. Mohon periksa kembali.",
+            )
+        siswa.nisn = clean_nisn
+
+    if payload.nama and payload.nama.strip():
+        siswa.nama = payload.nama.strip()
+
+    if payload.sekolah is not None:
+        siswa.sekolah = payload.sekolah.strip() or None
+
+    if payload.new_password:
+        if payload.old_password and not verify_password(payload.old_password, siswa.password_hash):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Kata sandi lama tidak sesuai.",
+            )
+        siswa.password_hash = hash_password(payload.new_password)
+
+    db.commit()
+    db.refresh(siswa)
+
+    access_token = create_access_token(data={"sub": str(siswa.id), "role": "siswa"})
+    user_info = UserInfo(
+        id=siswa.id,
+        nama=siswa.nama,
+        role="siswa",
+        nisn=siswa.nisn,
+        sekolah=siswa.sekolah,
+    )
+    return TokenResponse(access_token=access_token, role="siswa", user=user_info)
+
+
+@router.put("/siswa/{siswa_id}", response_model=TokenResponse)
+def update_siswa_by_id(
+    siswa_id: int,
+    payload: SiswaUpdateRequest,
+    db: Session = Depends(get_db),
+):
+    """
+    Fallback endpoint pembaruan data siswa berdasarkan ID.
+    """
+    siswa = db.query(Siswa).filter(Siswa.id == siswa_id).first()
+    if not siswa:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Akun siswa tidak ditemukan",
+        )
+
+    if payload.nisn and payload.nisn.strip() != siswa.nisn:
+        clean_nisn = payload.nisn.strip()
+        ada = db.query(Siswa).filter(Siswa.nisn == clean_nisn, Siswa.id != siswa.id).first()
+        if ada:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="NISN baru ini sudah terdaftar pada akun lain.",
+            )
+        siswa.nisn = clean_nisn
+
+    if payload.nama and payload.nama.strip():
+        siswa.nama = payload.nama.strip()
+
+    if payload.sekolah is not None:
+        siswa.sekolah = payload.sekolah.strip() or None
+
+    if payload.new_password:
+        if payload.old_password and not verify_password(payload.old_password, siswa.password_hash):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Kata sandi lama tidak sesuai.",
+            )
+        siswa.password_hash = hash_password(payload.new_password)
+
+    db.commit()
+    db.refresh(siswa)
+
+    access_token = create_access_token(data={"sub": str(siswa.id), "role": "siswa"})
+    user_info = UserInfo(
+        id=siswa.id,
+        nama=siswa.nama,
+        role="siswa",
+        nisn=siswa.nisn,
+        sekolah=siswa.sekolah,
+    )
+    return TokenResponse(access_token=access_token, role="siswa", user=user_info)
