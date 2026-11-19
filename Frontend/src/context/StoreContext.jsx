@@ -949,6 +949,131 @@ export const StoreProvider = ({ children }) => {
     return { success: true };
   };
 
+  // ─── FITUR NOTIFIKASI PERKEMBANGAN TINDAK LANJUT LAPORAN SISWA ───
+  const [readNotificationIds, setReadNotificationIds] = useState(() => {
+    try {
+      const saved = localStorage.getItem('sigap_student_read_notifs');
+      return saved ? JSON.parse(saved) : [];
+    } catch (_) {
+      return [];
+    }
+  });
+
+  const markNotificationAsRead = (notifId) => {
+    setReadNotificationIds((prev) => {
+      if (prev.includes(notifId)) return prev;
+      const next = [...prev, notifId];
+      try {
+        localStorage.setItem('sigap_student_read_notifs', JSON.stringify(next));
+      } catch (_) {}
+      return next;
+    });
+  };
+
+  const markAllNotificationsAsRead = () => {
+    const allIds = studentNotifications.map((n) => n.id);
+    setReadNotificationIds(allIds);
+    try {
+      localStorage.setItem('sigap_student_read_notifs', JSON.stringify(allIds));
+    } catch (_) {}
+  };
+
+  // Kompilasi seluruh event notifikasi dari laporan milik siswa
+  const studentNotifications = useMemo(() => {
+    const studentReports = reports.filter((r) => {
+      if (!r.is_active && r.urgensi === 'Selesai' && r.ticket_code?.startsWith('REF-')) return false;
+      if (currentUser?.id && r.siswa_id && Number(r.siswa_id) === Number(currentUser.id)) return true;
+      if (currentUser?.nama && r.reporter_name && r.reporter_name.toLowerCase() === currentUser.nama.toLowerCase()) return true;
+      if (!currentUser?.id) {
+        if (['TKT-2024-0891', 'TKT-2024-0742', 'TKT-2024-0511'].includes(r.ticket_code)) return true;
+        if (r.reporter_name && r.reporter_name.toLowerCase().includes('dimas prasetya')) return true;
+      }
+      return false;
+    });
+
+    const notifs = [];
+
+    studentReports.forEach((r) => {
+      // 1. Notifikasi Janji Temu Konseling Tatap Muka
+      if (r.counseling_appointment && r.counseling_appointment.status !== 'dibatalkan') {
+        const appt = r.counseling_appointment;
+        const notifId = `appt-${r.id}-${appt.scheduled_date}-${appt.status}`;
+        notifs.push({
+          id: notifId,
+          reportId: r.id,
+          ticketCode: r.ticket_code,
+          title: 'Jadwal Konseling Tatap Muka Ditetapkan',
+          category: r.kategori_nama,
+          message: `Konselor BK (${appt.counselor || 'Ibu Rahmawati, S.Pd'}) menetapkan jadwal: ${appt.scheduled_date} (${appt.scheduled_time}) di ${appt.location}.`,
+          waktu: appt.updated_at || r.tanggal,
+          status: 'counseling',
+          stage: 'ditindaklanjuti',
+          pelaksana: appt.counselor || 'Konselor BK Satgas',
+          isRead: readNotificationIds.includes(notifId),
+          appointmentData: appt,
+          reportData: r
+        });
+      }
+
+      // 2. Riwayat Perjalanan Tindak Lanjut dari Laporan
+      if (r.history && Array.isArray(r.history) && r.history.length > 0) {
+        r.history.forEach((h, hIdx) => {
+          const notifId = `hist-${r.id}-${hIdx}-${h.status}`;
+          let title = '';
+          if (h.status === 'menunggu') {
+            title = `Pengaduan #${r.ticket_code} Berhasil Diterima`;
+          } else if (h.status === 'diverifikasi') {
+            title = `Laporan #${r.ticket_code} Telah Diverifikasi Satgas`;
+          } else if (h.status === 'ditindaklanjuti') {
+            title = `Tindak Lanjut Dimulai untuk Laporan #${r.ticket_code}`;
+          } else if (h.status === 'selesai') {
+            title = `Laporan #${r.ticket_code} Selesai Ditangani`;
+          } else {
+            title = `Pembaruan Kasus #${r.ticket_code}`;
+          }
+
+          notifs.push({
+            id: notifId,
+            reportId: r.id,
+            ticketCode: r.ticket_code,
+            title,
+            category: r.kategori_nama,
+            message: h.catatan || (h.status === 'selesai' ? 'Kasus tuntas diselesaikan oleh konselor.' : 'Laporan dalam penelaahan konselor BK.'),
+            waktu: h.waktu || r.tanggal,
+            status: h.status,
+            stage: h.status,
+            pelaksana: h.pelaksana || 'Satgas PPKSP',
+            isRead: readNotificationIds.includes(notifId),
+            reportData: r
+          });
+        });
+      } else {
+        const notifId = `status-${r.id}-${r.status}`;
+        notifs.push({
+          id: notifId,
+          reportId: r.id,
+          ticketCode: r.ticket_code,
+          title: `Status Aduan #${r.ticket_code}: ${r.status}`,
+          category: r.kategori_nama,
+          message: r.catatan_konselor || 'Pengaduan Anda sedang diproses oleh tim penanganan sekolah.',
+          waktu: r.tanggal,
+          status: r.status,
+          stage: r.status,
+          pelaksana: 'Tim Penanganan SIGAP',
+          isRead: readNotificationIds.includes(notifId),
+          reportData: r
+        });
+      }
+    });
+
+    // Urutkan notifikasi: yang baru di atas
+    return notifs.reverse();
+  }, [reports, currentUser, readNotificationIds]);
+
+  const unreadNotificationsCount = useMemo(() => {
+    return studentNotifications.filter((n) => !n.isRead).length;
+  }, [studentNotifications]);
+
   return (
     <StoreContext.Provider
       value={{
@@ -976,6 +1101,10 @@ export const StoreProvider = ({ children }) => {
         updateStudentProfile,
         scheduleCounselingAppointment,
         confirmAppointmentAttendance,
+        studentNotifications,
+        unreadNotificationsCount,
+        markNotificationAsRead,
+        markAllNotificationsAsRead,
         addReportMessage,
         categories: KATEGORI_DATA
       }}

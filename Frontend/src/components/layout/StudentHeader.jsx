@@ -1,13 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Search, Lock, LogOut, PlusCircle, LogIn, Menu, X, LayoutDashboard, Settings } from 'lucide-react';
+import {
+  Search,
+  Lock,
+  LogOut,
+  PlusCircle,
+  LogIn,
+  Menu,
+  X,
+  LayoutDashboard,
+  Settings,
+  Bell,
+  CheckCheck,
+  Clock,
+  CheckCircle2,
+  RotateCw,
+  HeartHandshake,
+  ShieldCheck,
+  ChevronRight,
+  Inbox
+} from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 
 export const StudentHeader = ({ isDashboard = false, hideBorder = false }) => {
-  const { currentUser, logout } = useStore();
+  const {
+    currentUser,
+    logout,
+    studentNotifications = [],
+    unreadNotificationsCount = 0,
+    markNotificationAsRead,
+    markAllNotificationsAsRead
+  } = useStore();
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const notifDropdownRef = useRef(null);
+
+  // Tutup dropdown notifikasi saat klik di luar area
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notifDropdownRef.current && !notifDropdownRef.current.contains(event.target)) {
+        setNotifOpen(false);
+      }
+    };
+    if (notifOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [notifOpen]);
 
   const isAdmin = currentUser?.role === 'admin';
 
@@ -131,6 +174,128 @@ export const StudentHeader = ({ isDashboard = false, hideBorder = false }) => {
                   </span>
                 )}
               </Link>
+
+              {!isAdmin && (
+                <div className="relative" ref={notifDropdownRef}>
+                  <button
+                    type="button"
+                    onClick={() => setNotifOpen(!notifOpen)}
+                    title="Notifikasi Tindak Lanjut Aduan"
+                    className="p-1.5 rounded-xl border transition hover:opacity-90 flex items-center justify-center cursor-pointer shadow-2xs relative"
+                    style={{
+                      background: notifOpen ? '#BFEFFF' : '#FFFFFF',
+                      color: '#1C6F8E',
+                      borderColor: '#BFEFFF'
+                    }}
+                  >
+                    <Bell className="w-4 h-4 text-[#1C6F8E]" />
+                    {unreadNotificationsCount > 0 && (
+                      <span className="absolute -top-1 -right-1 px-1.5 py-0.2 rounded-full text-[9px] font-black bg-rose-500 text-white shadow-xs animate-pulse">
+                        {unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}
+                      </span>
+                    )}
+                  </button>
+
+                  {/* Dropdown Notifikasi */}
+                  {notifOpen && (
+                    <div
+                      className="absolute right-0 mt-2.5 w-80 sm:w-96 bg-white rounded-2xl border shadow-2xl p-4 z-50 text-left animate-fade-in"
+                      style={{ borderColor: '#BFEFFF' }}
+                    >
+                      <div className="flex justify-between items-center pb-2.5 border-b" style={{ borderColor: '#E2E8F0' }}>
+                        <div className="flex items-center gap-1.5">
+                          <Bell className="w-4 h-4 text-[#1C6F8E]" />
+                          <span className="font-bold text-xs text-[#111827]">Notifikasi Tindak Lanjut</span>
+                          {unreadNotificationsCount > 0 && (
+                            <span className="px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-rose-100 text-rose-700">
+                              {unreadNotificationsCount} baru
+                            </span>
+                          )}
+                        </div>
+                        {unreadNotificationsCount > 0 && (
+                          <button
+                            type="button"
+                            onClick={markAllNotificationsAsRead}
+                            className="text-[11px] font-semibold text-[#1C6F8E] hover:underline flex items-center gap-1 cursor-pointer"
+                          >
+                            <CheckCheck className="w-3 h-3 text-[#1C6F8E]" />
+                            <span>Tandai Semua Dibaca</span>
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="max-h-72 overflow-y-auto divide-y divide-slate-100 py-1 space-y-1">
+                        {studentNotifications.length === 0 ? (
+                          <div className="py-8 text-center text-xs text-slate-400 space-y-1">
+                            <Inbox className="w-6 h-6 mx-auto text-slate-300" />
+                            <p>Belum ada notifikasi tindak lanjut</p>
+                          </div>
+                        ) : (
+                          studentNotifications.slice(0, 5).map((notif) => (
+                            <div
+                              key={notif.id}
+                              onClick={() => {
+                                markNotificationAsRead(notif.id);
+                                setNotifOpen(false);
+                                navigate(`/dashboard?notif=${notif.reportId}`);
+                              }}
+                              className={`p-2.5 rounded-xl transition cursor-pointer flex items-start gap-2.5 ${
+                                !notif.isRead ? 'bg-sky-50/70 hover:bg-sky-100/60' : 'hover:bg-slate-50'
+                              }`}
+                            >
+                              <div
+                                className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border mt-0.5"
+                                style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+                              >
+                                {notif.status === 'selesai' ? (
+                                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
+                                ) : notif.status === 'counseling' ? (
+                                  <HeartHandshake className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                                ) : notif.status === 'diverifikasi' ? (
+                                  <ShieldCheck className="w-3.5 h-3.5 text-blue-700" />
+                                ) : notif.status === 'ditindaklanjuti' ? (
+                                  <RotateCw className="w-3.5 h-3.5 text-cyan-700" />
+                                ) : (
+                                  <Clock className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex justify-between items-start gap-1">
+                                  <h5 className="font-bold text-xs text-[#111827] truncate">
+                                    {notif.title}
+                                  </h5>
+                                  {!notif.isRead && (
+                                    <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0 mt-1" />
+                                  )}
+                                </div>
+                                <p className="text-[11px] text-slate-600 line-clamp-2 mt-0.5 leading-snug">
+                                  {notif.message}
+                                </p>
+                                <div className="flex items-center justify-between text-[10px] text-slate-400 mt-1">
+                                  <span>{notif.pelaksana}</span>
+                                  <span>{notif.waktu}</span>
+                                </div>
+                              </div>
+                            </div>
+                          ))
+                        )}
+                      </div>
+
+                      <div className="pt-2.5 border-t border-slate-100 text-center">
+                        <Link
+                          to="/dashboard?tab=notifikasi"
+                          onClick={() => setNotifOpen(false)}
+                          className="text-xs font-bold flex items-center justify-center gap-1 hover:underline"
+                          style={{ color: '#1C6F8E' }}
+                        >
+                          <span>Buka Seluruh Riwayat Tindak Lanjut</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {!isAdmin && (
                 <Link
@@ -284,15 +449,33 @@ export const StudentHeader = ({ isDashboard = false, hideBorder = false }) => {
                   </span>
                 </Link>
                 {!isAdmin && (
-                  <Link
-                    to="/dashboard?tab=pengaturan"
-                    onClick={() => setMobileOpen(false)}
-                    className="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 border"
-                    style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
-                  >
-                    <Settings className="w-4 h-4 text-[#1C6F8E]" />
-                    <span>Pengaturan Akun &amp; NISN</span>
-                  </Link>
+                  <>
+                    <Link
+                      to="/dashboard?tab=notifikasi"
+                      onClick={() => setMobileOpen(false)}
+                      className="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-between border"
+                      style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Bell className="w-4 h-4 text-[#1C6F8E]" />
+                        <span>Notifikasi Tindak Lanjut</span>
+                      </div>
+                      {unreadNotificationsCount > 0 && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white animate-pulse">
+                          {unreadNotificationsCount} Baru
+                        </span>
+                      )}
+                    </Link>
+                    <Link
+                      to="/dashboard?tab=pengaturan"
+                      onClick={() => setMobileOpen(false)}
+                      className="w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 border"
+                      style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                    >
+                      <Settings className="w-4 h-4 text-[#1C6F8E]" />
+                      <span>Pengaturan Akun &amp; NISN</span>
+                    </Link>
+                  </>
                 )}
                 <button
                   type="button"

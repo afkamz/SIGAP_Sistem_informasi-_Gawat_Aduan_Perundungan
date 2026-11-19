@@ -34,7 +34,14 @@ import {
   MapPin,
   HeartHandshake,
   HelpCircle,
-  ShieldCheck
+  ShieldCheck,
+  Bell,
+  CheckCheck,
+  MessageSquare,
+  Activity,
+  ListChecks,
+  ChevronRight,
+  Sparkles
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { StudentHeader } from '../../components/layout/StudentHeader';
@@ -47,7 +54,11 @@ export const StudentDashboard = () => {
     isBackendConnected,
     token,
     updateStudentProfile,
-    confirmAppointmentAttendance
+    confirmAppointmentAttendance,
+    studentNotifications = [],
+    unreadNotificationsCount = 0,
+    markNotificationAsRead,
+    markAllNotificationsAsRead
   } = useStore();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -55,6 +66,11 @@ export const StudentDashboard = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortOrder, setSortOrder] = useState('newest');
   const [isLoadingRiwayat, setIsLoadingRiwayat] = useState(false);
+
+  // State Pusat Notifikasi & Pelacak Alur
+  const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
+  const [notifFilter, setNotifFilter] = useState('all');
+  const [selectedReportDetail, setSelectedReportDetail] = useState(null);
 
   // State Pengaturan Akun (NISN, Nama, Sekolah, Kata Sandi)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -87,7 +103,23 @@ export const StudentDashboard = () => {
     if (searchParams.get('tab') === 'pengaturan') {
       setIsSettingsOpen(true);
     }
+    if (searchParams.get('tab') === 'notifikasi') {
+      setIsNotifModalOpen(true);
+    }
   }, [searchParams]);
+
+  // Buka detail laporan tertentu jika parameter URL ?notif=... terdeteksi
+  useEffect(() => {
+    const notifTarget = searchParams.get('notif');
+    if (notifTarget && myReports.length > 0) {
+      const targetRep = myReports.find(
+        (r) => String(r.id) === String(notifTarget) || r.ticket_code === notifTarget
+      );
+      if (targetRep) {
+        setSelectedReportDetail(targetRep);
+      }
+    }
+  }, [searchParams, myReports]);
 
   // Background Video Ref & Autoplay Enforcer
   const videoRef = useRef(null);
@@ -212,6 +244,34 @@ export const StudentDashboard = () => {
   }, [myReports]);
 
   const latestAppointment = activeAppointments[0] || null;
+
+  // Laporan prioritas yang sedang aktif untuk kartu Live Follow-up Stepper
+  const activeFollowUpReport = useMemo(() => {
+    if (myReports.length === 0) return null;
+    return (
+      myReports.find((r) => r.status === 'ditindaklanjuti') ||
+      myReports.find((r) => r.status === 'diverifikasi') ||
+      myReports.find((r) => r.status === 'menunggu') ||
+      myReports[0]
+    );
+  }, [myReports]);
+
+  // Filter notifikasi di dalam modal pusat notifikasi
+  const filteredNotifications = useMemo(() => {
+    if (notifFilter === 'unread') {
+      return studentNotifications.filter((n) => !n.isRead);
+    }
+    if (notifFilter === 'counseling') {
+      return studentNotifications.filter((n) => n.status === 'counseling' || n.actionType === 'appointment');
+    }
+    if (notifFilter === 'in_progress') {
+      return studentNotifications.filter((n) => n.stage === 'ditindaklanjuti' || n.stage === 'diverifikasi');
+    }
+    if (notifFilter === 'completed') {
+      return studentNotifications.filter((n) => n.status === 'selesai');
+    }
+    return studentNotifications;
+  }, [studentNotifications, notifFilter]);
 
   const totalCount = myReports.length;
   const pendingCount = myReports.filter((r) => r.status === 'menunggu').length;
@@ -856,7 +916,243 @@ export const StudentDashboard = () => {
               <RotateCw className={`w-4 h-4 text-[#1C6F8E] ${isLoadingRiwayat ? 'animate-spin' : ''}`} />
               <span>Sinkronkan Data</span>
             </button>
+
+            {/* Tombol Sekunder: Notifikasi Tindak Lanjut */}
+            <button
+              type="button"
+              onClick={() => setIsNotifModalOpen(true)}
+              className="w-full sm:w-auto px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition hover:opacity-95 border shadow-md active:scale-95 cursor-pointer relative"
+              style={{
+                background: '#FFFFFF',
+                color: '#1C6F8E',
+                borderColor: '#BFEFFF'
+              }}
+              title="Lihat seluruh notifikasi dan riwayat tindak lanjut penanganan aduan Anda"
+            >
+              <Bell className="w-4 h-4 text-[#1C6F8E]" />
+              <span>Notifikasi Tindak Lanjut</span>
+              {unreadNotificationsCount > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full text-[10px] font-black bg-rose-500 text-white animate-pulse">
+                  {unreadNotificationsCount} Baru
+                </span>
+              )}
+            </button>
           </div>
+
+          {/* ─── KARTU PELACAK ALUR TINDAK LANJUT ADUAN TERKINI (LIVE CASE TRACKER) ─── */}
+          {activeFollowUpReport && (
+            <div
+              className="w-full max-w-2xl mt-1 mb-2 p-5 sm:p-6 rounded-3xl border shadow-xl backdrop-blur-xl relative overflow-hidden transition-all duration-300 text-left"
+              style={{
+                background: 'rgba(255, 255, 255, 0.96)',
+                borderColor: '#BFEFFF',
+                boxShadow: '0 12px 36px -6px rgba(28, 111, 142, 0.16)',
+                opacity: isHeroInView ? 1 : 0,
+                transform: isHeroInView ? 'translateY(0)' : 'translateY(16px)',
+                transition: `opacity 600ms ${easeCurve} 650ms, transform 600ms ${easeCurve} 650ms`
+              }}
+            >
+              {/* Header Kartu Progres */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-[#BFEFFF]/60">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center border shadow-xs" style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}>
+                    <Activity className="w-4 h-4 text-[#1C6F8E]" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-black tracking-wider uppercase text-[#2E84A5] block">
+                      PROGRES TINDAK LANJUT ADUAN TERKINI
+                    </span>
+                    <h3 className="font-extrabold text-xs sm:text-sm text-[#142B4A]">
+                      #{activeFollowUpReport.ticket_code} • {activeFollowUpReport.kategori_nama}
+                    </h3>
+                  </div>
+                </div>
+
+                {/* Badge Status Tahapan */}
+                <div className="flex items-center gap-2 self-start sm:self-auto">
+                  <span
+                    className="px-3 py-1 rounded-full text-[11px] font-extrabold border shadow-2xs flex items-center gap-1.5"
+                    style={{
+                      background:
+                        activeFollowUpReport.status === 'selesai'
+                          ? '#D1FAE5'
+                          : activeFollowUpReport.status === 'ditindaklanjuti'
+                          ? '#E0F2FE'
+                          : activeFollowUpReport.status === 'diverifikasi'
+                          ? '#FEF3C7'
+                          : '#F1F5F9',
+                      color:
+                        activeFollowUpReport.status === 'selesai'
+                          ? '#065F46'
+                          : activeFollowUpReport.status === 'ditindaklanjuti'
+                          ? '#0369A1'
+                          : activeFollowUpReport.status === 'diverifikasi'
+                          ? '#92400E'
+                          : '#475569',
+                      borderColor:
+                        activeFollowUpReport.status === 'selesai'
+                          ? '#A7F3D0'
+                          : activeFollowUpReport.status === 'ditindaklanjuti'
+                          ? '#BAE6FD'
+                          : activeFollowUpReport.status === 'diverifikasi'
+                          ? '#FDE68A'
+                          : '#CBD5E1'
+                    }}
+                  >
+                    <span className="w-2 h-2 rounded-full animate-ping" style={{ background: 'currentColor' }} />
+                    <span>
+                      {activeFollowUpReport.status === 'menunggu'
+                        ? '1. Laporan Masuk'
+                        : activeFollowUpReport.status === 'diverifikasi'
+                        ? '2. Terverifikasi Satgas'
+                        : activeFollowUpReport.status === 'ditindaklanjuti'
+                        ? '3. Sedang Ditindaklanjuti'
+                        : '4. Selesai Ditangani'}
+                    </span>
+                  </span>
+                </div>
+              </div>
+
+              {/* ─── STEPPER 4 TAHAP TINDAK LANJUT ─── */}
+              <div className="py-2">
+                <div className="grid grid-cols-4 gap-1 sm:gap-2 text-center relative">
+                  {/* Step 1 */}
+                  <div className="flex flex-col items-center">
+                    <div
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-black text-xs border transition shadow-xs z-10"
+                      style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#1C6F8E' }}
+                    >
+                      <Check className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                    </div>
+                    <span className="text-[10px] sm:text-[11px] font-bold text-slate-800 mt-1 leading-tight">1. Diterima</span>
+                    <span className="text-[9px] text-slate-400 hidden sm:block">Aduan Masuk</span>
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="flex flex-col items-center">
+                    <div
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-black text-xs border transition shadow-xs z-10"
+                      style={{
+                        background: ['diverifikasi', 'ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status)
+                          ? '#BFEFFF'
+                          : '#F8FAFC',
+                        color: ['diverifikasi', 'ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status)
+                          ? '#1C6F8E'
+                          : '#94A3B8',
+                        borderColor: ['diverifikasi', 'ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status)
+                          ? '#1C6F8E'
+                          : '#E2E8F0'
+                      }}
+                    >
+                      {['diverifikasi', 'ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status) ? (
+                        <Check className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                      ) : (
+                        '2'
+                      )}
+                    </div>
+                    <span className="text-[10px] sm:text-[11px] font-bold text-slate-800 mt-1 leading-tight">2. Verifikasi</span>
+                    <span className="text-[9px] text-slate-400 hidden sm:block">Bukti Satgas</span>
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="flex flex-col items-center">
+                    <div
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-black text-xs border transition shadow-xs z-10"
+                      style={{
+                        background: ['ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status)
+                          ? '#BFEFFF'
+                          : activeFollowUpReport.status === 'diverifikasi'
+                          ? '#E0F2FE'
+                          : '#F8FAFC',
+                        color: ['ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status)
+                          ? '#1C6F8E'
+                          : '#94A3B8',
+                        borderColor: ['ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status)
+                          ? '#1C6F8E'
+                          : '#E2E8F0'
+                      }}
+                    >
+                      {['ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status) ? (
+                        <Check className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                      ) : (
+                        '3'
+                      )}
+                    </div>
+                    <span className="text-[10px] sm:text-[11px] font-bold text-slate-800 mt-1 leading-tight">3. Penanganan</span>
+                    <span className="text-[9px] text-slate-400 hidden sm:block">Konseling / Mediasi</span>
+                  </div>
+
+                  {/* Step 4 */}
+                  <div className="flex flex-col items-center">
+                    <div
+                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-black text-xs border transition shadow-xs z-10"
+                      style={{
+                        background: activeFollowUpReport.status === 'selesai' ? '#D1FAE5' : '#F8FAFC',
+                        color: activeFollowUpReport.status === 'selesai' ? '#065F46' : '#94A3B8',
+                        borderColor: activeFollowUpReport.status === 'selesai' ? '#059669' : '#E2E8F0'
+                      }}
+                    >
+                      {activeFollowUpReport.status === 'selesai' ? (
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      ) : (
+                        '4'
+                      )}
+                    </div>
+                    <span className="text-[10px] sm:text-[11px] font-bold text-slate-800 mt-1 leading-tight">4. Resolusi</span>
+                    <span className="text-[9px] text-slate-400 hidden sm:block">Kasus Tuntas</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Catatan Terakhir dari Konselor BK */}
+              <div
+                className="mt-3 p-3 rounded-2xl text-xs border flex items-start gap-2.5 leading-relaxed"
+                style={{
+                  background: 'rgba(191, 239, 255, 0.25)',
+                  borderColor: '#BFEFFF',
+                  color: '#1C6F8E'
+                }}
+              >
+                <MessageSquare className="w-4 h-4 text-[#1C6F8E] shrink-0 mt-0.5" />
+                <div className="space-y-0.5 w-full">
+                  <div className="flex justify-between items-center text-[10.5px]">
+                    <span className="font-bold">Perkembangan Terkini dari Konselor BK:</span>
+                    <span className="text-slate-400 text-[10px]">
+                      {activeFollowUpReport.history?.[activeFollowUpReport.history.length - 1]?.waktu || activeFollowUpReport.tanggal}
+                    </span>
+                  </div>
+                  <p className="text-slate-700 text-[11px]">
+                    {activeFollowUpReport.history?.[activeFollowUpReport.history.length - 1]?.catatan ||
+                      activeFollowUpReport.catatan_konselor ||
+                      'Laporan Anda saat ini sedang dalam penanganan intensif oleh Guru BK dan Satgas PPKSP.'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Tombol Aksi di Bawah Card */}
+              <div className="mt-3 pt-3 border-t border-[#BFEFFF]/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <button
+                  type="button"
+                  onClick={() => setSelectedReportDetail(activeFollowUpReport)}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold hover:underline cursor-pointer"
+                  style={{ color: '#1C6F8E' }}
+                >
+                  <ListChecks className="w-3.5 h-3.5" />
+                  <span>Lihat Kronologi Lengkap Kasus Ini →</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsNotifModalOpen(true)}
+                  className="px-3.5 py-1.5 rounded-xl text-xs font-bold border transition hover:opacity-90 flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
+                  style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                >
+                  <Bell className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                  <span>Pusat Notifikasi ({studentNotifications.length})</span>
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* ─── KARTU JADWAL KONSELING TATAP MUKA (APPOINTMENT TRACKER) ─── */}
           {latestAppointment && (
@@ -1593,17 +1889,24 @@ export const StudentDashboard = () => {
                       </div>
 
                       {/* Action Footer */}
-                      <Link
-                        to={`/lacak?code=${item.ticket_code.replace('#', '')}&from=dashboard`}
-                        className="text-xs font-bold flex items-center gap-1.5 mt-4 pt-3 border-t transition group hover:opacity-80 cursor-pointer"
-                        style={{
-                          color: '#1C6F8E',
-                          borderColor: '#BFEFFF'
-                        }}
-                      >
-                        <span>{isCompleted ? 'Lihat Arsip Resolusi' : 'Lihat Rincian & Percakapan'}</span>
-                        <ArrowRight className="w-3.5 h-3.5 transition group-hover:translate-x-0.5" />
-                      </Link>
+                      <div className="flex items-center justify-between gap-2 mt-4 pt-3 border-t" style={{ borderColor: '#BFEFFF' }}>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedReportDetail(item)}
+                          className="text-xs font-bold flex items-center gap-1.5 transition hover:underline cursor-pointer"
+                          style={{ color: '#1C6F8E' }}
+                        >
+                          <Activity className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                          <span>Alur Tindak Lanjut</span>
+                        </button>
+                        <Link
+                          to={`/lacak?code=${item.ticket_code.replace('#', '')}&from=dashboard`}
+                          className="text-[11px] font-semibold text-slate-400 hover:text-slate-600 flex items-center gap-1 cursor-pointer"
+                        >
+                          <span>Lacak</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </Link>
+                      </div>
                     </div>
                   );
                 })}
@@ -2045,6 +2348,388 @@ export const StudentDashboard = () => {
               >
                 <Check className="w-4 h-4 text-[#1C6F8E]" />
                 <span>Saya Mengerti &amp; Merasa Lebih Tenang</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── MODAL 1: PUSAT NOTIFIKASI & PERKEMBANGAN TINDAK LANJUT ─── */}
+      {isNotifModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in overflow-y-auto"
+          onClick={() => {
+            setIsNotifModalOpen(false);
+            if (searchParams.get('tab') === 'notifikasi') {
+              const newParams = new URLSearchParams(searchParams);
+              newParams.delete('tab');
+              setSearchParams(newParams, { replace: true });
+            }
+          }}
+        >
+          <div
+            className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 relative overflow-hidden shadow-2xl border my-8 text-left max-h-[90vh] flex flex-col"
+            style={{ borderColor: '#BFEFFF' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header Modal Notifikasi */}
+            <div className="flex items-start justify-between pb-4 border-b border-[#BFEFFF]/60 shrink-0">
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center border shadow-xs"
+                  style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}
+                >
+                  <Bell className="w-5 h-5 text-[#1C6F8E]" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-extrabold text-base sm:text-lg text-[#142B4A]">
+                      Pusat Notifikasi Tindak Lanjut
+                    </h3>
+                    {unreadNotificationsCount > 0 && (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white animate-pulse">
+                        {unreadNotificationsCount} Baru
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Informasi transparan sejauh mana laporan Anda telah ditindaklanjuti oleh Guru BK &amp; Satgas.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {unreadNotificationsCount > 0 && (
+                  <button
+                    type="button"
+                    onClick={markAllNotificationsAsRead}
+                    className="text-xs font-bold text-[#1C6F8E] hover:underline flex items-center gap-1 cursor-pointer bg-sky-50 px-2.5 py-1.5 rounded-xl border border-[#BFEFFF]"
+                  >
+                    <CheckCheck className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                    <span className="hidden sm:inline">Tandai Semua Dibaca</span>
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setIsNotifModalOpen(false)}
+                  className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-600 border border-slate-200 cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Filter Tabs */}
+            <div className="flex items-center gap-1.5 py-3 border-b border-slate-100 overflow-x-auto shrink-0">
+              {[
+                { id: 'all', label: 'Semua', count: studentNotifications.length },
+                { id: 'unread', label: 'Belum Dibaca', count: unreadNotificationsCount },
+                { id: 'in_progress', label: 'Sedang Ditindak', count: studentNotifications.filter((n) => n.stage === 'ditindaklanjuti' || n.stage === 'diverifikasi').length },
+                { id: 'counseling', label: 'Jadwal Konseling', count: studentNotifications.filter((n) => n.status === 'counseling').length },
+                { id: 'completed', label: 'Selesai', count: studentNotifications.filter((n) => n.status === 'selesai').length }
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setNotifFilter(tab.id)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                    notifFilter === tab.id
+                      ? 'bg-[#BFEFFF] text-[#142B4A] border border-[#BFEFFF]'
+                      : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-transparent'
+                  }`}
+                >
+                  <span>{tab.label}</span>
+                  <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${notifFilter === tab.id ? 'bg-white/80 text-[#142B4A]' : 'bg-slate-200 text-slate-700'}`}>
+                    {tab.count}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            {/* List Notifikasi */}
+            <div className="flex-1 overflow-y-auto divide-y divide-slate-100 py-2 space-y-2">
+              {filteredNotifications.length === 0 ? (
+                <div className="py-12 text-center text-xs text-slate-400 space-y-2">
+                  <Inbox className="w-8 h-8 mx-auto text-slate-300" />
+                  <p className="font-semibold text-slate-600">Tidak ada notifikasi pada kategori ini</p>
+                  <p className="text-[11px] text-slate-400 max-w-sm mx-auto">
+                    Setiap perkembangan terbaru dari Guru BK mengenai aduan Anda akan langsung muncul di sini.
+                  </p>
+                </div>
+              ) : (
+                filteredNotifications.map((notif) => (
+                  <div
+                    key={notif.id}
+                    onClick={() => {
+                      markNotificationAsRead(notif.id);
+                      if (notif.reportData) {
+                        setSelectedReportDetail(notif.reportData);
+                      } else {
+                        const rep = myReports.find((r) => r.id === notif.reportId || r.ticket_code === notif.ticketCode);
+                        if (rep) setSelectedReportDetail(rep);
+                      }
+                    }}
+                    className={`p-3.5 sm:p-4 rounded-2xl transition cursor-pointer flex items-start gap-3.5 border ${
+                      !notif.isRead ? 'bg-sky-50/70 border-[#BFEFFF] shadow-2xs' : 'bg-white hover:bg-slate-50/80 border-slate-100'
+                    }`}
+                  >
+                    {/* Icon Status */}
+                    <div
+                      className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border mt-0.5"
+                      style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}
+                    >
+                      {notif.status === 'selesai' ? (
+                        <CheckCircle2 className="w-4 h-4 text-emerald-700" />
+                      ) : notif.status === 'counseling' ? (
+                        <HeartHandshake className="w-4 h-4 text-[#1C6F8E]" />
+                      ) : notif.status === 'diverifikasi' ? (
+                        <ShieldCheck className="w-4 h-4 text-blue-700" />
+                      ) : notif.status === 'ditindaklanjuti' ? (
+                        <RotateCw className="w-4 h-4 text-cyan-700" />
+                      ) : (
+                        <Clock className="w-4 h-4 text-[#1C6F8E]" />
+                      )}
+                    </div>
+
+                    {/* Konten Notifikasi */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-xs text-[#142B4A]">
+                            {notif.title}
+                          </span>
+                          {!notif.isRead && (
+                            <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                          )}
+                        </div>
+                        <span className="text-[10px] text-slate-400 whitespace-nowrap">
+                          {notif.waktu}
+                        </span>
+                      </div>
+
+                      <div className="text-[11px] font-semibold text-[#1C6F8E] mb-1">
+                        Tiket: #{notif.ticketCode} • {notif.category}
+                      </div>
+
+                      <p className="text-xs text-slate-700 leading-relaxed bg-white/70 p-2.5 rounded-xl border border-slate-100">
+                        {notif.message}
+                      </p>
+
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-2 pt-2 border-t border-slate-100 text-[11px]">
+                        <span className="text-slate-500 font-medium">
+                          Pelaksana: <strong className="text-slate-700">{notif.pelaksana}</strong>
+                        </span>
+
+                        <span className="font-bold text-[#1C6F8E] flex items-center gap-1 hover:underline">
+                          <span>Buka Kronologi Penanganan</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Footer Modal Notifikasi */}
+            <div className="pt-3 border-t border-[#BFEFFF]/60 flex justify-between items-center text-xs shrink-0">
+              <span className="text-slate-400 text-[11px]">
+                Notifikasi diperbarui realtime sesuai audit penanganan BK
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsNotifModalOpen(false)}
+                className="px-4 py-2 rounded-xl font-bold border transition hover:bg-slate-50 cursor-pointer"
+                style={{ borderColor: '#D1D5DB', color: '#111827' }}
+              >
+                Tutup Notifikasi
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── MODAL 2: KRONOLOGI ALUR PENANGANAN KASUS SPESIFIK ─── */}
+      {selectedReportDetail && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in overflow-y-auto"
+          onClick={() => setSelectedReportDetail(null)}
+        >
+          <div
+            className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 relative overflow-hidden shadow-2xl border my-8 text-left max-h-[90vh] flex flex-col"
+            style={{ borderColor: '#BFEFFF' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header Modal Detail Laporan */}
+            <div className="flex items-start justify-between pb-3.5 border-b border-[#BFEFFF]/60 shrink-0">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border" style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}>
+                    ALUR TINDAK LANJUT RESMI
+                  </span>
+                  <span className="font-bold text-xs text-[#2E84A5]">
+                    #{selectedReportDetail.ticket_code}
+                  </span>
+                </div>
+                <h3 className="font-extrabold text-base sm:text-lg text-[#142B4A]">
+                  {selectedReportDetail.kategori_nama}
+                </h3>
+                <p className="text-xs text-slate-500">
+                  {selectedReportDetail.judul || selectedReportDetail.deskripsi}
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setSelectedReportDetail(null)}
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-600 border border-slate-200 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Body Timeline */}
+            <div className="flex-1 overflow-y-auto py-3 space-y-4">
+              {/* Stepper 4 Tahap */}
+              <div className="p-4 rounded-2xl border bg-slate-50/70" style={{ borderColor: '#E2E8F0' }}>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-2">
+                  Tahap Penanganan Saat Ini:
+                </span>
+                <div className="grid grid-cols-4 gap-2 text-center">
+                  <div className="flex flex-col items-center">
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs bg-[#BFEFFF] text-[#1C6F8E] border border-[#1C6F8E]">
+                      <Check className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                    </div>
+                    <span className="text-[10px] font-bold text-slate-800 mt-1">1. Diterima</span>
+                  </div>
+
+                  <div className="flex flex-col items-center">
+                    <div
+                      className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs border ${
+                        ['diverifikasi', 'ditindaklanjuti', 'selesai'].includes(selectedReportDetail.status)
+                          ? 'bg-[#BFEFFF] text-[#1C6F8E] border-[#1C6F8E]'
+                          : 'bg-white text-slate-400 border-slate-200'
+                      }`}
+                    >
+                      {['diverifikasi', 'ditindaklanjuti', 'selesai'].includes(selectedReportDetail.status) ? (
+                        <Check className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                      ) : (
+                        '2'
+                      )}
+                    </div>
+                    <span className="text-[10px] font-bold text-slate-800 mt-1">2. Verifikasi</span>
+                  </div>
+
+                  <div className="flex flex-col items-center">
+                    <div
+                      className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs border ${
+                        ['ditindaklanjuti', 'selesai'].includes(selectedReportDetail.status)
+                          ? 'bg-[#BFEFFF] text-[#1C6F8E] border-[#1C6F8E]'
+                          : selectedReportDetail.status === 'diverifikasi'
+                          ? 'bg-sky-100 text-sky-800 border-sky-300'
+                          : 'bg-white text-slate-400 border-slate-200'
+                      }`}
+                    >
+                      {['ditindaklanjuti', 'selesai'].includes(selectedReportDetail.status) ? (
+                        <Check className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                      ) : (
+                        '3'
+                      )}
+                    </div>
+                    <span className="text-[10px] font-bold text-slate-800 mt-1">3. Penanganan</span>
+                  </div>
+
+                  <div className="flex flex-col items-center">
+                    <div
+                      className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs border ${
+                        selectedReportDetail.status === 'selesai'
+                          ? 'bg-emerald-100 text-emerald-800 border-emerald-400'
+                          : 'bg-white text-slate-400 border-slate-200'
+                      }`}
+                    >
+                      {selectedReportDetail.status === 'selesai' ? (
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
+                      ) : (
+                        '4'
+                      )}
+                    </div>
+                    <span className="text-[10px] font-bold text-slate-800 mt-1">4. Tuntas</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Jadwal Konseling Jika Ada */}
+              {selectedReportDetail.counseling_appointment && selectedReportDetail.counseling_appointment.status !== 'dibatalkan' && (
+                <div className="p-4 rounded-2xl border bg-sky-50/70" style={{ borderColor: '#BFEFFF' }}>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-[#1C6F8E]" />
+                      <span className="font-bold text-xs text-[#142B4A]">Sesi Konseling Tatap Muka Terjadwal</span>
+                    </div>
+                    <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-white text-[#1C6F8E] border border-[#BFEFFF]">
+                      {selectedReportDetail.counseling_appointment.is_confirmed ? 'Siap Hadir' : 'Menunggu Konfirmasi'}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-xs text-slate-700">
+                    <div>
+                      <span className="text-[10px] text-slate-400 block">Waktu:</span>
+                      <strong>{selectedReportDetail.counseling_appointment.scheduled_date} ({selectedReportDetail.counseling_appointment.scheduled_time})</strong>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-slate-400 block">Ruangan:</span>
+                      <strong>{selectedReportDetail.counseling_appointment.location}</strong>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Kronologi History Lengkap */}
+              <div>
+                <h4 className="font-bold text-xs uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                  <span>Riwayat Jejak Rekam Penanganan (Audit Trail)</span>
+                </h4>
+
+                <div className="space-y-2.5">
+                  {selectedReportDetail.history && selectedReportDetail.history.length > 0 ? (
+                    selectedReportDetail.history.map((hist, hIdx) => (
+                      <div
+                        key={hIdx}
+                        className="p-3 rounded-2xl border text-xs bg-white space-y-1"
+                        style={{ borderColor: '#E2E8F0' }}
+                      >
+                        <div className="flex justify-between items-center">
+                          <span className="font-bold text-[#142B4A] capitalize">
+                            Tahap: {hist.status}
+                          </span>
+                          <span className="text-[10px] text-slate-400">{hist.waktu}</span>
+                        </div>
+                        <p className="text-slate-600 text-[11.5px] leading-relaxed">
+                          {hist.catatan}
+                        </p>
+                        <div className="text-[10px] text-slate-400 pt-1 border-t border-slate-50">
+                          Pelaksana: <strong className="text-slate-600">{hist.pelaksana}</strong>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-3 rounded-2xl border text-xs text-slate-500 bg-slate-50">
+                      Laporan baru masuk dalam sistem. Menunggu telaah awal dari tim konselor sekolah.
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Footer Modal Detail */}
+            <div className="pt-3 border-t border-[#BFEFFF]/60 flex justify-end shrink-0">
+              <button
+                type="button"
+                onClick={() => setSelectedReportDetail(null)}
+                className="px-4 py-2 rounded-xl text-xs font-bold border transition hover:bg-slate-50 cursor-pointer"
+                style={{ borderColor: '#D1D5DB', color: '#111827' }}
+              >
+                Tutup Kronologi
               </button>
             </div>
           </div>
