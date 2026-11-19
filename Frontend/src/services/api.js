@@ -119,6 +119,24 @@ export const api = {
     return handleResponse(response);
   },
 
+  async resetPasswordSiswa(payload) {
+    const response = await fetch(`${API_BASE_URL}/auth/siswa/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    return handleResponse(response);
+  },
+
+  async requestResetAdmin(payload) {
+    const response = await fetch(`${API_BASE_URL}/auth/admin/reset-request`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    return handleResponse(response);
+  },
+
   // Kategori
   async getKategori() {
     const response = await fetch(`${API_BASE_URL}/pengaduan/kategori`);

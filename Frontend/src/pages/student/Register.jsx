@@ -416,7 +416,7 @@ export const Register = () => {
           {/* Link Bantuan */}
           <div className="pt-4 text-center">
             <Link
-              to="/lacak"
+              to="/lupa-sandi?role=siswa"
               className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-600 hover:underline transition"
             >
               <Headphones className="w-3.5 h-3.5 text-slate-400" />

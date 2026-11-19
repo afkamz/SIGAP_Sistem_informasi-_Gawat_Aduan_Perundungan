@@ -5,7 +5,11 @@ import {
   ShieldCheck,
   Eye,
   EyeOff,
-  ArrowLeft
+  ArrowLeft,
+  Headphones,
+  KeyRound,
+  ExternalLink,
+  HelpCircle
 } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { api } from '../../services/api';
@@ -16,6 +20,7 @@ export const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   const { loginUser } = useStore();
   const navigate = useNavigate();
@@ -235,9 +240,9 @@ export const AdminLogin = () => {
                 <input type="checkbox" defaultChecked className="rounded border-slate-300 text-[#1C6F8E] focus:ring-[#1C6F8E]" />
                 <span>Ingat perangkat ini</span>
               </label>
-              <a href="#/lupa-sandi-admin" className="font-semibold hover:underline" style={{ color: '#1C6F8E' }}>
-                Lupa kata sandi?
-              </a>
+              <Link to="/lupa-sandi?role=admin" className="font-semibold hover:underline" style={{ color: '#1C6F8E' }}>
+                Lupa kata sandi Anda?
+              </Link>
             </div>
 
             {/* Tombol: Masuk ke Panel Admin */}
@@ -281,8 +286,121 @@ export const AdminLogin = () => {
               Masuk ke Portal Siswa →
             </Link>
           </div>
+
+          {/* Link Bantuan: Apakah Anda mengalami kesulitan saat masuk? */}
+          <div className="pt-2 text-center">
+            <button
+              type="button"
+              onClick={() => setShowHelpModal(true)}
+              className="inline-flex items-center gap-1.5 text-xs hover:underline transition cursor-pointer"
+              style={{ color: '#2E84A5' }}
+            >
+              <Headphones className="w-3.5 h-3.5" style={{ color: '#1C6F8E' }} />
+              <span>Apakah Anda mengalami kesulitan saat masuk?</span>
+            </button>
+          </div>
         </div>
       </main>
+
+      {/* ─── MODAL PUSAT BANTUAN AKSES ADMIN & GURU BK ─── */}
+      {showHelpModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fade-in">
+          <div
+            className="w-full max-w-lg bg-white rounded-2xl border shadow-xl p-6 space-y-5 text-left relative max-h-[90vh] overflow-y-auto"
+            style={{ borderColor: '#BFEFFF' }}
+          >
+            <div className="flex justify-between items-start border-b pb-3" style={{ borderColor: '#E2E8F0' }}>
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-[#1C6F8E]" />
+                <div>
+                  <h3 className="font-bold text-base text-[#111827]">
+                    Pusat Bantuan Personel Satgas &amp; Guru BK
+                  </h3>
+                  <p className="text-[11px]" style={{ color: '#2E84A5' }}>
+                    Prosedur pemecahan masalah kendala login portal staf SIGAP
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowHelpModal(false)}
+                className="text-slate-400 hover:text-slate-600 font-bold text-lg leading-none cursor-pointer p-1"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-3.5 text-xs leading-relaxed" style={{ color: '#2E84A5' }}>
+              {/* Panduan 1: NIP Tidak Terdaftar */}
+              <div className="p-3.5 rounded-xl border bg-slate-50 space-y-1" style={{ borderColor: '#E2E8F0' }}>
+                <strong className="block text-[#111827] text-xs font-bold">
+                  1. NIP Tidak Terdaftar atau Salah Format?
+                </strong>
+                <p>
+                  Pastikan Anda menginput NIP 18 digit resmi tanpa tanda spasi atau titik. NIP petugas terdaftar disinkronkan melalui Dapodik / SIM-Tendik sekolah yang diverifikasi oleh Kepala Sekolah.
+                </p>
+              </div>
+
+              {/* Panduan 2: Lupa Kata Sandi Akun Petugas */}
+              <div className="p-3.5 rounded-xl border bg-slate-50 space-y-1.5" style={{ borderColor: '#E2E8F0' }}>
+                <strong className="block text-[#111827] text-xs font-bold">
+                  2. Lupa Kata Sandi Petugas?
+                </strong>
+                <p>
+                  Gunakan halaman Pemulihan Akses Akun Resmi atau koordinasikan dengan Koordinator Satgas PPKSP untuk penerbitan token otorisasi reset sandi.
+                </p>
+                <div className="pt-1">
+                  <Link
+                    to="/lupa-sandi?role=admin"
+                    onClick={() => setShowHelpModal(false)}
+                    className="inline-flex items-center gap-1.5 font-bold text-xs underline"
+                    style={{ color: '#1C6F8E' }}
+                  >
+                    <KeyRound className="w-3.5 h-3.5" />
+                    <span>Buka Halaman Pemulihan Sandi Admin →</span>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Panduan 3: Penanganan Kasus Darurat */}
+              <div
+                className="p-3.5 rounded-xl border space-y-2"
+                style={{ background: 'rgba(191, 239, 255, 0.25)', borderColor: '#BFEFFF' }}
+              >
+                <div className="flex items-center gap-2">
+                  <ShieldAlert className="w-4 h-4 text-[#1C6F8E]" />
+                  <strong className="block text-[#1C6F8E] text-xs font-bold">
+                    3. Ada Kasus Kekerasan Mendesak yang Perlu Segera Ditindak?
+                  </strong>
+                </div>
+                <p>
+                  Jika akun sedang mengalami kendala otentikasi namun korban membutuhkan perlindungan seketika, segera gunakan nomor darurat internal Satgas PPKSP atau akses kanal pelaporan cepat.
+                </p>
+              </div>
+
+              {/* Kontak Helpdesk Resmi */}
+              <div className="p-3 rounded-xl border bg-slate-50 space-y-1" style={{ borderColor: '#E2E8F0' }}>
+                <span className="font-semibold text-[#111827] block">Kontak Bantuan IT &amp; Disdik:</span>
+                <p className="flex justify-between items-center text-[11px] text-slate-600">
+                  <span>Helpdesk Satgas PPKSP: <strong>0811-9876-5432</strong></span>
+                  <span>Email: <strong>satgas.bk@sigap.id</strong></span>
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-2 border-t" style={{ borderColor: '#E2E8F0' }}>
+              <button
+                type="button"
+                onClick={() => setShowHelpModal(false)}
+                className="px-4 py-2 rounded-lg text-xs font-bold border transition cursor-pointer hover:bg-slate-50"
+                style={{ borderColor: '#D1D5DB', color: '#111827' }}
+              >
+                Tutup Bantuan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

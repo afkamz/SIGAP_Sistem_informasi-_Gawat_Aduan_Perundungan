@@ -9,7 +9,9 @@ import {
   ArrowLeft,
   SearchCheck,
   Info,
-  Headphones
+  Headphones,
+  KeyRound,
+  School
 } from 'lucide-react';
 import { api } from '../../services/api';
 import { useStore } from '../../context/StoreContext';
@@ -23,6 +25,7 @@ export const Login = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [emailError, setEmailError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showHelpModal, setShowHelpModal] = useState(false);
 
   const { loginUser } = useStore();
   const navigate = useNavigate();
@@ -247,7 +250,7 @@ export const Login = () => {
               </div>
               <div className="mt-1.5">
                 <Link
-                  to="/lupa-sandi"
+                  to="/lupa-sandi?role=siswa"
                   className="text-xs text-slate-400 hover:text-slate-600 transition"
                 >
                   Lupa kata sandi Anda?
@@ -337,18 +340,134 @@ export const Login = () => {
             </p>
           </div>
 
-          {/* Link Bantuan: Apakah Anda mengalami kesulitan saat masuk? (Persis Referensi) */}
+          {/* Link Bantuan: Apakah Anda mengalami kesulitan saat masuk? */}
           <div className="pt-4 text-center">
-            <Link
-              to="/lacak"
-              className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-600 hover:underline transition"
+            <button
+              type="button"
+              onClick={() => setShowHelpModal(true)}
+              className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-600 hover:underline transition cursor-pointer"
             >
               <Headphones className="w-3.5 h-3.5 text-slate-400" />
               <span>Apakah Anda mengalami kesulitan saat masuk?</span>
-            </Link>
+            </button>
           </div>
         </div>
       </main>
+
+      {/* ─── MODAL BANTUAN MASUK SISWA ─── */}
+      {showHelpModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs animate-fade-in">
+          <div
+            className="w-full max-w-lg bg-white rounded-2xl border shadow-xl p-6 space-y-5 text-left relative max-h-[90vh] overflow-y-auto"
+            style={{ borderColor: '#BFEFFF' }}
+          >
+            <div className="flex justify-between items-start border-b pb-3" style={{ borderColor: '#E2E8F0' }}>
+              <div className="flex items-center gap-2">
+                <Headphones className="w-5 h-5 text-[#1C6F8E]" />
+                <div>
+                  <h3 className="font-bold text-base text-[#111827]">
+                    Bantuan Masuk Portal Siswa
+                  </h3>
+                  <p className="text-[11px]" style={{ color: '#2E84A5' }}>
+                    Panduan jika lupa NISN, lupa sandi, atau ingin mengirim aduan cepat
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowHelpModal(false)}
+                className="text-slate-400 hover:text-slate-600 font-bold text-lg leading-none cursor-pointer p-1"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-3.5 text-xs leading-relaxed" style={{ color: '#2E84A5' }}>
+              {/* Panduan 1: Lupa NISN */}
+              <div className="p-3.5 rounded-xl border bg-slate-50 space-y-1" style={{ borderColor: '#E2E8F0' }}>
+                <strong className="block text-[#111827] text-xs font-bold">
+                  1. Tidak Ingat NISN (10 Digit)?
+                </strong>
+                <p>
+                  NISN tertera di Kartu Pelajar, lembar biodata Rapor Sekolah, Ijazah SD/SMP, atau dapat dicek mandiri melalui portal resmi Kemdikbudristek (<strong>nisn.data.kemdikbud.go.id</strong>).
+                </p>
+              </div>
+
+              {/* Panduan 2: Lupa Kata Sandi */}
+              <div className="p-3.5 rounded-xl border bg-slate-50 space-y-1.5" style={{ borderColor: '#E2E8F0' }}>
+                <strong className="block text-[#111827] text-xs font-bold">
+                  2. Lupa Kata Sandi Akun Siswa?
+                </strong>
+                <p>
+                  Gunakan fitur pemulihan mandiri dengan memasukkan NISN dan Nama Lengkap yang terdaftar untuk membuat kata sandi baru secara aman.
+                </p>
+                <div className="pt-1">
+                  <Link
+                    to="/lupa-sandi?role=siswa"
+                    onClick={() => setShowHelpModal(false)}
+                    className="inline-flex items-center gap-1.5 font-bold text-xs underline"
+                    style={{ color: '#1C6F8E' }}
+                  >
+                    <KeyRound className="w-3.5 h-3.5" />
+                    <span>Buka Halaman Pemulihan Sandi Siswa →</span>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Panduan 3: Butuh Lapor / Cek Tiket Cepat */}
+              <div
+                className="p-3.5 rounded-xl border space-y-2"
+                style={{ background: 'rgba(191, 239, 255, 0.25)', borderColor: '#BFEFFF' }}
+              >
+                <strong className="block text-[#1C6F8E] text-xs font-bold">
+                  3. Ingin Segera Melapor Tanpa Masuk Akun?
+                </strong>
+                <p>
+                  SIGAP menjamin hak perlindungan Anda. Anda dapat langsung mengirim aduan secara anonim atau memantau progres penanganan menggunakan Kode Tiket.
+                </p>
+                <div className="flex gap-2 pt-1">
+                  <Link
+                    to="/buat-laporan"
+                    onClick={() => setShowHelpModal(false)}
+                    className="px-3 py-1.5 rounded-lg font-bold text-xs border transition hover:opacity-90"
+                    style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                  >
+                    Kirim Aduan Cepat →
+                  </Link>
+                  <Link
+                    to="/lacak"
+                    onClick={() => setShowHelpModal(false)}
+                    className="px-3 py-1.5 rounded-lg font-bold text-xs border transition hover:opacity-90 bg-white"
+                    style={{ color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                  >
+                    Lacak Tiket Aduan →
+                  </Link>
+                </div>
+              </div>
+
+              {/* Kontak BK */}
+              <div className="p-3 rounded-xl border bg-slate-50 space-y-1" style={{ borderColor: '#E2E8F0' }}>
+                <span className="font-semibold text-[#111827] block">Pusat Konseling Sekolah:</span>
+                <p className="flex justify-between items-center text-[11px] text-slate-600">
+                  <span>Konselor BK: <strong>Ibu Rahmawati, S.Pd</strong></span>
+                  <span>Ruang: <strong>Gedung Utama Lt. 2</strong></span>
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-2 border-t" style={{ borderColor: '#E2E8F0' }}>
+              <button
+                type="button"
+                onClick={() => setShowHelpModal(false)}
+                className="px-4 py-2 rounded-lg text-xs font-bold border transition cursor-pointer hover:bg-slate-50"
+                style={{ borderColor: '#D1D5DB', color: '#111827' }}
+              >
+                Tutup Panduan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

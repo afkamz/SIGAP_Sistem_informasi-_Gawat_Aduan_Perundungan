@@ -2622,3 +2622,25 @@ Presisi koordinat offset navigasi scroll halus navbar (7 Kategori, Alur Penangan
 | 2 | `EDIT` | `Frontend/src/components/3d/CinematicCategoriesShowcase.jsx` | Penyesuaian padding atas panggung sticky, translasi awal judul, dan percepatan awal gerak reel kartu agar langsung responsif |
 | 3 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Penambahan atribut `scroll-mt-20` pada kontainer seksi Tentang |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 140 optimalisasi presisi scroll navigasi landing page |
+
+
+---
+
+## 📅 [Sesi 141] Kamis, 19 November 2026 — Jam 21 WIB
+
+### Fokus Utama
+Implementasi halaman dan modal Pemulihan Kata Sandi (`/lupa-sandi`) mandiri untuk siswa dan petugas admin, serta penyediaan Pusat Bantuan Kendala Masuk resmi menggantikan tautan rusak dan redirect tidak tepat pada portal autentikasi.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `TAMBAH` | `Frontend/src/pages/auth/ForgotPassword.jsx` | Halaman komprehensif pemulihan kata sandi bertab ganda (Siswa & Admin/Guru BK) dengan verifikasi identitas resmi |
+| 2 | `EDIT` | `Frontend/src/App.jsx` | Registrasi rute baru `/lupa-sandi` pada routing aplikasi |
+| 3 | `EDIT` | `Frontend/src/pages/admin/AdminLogin.jsx` | Pembaruan tautan Lupa Sandi menuju `/lupa-sandi?role=admin` dan penambahan tombol serta modal Pusat Bantuan Masuk Admin |
+| 4 | `EDIT` | `Frontend/src/pages/student/Login.jsx` | Pembaruan tautan Lupa Sandi ke `/lupa-sandi?role=siswa` dan penggantian redirect keliru `/lacak` dengan modal interaktif Bantuan Masuk Siswa |
+| 5 | `EDIT` | `Frontend/src/pages/student/Register.jsx` | Pembaruan tautan bantuan kesulitan mendaftar ke rute pemulihan bantuan yang tepat |
+| 6 | `EDIT` | `Frontend/src/services/api.js` | Penambahan method client `resetPasswordSiswa` dan `requestResetAdmin` |
+| 7 | `EDIT` | `backend/sigap-backend/app/schemas/auth.py` | Penambahan skema `SiswaResetPasswordRequest` dan `AdminResetPasswordRequest` |
+| 8 | `EDIT` | `backend/sigap-backend/app/routers/auth.py` | Implementasi endpoint backend `POST /api/auth/siswa/reset-password` dan `POST /api/auth/admin/reset-request` |
+| 9 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 141 implementasi pemulihan kata sandi dan pusat bantuan autentikasi |

@@ -67,3 +67,16 @@ class SiswaUpdateRequest(BaseModel):
     sekolah: str | None = None
     old_password: str | None = None
     new_password: str | None = None
+
+
+class SiswaResetPasswordRequest(BaseModel):
+    nisn: str = Field(..., min_length=4, max_length=20)
+    nama: str = Field(..., min_length=2, max_length=150)
+    new_password: str = Field(..., min_length=4)
+
+
+class AdminResetPasswordRequest(BaseModel):
+    nip: str = Field(..., min_length=4, max_length=50)
+    nama: str = Field(..., min_length=2, max_length=150)
+    token_otorisasi: str | None = None
+    new_password: str | None = None

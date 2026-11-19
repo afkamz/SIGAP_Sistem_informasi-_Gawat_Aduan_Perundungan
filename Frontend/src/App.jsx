@@ -11,6 +11,7 @@ import { Register } from './pages/student/Register';
 import { StudentDashboard } from './pages/student/StudentDashboard';
 import { CreateReportWizard } from './pages/student/CreateReportWizard';
 import { TrackReport } from './pages/student/TrackReport';
+import { ForgotPassword } from './pages/auth/ForgotPassword';
 
 // Admin Pages
 import { AdminLogin } from './pages/admin/AdminLogin';
@@ -34,6 +35,7 @@ export const App = () => {
           {/* Portal Siswa & Pelapor */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/lupa-sandi" element={<ForgotPassword />} />
           <Route
             path="/dashboard"
             element={

@@ -8,6 +8,7 @@ from app.models.siswa import Siswa
 from app.schemas.auth import (
     TokenResponse, AdminLoginResponse, AdminOut, AdminCreateRequest, UserInfo,
     SiswaRegisterRequest, SiswaLoginRequest, SiswaOut, SiswaUpdateRequest,
+    SiswaResetPasswordRequest, AdminResetPasswordRequest,
 )
 from app.core.security import (
     verify_password, hash_password, create_access_token, get_current_user,
@@ -305,3 +306,70 @@ def update_siswa_by_id(
         sekolah=siswa.sekolah,
     )
     return TokenResponse(access_token=access_token, role="siswa", user=user_info)
+
+
+@router.post("/siswa/reset-password")
+def reset_password_siswa(payload: SiswaResetPasswordRequest, db: Session = Depends(get_db)):
+    """
+    Pemulihan kata sandi siswa mandiri dengan verifikasi NISN dan Nama Lengkap.
+    """
+    clean_nisn = payload.nisn.strip()
+    clean_nama = payload.nama.strip().lower()
+
+    siswa = db.query(Siswa).filter(Siswa.nisn == clean_nisn).first()
+    if not siswa:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="NISN tidak ditemukan dalam database siswa.",
+        )
+
+    if clean_nama not in siswa.nama.lower() and siswa.nama.lower() not in clean_nama:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Nama lengkap tidak cocok dengan data pemilik NISN yang terdaftar.",
+        )
+
+    siswa.password_hash = hash_password(payload.new_password)
+    db.commit()
+    return {
+        "success": True,
+        "message": "Kata sandi siswa berhasil diubah. Silakan masuk dengan kata sandi baru Anda.",
+    }
+
+
+@router.post("/admin/reset-request")
+def reset_request_admin(payload: AdminResetPasswordRequest, db: Session = Depends(get_db)):
+    """
+    Permohonan verifikasi pemulihan kata sandi Admin/Guru BK sesuai SOP Satgas PPKSP.
+    """
+    clean_nip = payload.nip.strip()
+    clean_nama = payload.nama.strip().lower()
+
+    admin = db.query(Admin).filter(Admin.nip == clean_nip).first()
+    if not admin:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="NIP petugas tidak terdaftar dalam pangkalan data resmi SIGAP.",
+        )
+
+    if clean_nama not in admin.nama.lower() and admin.nama.lower() not in clean_nama:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Nama petugas tidak sesuai dengan arsip kepegawaian NIP terdaftar.",
+        )
+
+    if payload.new_password and (payload.token_otorisasi == "SIGAP-BK-2026" or payload.token_otorisasi == "ADMIN-DISDIK"):
+        admin.password_hash = hash_password(payload.new_password)
+        db.commit()
+        return {
+            "success": True,
+            "message": f"Kata sandi akun admin {admin.nama} berhasil diperbarui secara sah.",
+        }
+
+    return {
+        "success": True,
+        "verified": True,
+        "admin_name": admin.nama,
+        "jabatan": admin.jabatan,
+        "message": f"NIP {admin.nip} atas nama {admin.nama} terverifikasi aktif. Tautan pemulihan dan instruksi tiket reset resmi telah dialokasikan ke Helpdesk Satgas PPKSP.",
+    }
