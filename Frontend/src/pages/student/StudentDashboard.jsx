@@ -108,19 +108,6 @@ export const StudentDashboard = () => {
     }
   }, [searchParams]);
 
-  // Buka detail laporan tertentu jika parameter URL ?notif=... terdeteksi
-  useEffect(() => {
-    const notifTarget = searchParams.get('notif');
-    if (notifTarget && myReports.length > 0) {
-      const targetRep = myReports.find(
-        (r) => String(r.id) === String(notifTarget) || r.ticket_code === notifTarget
-      );
-      if (targetRep) {
-        setSelectedReportDetail(targetRep);
-      }
-    }
-  }, [searchParams, myReports]);
-
   // Background Video Ref & Autoplay Enforcer
   const videoRef = useRef(null);
   const heroRef = useRef(null);
@@ -230,6 +217,19 @@ export const StudentDashboard = () => {
       return false;
     });
   }, [reports, currentUser]);
+
+  // Buka detail laporan tertentu jika parameter URL ?notif=... terdeteksi
+  useEffect(() => {
+    const notifTarget = searchParams.get('notif');
+    if (notifTarget && myReports.length > 0) {
+      const targetRep = myReports.find(
+        (r) => String(r.id) === String(notifTarget) || r.ticket_code === notifTarget
+      );
+      if (targetRep) {
+        setSelectedReportDetail(targetRep);
+      }
+    }
+  }, [searchParams, myReports]);
 
   // Daftar jadwal sesi konseling tatap muka dari laporan milik siswa
   const activeAppointments = useMemo(() => {

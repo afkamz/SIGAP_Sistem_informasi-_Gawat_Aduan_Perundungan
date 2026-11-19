@@ -2676,3 +2676,19 @@ Perbaikan bug kritis runtime ReferenceError `useMemo` pada StoreContext yang men
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `Frontend/src/context/StoreContext.jsx` | Penambahan import hook `useMemo` dari React pada header modul StoreContext untuk mengeliminasi ReferenceError |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 143 perbaikan bug layar blank putih |
+
+
+---
+
+## 📅 [Sesi 144] Kamis, 19 November 2026 — Jam 22 WIB
+
+### Fokus Utama
+Eliminasi bug TDZ (Temporal Dead Zone) `myReports` pada StudentDashboard yang menyebabkan layar blank putih saat mengakses rute dashboard siswa, serta pembaruan build produksi Docker frontend.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/student/StudentDashboard.jsx` | Relokasi hook `useEffect` penanganan query parameter `notif` ke bawah deklarasi leksikal `myReports` guna mengeliminasi runtime ReferenceError TDZ |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 144 eliminasi bug TDZ myReports dashboard siswa |
+
