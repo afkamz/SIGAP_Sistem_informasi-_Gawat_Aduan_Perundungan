@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { INITIAL_LAPORAN, INITIAL_AUDIT } from '../data/mockData';
 import { KATEGORI_DATA } from '../data/categories';
 import { api } from '../services/api';
