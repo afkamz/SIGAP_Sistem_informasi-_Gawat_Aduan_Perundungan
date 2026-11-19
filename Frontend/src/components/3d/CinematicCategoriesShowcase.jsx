@@ -168,17 +168,17 @@ export const CinematicCategoriesShowcase = ({ onSelectCategory }) => {
       // Mengubah judul dari oversized typography di tengah viewport menuju posisi dan ukuran header normal
       if (titleWrapperRef.current) {
         const titleProgress = smoothStep(0.00, 0.18, progress);
-        const startScale = isMobile ? 1.12 : 1.45;
+        const startScale = isMobile ? 1.08 : 1.25;
         const currentScale = startScale - (startScale - 1.0) * titleProgress;
-        const startTranslateY = isMobile ? viewportHeight * 0.08 : viewportHeight * 0.12;
+        const startTranslateY = isMobile ? 12 : 24;
         const currentTranslateY = startTranslateY * (1.0 - titleProgress);
 
         titleWrapperRef.current.style.transform = `translate3d(0, ${currentTranslateY.toFixed(1)}px, 0) scale(${currentScale.toFixed(3)})`;
       }
 
       // ─── 1. TIMELINE ALOKASI RESMI (0–100%) ───
-      // Interpolasi gerakan horizontal kontinu (10% s.d. 80%)
-      const flightP = smoothStep(0.10, 0.80, progress);
+      // Interpolasi gerakan horizontal kontinu (4% s.d. 82%)
+      const flightP = smoothStep(0.04, 0.82, progress);
       const currentTrackX = startX + (endX - startX) * flightP;
 
       // Terapkan translasi track horizontal utama
@@ -269,7 +269,7 @@ export const CinematicCategoriesShowcase = ({ onSelectCategory }) => {
     >
       {/* ─── Pinned Sticky Stage (100dvh Viewport) ─── */}
       <div
-        className="categories-sticky-stage sticky top-0 w-full h-screen h-[100dvh] overflow-hidden flex flex-col justify-between py-5 sm:py-7 relative z-20 bg-transparent"
+        className="categories-sticky-stage sticky top-0 w-full h-screen h-[100dvh] overflow-hidden flex flex-col justify-between pt-16 pb-4 sm:pt-20 sm:pb-6 relative z-20 bg-transparent"
         style={{
           position: 'sticky',
           top: 0,
@@ -282,7 +282,7 @@ export const CinematicCategoriesShowcase = ({ onSelectCategory }) => {
         {/* ─── SCENE 01: SECTION HEADER (Oversized Editorial Typography Scroll Reveal) ─── */}
         <div
           ref={titleWrapperRef}
-          className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-4 sm:pt-6 z-30 flex-shrink-0 origin-top will-change-transform"
+          className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-2 sm:pt-3 z-30 flex-shrink-0 origin-top will-change-transform"
           style={{
             transform: 'translate3d(0, 0px, 0) scale(1)',
             transformOrigin: '50% 0%'

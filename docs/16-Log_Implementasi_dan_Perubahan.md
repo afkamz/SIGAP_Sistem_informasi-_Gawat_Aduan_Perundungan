@@ -2605,3 +2605,20 @@ Implementasi fitur Jadwal Konseling Tatap Muka (Appointment Tracker) pada Dashbo
 | 3 | `EDIT` | `Frontend/src/pages/student/StudentDashboard.jsx` | Penambahan Kartu Jadwal Konseling Tatap Muka (Appointment Tracker), tombol konfirmasi siap hadir, dan modal Panduan Masuk Ruang BK |
 | 4 | `EDIT` | `Frontend/src/pages/admin/ReportDetail.jsx` | Penambahan kartu sesi konseling aktif dan modal terbit/ubah jadwal konseling tatap muka bagi Guru BK/Satgas |
 | 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 139 implementasi jadwal konseling tatap muka |
+
+
+---
+
+## 📅 [Sesi 140] Kamis, 19 November 2026 — Jam 20 WIB
+
+### Fokus Utama
+Presisi koordinat offset navigasi scroll halus navbar (7 Kategori, Alur Penanganan, Tentang, Keamanan, FAQ) terhadap header fixed 64px, serta penyesuaian padding stage sinematik kategori agar judul dan kartu tampil proporsional tanpa terpotong.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Koreksi perhitungan `scrollToSection` dengan koordinat absolut dan pembedaan target sticky stage vs seksi flow reguler, penambahan `scroll-mt-20`, serta perbaikan scroll-spy |
+| 2 | `EDIT` | `Frontend/src/components/3d/CinematicCategoriesShowcase.jsx` | Penyesuaian padding atas panggung sticky, translasi awal judul, dan percepatan awal gerak reel kartu agar langsung responsif |
+| 3 | `EDIT` | `Frontend/src/components/landing/AboutEditorialShowcase.jsx` | Penambahan atribut `scroll-mt-20` pada kontainer seksi Tentang |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 140 optimalisasi presisi scroll navigasi landing page |

@@ -270,7 +270,7 @@ export const AboutEditorialShowcase = ({ handleReportAction }) => {
     <section
       id="about"
       ref={sectionRef}
-      className="about-editorial-section relative w-full h-[230vh] lg:h-[270vh]"
+      className="about-editorial-section relative w-full h-[230vh] lg:h-[270vh] scroll-mt-20"
       style={{ overflow: 'visible', background: '#FFFFFF' }}
     >
       {/* ─── Pinned Viewport Container (100dvh) ─── */}

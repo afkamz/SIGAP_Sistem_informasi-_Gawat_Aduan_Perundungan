@@ -111,32 +111,26 @@ export const LandingPage = () => {
   }, [hoveredNav, activeNav]);
 
   useEffect(() => {
-    const sections = ['about', 'categories', 'how-it-works', 'safety', 'faq'];
+    // Urutan seksi sesuai tampilan dokumen sebenarnya dari atas ke bawah
+    const sections = ['about', 'how-it-works', 'categories', 'safety', 'faq'];
     let ticking = false;
-    let cachedTops = [];
-
-    const cacheSectionTops = () => {
-      cachedTops = sections
-        .map((id) => {
-          const el = document.getElementById(id);
-          return el ? { id, top: el.offsetTop } : null;
-        })
-        .filter(Boolean);
-    };
-
-    cacheSectionTops();
-    window.addEventListener('resize', cacheSectionTops, { passive: true });
 
     const handleScrollNav = () => {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
-        const scrollPos = window.scrollY + 200;
+        const navbarHeight = 64;
+        const scrollPos = window.scrollY + navbarHeight + 80;
         let found = 'about';
-        for (let i = cachedTops.length - 1; i >= 0; i--) {
-          if (cachedTops[i].top <= scrollPos) {
-            found = cachedTops[i].id;
-            break;
+
+        for (let i = sections.length - 1; i >= 0; i--) {
+          const el = document.getElementById(sections[i]);
+          if (el) {
+            const absoluteTop = el.getBoundingClientRect().top + window.pageYOffset;
+            if (absoluteTop <= scrollPos) {
+              found = sections[i];
+              break;
+            }
           }
         }
         setActiveNav((prev) => (prev !== found ? found : prev));
@@ -145,10 +139,11 @@ export const LandingPage = () => {
     };
 
     window.addEventListener('scroll', handleScrollNav, { passive: true });
+    window.addEventListener('resize', handleScrollNav, { passive: true });
     handleScrollNav();
     return () => {
       window.removeEventListener('scroll', handleScrollNav);
-      window.removeEventListener('resize', cacheSectionTops);
+      window.removeEventListener('resize', handleScrollNav);
     };
   }, []);
 
@@ -382,12 +377,30 @@ export const LandingPage = () => {
   };
 
   const scrollToSection = (e, sectionId) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setMobileMenuOpen(false);
-    const element = document.getElementById(sectionId) || (sectionId === 'about' && document.getElementById('mission'));
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+
+    const targetId = sectionId === 'about' ? 'about' : sectionId;
+    const element = document.getElementById(targetId) || (sectionId === 'about' && document.getElementById('mission'));
+    if (!element) return;
+
+    const navbarHeight = 64;
+    const rect = element.getBoundingClientRect();
+    const absoluteTop = rect.top + window.pageYOffset;
+
+    // Untuk sticky stage (about, categories, faq), target scroll tepat di absoluteTop saat sticky pinning aktif
+    // Untuk seksi flow reguler (how-it-works, safety, mission), sisakan offset navbar agar judul tidak terpotong
+    const isStickyStage = sectionId === 'about' || sectionId === 'categories' || sectionId === 'faq';
+    let targetScrollY = isStickyStage ? absoluteTop : absoluteTop - navbarHeight;
+
+    if (sectionId === 'how-it-works') {
+      targetScrollY = absoluteTop - navbarHeight - 8;
     }
+
+    window.scrollTo({
+      top: Math.max(0, Math.round(targetScrollY)),
+      behavior: 'smooth'
+    });
   };
 
   const getCategoryIcon = (iconName) => {
@@ -830,7 +843,7 @@ export const LandingPage = () => {
       </section>
 
       {/* ─── SECTION 3: HOW IT WORKS (#how-it-works) (White Background) ─── */}
-      <section id="how-it-works" className="py-20 lg:py-28 relative z-30" style={{ background: '#FFFFFF' }}>
+      <section id="how-it-works" className="scroll-mt-20 py-20 lg:py-28 relative z-30" style={{ background: '#FFFFFF' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight" style={{ color: '#1C6F8E' }}>
@@ -919,7 +932,7 @@ export const LandingPage = () => {
         </div>
 
         {/* Section 5: Safety & Privacy (#safety) */}
-        <section id="safety" className="py-20 lg:py-28 relative z-10" style={{ background: 'transparent' }}>
+        <section id="safety" className="scroll-mt-20 py-20 lg:py-28 relative z-10" style={{ background: 'transparent' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
               <div className="lg:col-span-5 space-y-4">
