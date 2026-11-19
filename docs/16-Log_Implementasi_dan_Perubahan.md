@@ -2556,3 +2556,15 @@ Penggantian media pada permukaan kubus 3D bagian atas (top face) menjadi foto st
 | 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Penyesuaian tipografi spasi kalimat pertama CONCLUSION) |
 | 3 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Penyesuaian tipografi spasi kalimat pertama CONCLUSION) |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 136 perbaikan tipografi naskah paper |
+
+
+## 📅 [Sesi 137] Rabu, 19 November 2026 — Jam 11 WIB
+
+**Fokus Utama:** Perbaikan kalimat pembuka subbagian V.D Respondent Validation pada ketiga berkas LaTeX untuk menghilangkan pengulangan bilingual ("Validasi responden (\textit{respondent validation})") guna menjaga konsistensi gaya bahasa naskah.
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP.tex` | Naskah Publikasi Ilmiah Utama (Kalimat pembuka V.D tanpa pengulangan bilingual) |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Kalimat pembuka V.D tanpa pengulangan bilingual) |
+| 3 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Kalimat pembuka V.D tanpa pengulangan bilingual) |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 137 |
