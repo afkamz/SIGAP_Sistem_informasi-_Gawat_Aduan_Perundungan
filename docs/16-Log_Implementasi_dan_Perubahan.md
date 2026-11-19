@@ -2545,3 +2545,14 @@ Penggantian media pada permukaan kubus 3D bagian atas (top face) menjadi foto st
 | 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Penambahan Bab VI CONCLUSION) |
 | 3 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Penambahan Bab VI CONCLUSION) |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 135 penulisan kesimpulan naskah paper |
+
+## 📅 [Sesi 136] Kamis, 19 November 2026 — Jam 09 WIB
+
+**Fokus Utama:** Perbaikan tata letak tipografi spasi renggang (*underfull hbox*) pada baris pertama Bab VI (CONCLUSION) naskah publikasi ilmiah LaTeX dengan mengganti kata panjang yang terdorong ke baris baru menjadi frasa akademik baku yang seimbang dan rapat.
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP.tex` | Naskah Publikasi Ilmiah Utama (Penyesuaian tipografi spasi kalimat pertama CONCLUSION) |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Penyesuaian tipografi spasi kalimat pertama CONCLUSION) |
+| 3 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Penyesuaian tipografi spasi kalimat pertama CONCLUSION) |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 136 perbaikan tipografi naskah paper |
