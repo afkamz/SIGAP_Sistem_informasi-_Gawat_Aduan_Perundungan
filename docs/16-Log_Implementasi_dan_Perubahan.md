@@ -2692,3 +2692,19 @@ Eliminasi bug TDZ (Temporal Dead Zone) `myReports` pada StudentDashboard yang me
 | 1 | `EDIT` | `Frontend/src/pages/student/StudentDashboard.jsx` | Relokasi hook `useEffect` penanganan query parameter `notif` ke bawah deklarasi leksikal `myReports` guna mengeliminasi runtime ReferenceError TDZ |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 144 eliminasi bug TDZ myReports dashboard siswa |
 
+
+---
+
+## 📅 [Sesi 145] Sabtu, 21 November 2026 — Jam 21 WIB
+
+### Fokus Utama
+Penyederhanaan tampilan hero section dashboard siswa dengan menghapus tombol Pengaturan Akun, tombol Notifikasi Tindak Lanjut, dan kartu Progres Tindak Lanjut Terkini sehingga area video latar belakang kembali bersih hanya menampilkan 3 tombol utama (Buat Aduan Baru, Lacak Tiket, dan Sinkronkan Data), sementara fitur notifikasi dan pengaturan akun tetap terpusat di navbar.
+
+### Ringkasan Perubahan Berkas
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/student/StudentDashboard.jsx` | Pembersihan hero section dari tombol Pengaturan Akun, tombol Notifikasi, dan kartu pelacak alur agar kembali ke tampilan awal 3 tombol utama |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 145 penyederhanaan hero section dashboard siswa |
+
+

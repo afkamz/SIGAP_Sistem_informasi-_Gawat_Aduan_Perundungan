@@ -245,17 +245,6 @@ export const StudentDashboard = () => {
 
   const latestAppointment = activeAppointments[0] || null;
 
-  // Laporan prioritas yang sedang aktif untuk kartu Live Follow-up Stepper
-  const activeFollowUpReport = useMemo(() => {
-    if (myReports.length === 0) return null;
-    return (
-      myReports.find((r) => r.status === 'ditindaklanjuti') ||
-      myReports.find((r) => r.status === 'diverifikasi') ||
-      myReports.find((r) => r.status === 'menunggu') ||
-      myReports[0]
-    );
-  }, [myReports]);
-
   // Filter notifikasi di dalam modal pusat notifikasi
   const filteredNotifications = useMemo(() => {
     if (notifFilter === 'unread') {
@@ -426,6 +415,15 @@ export const StudentDashboard = () => {
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, [totalCount, pendingCount, inProgressCount, completedCount, pendingPercent, inProgressPercent, completedPercent]);
+
+  const handleCloseReportDetail = () => {
+    setSelectedReportDetail(null);
+    if (searchParams.get('notif')) {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('notif');
+      setSearchParams(newParams, { replace: true });
+    }
+  };
 
   const handleRefreshRiwayat = async () => {
     if (!currentUser?.id) return;
@@ -805,48 +803,7 @@ export const StudentDashboard = () => {
             Ruang perlindungan siswa SIGAP. Setiap suara Anda didengar, dilindungi, dan ditindaklanjuti secara profesional.
           </p>
 
-          {/* Badge Interaktif NISN & Profil Siswa (Klik untuk mengubah NISN jika ada salah ketik/typo) */}
-          <div
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-2xl border shadow-md backdrop-blur-md transition hover:scale-[1.02] cursor-pointer active:scale-98"
-            onClick={() => setIsSettingsOpen(true)}
-            title="Klik untuk mengubah NISN atau data diri siswa jika terdapat salah ketik (typo)"
-            style={{
-              background: 'rgba(255, 255, 255, 0.94)',
-              borderColor: '#BFEFFF',
-              opacity: isHeroInView ? 1 : 0,
-              transform: isHeroInView ? 'translateY(0)' : 'translateY(16px)',
-              transition: `opacity 500ms ${easeCurve} 500ms, transform 500ms ${easeCurve} 500ms`
-            }}
-          >
-            <div
-              className="w-7 h-7 rounded-xl flex items-center justify-center font-bold text-xs"
-              style={{ background: '#BFEFFF', color: '#1C6F8E' }}
-            >
-              <GraduationCap className="w-4 h-4 text-[#1C6F8E]" />
-            </div>
-            <div className="text-left leading-tight">
-              <span className="text-[10px] font-semibold text-slate-500 block">NISN TERDAFTAR</span>
-              <span className="text-xs font-bold text-[#1C6F8E] font-mono tracking-wide">
-                {currentUser?.nisn || '0061234567'}
-              </span>
-            </div>
-            <span className="text-slate-300">|</span>
-            <div className="text-left leading-tight hidden xs:block">
-              <span className="text-[10px] font-semibold text-slate-500 block">SEKOLAH</span>
-              <span className="text-xs font-bold text-slate-700 truncate max-w-[150px] block">
-                {currentUser?.sekolah || 'SMAN 1 Teladan'}
-              </span>
-            </div>
-            <div
-              className="ml-1 px-2 py-0.5 rounded-lg text-[10px] font-bold flex items-center gap-1 border"
-              style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
-            >
-              <Edit3 className="w-3 h-3 text-[#1C6F8E]" />
-              <span>Koreksi NISN</span>
-            </div>
-          </div>
-
-          {/* Group Tombol Aksi - Fokus Utama "Buat Aduan Baru" */}
+          {/* Group Tombol Aksi - Hanya Buat Aduan Baru, Lacak Tiket, & Sinkronkan Data */}
           <div
             className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto pt-2"
             style={{
@@ -869,22 +826,6 @@ export const StudentDashboard = () => {
               <PlusCircle className="w-5 h-5 text-[#142B4A]" />
               <span>Buat Aduan Baru</span>
             </Link>
-
-            {/* Tombol Sekunder: Pengaturan Akun */}
-            <button
-              type="button"
-              onClick={() => setIsSettingsOpen(true)}
-              className="w-full sm:w-auto px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition hover:opacity-95 border shadow-md active:scale-95 cursor-pointer"
-              style={{
-                background: '#FFFFFF',
-                color: '#1C6F8E',
-                borderColor: '#BFEFFF'
-              }}
-              title="Pengaturan akun siswa (Ubah NISN, Nama, atau Sekolah jika typo)"
-            >
-              <Settings className="w-4 h-4 text-[#1C6F8E]" />
-              <span>Pengaturan Akun</span>
-            </button>
 
             {/* Tombol Sekunder: Lacak Tiket */}
             <Link
@@ -916,426 +857,7 @@ export const StudentDashboard = () => {
               <RotateCw className={`w-4 h-4 text-[#1C6F8E] ${isLoadingRiwayat ? 'animate-spin' : ''}`} />
               <span>Sinkronkan Data</span>
             </button>
-
-            {/* Tombol Sekunder: Notifikasi Tindak Lanjut */}
-            <button
-              type="button"
-              onClick={() => setIsNotifModalOpen(true)}
-              className="w-full sm:w-auto px-5 py-3.5 rounded-2xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition hover:opacity-95 border shadow-md active:scale-95 cursor-pointer relative"
-              style={{
-                background: '#FFFFFF',
-                color: '#1C6F8E',
-                borderColor: '#BFEFFF'
-              }}
-              title="Lihat seluruh notifikasi dan riwayat tindak lanjut penanganan aduan Anda"
-            >
-              <Bell className="w-4 h-4 text-[#1C6F8E]" />
-              <span>Notifikasi Tindak Lanjut</span>
-              {unreadNotificationsCount > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full text-[10px] font-black bg-rose-500 text-white animate-pulse">
-                  {unreadNotificationsCount} Baru
-                </span>
-              )}
-            </button>
           </div>
-
-          {/* ─── KARTU PELACAK ALUR TINDAK LANJUT ADUAN TERKINI (LIVE CASE TRACKER) ─── */}
-          {activeFollowUpReport && (
-            <div
-              className="w-full max-w-2xl mt-1 mb-2 p-5 sm:p-6 rounded-3xl border shadow-xl backdrop-blur-xl relative overflow-hidden transition-all duration-300 text-left"
-              style={{
-                background: 'rgba(255, 255, 255, 0.96)',
-                borderColor: '#BFEFFF',
-                boxShadow: '0 12px 36px -6px rgba(28, 111, 142, 0.16)',
-                opacity: isHeroInView ? 1 : 0,
-                transform: isHeroInView ? 'translateY(0)' : 'translateY(16px)',
-                transition: `opacity 600ms ${easeCurve} 650ms, transform 600ms ${easeCurve} 650ms`
-              }}
-            >
-              {/* Header Kartu Progres */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-[#BFEFFF]/60">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl flex items-center justify-center border shadow-xs" style={{ background: '#BFEFFF', borderColor: '#BFEFFF' }}>
-                    <Activity className="w-4 h-4 text-[#1C6F8E]" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-black tracking-wider uppercase text-[#2E84A5] block">
-                      PROGRES TINDAK LANJUT ADUAN TERKINI
-                    </span>
-                    <h3 className="font-extrabold text-xs sm:text-sm text-[#142B4A]">
-                      #{activeFollowUpReport.ticket_code} • {activeFollowUpReport.kategori_nama}
-                    </h3>
-                  </div>
-                </div>
-
-                {/* Badge Status Tahapan */}
-                <div className="flex items-center gap-2 self-start sm:self-auto">
-                  <span
-                    className="px-3 py-1 rounded-full text-[11px] font-extrabold border shadow-2xs flex items-center gap-1.5"
-                    style={{
-                      background:
-                        activeFollowUpReport.status === 'selesai'
-                          ? '#D1FAE5'
-                          : activeFollowUpReport.status === 'ditindaklanjuti'
-                          ? '#E0F2FE'
-                          : activeFollowUpReport.status === 'diverifikasi'
-                          ? '#FEF3C7'
-                          : '#F1F5F9',
-                      color:
-                        activeFollowUpReport.status === 'selesai'
-                          ? '#065F46'
-                          : activeFollowUpReport.status === 'ditindaklanjuti'
-                          ? '#0369A1'
-                          : activeFollowUpReport.status === 'diverifikasi'
-                          ? '#92400E'
-                          : '#475569',
-                      borderColor:
-                        activeFollowUpReport.status === 'selesai'
-                          ? '#A7F3D0'
-                          : activeFollowUpReport.status === 'ditindaklanjuti'
-                          ? '#BAE6FD'
-                          : activeFollowUpReport.status === 'diverifikasi'
-                          ? '#FDE68A'
-                          : '#CBD5E1'
-                    }}
-                  >
-                    <span className="w-2 h-2 rounded-full animate-ping" style={{ background: 'currentColor' }} />
-                    <span>
-                      {activeFollowUpReport.status === 'menunggu'
-                        ? '1. Laporan Masuk'
-                        : activeFollowUpReport.status === 'diverifikasi'
-                        ? '2. Terverifikasi Satgas'
-                        : activeFollowUpReport.status === 'ditindaklanjuti'
-                        ? '3. Sedang Ditindaklanjuti'
-                        : '4. Selesai Ditangani'}
-                    </span>
-                  </span>
-                </div>
-              </div>
-
-              {/* ─── STEPPER 4 TAHAP TINDAK LANJUT ─── */}
-              <div className="py-2">
-                <div className="grid grid-cols-4 gap-1 sm:gap-2 text-center relative">
-                  {/* Step 1 */}
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-black text-xs border transition shadow-xs z-10"
-                      style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#1C6F8E' }}
-                    >
-                      <Check className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                    </div>
-                    <span className="text-[10px] sm:text-[11px] font-bold text-slate-800 mt-1 leading-tight">1. Diterima</span>
-                    <span className="text-[9px] text-slate-400 hidden sm:block">Aduan Masuk</span>
-                  </div>
-
-                  {/* Step 2 */}
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-black text-xs border transition shadow-xs z-10"
-                      style={{
-                        background: ['diverifikasi', 'ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status)
-                          ? '#BFEFFF'
-                          : '#F8FAFC',
-                        color: ['diverifikasi', 'ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status)
-                          ? '#1C6F8E'
-                          : '#94A3B8',
-                        borderColor: ['diverifikasi', 'ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status)
-                          ? '#1C6F8E'
-                          : '#E2E8F0'
-                      }}
-                    >
-                      {['diverifikasi', 'ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status) ? (
-                        <Check className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                      ) : (
-                        '2'
-                      )}
-                    </div>
-                    <span className="text-[10px] sm:text-[11px] font-bold text-slate-800 mt-1 leading-tight">2. Verifikasi</span>
-                    <span className="text-[9px] text-slate-400 hidden sm:block">Bukti Satgas</span>
-                  </div>
-
-                  {/* Step 3 */}
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-black text-xs border transition shadow-xs z-10"
-                      style={{
-                        background: ['ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status)
-                          ? '#BFEFFF'
-                          : activeFollowUpReport.status === 'diverifikasi'
-                          ? '#E0F2FE'
-                          : '#F8FAFC',
-                        color: ['ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status)
-                          ? '#1C6F8E'
-                          : '#94A3B8',
-                        borderColor: ['ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status)
-                          ? '#1C6F8E'
-                          : '#E2E8F0'
-                      }}
-                    >
-                      {['ditindaklanjuti', 'selesai'].includes(activeFollowUpReport.status) ? (
-                        <Check className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                      ) : (
-                        '3'
-                      )}
-                    </div>
-                    <span className="text-[10px] sm:text-[11px] font-bold text-slate-800 mt-1 leading-tight">3. Penanganan</span>
-                    <span className="text-[9px] text-slate-400 hidden sm:block">Konseling / Mediasi</span>
-                  </div>
-
-                  {/* Step 4 */}
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-black text-xs border transition shadow-xs z-10"
-                      style={{
-                        background: activeFollowUpReport.status === 'selesai' ? '#D1FAE5' : '#F8FAFC',
-                        color: activeFollowUpReport.status === 'selesai' ? '#065F46' : '#94A3B8',
-                        borderColor: activeFollowUpReport.status === 'selesai' ? '#059669' : '#E2E8F0'
-                      }}
-                    >
-                      {activeFollowUpReport.status === 'selesai' ? (
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                      ) : (
-                        '4'
-                      )}
-                    </div>
-                    <span className="text-[10px] sm:text-[11px] font-bold text-slate-800 mt-1 leading-tight">4. Resolusi</span>
-                    <span className="text-[9px] text-slate-400 hidden sm:block">Kasus Tuntas</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Catatan Terakhir dari Konselor BK */}
-              <div
-                className="mt-3 p-3 rounded-2xl text-xs border flex items-start gap-2.5 leading-relaxed"
-                style={{
-                  background: 'rgba(191, 239, 255, 0.25)',
-                  borderColor: '#BFEFFF',
-                  color: '#1C6F8E'
-                }}
-              >
-                <MessageSquare className="w-4 h-4 text-[#1C6F8E] shrink-0 mt-0.5" />
-                <div className="space-y-0.5 w-full">
-                  <div className="flex justify-between items-center text-[10.5px]">
-                    <span className="font-bold">Perkembangan Terkini dari Konselor BK:</span>
-                    <span className="text-slate-400 text-[10px]">
-                      {activeFollowUpReport.history?.[activeFollowUpReport.history.length - 1]?.waktu || activeFollowUpReport.tanggal}
-                    </span>
-                  </div>
-                  <p className="text-slate-700 text-[11px]">
-                    {activeFollowUpReport.history?.[activeFollowUpReport.history.length - 1]?.catatan ||
-                      activeFollowUpReport.catatan_konselor ||
-                      'Laporan Anda saat ini sedang dalam penanganan intensif oleh Guru BK dan Satgas PPKSP.'}
-                  </p>
-                </div>
-              </div>
-
-              {/* Tombol Aksi di Bawah Card */}
-              <div className="mt-3 pt-3 border-t border-[#BFEFFF]/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <button
-                  type="button"
-                  onClick={() => setSelectedReportDetail(activeFollowUpReport)}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold hover:underline cursor-pointer"
-                  style={{ color: '#1C6F8E' }}
-                >
-                  <ListChecks className="w-3.5 h-3.5" />
-                  <span>Lihat Kronologi Lengkap Kasus Ini →</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setIsNotifModalOpen(true)}
-                  className="px-3.5 py-1.5 rounded-xl text-xs font-bold border transition hover:opacity-90 flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
-                  style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
-                >
-                  <Bell className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                  <span>Pusat Notifikasi ({studentNotifications.length})</span>
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* ─── KARTU JADWAL KONSELING TATAP MUKA (APPOINTMENT TRACKER) ─── */}
-          {latestAppointment && (
-            <div
-              className="w-full max-w-2xl mt-1 mb-2 p-5 sm:p-6 rounded-3xl border shadow-xl backdrop-blur-xl relative overflow-hidden transition-all duration-300 text-left"
-              style={{
-                background: 'rgba(255, 255, 255, 0.96)',
-                borderColor: '#BFEFFF',
-                boxShadow: '0 12px 36px -6px rgba(28, 111, 142, 0.18)',
-                opacity: isHeroInView ? 1 : 0,
-                transform: isHeroInView ? 'translateY(0)' : 'translateY(16px)',
-                transition: `opacity 500ms ${easeCurve} 650ms, transform 500ms ${easeCurve} 650ms`
-              }}
-            >
-              {/* Soft decorative ambient shape */}
-              <div
-                className="absolute -right-16 -top-16 w-44 h-44 rounded-full pointer-events-none select-none"
-                style={{
-                  background: 'linear-gradient(135deg, #BFEFFF 0%, #D6F5FF 100%)',
-                  opacity: 0.65
-                }}
-              />
-
-              {/* Card Header: Icon, Badge, and Title */}
-              <div
-                className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b"
-                style={{ borderColor: 'rgba(191, 239, 255, 0.7)' }}
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-10 h-10 rounded-2xl flex items-center justify-center border shadow-xs shrink-0"
-                    style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
-                  >
-                    <Calendar className="w-5 h-5 text-[#1C6F8E]" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-[#1C6F8E]">
-                        Jadwal Konseling Tatap Muka
-                      </span>
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping inline-block" />
-                    </div>
-                    <p className="text-[11px] text-slate-500 font-medium">
-                      Sesi pendampingan privat resmi dari Tim Guru BK &amp; Satgas PPKSP
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span
-                    className="px-3 py-1 rounded-full text-[11px] font-extrabold border shadow-2xs flex items-center gap-1.5"
-                    style={{
-                      background: latestAppointment.is_confirmed ? '#D1FAE5' : '#D6F5FF',
-                      color: latestAppointment.is_confirmed ? '#065F46' : '#1C6F8E',
-                      borderColor: latestAppointment.is_confirmed ? '#A7F3D0' : '#BFEFFF'
-                    }}
-                  >
-                    {latestAppointment.is_confirmed ? (
-                      <>
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>Kehadiran Terkonfirmasi</span>
-                      </>
-                    ) : (
-                      <>
-                        <Clock className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                        <span>Dijadwalkan Konselor</span>
-                      </>
-                    )}
-                  </span>
-                </div>
-              </div>
-
-              {/* Card Body: Detail Waktu, Ruangan, Konselor, dan Kasus Terkait */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 py-3.5 text-xs">
-                {/* Waktu & Tanggal */}
-                <div className="p-3 rounded-2xl border" style={{ background: '#F0FAFD', borderColor: '#BFEFFF' }}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <Clock className="w-4 h-4 text-[#1C6F8E]" />
-                    <span className="text-[10px] font-bold uppercase text-slate-500">WAKTU PERTEMUAN:</span>
-                  </div>
-                  <div className="font-bold text-slate-900 text-xs sm:text-[13px]">
-                    {latestAppointment.scheduled_date || 'Jumat, 20 November 2026'}
-                  </div>
-                  <div className="text-[11px] font-semibold text-[#1C6F8E] mt-0.5">
-                    Pukul {latestAppointment.scheduled_time || '10:00 - 11:00 WIB'}
-                  </div>
-                </div>
-
-                {/* Lokasi Ruangan Aman */}
-                <div className="p-3 rounded-2xl border" style={{ background: '#F0FAFD', borderColor: '#BFEFFF' }}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <MapPin className="w-4 h-4 text-[#1C6F8E]" />
-                    <span className="text-[10px] font-bold uppercase text-slate-500">LOKASI RUANG PRIVAT:</span>
-                  </div>
-                  <div className="font-bold text-slate-900 text-xs sm:text-[13px]">
-                    {latestAppointment.location || 'Ruang Bimbingan Konseling (BK) Privat - Lantai 2'}
-                  </div>
-                  <div className="text-[11px] text-slate-500 mt-0.5 leading-tight">
-                    {latestAppointment.room_detail || 'Ruang aman tertutup, tanpa paparan teman lain.'}
-                  </div>
-                </div>
-
-                {/* Konselor Pendamping */}
-                <div className="p-3 rounded-2xl border" style={{ background: '#FFFFFF', borderColor: '#BFEFFF' }}>
-                  <span className="text-[10px] font-bold uppercase text-slate-500 block mb-1">GURU BK PENDAMPING:</span>
-                  <div className="font-bold text-slate-800 text-xs">
-                    {latestAppointment.counselor || 'Ibu Rahmawati, S.Pd (Konselor Satgas PPKSP)'}
-                  </div>
-                  <div className="text-[10px] text-slate-500 mt-0.5">
-                    Kasus: <span className="font-semibold text-[#1C6F8E]">#{latestAppointment.ticketCode}</span> • {latestAppointment.caseTitle || 'Perundungan Siber'}
-                  </div>
-                </div>
-
-                {/* Jaminan Keamanan */}
-                <div className="p-3 rounded-2xl border flex flex-col justify-between" style={{ background: '#FFFFFF', borderColor: '#BFEFFF' }}>
-                  <span className="text-[10px] font-bold uppercase text-slate-500 block mb-1">JAMINAN PERLINDUNGAN:</span>
-                  <div className="flex items-center gap-1.5 text-slate-700 font-semibold text-[11px]">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>100% Rahasia &amp; Bebas Konfrontasi</span>
-                  </div>
-                  <span className="text-[10px] text-slate-400 mt-0.5">Dilindungi SOP Satgas PPKSP</span>
-                </div>
-              </div>
-
-              {/* Catatan Konselor untuk Siswa */}
-              {latestAppointment.notes && (
-                <div
-                  className="p-3 rounded-2xl text-[11px] leading-relaxed border mb-3"
-                  style={{
-                    background: 'rgba(191, 239, 255, 0.25)',
-                    borderColor: '#BFEFFF',
-                    color: '#1C6F8E'
-                  }}
-                >
-                  <span className="font-bold block mb-0.5">Pesan dari Konselor:</span>
-                  {latestAppointment.notes}
-                </div>
-              )}
-
-              {/* Action Buttons Footer */}
-              <div
-                className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 pt-2 border-t"
-                style={{ borderColor: 'rgba(191, 239, 255, 0.6)' }}
-              >
-                <button
-                  type="button"
-                  onClick={() => setShowAppointmentGuide(true)}
-                  className="px-3.5 py-2 rounded-xl text-xs font-bold border transition hover:opacity-90 flex items-center gap-1.5 cursor-pointer"
-                  style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
-                >
-                  <HelpCircle className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                  <span>Panduan Masuk Ruang BK</span>
-                </button>
-
-                <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-                  {!latestAppointment.is_confirmed ? (
-                    <button
-                      type="button"
-                      disabled={confirmingAppt}
-                      onClick={async () => {
-                        setConfirmingAppt(true);
-                        confirmAppointmentAttendance(latestAppointment.reportId, currentUser?.nama || 'Siswa');
-                        setTimeout(() => setConfirmingAppt(false), 500);
-                      }}
-                      className="px-4 py-2 rounded-xl text-xs font-bold border transition active:scale-95 shadow-xs flex items-center gap-1.5 cursor-pointer hover:opacity-90 w-full sm:w-auto justify-center"
-                      style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
-                    >
-                      <Check className="w-3.5 h-3.5 text-[#1C6F8E]" />
-                      <span>{confirmingAppt ? 'Mengonfirmasi...' : 'Konfirmasi: Saya Siap Hadir'}</span>
-                    </button>
-                  ) : (
-                    <span
-                      className="px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 border"
-                      style={{ background: '#ECFDF5', color: '#065F46', borderColor: '#A7F3D0' }}
-                    >
-                      <Check className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>Kehadiran Anda Telah Dicatat BK</span>
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
 
           <span
             className="text-[11px] sm:text-xs font-semibold px-3.5 py-1 rounded-full border shadow-xs"
@@ -1918,6 +1440,186 @@ export const StudentDashboard = () => {
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 relative z-20">
+
+        {/* ─── KARTU JADWAL KONSELING TATAP MUKA (APPOINTMENT TRACKER) ─── */}
+        {latestAppointment && (
+          <div
+            className="w-full p-5 sm:p-6 rounded-3xl border shadow-xl relative overflow-hidden transition-all duration-300 text-left"
+            style={{
+              background: '#FFFFFF',
+              borderColor: '#BFEFFF',
+              boxShadow: '0 12px 36px -6px rgba(28, 111, 142, 0.18)'
+            }}
+          >
+            {/* Soft decorative ambient shape */}
+            <div
+              className="absolute -right-16 -top-16 w-44 h-44 rounded-full pointer-events-none select-none"
+              style={{
+                background: 'linear-gradient(135deg, #BFEFFF 0%, #D6F5FF 100%)',
+                opacity: 0.65
+              }}
+            />
+
+            {/* Card Header: Icon, Badge, and Title */}
+            <div
+              className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b"
+              style={{ borderColor: 'rgba(191, 239, 255, 0.7)' }}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-10 h-10 rounded-2xl flex items-center justify-center border shadow-xs shrink-0"
+                  style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
+                >
+                  <Calendar className="w-5 h-5 text-[#1C6F8E]" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-[#1C6F8E]">
+                      Jadwal Konseling Tatap Muka
+                    </span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping inline-block" />
+                  </div>
+                  <p className="text-[11px] text-slate-500 font-medium">
+                    Sesi pendampingan privat resmi dari Tim Guru BK &amp; Satgas PPKSP
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span
+                  className="px-3 py-1 rounded-full text-[11px] font-extrabold border shadow-2xs flex items-center gap-1.5"
+                  style={{
+                    background: latestAppointment.is_confirmed ? '#D1FAE5' : '#D6F5FF',
+                    color: latestAppointment.is_confirmed ? '#065F46' : '#1C6F8E',
+                    borderColor: latestAppointment.is_confirmed ? '#A7F3D0' : '#BFEFFF'
+                  }}
+                >
+                  {latestAppointment.is_confirmed ? (
+                    <>
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Kehadiran Terkonfirmasi</span>
+                    </>
+                  ) : (
+                    <>
+                      <Clock className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                      <span>Dijadwalkan Konselor</span>
+                    </>
+                  )}
+                </span>
+              </div>
+            </div>
+
+            {/* Card Body: Detail Waktu, Ruangan, Konselor, dan Kasus Terkait */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 py-3.5 text-xs">
+              {/* Waktu & Tanggal */}
+              <div className="p-3 rounded-2xl border" style={{ background: '#F0FAFD', borderColor: '#BFEFFF' }}>
+                <div className="flex items-center gap-2 mb-1">
+                  <Clock className="w-4 h-4 text-[#1C6F8E]" />
+                  <span className="text-[10px] font-bold uppercase text-slate-500">WAKTU PERTEMUAN:</span>
+                </div>
+                <div className="font-bold text-slate-900 text-xs sm:text-[13px]">
+                  {latestAppointment.scheduled_date || 'Jumat, 20 November 2026'}
+                </div>
+                <div className="text-[11px] font-semibold text-[#1C6F8E] mt-0.5">
+                  Pukul {latestAppointment.scheduled_time || '10:00 - 11:00 WIB'}
+                </div>
+              </div>
+
+              {/* Lokasi Ruangan Aman */}
+              <div className="p-3 rounded-2xl border" style={{ background: '#F0FAFD', borderColor: '#BFEFFF' }}>
+                <div className="flex items-center gap-2 mb-1">
+                  <MapPin className="w-4 h-4 text-[#1C6F8E]" />
+                  <span className="text-[10px] font-bold uppercase text-slate-500">LOKASI RUANG PRIVAT:</span>
+                </div>
+                <div className="font-bold text-slate-900 text-xs sm:text-[13px]">
+                  {latestAppointment.location || 'Ruang Bimbingan Konseling (BK) Privat - Lantai 2'}
+                </div>
+                <div className="text-[11px] text-slate-500 mt-0.5 leading-tight">
+                  {latestAppointment.room_detail || 'Ruang aman tertutup, tanpa paparan teman lain.'}
+                </div>
+              </div>
+
+              {/* Konselor Pendamping */}
+              <div className="p-3 rounded-2xl border" style={{ background: '#FFFFFF', borderColor: '#BFEFFF' }}>
+                <span className="text-[10px] font-bold uppercase text-slate-500 block mb-1">GURU BK PENDAMPING:</span>
+                <div className="font-bold text-slate-800 text-xs">
+                  {latestAppointment.counselor || 'Ibu Rahmawati, S.Pd (Konselor Satgas PPKSP)'}
+                </div>
+                <div className="text-[10px] text-slate-500 mt-0.5">
+                  Kasus: <span className="font-semibold text-[#1C6F8E]">#{latestAppointment.ticketCode}</span> • {latestAppointment.caseTitle || 'Perundungan Siber'}
+                </div>
+              </div>
+
+              {/* Jaminan Keamanan */}
+              <div className="p-3 rounded-2xl border flex flex-col justify-between" style={{ background: '#FFFFFF', borderColor: '#BFEFFF' }}>
+                <span className="text-[10px] font-bold uppercase text-slate-500 block mb-1">JAMINAN PERLINDUNGAN:</span>
+                <div className="flex items-center gap-1.5 text-slate-700 font-semibold text-[11px]">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>100% Rahasia &amp; Bebas Konfrontasi</span>
+                </div>
+                <span className="text-[10px] text-slate-400 mt-0.5">Dilindungi SOP Satgas PPKSP</span>
+              </div>
+            </div>
+
+            {/* Catatan Konselor untuk Siswa */}
+            {latestAppointment.notes && (
+              <div
+                className="p-3 rounded-2xl text-[11px] leading-relaxed border mb-3"
+                style={{
+                  background: 'rgba(191, 239, 255, 0.25)',
+                  borderColor: '#BFEFFF',
+                  color: '#1C6F8E'
+                }}
+              >
+                <span className="font-bold block mb-0.5">Pesan dari Konselor:</span>
+                {latestAppointment.notes}
+              </div>
+            )}
+
+            {/* Action Buttons Footer */}
+            <div
+              className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 pt-2 border-t"
+              style={{ borderColor: 'rgba(191, 239, 255, 0.6)' }}
+            >
+              <button
+                type="button"
+                onClick={() => setShowAppointmentGuide(true)}
+                className="px-3.5 py-2 rounded-xl text-xs font-bold border transition hover:opacity-90 flex items-center gap-1.5 cursor-pointer"
+                style={{ background: '#FFFFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+              >
+                <HelpCircle className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                <span>Panduan Masuk Ruang BK</span>
+              </button>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+                {!latestAppointment.is_confirmed ? (
+                  <button
+                    type="button"
+                    disabled={confirmingAppt}
+                    onClick={async () => {
+                      setConfirmingAppt(true);
+                      confirmAppointmentAttendance(latestAppointment.reportId, currentUser?.nama || 'Siswa');
+                      setTimeout(() => setConfirmingAppt(false), 500);
+                    }}
+                    className="px-4 py-2 rounded-xl text-xs font-bold border transition active:scale-95 shadow-xs flex items-center gap-1.5 cursor-pointer hover:opacity-90 w-full sm:w-auto justify-center"
+                    style={{ background: '#BFEFFF', color: '#1C6F8E', borderColor: '#BFEFFF' }}
+                  >
+                    <Check className="w-3.5 h-3.5 text-[#1C6F8E]" />
+                    <span>{confirmingAppt ? 'Mengonfirmasi...' : 'Konfirmasi: Saya Siap Hadir'}</span>
+                  </button>
+                ) : (
+                  <span
+                    className="px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 border"
+                    style={{ background: '#ECFDF5', color: '#065F46', borderColor: '#A7F3D0' }}
+                  >
+                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Kehadiran Anda Telah Dicatat BK</span>
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Banner Bantuan Darurat Segera */}
         <div
@@ -2553,7 +2255,7 @@ export const StudentDashboard = () => {
       {selectedReportDetail && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fade-in overflow-y-auto"
-          onClick={() => setSelectedReportDetail(null)}
+          onClick={handleCloseReportDetail}
         >
           <div
             className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 relative overflow-hidden shadow-2xl border my-8 text-left max-h-[90vh] flex flex-col"
@@ -2581,7 +2283,7 @@ export const StudentDashboard = () => {
 
               <button
                 type="button"
-                onClick={() => setSelectedReportDetail(null)}
+                onClick={handleCloseReportDetail}
                 className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-600 border border-slate-200 cursor-pointer"
               >
                 <X className="w-4 h-4" />
@@ -2725,7 +2427,7 @@ export const StudentDashboard = () => {
             <div className="pt-3 border-t border-[#BFEFFF]/60 flex justify-end shrink-0">
               <button
                 type="button"
-                onClick={() => setSelectedReportDetail(null)}
+                onClick={handleCloseReportDetail}
                 className="px-4 py-2 rounded-xl text-xs font-bold border transition hover:bg-slate-50 cursor-pointer"
                 style={{ borderColor: '#D1D5DB', color: '#111827' }}
               >
