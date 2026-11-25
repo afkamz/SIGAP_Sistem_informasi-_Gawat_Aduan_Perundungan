@@ -26,6 +26,15 @@ Folder `docs/` memuat seluruh dokumen spesifikasi produk, arsitektur sistem, ran
 | **15** | [15-Gimik_Presentasi_4.md](./15-Gimik_Presentasi_4.md) | **Progress Mingguan (Minggu 8)**: Route guard terpusat, sinkronisasi tiket backend riil, dan lookup hybrid. |
 | **16** | [16-Log_Implementasi_dan_Perubahan.md](./16-Log_Implementasi_dan_Perubahan.md) | **Log Implementasi & Perubahan Sistem**: Catatan riwayat sesi teknis (Sesi 1 s.d. Sesi 10). |
 | **17** | [**17-Gimik_Presentasi_5.md**](./17-Gimik_Presentasi_5.md) | **Progress Mingguan (Minggu 9)**: Eliminasi mock data total, integrasi live CRUD MySQL, serving bukti nyata, dan kartu triase Validasi AI. |
+| **18** | [18-Gimik_Presentasi_6.md](./18-Gimik_Presentasi_6.md) | **Progress Mingguan (Minggu 10)**: Redesain landing page baby blue, audio soundscape, dan pipeline analitik data. |
+| **19** | [19-Gimik_Presentasi_7.md](./19-Gimik_Presentasi_7.md) | **Progress Mingguan (Minggu 11)**: Integrasi live chart ECharts, audit trail hash SHA-256, dan testing end-to-end. |
+| **20** | [20-brainstroming-pengujian.md](./20-brainstroming-pengujian.md) | **Brainstorming Pengujian**: Konsep instrumen evaluasi empiris pengguna (SUS & TAM). |
+| **21** | [21-Panduan_Skenario_Uji_Responden.md](./21-Panduan_Skenario_Uji_Responden.md) | **Panduan Skenario Pengujian Responden**: Skenario tugas pengujian siswa dan admin. |
+| **22** | [22-Google_Apps_Script_Form_Pengujian.md](./22-Google_Apps_Script_Form_Pengujian.md) | **Google Apps Script Form Pengujian (Iterasi 1)**: Skrip pembuat Google Form evaluasi pertama. |
+| **23** | [23-Gimik_Presentasi_8.md](./23-Gimik_Presentasi_8.md) | **Progress Mingguan (Minggu 12)**: Rekapitulasi pencapaian siklus Minggu 12 dan persiapan instrumen evaluasi. |
+| **24** | [24-Materi_dan_QNA_Presentasi_Kelompok.md](./24-Materi_dan_QNA_Presentasi_Kelompok.md) | **Materi & QnA Presentasi Kelompok**: Panduan komprehensif presentasi proyek SIGAP dan simulasi tanya jawab. |
+| **25** | [25-Materi_PPT_Presentasi_SIGAP.md](./25-Materi_PPT_Presentasi_SIGAP.md) | **Materi Slide Presentasi SIGAP**: Rancangan slide presentasi pitch deck sistem SIGAP. |
+| **26** | [26-Google_Apps_Script_Pengujian_Iterasi_2.md](./26-Google_Apps_Script_Pengujian_Iterasi_2.md) | **Google Apps Script Pengujian Iterasi ke-2 (Minggu 13)**: Instrumen evaluasi perbaikan, generator Google Form, skrip kalkulasi SUS/TAM sheets, dan komparasi delta peningkatan. |
 
 ---
 

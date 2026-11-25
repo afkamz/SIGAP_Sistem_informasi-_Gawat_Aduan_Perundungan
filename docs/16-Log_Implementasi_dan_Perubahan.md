@@ -2774,4 +2774,15 @@ Penyederhanaan tampilan hero section dashboard siswa dengan menghapus tombol Pen
 | 2 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Kalkulasi otomatis offset vertikal dinamis terhadap slot hero mobile, kalibrasi skala 0.52, dan penyesuaian bayangan |
 | 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 143 |
 
+## 📅 [Sesi 144] Rabu, 25 November 2026 — Jam 19 WIB
+
+**Fokus Utama:** Penyusunan dokumen instrumen dan kode Google Apps Script untuk Pengujian Pengguna Iterasi ke-2 (`docs/26-Google_Apps_Script_Pengujian_Iterasi_2.md`) guna mengevaluasi peningkatan kepuasan, kebergunaan (SUS), dan kemudahan sistem (TAM) pasca implementasi perbaikan siklus Minggu ke-13.
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `TAMBAH` | `docs/26-Google_Apps_Script_Pengujian_Iterasi_2.md` | Dokumen instrumen kuesioner evaluasi iterasi ke-2, Google Apps Script form generator, script kalkulasi SUS/TAM sheets, dan draft siaran responden |
+| 2 | `EDIT` | `docs/README.md` | Pembaruan daftar indeks dokumentasi resmi repositori |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 144 pembukaan pengujian evaluasi iterasi ke-2 |
+
+
 
