@@ -54,9 +54,9 @@ export const ReportDetail = () => {
     }
     const cleanPath = path.replace(/^\/+/, '');
     if (cleanPath.startsWith('uploads/')) {
-      return `http://localhost:8000/${cleanPath}`;
+      return `/${cleanPath}`;
     }
-    return `http://localhost:8000/uploads/${cleanPath}`;
+    return `/uploads/${cleanPath}`;
   };
 
   // States

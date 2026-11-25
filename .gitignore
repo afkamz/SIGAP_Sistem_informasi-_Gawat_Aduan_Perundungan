@@ -78,8 +78,9 @@ test_SIGAP.log
 hahai.tex
 
 # ------------------------------------------------------------------------------
-# 4. OS & Editor Artifacts
+# 4. OS & Editor Artifacts & Tooling
 # ------------------------------------------------------------------------------
+cloudflared
 .DS_Store
 Thumbs.db
 .idea/
