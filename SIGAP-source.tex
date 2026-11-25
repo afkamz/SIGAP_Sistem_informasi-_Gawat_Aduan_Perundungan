@@ -79,7 +79,7 @@ afkam21@it.student.pens.ac.id, arvindzaky@it.student.pens.ac.id}
 
 \maketitle
 
-\noindent\textbf{Abstract---}\textbf{Perundungan dan kekerasan siber di lingkungan pendidikan kerap mengalami fenomena \textit{underreporting} akibat ketakutan peserta didik terhadap intimidasi balasan serta ketiadaan saluran pelaporan yang menjamin privasi. Selain itu, pihak sekolah menghadapi kendala dalam mengklasifikasikan narasi aduan nonformal dan mendeteksi pola insiden berulang secara manual. Penelitian ini mengusulkan SIGAP (\textit{Sistem Informasi Pengaduan Perundungan dan Kekerasan Pelajar}), sebuah platform pelaporan digital terintegrasi berbasis kecerdasan buatan. Kontribusi teknologi sistem ini meliputi: (1) arsitektur pelaporan \textit{dual-mode} (anonim dan terverifikasi) dengan kode tiket pelacakan acak; (2) modul \textit{natural language processing} (NLP) memanfaatkan \textit{sentence embedding} model \textit{pre-trained} IndoBERT (\texttt{indobenchmark/indobert-base-p1}) dan \textit{cosine similarity}; (3) algoritma \textit{density-based clustering} HDBSCAN guna memetakan pola kekerasan berulang dan titik rawan tanpa penentuan jumlah klaster di awal; serta (4) kerangka kerja \textit{human-in-the-loop} yang dilengkapi \textit{tamper-resistant audit trail} dan \textit{state transition guard} guna menjamin akuntabilitas penanganan oleh Guru BK. Pengujian sistem dilakukan melalui verifikasi fungsional, evaluasi klasifikasi teks, serta \textit{Respondent Validation}. Hasil pengujian menunjukkan persentase keberhasilan fungsi sistem sebesar XX\% pada \textit{Black-Box Testing}, akurasi klasifikasi teks aduan sebesar XX\%, skor \textit{System Usability Scale} (SUS) sebesar 66,85, skor rata-rata \textit{Technology Acceptance Model} (TAM) sebesar 4,08, waktu respons API rata-rata XX ms, serta rasio keberhasilan sistem sebesar XX\%. Hasil perancangan menunjukkan bahwa SIGAP efektif menurunkan hambatan psikologis pelaporan siswa serta meningkatkan ketepatan dan efisiensi waktu triase penanganan insiden kekerasan di sekolah.}\\
+\noindent\textbf{Abstract---}\textbf{Perundungan dan kekerasan siber di lingkungan pendidikan kerap mengalami fenomena \textit{underreporting} akibat ketakutan peserta didik terhadap intimidasi balasan serta ketiadaan saluran pelaporan yang menjamin privasi. Selain itu, pihak sekolah menghadapi kendala dalam mengklasifikasikan narasi aduan nonformal dan mendeteksi pola insiden berulang secara manual. Penelitian ini mengusulkan SIGAP (\textit{Sistem Informasi Pengaduan Perundungan dan Kekerasan Pelajar}), sebuah platform pelaporan digital terintegrasi berbasis kecerdasan buatan. Kontribusi teknologi sistem ini meliputi: (1) arsitektur pelaporan \textit{dual-mode} (anonim dan terverifikasi) dengan kode tiket pelacakan acak; (2) modul \textit{natural language processing} (NLP) memanfaatkan \textit{sentence embedding} model \textit{pre-trained} IndoBERT (\texttt{indobenchmark/indobert-base-p1}) dan \textit{cosine similarity}; (3) algoritma \textit{density-based clustering} HDBSCAN guna memetakan pola kekerasan berulang dan titik rawan tanpa penentuan jumlah klaster di awal; serta (4) kerangka kerja \textit{human-in-the-loop} yang dilengkapi \textit{tamper-resistant audit trail} dan \textit{state transition guard} guna menjamin akuntabilitas penanganan oleh Guru BK. Pengujian sistem dilakukan melalui verifikasi fungsional, evaluasi klasifikasi teks, serta \textit{Respondent Validation}. Hasil pengujian menunjukkan persentase keberhasilan fungsi sistem sebesar XX\% pada \textit{Black-Box Testing}, akurasi klasifikasi teks aduan sebesar 81,07\%, skor \textit{System Usability Scale} (SUS) sebesar 66,85, skor rata-rata \textit{Technology Acceptance Model} (TAM) sebesar 4,08, waktu respons API rata-rata XX ms, serta rasio keberhasilan sistem sebesar XX\%. Hasil perancangan menunjukkan bahwa SIGAP efektif menurunkan hambatan psikologis pelaporan siswa serta meningkatkan ketepatan dan efisiensi waktu triase penanganan insiden kekerasan di sekolah.}\\
 \textbf{Index Terms---Perundungan Pelajar, Sistem Pengaduan, Kecerdasan Buatan, IndoBERT, HDBSCAN, Natural Language Processing.}
 
 \section{INTRODUCTION}
@@ -262,27 +262,27 @@ Model triase berbasis IndoBERT \textit{cosine similarity} dievaluasi pada data u
 \hline
 \textbf{No} & \textbf{Kategori} & \textbf{P (\%)} & \textbf{R (\%)} & \textbf{F1 (\%)} \\
 \hline
-1 & Perundungan Verbal    & XX,XX & XX,XX & XX,XX \\
+1 & Perundungan Verbal    & 84,62 & 82,50 & 83,54 \\
 \hline
-2 & Perundungan Fisik     & XX,XX & XX,XX & XX,XX \\
+2 & Perundungan Fisik     & 65,00 & 65,00 & 65,00 \\
 \hline
-3 & \textit{Cyberbullying}& XX,XX & XX,XX & XX,XX \\
+3 & \textit{Cyberbullying}& 97,37 & 92,50 & 94,87 \\
 \hline
-4 & Kekerasan Seksual     & XX,XX & XX,XX & XX,XX \\
+4 & Kekerasan Seksual     & 82,05 & 80,00 & 81,01 \\
 \hline
-5 & Hukuman Fisik Pendidik& XX,XX & XX,XX & XX,XX \\
+5 & Hukuman Fisik Pendidik& 82,05 & 80,00 & 81,01 \\
 \hline
-6 & Kekerasan Psikis      & XX,XX & XX,XX & XX,XX \\
+6 & Kekerasan Psikis      & 71,74 & 82,50 & 76,74 \\
 \hline
-7 & Penyalahgunaan Zat    & XX,XX & XX,XX & XX,XX \\
+7 & Penyalahgunaan Zat    & 87,18 & 85,00 & 86,08 \\
 \hline
-\multicolumn{2}{|c|}{\textbf{Macro-Average}} & \textbf{XX,XX} & \textbf{XX,XX} & \textbf{XX,XX} \\
+\multicolumn{2}{|c|}{\textbf{Macro-Average}} & \textbf{81,43} & \textbf{81,07} & \textbf{81,18} \\
 \hline
 \end{tabular}
 \end{center}
 \end{table}
 
-Secara keseluruhan, model mencapai akurasi klasifikasi sebesar \textbf{XX,XX\%} dengan \textit{macro-average F1-score} sebesar \textbf{XX,XX\%} pada data uji tertutup. Performa ini mengonfirmasi kemampuan model IndoBERT \textit{cosine similarity} dalam menangkap variasi narasi nonformal bahasa gaul pelajar Indonesia secara akurat, sejalan dengan temuan Nabiilah dkk.~\cite{nabiilah2024} dan Jazuli dkk.~\cite{jazuli2025} pada klasifikasi teks multikelas berbahasa Indonesia.
+Secara keseluruhan, model mencapai akurasi klasifikasi sebesar \textbf{81,07\%} dengan \textit{macro-average F1-score} sebesar \textbf{81,18\%} pada data uji tertutup. Performa ini mengonfirmasi kemampuan model IndoBERT \textit{cosine similarity} dalam menangkap variasi narasi nonformal bahasa gaul pelajar Indonesia secara akurat, sejalan dengan temuan Nabiilah dkk.~\cite{nabiilah2024} dan Jazuli dkk.~\cite{jazuli2025} pada klasifikasi teks multikelas berbahasa Indonesia.
 
 \subsection{Evaluasi Performa Sistem (API Response Time)}
 
@@ -300,13 +300,13 @@ Kuesioner TAM mengukur dua konstruk utama: \textit{Perceived Usefulness} (PU) da
 
 \subsection{Diskusi}
 
-Hasil evaluasi multidimensi di atas secara konsisten menunjukkan bahwa SIGAP berhasil mencapai seluruh target kinerja yang ditetapkan. Akurasi klasifikasi NLP sebesar XX,XX\% mengonfirmasi bahwa pendekatan \textit{cosine similarity} berbasis IndoBERT \textit{sentence embedding} efektif sebagai mekanisme triase awal yang andal, sekaligus memvalidasi strategi \textit{data augmentation} dalam mengatasi masalah \textit{class imbalance} antar kategori yuridis. Tingkat keberhasilan fungsional 100,00\% pada \textit{black-box testing} menegaskan kematangan implementasi alur pelaporan multi-langkah, validasi MIME, dan mekanisme \textit{state transition guard} audit trail.
+Hasil evaluasi multidimensi di atas secara konsisten menunjukkan bahwa SIGAP berhasil mencapai seluruh target kinerja yang ditetapkan. Akurasi klasifikasi NLP sebesar 81,07\% mengonfirmasi bahwa pendekatan \textit{cosine similarity} berbasis IndoBERT \textit{sentence embedding} efektif sebagai mekanisme triase awal yang andal, sekaligus memvalidasi strategi \textit{data augmentation} dalam mengatasi masalah \textit{class imbalance} antar kategori yuridis. Tingkat keberhasilan fungsional 100,00\% pada \textit{black-box testing} menegaskan kematangan implementasi alur pelaporan multi-langkah, validasi MIME, dan mekanisme \textit{state transition guard} audit trail.
 
 Dari sisi penerimaan responden, skor SUS 66,85 dan TAM 4,08 mengindikasikan bahwa implementasi SIGAP berhasil meminimalkan hambatan psikologis pelaporan siswa. Capaian ini menjawab persoalan \textit{underreporting} yang diidentifikasi oleh Kasturiratna dkk.~\cite{kasturiratna2025} dan Wachs dkk.~\cite{wachs2022}. Kerangka kerja \textit{human-in-the-loop} yang menempatkan rekomendasi AI sebagai \textit{pending review} terbukti diterima baik oleh Guru BK, sejalan dengan temuan Sele dan Chugunova~\cite{sele2024} mengenai peningkatan kepercayaan pengguna terhadap keputusan semi-otomatis yang tetap melibatkan kontrol manusia.
 
 \section{CONCLUSION}
 
-Penelitian ini berhasil mengembangkan sistem SIGAP sebagai platform pelaporan perundungan dan kekerasan digital terintegrasi berbasis kecerdasan buatan di lingkungan satuan pendidikan. Melalui arsitektur pelaporan \textit{dual-mode} berfitur kode tiket pelacak acak dan kerangka kerja \textit{human-in-the-loop}, sistem terbukti efektif mereduksi hambatan psikologis pelaporan siswa guna mengatasi persoalan \textit{underreporting}, dengan tetap menjamin akuntabilitas penanganan oleh Guru BK melalui \textit{tamper-resistant audit trail}. Integrasi model \textit{pre-trained} IndoBERT dengan perhitungan \textit{cosine similarity} dan algoritma HDBSCAN mampu menyediakan rekomendasi triase awal yang andal serta memetakan klaster titik rawan insiden berulang. Hasil evaluasi empiris menunjukkan tingkat keberhasilan fungsional 100,00\% pada \textit{black-box testing}, akurasi klasifikasi teks sebesar XX,XX\%, serta penerimaan pengguna yang positif pada pengujian SUS dan TAM. Pengembangan selanjutnya diarahkan pada penerapan sistem di berbagai sekolah secara luas, integrasi notifikasi multi-kanal, dan pemutakhiran model klasifikasi secara berkelanjutan berbasis data intervensi konseling riil.
+Penelitian ini berhasil mengembangkan sistem SIGAP sebagai platform pelaporan perundungan dan kekerasan digital terintegrasi berbasis kecerdasan buatan di lingkungan satuan pendidikan. Melalui arsitektur pelaporan \textit{dual-mode} berfitur kode tiket pelacak acak dan kerangka kerja \textit{human-in-the-loop}, sistem terbukti efektif mereduksi hambatan psikologis pelaporan siswa guna mengatasi persoalan \textit{underreporting}, dengan tetap menjamin akuntabilitas penanganan oleh Guru BK melalui \textit{tamper-resistant audit trail}. Integrasi model \textit{pre-trained} IndoBERT dengan perhitungan \textit{cosine similarity} dan algoritma HDBSCAN mampu menyediakan rekomendasi triase awal yang andal serta memetakan klaster titik rawan insiden berulang. Hasil evaluasi empiris menunjukkan tingkat keberhasilan fungsional 100,00\% pada \textit{black-box testing}, akurasi klasifikasi teks sebesar 81,07\%, serta penerimaan pengguna yang positif pada pengujian SUS dan TAM. Pengembangan selanjutnya diarahkan pada penerapan sistem di berbagai sekolah secara luas, integrasi notifikasi multi-kanal, dan pemutakhiran model klasifikasi secara berkelanjutan berbasis data intervensi konseling riil.
 
 \begin{thebibliography}{00}
 \bibitem{zhang2022}

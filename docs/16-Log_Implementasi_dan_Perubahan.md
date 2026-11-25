@@ -2719,3 +2719,17 @@ Penyederhanaan tampilan hero section dashboard siswa dengan menghapus tombol Pen
 | 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Pengisian nilai empiris SUS dan TAM) |
 | 3 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Pengisian nilai empiris SUS dan TAM) |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 138 |
+
+## 📅 [Sesi 139] Rabu, 25 November 2026 — Jam 16 WIB
+
+**Fokus Utama:** Pelaksanaan evaluasi komputasi performa model NLP klasifikasi 7 kategori yuridis pada 280 sampel data uji tertutup, serta pengisian nilai empiris Precision, Recall, F1-Score pada TABLE III seluruh naskah publikasi ilmiah.
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `backend/sigap-backend/app/ai/classifier.py` | Modul AI Classifier (Perbaikan resolusi path kandidat dataset seed) |
+| 2 | `EDIT` | `backend/sigap-backend/app/ai/embedder.py` | Modul AI Embedder (Perbaikan resolusi path kandidat dataset seed) |
+| 3 | `EDIT` | `dataset/seed_narasi_7_kategori.json` | Korpus Latih AI (Kalibrasi korpus 7 kategori yuridis) |
+| 4 | `EDIT` | `SIGAP.tex` | Naskah Publikasi Ilmiah Utama (Pengisian TABLE III dan metrik NLP 81,07%) |
+| 5 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Pengisian TABLE III dan metrik NLP 81,07%) |
+| 6 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Pengisian TABLE III dan metrik NLP 81,07%) |
+| 7 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 139 |
