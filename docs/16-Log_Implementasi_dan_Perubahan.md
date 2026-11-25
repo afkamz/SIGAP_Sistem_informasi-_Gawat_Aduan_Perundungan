@@ -2708,3 +2708,14 @@ Penyederhanaan tampilan hero section dashboard siswa dengan menghapus tombol Pen
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 145 penyederhanaan hero section dashboard siswa |
 
 
+
+## 📅 [Sesi 138] Rabu, 25 November 2026 — Jam 15 WIB
+
+**Fokus Utama:** Pemutakhiran nilai empiris pengujian validasi responden (*Respondent Validation*) pada seluruh naskah publikasi ilmiah (SUS 66,85 dan TAM 4,08) berdasarkan data 23 responden kuesioner riil.
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP.tex` | Naskah Publikasi Ilmiah Utama (Pengisian nilai empiris SUS dan TAM) |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Pengisian nilai empiris SUS dan TAM) |
+| 3 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Pengisian nilai empiris SUS dan TAM) |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 138 |
