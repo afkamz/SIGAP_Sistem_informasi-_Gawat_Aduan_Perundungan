@@ -158,10 +158,12 @@ export const InteractivePhotoCube = ({
   scrollProgressRef.current = scrollProgress;
 
   // Nilai fisik kinematik lerp (current vs target)
+  const isInitMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+  const isInitTablet = typeof window !== 'undefined' && window.innerWidth >= 640 && window.innerWidth < 1024;
   const animState = useRef({
-    curTx: 320,
-    curTy: 0,
-    curScale: 0.72,
+    curTx: isInitMobile ? 0 : isInitTablet ? 60 : 320,
+    curTy: isInitMobile ? -110 : 0,
+    curScale: isInitMobile ? 0.55 : isInitTablet ? 0.65 : 0.72,
     curRotX: -20,
     curRotY: 28,
     curRotZ: 0,
@@ -247,14 +249,22 @@ export const InteractivePhotoCube = ({
       const isTablet = viewportWidth >= 640 && viewportWidth < 1024;
 
       // Baseline offsets dan skala sesuai breakpoint
+      // Di desktop: geser ke kanan (X) agar berdampingan dengan teks di kiri
+      // Di mobile/tablet: posisikan di tengah horizontal (X: 0) dan di slot vertikal antara judul dan tombol (Y: offset ke atas)
       const initialOffsetX = isMobile
-        ? Math.min(80, viewportWidth * 0.12)
+        ? 0
         : isTablet
-        ? Math.min(180, viewportWidth * 0.20)
+        ? Math.min(60, viewportWidth * 0.08)
         : Math.min(340, viewportWidth * 0.25);
 
-      const baseScale = isMobile ? 0.60 : isTablet ? 0.68 : 0.72;
-      const peakScale = isMobile ? 1.02 : isTablet ? 1.12 : 1.22;
+      const initialOffsetY = isMobile
+        ? -Math.round(Math.min(130, Math.max(80, viewportHeight * 0.15)))
+        : isTablet
+        ? -Math.round(Math.min(80, viewportHeight * 0.08))
+        : 0;
+
+      const baseScale = isMobile ? 0.55 : isTablet ? 0.65 : 0.72;
+      const peakScale = isMobile ? 1.15 : isTablet ? 1.18 : 1.22;
 
       let targetTx = 0;
       let targetTy = 0;
@@ -283,7 +293,7 @@ export const InteractivePhotoCube = ({
         const ambientRollZ = Math.sin(floatWave * 0.6) * 1.5;
 
         targetTx = initialOffsetX;
-        targetTy = ambientFloatY;
+        targetTy = initialOffsetY + ambientFloatY;
         targetScale = baseScale;
         targetRotX = -20.0 + ambientTiltX; // Tampilan isometric dari atas
         targetRotY = st.autoRotY;
@@ -304,9 +314,10 @@ export const InteractivePhotoCube = ({
           }
         }
 
-        // A. Perjalanan Horizontal: Kanan -> Tengah (p: 0.015 -> 0.45)
+        // A. Perjalanan Translasi: Dari Posisi Awal -> Tengah Layar (p: 0.015 -> 0.45)
         const pTravel = smoothStep(0.015, 0.45, p);
         targetTx = initialOffsetX * (1 - pTravel);
+        targetTy = initialOffsetY * (1 - pTravel);
 
         // B. Pembesaran Skala (p: 0.015 -> 0.55)
         const pScale = smoothStep(0.015, 0.55, p);
@@ -432,12 +443,18 @@ export const InteractivePhotoCube = ({
       >
         <style>{`
           .cube-viewport {
-            --cube-size: 260px;
-            --cube-half: 130px;
+            --cube-size: 220px;
+            --cube-half: 110px;
             width: var(--cube-size);
             height: var(--cube-size);
           }
-          @media (min-width: 640px) {
+          @media (min-width: 480px) {
+            .cube-viewport {
+              --cube-size: 260px;
+              --cube-half: 130px;
+            }
+          }
+          @media (min-width: 768px) {
             .cube-viewport {
               --cube-size: 300px;
               --cube-half: 150px;
@@ -600,7 +617,7 @@ export const InteractivePhotoCube = ({
       {/* ─── Ground Realistic Soft Shadow ─── */}
       <div
         ref={shadowRef}
-        className="w-[220px] sm:w-[300px] h-[18px] rounded-full pointer-events-none mt-4 transition-opacity duration-300"
+        className="w-[180px] xs:w-[220px] sm:w-[280px] md:w-[320px] h-[14px] sm:h-[18px] rounded-full pointer-events-none mt-2 sm:mt-4 transition-opacity duration-300"
         style={{
           background: 'radial-gradient(ellipse at center, rgba(191, 239, 255, 0.7) 0%, rgba(191, 239, 255, 0) 70%)'
         }}

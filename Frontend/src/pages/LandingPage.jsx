@@ -647,13 +647,13 @@ export const LandingPage = () => {
         style={{ position: 'relative', height: '500vh', overflow: 'visible' }}
       >
         <div
-          className="cube-sticky-stage sticky top-0 w-full h-screen h-[100svh] overflow-hidden flex flex-col justify-between"
+          className="cube-sticky-stage sticky top-0 w-full h-screen h-[100dvh] overflow-hidden flex flex-col justify-between"
           style={{
             position: 'sticky',
             top: 0,
             left: 0,
             width: '100%',
-            height: '100vh',
+            height: '100dvh',
             overflow: 'hidden',
             zIndex: 20,
             background: 'transparent'
@@ -671,17 +671,17 @@ export const LandingPage = () => {
             {/* SCENE 01 & 02: HERO INITIAL CONTENT (0–15% Visible, 15–35% Fade Out) */}
             <div
               ref={heroContentRef}
-              className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-32 relative z-10 will-change-transform"
+              className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 lg:pt-32 relative z-20 will-change-transform"
               style={{
                 opacity: 1,
                 transform: 'translate3d(0, 0px, 0)',
                 pointerEvents: 'auto'
               }}
             >
-              <div className="max-w-xl lg:max-w-2xl space-y-5 text-center lg:text-left mx-auto lg:mx-0">
+              <div className="max-w-xl lg:max-w-2xl space-y-3 sm:space-y-5 text-center lg:text-left mx-auto lg:mx-0 flex flex-col items-center lg:items-start">
                 {/* Main Headline */}
                 <div className="space-y-1">
-                  <h1 className="text-3xl sm:text-5xl lg:text-[62px] font-black tracking-tight leading-[1.08]" style={{ color: '#1C6F8E' }}>
+                  <h1 className="text-2xl xs:text-3xl sm:text-5xl lg:text-[62px] font-black tracking-tight leading-[1.12] sm:leading-[1.08]" style={{ color: '#1C6F8E' }}>
                     SUARAKAN KEBENARAN. <br />
                     <span style={{ color: '#2E84A5' }}>
                       CIPTAKAN SEKOLAH BEBAS KEKERASAN
@@ -691,16 +691,19 @@ export const LandingPage = () => {
                 </div>
 
                 {/* Supporting Text */}
-                <p className="text-sm sm:text-base leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium" style={{ color: '#1C6F8E' }}>
+                <p className="text-xs sm:text-base leading-relaxed max-w-md lg:max-w-xl mx-auto lg:mx-0 font-medium" style={{ color: '#1C6F8E' }}>
                   Setiap pelajar berhak mendapatkan lingkungan pendidikan yang aman, nyaman, dan bebas dari perundungan.
                 </p>
 
+                {/* Dedicated Spacer Area on Mobile for 3D Cube */}
+                <div className="w-full h-36 xs:h-44 sm:h-52 lg:hidden pointer-events-none select-none" aria-hidden="true" />
+
                 {/* Call to Actions */}
-                <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+                <div className="pt-1 flex flex-col xs:flex-row items-center justify-center lg:justify-start gap-2.5 sm:gap-3 w-full sm:w-auto">
                   <button
                     type="button"
                     onClick={(e) => handleReportAction(e, '/buat-laporan')}
-                    className="w-full sm:w-auto px-8 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 group cursor-pointer active:scale-95 transition hover:opacity-90 shadow-xs border"
+                    className="w-full xs:w-auto px-6 sm:px-8 py-3 sm:py-3.5 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 group cursor-pointer active:scale-95 transition hover:opacity-90 shadow-xs border"
                     style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
                   >
                     <ShieldAlert className="w-4 h-4 text-[#1C6F8E] group-hover:scale-110 transition" />
@@ -710,7 +713,7 @@ export const LandingPage = () => {
 
                   <Link
                     to="/login"
-                    className="w-full sm:w-auto px-7 py-3.5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border transition hover:opacity-90"
+                    className="w-full xs:w-auto px-5 sm:px-7 py-3 sm:py-3.5 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 border transition hover:opacity-90"
                     style={{ color: '#1C6F8E', border: '1.5px solid #BFEFFF', background: '#FFFFFF' }}
                   >
                     <LogIn className="w-4 h-4 text-[#1C6F8E]" />
@@ -719,24 +722,24 @@ export const LandingPage = () => {
                 </div>
 
                 {/* Quick Ticket Tracking */}
-                <div className="pt-2 max-w-md mx-auto lg:mx-0">
+                <div className="pt-1 max-w-md w-full mx-auto lg:mx-0">
                   <form
                     onSubmit={handleQuickTrack}
-                    className="p-1.5 pl-3.5 rounded-2xl border flex items-center gap-2"
+                    className="p-1.5 pl-3 sm:pl-3.5 rounded-2xl border flex items-center gap-2"
                     style={{ background: '#FFFFFF', border: '1.5px solid #BFEFFF' }}
                   >
-                    <Search className="w-4 h-4 flex-shrink-0 text-[#1C6F8E]" />
+                    <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 text-[#1C6F8E]" />
                     <input
                       type="text"
                       placeholder="Punya Kode Tiket? (Contoh: SGP-2024-0142)"
                       value={quickTicketCode}
                       onChange={(e) => setQuickTicketCode(e.target.value)}
-                      className="w-full bg-transparent text-xs focus:outline-none font-medium"
+                      className="w-full bg-transparent text-[11px] sm:text-xs focus:outline-none font-medium"
                       style={{ color: '#1C6F8E' }}
                     />
                     <button
                       type="submit"
-                      className="px-4 py-2 rounded-xl text-xs font-bold flex-shrink-0 cursor-pointer transition hover:opacity-90 border"
+                      className="px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold flex-shrink-0 cursor-pointer transition hover:opacity-90 border"
                       style={{ background: '#BFEFFF', borderColor: '#BFEFFF', color: '#1C6F8E' }}
                     >
                       Lacak
@@ -747,7 +750,7 @@ export const LandingPage = () => {
             </div>
 
             {/* 3D CUBE CONTAINER */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20 pt-16">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 pt-16">
               <InteractivePhotoCube />
             </div>
 

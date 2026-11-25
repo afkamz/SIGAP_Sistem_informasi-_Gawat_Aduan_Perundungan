@@ -2753,3 +2753,14 @@ Penyederhanaan tampilan hero section dashboard siswa dengan menghapus tombol Pen
 |:--:|:---------:|---|---|
 | 1 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Eliminasi teks liar sebelum documentclass) |
 | 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 141 |
+
+## 📅 [Sesi 142] Rabu, 25 November 2026 — Jam 17 WIB
+
+**Fokus Utama:** Optimalisasi responsivitas hero section dan integrasi visual 3D Photo Cube pada perangkat mobile agar kubus terbingkai proporsional tanpa menutupi judul, deskripsi, tombol aksi, maupun formulir pencarian tiket.
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penyesuaian layout hero responsif mobile, penambahan slot spacer khusus kubus, serta koreksi z-index dan ukuran tipografi |
+| 2 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Implementasi initial offset vertikal responsif mobile, centering horizontal, breakpoint ukuran kubus dinamis, dan interpolasi gerak scroll halus |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 142 |
+
