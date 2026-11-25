@@ -2744,3 +2744,12 @@ Penyederhanaan tampilan hero section dashboard siswa dengan menghapus tombol Pen
 | 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Penambahan Tabel IV Validasi Responden) |
 | 3 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Penambahan Tabel IV Validasi Responden) |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 140 |
+
+## 📅 [Sesi 141] Rabu, 25 November 2026 — Jam 17 WIB
+
+**Fokus Utama:** Eliminasi halaman kosong sebelum cover pada berkas naskah publikasi ilmiah `SIGAP_Paper.tex` dengan menghapus teks liar ("bahan di") yang tidak sengaja terketik sebelum deklarasi `\documentclass`.
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Eliminasi teks liar sebelum documentclass) |
+| 2 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 141 |
