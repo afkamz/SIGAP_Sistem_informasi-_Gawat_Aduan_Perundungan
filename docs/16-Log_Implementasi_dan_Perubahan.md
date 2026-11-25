@@ -2733,3 +2733,14 @@ Penyederhanaan tampilan hero section dashboard siswa dengan menghapus tombol Pen
 | 5 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Pengisian TABLE III dan metrik NLP 81,07%) |
 | 6 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Pengisian TABLE III dan metrik NLP 81,07%) |
 | 7 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 139 |
+
+## 📅 [Sesi 140] Rabu, 25 November 2026 — Jam 16 WIB
+
+**Fokus Utama:** Penambahan Tabel IV (Hasil Pengujian Validasi Responden SUS dan TAM) pada subbagian V.D Respondent Validation di seluruh naskah publikasi ilmiah untuk menyajikan data kuesioner secara terstruktur dan komprehensif.
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP.tex` | Naskah Publikasi Ilmiah Utama (Penambahan Tabel IV Validasi Responden) |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Naskah Ringkas Publikasi Ilmiah (Penambahan Tabel IV Validasi Responden) |
+| 3 | `EDIT` | `SIGAP-source.tex` | Naskah Sumber LaTeX (Penambahan Tabel IV Validasi Responden) |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 140 |
