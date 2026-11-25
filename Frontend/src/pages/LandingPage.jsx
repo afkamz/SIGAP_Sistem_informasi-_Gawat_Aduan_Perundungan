@@ -696,7 +696,11 @@ export const LandingPage = () => {
                 </p>
 
                 {/* Dedicated Spacer Area on Mobile for 3D Cube */}
-                <div className="w-full h-36 xs:h-44 sm:h-52 lg:hidden pointer-events-none select-none" aria-hidden="true" />
+                <div
+                  id="hero-mobile-cube-slot"
+                  className="w-full h-44 xs:h-48 sm:h-52 lg:hidden pointer-events-none select-none my-1"
+                  aria-hidden="true"
+                />
 
                 {/* Call to Actions */}
                 <div className="pt-1 flex flex-col xs:flex-row items-center justify-center lg:justify-start gap-2.5 sm:gap-3 w-full sm:w-auto">
@@ -750,7 +754,7 @@ export const LandingPage = () => {
             </div>
 
             {/* 3D CUBE CONTAINER */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 pt-16">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
               <InteractivePhotoCube />
             </div>
 

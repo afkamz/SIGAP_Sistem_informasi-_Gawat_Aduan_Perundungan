@@ -2764,3 +2764,14 @@ Penyederhanaan tampilan hero section dashboard siswa dengan menghapus tombol Pen
 | 2 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Implementasi initial offset vertikal responsif mobile, centering horizontal, breakpoint ukuran kubus dinamis, dan interpolasi gerak scroll halus |
 | 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 142 |
 
+## 📅 [Sesi 143] Rabu, 25 November 2026 — Jam 18 WIB
+
+**Fokus Utama:** Penyempurnaan presisi posisi 3D Photo Cube pada mobile dengan kalkulasi offset dinamis berbasis bounding rect slot spacer `hero-mobile-cube-slot` untuk memastikan kubus tidak lagi menabrak teks subtitle dan tetap terbingkai rapi di atas tombol aksi.
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `Frontend/src/pages/LandingPage.jsx` | Penambahan ID referensi slot mobile `hero-mobile-cube-slot`, penyesuaian tinggi slot, dan eliminasi padding kontainer kubus |
+| 2 | `EDIT` | `Frontend/src/components/3d/InteractivePhotoCube.jsx` | Kalkulasi otomatis offset vertikal dinamis terhadap slot hero mobile, kalibrasi skala 0.52, dan penyesuaian bayangan |
+| 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 143 |
+
+

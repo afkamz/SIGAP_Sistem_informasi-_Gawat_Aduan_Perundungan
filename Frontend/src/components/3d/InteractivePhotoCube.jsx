@@ -160,10 +160,11 @@ export const InteractivePhotoCube = ({
   // Nilai fisik kinematik lerp (current vs target)
   const isInitMobile = typeof window !== 'undefined' && window.innerWidth < 640;
   const isInitTablet = typeof window !== 'undefined' && window.innerWidth >= 640 && window.innerWidth < 1024;
+  const heroInitialOffsetYRef = useRef(isInitMobile ? -35 : 0);
   const animState = useRef({
     curTx: isInitMobile ? 0 : isInitTablet ? 60 : 320,
-    curTy: isInitMobile ? -110 : 0,
-    curScale: isInitMobile ? 0.55 : isInitTablet ? 0.65 : 0.72,
+    curTy: isInitMobile ? -35 : 0,
+    curScale: isInitMobile ? 0.52 : isInitTablet ? 0.65 : 0.72,
     curRotX: -20,
     curRotY: 28,
     curRotZ: 0,
@@ -250,20 +251,33 @@ export const InteractivePhotoCube = ({
 
       // Baseline offsets dan skala sesuai breakpoint
       // Di desktop: geser ke kanan (X) agar berdampingan dengan teks di kiri
-      // Di mobile/tablet: posisikan di tengah horizontal (X: 0) dan di slot vertikal antara judul dan tombol (Y: offset ke atas)
+      // Di mobile/tablet: posisikan di tengah horizontal (X: 0) dan di slot vertikal antara judul dan tombol (Y: offset slot dinamis)
       const initialOffsetX = isMobile
         ? 0
         : isTablet
         ? Math.min(60, viewportWidth * 0.08)
         : Math.min(340, viewportWidth * 0.25);
 
-      const initialOffsetY = isMobile
-        ? -Math.round(Math.min(130, Math.max(80, viewportHeight * 0.15)))
-        : isTablet
-        ? -Math.round(Math.min(80, viewportHeight * 0.08))
-        : 0;
+      if (p <= 0.015) {
+        if (isMobile) {
+          const slotEl = typeof document !== 'undefined' ? document.getElementById('hero-mobile-cube-slot') : null;
+          if (slotEl) {
+            const slotRect = slotEl.getBoundingClientRect();
+            const slotCenterY = slotRect.top + slotRect.height / 2;
+            const viewportCenterY = viewportHeight / 2;
+            heroInitialOffsetYRef.current = Math.round(slotCenterY - viewportCenterY);
+          } else {
+            heroInitialOffsetYRef.current = -Math.round(Math.min(50, Math.max(20, viewportHeight * 0.05)));
+          }
+        } else if (isTablet) {
+          heroInitialOffsetYRef.current = -Math.round(Math.min(50, viewportHeight * 0.05));
+        } else {
+          heroInitialOffsetYRef.current = 0;
+        }
+      }
 
-      const baseScale = isMobile ? 0.55 : isTablet ? 0.65 : 0.72;
+      const initialOffsetY = heroInitialOffsetYRef.current;
+      const baseScale = isMobile ? 0.52 : isTablet ? 0.65 : 0.72;
       const peakScale = isMobile ? 1.15 : isTablet ? 1.18 : 1.22;
 
       let targetTx = 0;
@@ -443,15 +457,15 @@ export const InteractivePhotoCube = ({
       >
         <style>{`
           .cube-viewport {
-            --cube-size: 220px;
-            --cube-half: 110px;
+            --cube-size: 210px;
+            --cube-half: 105px;
             width: var(--cube-size);
             height: var(--cube-size);
           }
           @media (min-width: 480px) {
             .cube-viewport {
-              --cube-size: 260px;
-              --cube-half: 130px;
+              --cube-size: 250px;
+              --cube-half: 125px;
             }
           }
           @media (min-width: 768px) {
@@ -617,7 +631,7 @@ export const InteractivePhotoCube = ({
       {/* ─── Ground Realistic Soft Shadow ─── */}
       <div
         ref={shadowRef}
-        className="w-[180px] xs:w-[220px] sm:w-[280px] md:w-[320px] h-[14px] sm:h-[18px] rounded-full pointer-events-none mt-2 sm:mt-4 transition-opacity duration-300"
+        className="w-[160px] xs:w-[200px] sm:w-[280px] md:w-[320px] h-[12px] sm:h-[18px] rounded-full pointer-events-none mt-2 sm:mt-4 transition-opacity duration-300"
         style={{
           background: 'radial-gradient(ellipse at center, rgba(191, 239, 255, 0.7) 0%, rgba(191, 239, 255, 0) 70%)'
         }}
