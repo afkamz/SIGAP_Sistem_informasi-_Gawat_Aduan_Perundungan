@@ -2784,5 +2784,16 @@ Penyederhanaan tampilan hero section dashboard siswa dengan menghapus tombol Pen
 | 2 | `EDIT` | `docs/README.md` | Pembaruan daftar indeks dokumentasi resmi repositori |
 | 3 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 144 pembukaan pengujian evaluasi iterasi ke-2 |
 
+## 📅 [Sesi 145] Kamis, 26 November 2026 — Jam 08 WIB
+
+**Fokus Utama:** Restrukturisasi dan diferensiasi bagian Diskusi (V.E) dan Conclusion (VI) pada paper IEEE LaTeX sesuai arahan dosen pembimbing agar tidak redundan, menyederhanakan kesimpulan ke format standar (permasalahan, solusi aplikasi, metode pengujian, dan hasil ringkas), serta eliminasi karakter non-ASCII pada referensi.
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP_Paper.tex` | Restrukturisasi bagian CONCLUSION menjadi ringkas dan padat (fokus: problem, solusi SIGAP, 3 metode pengujian, dan ringkasan hasil numerik) serta perbaikan encoding accent bibliografi |
+| 2 | `EDIT` | `SIGAP.tex` | Sinkronisasi penuh revisi bagian CONCLUSION dan bibliografi |
+| 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi penuh revisi bagian CONCLUSION dan bibliografi |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 145 |
+
 
 
