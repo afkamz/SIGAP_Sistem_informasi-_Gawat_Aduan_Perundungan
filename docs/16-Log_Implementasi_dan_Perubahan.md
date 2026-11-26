@@ -2806,5 +2806,17 @@ Penyederhanaan tampilan hero section dashboard siswa dengan menghapus tombol Pen
 | 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi penuh penambahan 4 tabel detail dan package multirow |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 146 |
 
+## 📅 [Sesi 147] Kamis, 26 November 2026 — Jam 08 WIB
+
+**Fokus Utama:** Pelaksanaan load testing empiris terhadap backend SIGAP pada 50 permintaan konkuren (total 200 permintaan) dan pengisian metrik evaluasi performa API serta seluruh placeholder nilai XX pada naskah LaTeX (Abstract dan Subbab V.C).
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `TAMBAH` | `backend/sigap-backend/load_test.py` | Skrip pengujian beban performa asinkronus (httpx) untuk endpoint autentikasi, kategori, dan inferensi NLP aduan |
+| 2 | `EDIT` | `SIGAP_Paper.tex` | Pengisian metrik riil evaluasi performa API (latensi 270 ms pelaporan, 651 ms NLP, 400 ms auth, success rate 100,00%) dan eliminasi seluruh placeholder XX |
+| 3 | `EDIT` | `SIGAP.tex` | Sinkronisasi penuh pembaruan metrik evaluasi performa API dan Abstract |
+| 4 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi penuh pembaruan metrik evaluasi performa API dan Abstract |
+| 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 147 |
+
 
 
