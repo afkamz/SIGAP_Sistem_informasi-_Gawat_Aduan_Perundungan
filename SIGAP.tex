@@ -15,6 +15,7 @@
 \usepackage{pdfpages}
 \usepackage{verbatim}
 \usepackage{listings}
+\usepackage{multirow}
 \usepackage{url}
 
 \begin{document}
@@ -290,28 +291,26 @@ Pengujian performa dilakukan terhadap \textit{endpoint} API kritis menggunakan s
 
 \subsection{Respondent Validation}
 
-Pengujian melibatkan 23 responden yang terbagi atas dua kelompok peran: 22 siswa sebagai pelapor dan 1 guru BK/admin sebagai pengelola laporan. Dua instrumen digunakan secara paralel: \textit{System Usability Scale} (SUS) dan \textit{Technology Acceptance Model} (TAM). Rangkuman hasil pengujian kaji kelayakan responden disajikan pada Tabel~\ref{tab:respondent_val}.
+Pengujian melibatkan 23 responden: 22 siswa sebagai pelapor dan 1 guru BK sebagai pengelola laporan, dengan komposisi 13 laki-laki dan 10 perempuan. Dua instrumen digunakan secara paralel: \textit{System Usability Scale} (SUS) dan \textit{Technology Acceptance Model} (TAM). Profil responden disajikan pada Tabel~\ref{tab:profil_responden}.
 
 \begin{table}[htbp]
-\caption{Hasil Pengujian Validasi Responden (SUS dan TAM)}
-\label{tab:respondent_val}
+\caption{Profil Responden (n = 23)}
+\label{tab:profil_responden}
 \begin{center}
 \resizebox{\columnwidth}{!}{
-\begin{tabular}{|c|l|c|c|c|}
+\begin{tabular}{|l|l|c|}
 \hline
-\textbf{No} & \textbf{Konstruk / Dimensi Evaluasi} & \textbf{Sampel} & \textbf{Skor} & \textbf{Kategori / Hasil} \\
+\textbf{Kategori} & \textbf{Kelompok} & \textbf{Jumlah} \\
 \hline
-1 & SUS -- Kelompok Siswa & 22 & 66,70 & \textit{Acceptable} \\
+\multirow{3}{*}{Peran} & Siswa (Pelapor) & 22 \\
+\cline{2-3}
+ & Guru BK / Admin & 1 \\
+\cline{2-3}
+ & Keduanya & 23 \\
 \hline
-2 & SUS -- Guru BK / Admin & 1 & 70,00 & \textit{Good} \\
-\hline
-\multicolumn{2}{|c|}{\textbf{Rerata Skor SUS (Skala 0--100)}} & \textbf{23} & \textbf{66,85} & \textbf{\textit{Acceptable}} \\
-\hline
-3 & TAM -- \textit{Perceived Usefulness} (PU) & 23 & 4,18 & 83,7\% (Sangat Berguna) \\
-\hline
-4 & TAM -- \textit{Perceived Ease of Use} (PEOU) & 23 & 3,97 & 79,5\% (Mudah Dipakai) \\
-\hline
-\multicolumn{2}{|c|}{\textbf{Rerata Skor TAM (Skala 1--5)}} & \textbf{23} & \textbf{4,08} & \textbf{81,6\% (Adopsi Tinggi)} \\
+\multirow{2}{*}{Jenis Kelamin} & Laki-laki & 13 \\
+\cline{2-3}
+ & Perempuan & 10 \\
 \hline
 \end{tabular}
 }
@@ -319,10 +318,90 @@ Pengujian melibatkan 23 responden yang terbagi atas dua kelompok peran: 22 siswa
 \end{table}
 
 \subsubsection{System Usability Scale (SUS)}
-Instrumen SUS terdiri dari 10 butir pernyataan skala Likert 1--5 dengan nilai total dinormalisasi ke rentang 0--100 \cite{zerovnik2024}. Rerata skor SUS yang diperoleh adalah \textbf{66,85} (skala 0--100) dengan standar deviasi 21,42, yang berada pada rentang \textit{``Acceptable''} (50--69). Secara spesifik, kelompok Guru BK memberikan skor sebesar 70,00 (\textit{``Good''}), sedangkan kelompok siswa memberikan rerata sebesar 66,70. Skor ini mengindikasikan bahwa antarmuka SIGAP dinilai oleh pengguna sebagai sistem yang intuitif, mudah dipelajari, dan efisien digunakan tanpa pelatihan intensif.
+Instrumen SUS terdiri dari 10 butir pernyataan skala Likert 1--5, dinormalisasi ke rentang 0--100 \cite{zerovnik2024}. Rata-rata skor SUS per kelompok peran disajikan pada Tabel~\ref{tab:sus_peran}.
+
+\begin{table}[htbp]
+\caption{Rata-rata Skor SUS Menurut Peran (n = 23)}
+\label{tab:sus_peran}
+\begin{center}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Kelompok} & \textbf{Jumlah} & \textbf{Rata-rata Skor} \\
+\hline
+Semua responden & 23 & 66,85 \\
+\hline
+Siswa (Pelapor) & 22 & 66,70 \\
+\hline
+Guru BK / Admin & 1 & 70,00 \\
+\hline
+\end{tabular}
+}
+\end{center}
+\end{table}
+
+Rerata skor SUS keseluruhan sebesar \textbf{66,85} berada pada kategori \textit{``Acceptable''} (rentang 50--69). Kelompok Guru BK memperoleh skor 70,00 (\textit{``Good''}), sedangkan kelompok siswa memperoleh rerata 66,70. Rata-rata nilai per butir pernyataan SUS disajikan pada Tabel~\ref{tab:sus_butir}.
+
+\begin{table}[htbp]
+\caption{Rata-rata Nilai per Butir SUS (n = 23)}
+\label{tab:sus_butir}
+\begin{center}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{|c|p{4.8cm}|c|}
+\hline
+\textbf{Kode} & \textbf{Pernyataan} & \textbf{Rata-rata} \\
+\hline
+S1 & Saya merasa akan sering menggunakan sistem ini & 3,91 \\
+\hline
+S2 & Sistem ini terlalu rumit untuk digunakan & 2,61 \\
+\hline
+S3 & Sistem ini mudah digunakan & 3,87 \\
+\hline
+S4 & Membutuhkan bantuan orang lain untuk menggunakan sistem & 2,87 \\
+\hline
+S5 & Fungsi-fungsi sistem terintegrasi dengan baik & 4,13 \\
+\hline
+S6 & Terlalu banyak ketidakkonsistenan dalam sistem & 2,30 \\
+\hline
+S7 & Kebanyakan orang dapat mempelajari sistem ini dengan cepat & 3,74 \\
+\hline
+S8 & Sistem ini sangat tidak praktis digunakan & 2,30 \\
+\hline
+S9 & Saya merasa sangat percaya diri menggunakan sistem ini & 4,04 \\
+\hline
+S10 & Perlu belajar banyak hal sebelum menggunakan sistem & 2,87 \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Rerata Skor SUS (Skala 0--100)}} & \textbf{66,85} \\
+\hline
+\end{tabular}
+}
+\end{center}
+\end{table}
 
 \subsubsection{Technology Acceptance Model (TAM)}
-Kuesioner TAM mengukur dua konstruk utama: \textit{Perceived Usefulness} (PU) dan \textit{Perceived Ease of Use} (PEOU) pada skala Likert 1--5. Rerata skor TAM keseluruhan yang diperoleh adalah \textbf{4,08} (dari skala 5,00) atau 81,6\%, dengan skor PU sebesar \textbf{4,18} (83,7\%) dan skor PEOU sebesar \textbf{3,97} (79,5\%). Nilai ini menunjukkan bahwa responden mempersepsikan SIGAP sebagai sistem yang sangat berguna dan mudah digunakan, mengindikasikan tingkat adopsi yang tinggi di lingkungan satuan pendidikan.
+Kuesioner TAM mengukur dua konstruk: \textit{Perceived Usefulness} (PU) dan \textit{Perceived Ease of Use} (PEOU) pada skala Likert 1--5. Hasil TAM per konstruk disajikan pada Tabel~\ref{tab:tam_hasil}.
+
+\begin{table}[htbp]
+\caption{Hasil TAM (n = 23)}
+\label{tab:tam_hasil}
+\begin{center}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Aspek} & \textbf{Jumlah Pernyataan} & \textbf{Rata-rata Skor} \\
+\hline
+\textit{Perceived Usefulness} (PU) & 5 & 4,18 (83,7\%) \\
+\hline
+\textit{Perceived Ease of Use} (PEOU) & 5 & 3,97 (79,5\%) \\
+\hline
+\textbf{Keseluruhan TAM} & \textbf{10} & \textbf{4,08 (81,6\%)} \\
+\hline
+\end{tabular}
+}
+\end{center}
+\end{table}
+
+Rerata skor TAM sebesar \textbf{4,08} (81,6\%) mengindikasikan tingkat adopsi yang tinggi. Skor PU sebesar \textbf{4,18} (83,7\%) menunjukkan bahwa responden mempersepsikan SIGAP sebagai sistem yang sangat bermanfaat, sedangkan skor PEOU sebesar \textbf{3,97} (79,5\%) mengonfirmasi kemudahan penggunaan sistem tanpa pelatihan khusus.
 
 \subsection{Diskusi}
 

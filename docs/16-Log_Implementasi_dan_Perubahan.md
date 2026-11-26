@@ -2795,5 +2795,16 @@ Penyederhanaan tampilan hero section dashboard siswa dengan menghapus tombol Pen
 | 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi penuh revisi bagian CONCLUSION dan bibliografi |
 | 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 145 |
 
+## 📅 [Sesi 146] Kamis, 26 November 2026 — Jam 08 WIB
+
+**Fokus Utama:** Penggantian tabel ringkasan pengujian kaji kelayakan pengguna (V.D Respondent Validation) menjadi 4 tabel detail bergaya referensi IEEE: Profil Responden, Rata-rata SUS per Kelompok Peran, Rata-rata per Butir SUS, dan Hasil TAM per Konstruk, berdasarkan data empiris kuesioner (n=23).
+
+| No | Tipe Aksi | Berkas yang Diubah / Ditambah | Modul / Komponen Terkait |
+|:--:|:---------:|---|---|
+| 1 | `EDIT` | `SIGAP_Paper.tex` | Tambah tabel Profil Responden, SUS per peran, SUS per butir, dan TAM per konstruk; tambah `\usepackage{multirow}` |
+| 2 | `EDIT` | `SIGAP.tex` | Sinkronisasi penuh penambahan 4 tabel detail dan package multirow |
+| 3 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi penuh penambahan 4 tabel detail dan package multirow |
+| 4 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 146 |
+
 
 
