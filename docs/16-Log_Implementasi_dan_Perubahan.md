@@ -2818,5 +2818,19 @@ Penyederhanaan tampilan hero section dashboard siswa dengan menghapus tombol Pen
 | 4 | `EDIT` | `SIGAP-source.tex` | Sinkronisasi penuh pembaruan metrik evaluasi performa API dan Abstract |
 | 5 | `EDIT` | `docs/16-Log_Implementasi_dan_Perubahan.md` | Pencatatan log sesi 147 |
 
+---
+
+### 🛑 Penutupan Siklus Pengembangan Minggu ke-13
+
+> 📌 **Catatan Batas Siklus Pengembangan (Batas Akhir Minggu 13)**:  
+> Seluruh rangkaian pekerjaan, pengujian empiris, pengolahan data kuesioner nyata (n=23 responden), evaluasi komputasi NLP (280 sampel uji), uji beban API (*load testing* 200 requests), penyempurnaan UI 3D interaktif responsif mobile, serta finalisasi naskah publikasi ilmiah IEEE (hingga Bab VI Conclusion & 0 placeholder) pada **Sesi 134 sampai Sesi 147** secara resmi **DITUTUP** sebagai capaian **Minggu ke-13**.  
+>  
+> Catatan rekapitulasi komprehensif, capaian fitur, kendala, dan keputusan arsitektural didokumentasikan secara lengkap pada berkas:  
+> 📄 [`docs/27-Gimik_Presentasi_9.md`](file:///home/afkam/SIGAP_Sistem_informasi-_Gawat_Aduan_Perundungan/docs/27-Gimik_Presentasi_9.md)
+>  
+> ⏩ **Log selanjutnya akan dilanjutkan pada siklus Minggu ke-14 (Sesi 148 dan seterusnya)**.
+
+---
+
 
 

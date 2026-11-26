@@ -35,6 +35,7 @@ Folder `docs/` memuat seluruh dokumen spesifikasi produk, arsitektur sistem, ran
 | **24** | [24-Materi_dan_QNA_Presentasi_Kelompok.md](./24-Materi_dan_QNA_Presentasi_Kelompok.md) | **Materi & QnA Presentasi Kelompok**: Panduan komprehensif presentasi proyek SIGAP dan simulasi tanya jawab. |
 | **25** | [25-Materi_PPT_Presentasi_SIGAP.md](./25-Materi_PPT_Presentasi_SIGAP.md) | **Materi Slide Presentasi SIGAP**: Rancangan slide presentasi pitch deck sistem SIGAP. |
 | **26** | [26-Google_Apps_Script_Pengujian_Iterasi_2.md](./26-Google_Apps_Script_Pengujian_Iterasi_2.md) | **Google Apps Script Pengujian Iterasi ke-2 (Minggu 13)**: Instrumen evaluasi perbaikan, generator Google Form, skrip kalkulasi SUS/TAM sheets, dan komparasi delta peningkatan. |
+| **27** | [27-Gimik_Presentasi_9.md](./27-Gimik_Presentasi_9.md) | **Progress Mingguan (Minggu 13)**: Rekapitulasi pencapaian siklus Minggu 13 (data empiris responden SUS/TAM, evaluasi NLP 280 sampel, load test API riil, restrukturisasi naskah paper IEEE bebas placeholder, dan optimasi UI 3D mobile). |
 
 ---
 
